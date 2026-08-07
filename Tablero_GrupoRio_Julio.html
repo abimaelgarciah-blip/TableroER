@@ -226,6 +226,24 @@
   .legend .ln{color:var(--ink-2)}
   .legend .lv{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
   .legend .lp{color:var(--muted);width:42px;text-align:right;font-variant-numeric:tabular-nums}
+  .legend .li.clickable{cursor:pointer;border-radius:8px;margin:-4px -6px;padding:4px 6px;transition:background .15s}
+  .legend .li.clickable:hover{background:var(--hover)}
+
+  /* ---------- Detalle de incumplimiento (desplegable) ---------- */
+  .inc-toggle{margin-top:16px;background:var(--hover);border:1px solid var(--border);color:var(--ink-2);
+    font-size:12.5px;padding:7px 12px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;
+    gap:6px;transition:background .15s,border-color .15s}
+  .inc-toggle:hover{background:var(--active);border-color:var(--border-strong)}
+  .inc-toggle .caret{transition:transform .3s ease}
+  .inc-toggle[aria-expanded="true"] .caret{transform:rotate(180deg)}
+  .inc-detail{max-height:0;opacity:0;overflow:hidden;transform:translateY(-8px);
+    transition:max-height .5s cubic-bezier(.22,.61,.36,1),opacity .4s ease,transform .4s ease}
+  .inc-detail.open{max-height:2000px;opacity:1;transform:none}
+  .mini-h{font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 10px}
+  .inc-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12.5px;
+    padding:4px 8px;border-radius:6px;transition:background .15s,color .15s;white-space:nowrap}
+  .inc-close:hover{color:var(--ink);background:var(--hover)}
+  @media (prefers-reduced-motion: reduce){ .inc-detail{transition:opacity .2s ease} }
 
   /* ---------- Line chart ---------- */
   .line-wrap svg{width:100%;height:auto;display:block}
@@ -513,17 +531,35 @@
               <div class="donut" id="donut-cumpl"></div>
               <div class="legend" id="legend-cumpl"></div>
             </div>
+            <button type="button" class="inc-toggle" id="inc-toggle" aria-expanded="false" aria-controls="inc-detail">
+              Ver detalle de incumplimiento <span class="caret">▾</span>
+            </button>
           </div>
         </div>
 
-        <div class="card" style="margin-top:16px">
-          <h3>Incumplimiento por rango de horas</h3>
-          <p class="csub">Estudios con A-F negativa, agrupados por horas de retraso</p>
-          <div class="bars" id="bars-horas"></div>
-          <div class="line-note" style="margin-top:12px" id="nota-horas">63 estudios dentro de las 24 h + 5 no recibidos (sin hora A-F) + 1 con ≥ 24 h de retraso = 69 incumplidos. El histograma muestra solo los negativos dentro de 24 h.</div>
+        <div class="inc-detail" id="inc-detail">
+          <div class="card" style="margin-top:16px">
+            <div class="card-head">
+              <div>
+                <h3>Detalle de incumplimiento · <span id="inc-detail-unit">todas las unidades</span></h3>
+                <p class="csub" id="inc-detail-sub">Estudios no entregados a tiempo</p>
+              </div>
+              <button type="button" class="inc-close" id="inc-close" aria-label="Ocultar detalle">Ocultar ▴</button>
+            </div>
+            <div class="grid two">
+              <div>
+                <h4 class="mini-h">Por rango de horas de retraso</h4>
+                <div class="bars" id="bars-horas"></div>
+                <div class="line-note" style="margin-top:10px" id="nota-horas"></div>
+              </div>
+              <div>
+                <h4 class="mini-h">Por departamento</h4>
+                <div id="inc-por-depto"></div>
+              </div>
+            </div>
+            <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con 24 h o más de retraso se cuentan como cumplimiento (seguimientos de calidad) y se excluyen del histograma. Datos del reporte de julio 2026.</div>
+          </div>
         </div>
-
-        <div class="line-note" style="margin-top:14px">Nota: el indicador (real) es cumplimiento / estudios prometidos y excluye del histograma de horas los estudios con 24 h o más de retraso. Datos del reporte mensual de junio 2026.</div>
       </section>
 
       <!-- ===================== INCUMPLIMIENTO ===================== -->
@@ -2836,6 +2872,8 @@ function renderAll(){
   // Indicador por unidad (junio) + tendencia temporal
   buildUnitBar();
   renderIndicador('Todas');
+  document.getElementById('inc-toggle').onclick=()=>setIncDetail(!incDetailOpen);
+  document.getElementById('inc-close').onclick=()=>setIncDetail(false);
   document.querySelectorAll('#ind-seg .seg-b').forEach(b=>
     b.onclick=()=>{ indMode=b.dataset.m;
       document.querySelectorAll('#ind-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
@@ -2863,14 +2901,22 @@ function buildUnitBar(){
   document.getElementById('unit-select').addEventListener('change',e=>renderIndicador(e.target.value));
 }
 
-function renderIndicador(nombre){
+let incDetailOpen=false, incCurUnit='Todas';
+function incByDeptoUnit(unit){
+  const uI = unit==='Todas' ? -1 : incRecs.unidades.indexOf(unit);
+  const cnt={};
+  incRecs.recs.forEach(r=>{
+    if(r[0]!==6) return;            // julio
+    if(uI>=0 && r[2]!==uI) return;  // unidad
+    const d=incRecs.deptos[r[3]];
+    cnt[d]=(cnt[d]||0)+1;
+  });
+  return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({name,v}));
+}
+function renderIncDetail(nombre){
   const u=unidades[nombre]; if(!u) return;
+  incCurUnit=nombre;
   const et=(nombre==='Todas')?'todas las unidades':nombre;
-  const col=thColor(u.indicador);
-  gaugeChart(document.getElementById('gauge-indicador'), u.indicador, 98, col);
-  donutChart(document.getElementById('donut-cumpl'), document.getElementById('legend-cumpl'),
-    [{name:'Cumplimiento',v:u.cumpl},{name:'Incumplimiento',v:u.incumpl}], ['#4c8c6f','#c96f63']);
-  document.getElementById('sub-donut').textContent='Distribución de '+fmt(u.prometidos)+' estudios prometidos · '+et;
   const horasEl=document.getElementById('bars-horas');
   if(u.neg===0){
     horasEl.innerHTML='<div class="empty">Sin estudios con retraso por horas en esta unidad'+
@@ -2881,6 +2927,39 @@ function renderIndicador(nombre){
   const dentro=u.neg-u.excl24;
   document.getElementById('nota-horas').innerHTML=
     `${dentro} con retraso &lt; 24 h + ${u.notrec} no recibido${u.notrec===1?'':'s'} = <b>${u.incumpl}</b> incumplido${u.incumpl===1?'':'s'}.${u.excl24?` Los ${u.excl24} con ≥ 24 h se cuentan como cumplimiento (seguimientos de calidad).`:''} El histograma muestra solo los negativos dentro de 24 h.`;
+  const dep=incByDeptoUnit(nombre), depEl=document.getElementById('inc-por-depto');
+  if(dep.length){ barChart(depEl, dep, '#c96f63'); }
+  else { depEl.innerHTML='<div class="empty">Sin incumplimiento registrado en esta unidad en julio.</div>'; }
+  document.getElementById('inc-detail-unit').textContent=et;
+  document.getElementById('inc-detail-sub').textContent=
+    `${fmt(u.incumpl)} incumplido${u.incumpl===1?'':'s'} de ${fmt(u.prometidos)} estudios · julio 2026`;
+}
+function setIncDetail(open){
+  incDetailOpen=open;
+  document.getElementById('inc-detail').classList.toggle('open',open);
+  const t=document.getElementById('inc-toggle');
+  if(t) t.setAttribute('aria-expanded',open?'true':'false');
+  if(open){
+    renderIncDetail(incCurUnit);
+    const p=document.getElementById('inc-detail');
+    if(p&&p.scrollIntoView) setTimeout(()=>p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}),120);
+  }
+}
+function renderIndicador(nombre){
+  const u=unidades[nombre]; if(!u) return;
+  const et=(nombre==='Todas')?'todas las unidades':nombre;
+  const col=thColor(u.indicador);
+  gaugeChart(document.getElementById('gauge-indicador'), u.indicador, 98, col);
+  donutChart(document.getElementById('donut-cumpl'), document.getElementById('legend-cumpl'),
+    [{name:'Cumplimiento',v:u.cumpl},{name:'Incumplimiento',v:u.incumpl}], ['#4c8c6f','#c96f63']);
+  document.getElementById('sub-donut').textContent='Distribución de '+fmt(u.prometidos)+' estudios prometidos · '+et;
+  // clic en el segmento/leyenda de Incumplimiento => despliega el detalle
+  const arcs=document.querySelectorAll('#donut-cumpl svg circle');
+  if(arcs[1]){ arcs[1].style.cursor='pointer'; arcs[1].onclick=()=>setIncDetail(true); }
+  const legItems=document.querySelectorAll('#legend-cumpl .li');
+  if(legItems[1]){ legItems[1].classList.add('clickable'); legItems[1].onclick=()=>setIncDetail(true); }
+  renderIncDetail(nombre);
+  document.getElementById('inc-detail').classList.toggle('open', incDetailOpen);
   const sel=document.getElementById('unit-select'); if(sel) sel.value=nombre;
   renderIndicadorTemporal(nombre);
 }
