@@ -417,10 +417,6 @@
       <svg class="ico ico-indicador" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 13a8 8 0 0 1 16 0"/><line class="needle" x1="12" y1="13" x2="16" y2="9"/><circle cx="12" cy="13" r="1.3" fill="currentColor" stroke="none"/></svg>
       Indicador
     </button>
-    <button class="nav-item" data-view="incumplimiento">
-      <svg class="ico ico-incumplimiento" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><circle class="bang" cx="12" cy="17" r="1.1" fill="currentColor" stroke="none"/></svg>
-      Incumplimiento
-    </button>
     <button class="nav-item" data-view="departamentos">
       <svg class="ico ico-departamentos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="b1" x1="4" y1="20" x2="4" y2="10"/><line class="b2" x1="10" y1="20" x2="10" y2="4"/><line class="b3" x1="16" y1="20" x2="16" y2="13"/><line class="b4" x1="20" y1="20" x2="20" y2="8"/></svg>
       Departamentos
@@ -546,6 +542,12 @@
               </div>
               <button type="button" class="inc-close" id="inc-close" aria-label="Ocultar detalle">Ocultar ▴</button>
             </div>
+            <div class="grid kpis" style="margin-bottom:16px">
+              <div class="card kpi"><div class="k-label">Total incumplidos</div><div class="k-value" style="color:#ba544c" id="incd-kpi-total">–</div><div class="k-foot">no entregados a tiempo</div></div>
+              <div class="card kpi"><div class="k-label">Retraso mediano</div><div class="k-value" id="incd-kpi-med">–</div><div class="k-foot">la mayoría, por minutos</div></div>
+              <div class="card kpi"><div class="k-label">Seguimientos ≥ 24 h</div><div class="k-value" id="incd-kpi-ge24">–</div><div class="k-foot">cuentan como cumplimiento</div></div>
+              <div class="card kpi"><div class="k-label">No recibidos</div><div class="k-value" id="incd-kpi-norec">–</div><div class="k-foot">sin registro de entrega</div></div>
+            </div>
             <div class="grid two">
               <div>
                 <h4 class="mini-h">Por rango de horas de retraso</h4>
@@ -557,119 +559,28 @@
                 <div id="inc-por-depto"></div>
               </div>
             </div>
+            <div class="grid two" style="margin-top:16px">
+              <div>
+                <h4 class="mini-h">Por día de la semana</h4>
+                <div class="bars" id="incd-por-dia"></div>
+                <div class="line-note" style="margin-top:10px" id="incd-nota-dia"></div>
+              </div>
+              <div>
+                <h4 class="mini-h">Top 5 estudios entregados tarde</h4>
+                <div class="bars wide" id="incd-top-estudios"></div>
+              </div>
+            </div>
+            <div style="margin-top:16px">
+              <h4 class="mini-h">Mapa de calor · día × hora prometida</h4>
+              <div class="heat-scroll"><div id="incd-heat"></div></div>
+              <div class="heat-leg" id="incd-heat-leg"></div>
+              <div class="line-note" id="incd-nota-heat" style="margin-top:10px"></div>
+            </div>
             <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con 24 h o más de retraso se cuentan como cumplimiento (seguimientos de calidad) y se excluyen del histograma. Datos del reporte de julio 2026.</div>
           </div>
         </div>
       </section>
 
-      <!-- ===================== INCUMPLIMIENTO ===================== -->
-      <section class="view" id="incumplimiento">
-        <div class="page-head">
-          <h1>Incumplimiento</h1>
-          <p>Análisis de entregas fuera de tiempo <span class="badge" id="inc-badge">Ene–Jul 2026 · todas las unidades</span></p>
-        </div>
-
-        <div class="card-head" style="margin-bottom:18px">
-          <div style="display:flex;gap:14px;flex-wrap:wrap">
-            <div>
-              <div class="nav-label" style="margin-bottom:8px">Unidad</div>
-              <div class="unit-bar" id="inc-unit-bar" style="margin:0"></div>
-            </div>
-            <div>
-              <div class="nav-label" style="margin-bottom:8px">Periodo</div>
-              <div class="unit-bar" id="inc-per-bar" style="margin:0"></div>
-            </div>
-          </div>
-          <div class="seg" id="inc-seg" style="margin-top:22px">
-            <button class="seg-b active" data-m="mes">Mensual</button>
-            <button class="seg-b" data-m="semana">Semanal</button>
-          </div>
-        </div>
-
-        <div class="grid kpis">
-          <div class="card kpi">
-            <div class="k-label">Total incumplidos</div>
-            <div class="k-value" style="color:#ba544c" id="kpi-inc-total">1,443</div>
-            <div class="k-foot" id="foot-inc-total">en 6 meses (~240/mes)</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">Retraso mediano</div>
-            <div class="k-value" id="kpi-inc-med">0.8 h</div>
-            <div class="k-foot">la mayoría, por minutos</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">Casos graves ≥ 24 h</div>
-            <div class="k-value" id="kpi-inc-ge24">194</div>
-            <div class="k-foot">sin recibir a tiempo</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">No recibidos</div>
-            <div class="k-value" id="kpi-inc-norec">21</div>
-            <div class="k-foot">sin registro de entrega</div>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div class="card">
-            <h3>Incumplimiento por <span id="inc-per-lbl">mes</span></h3>
-            <p class="csub" id="sub-inc-per">Estudios entregados tarde · enero–julio 2026</p>
-            <div class="bars" id="bars-inc-semana"></div>
-          </div>
-          <div class="card">
-            <h3>Incumplimiento por día</h3>
-            <p class="csub">Según el día de la fecha promesa</p>
-            <div class="bars" id="bars-inc-dia"></div>
-            <div class="line-note" style="margin-top:12px" id="nota-inc-dia">El <b>lunes</b> concentra 323 (22%), el peor día; el domingo casi no hay actividad (21).</div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <h3>Top 5 estudios entregados tarde</h3>
-          <p class="csub" id="sub-inc-top">Tipos de estudio con más incumplimientos (enero–julio 2026)</p>
-          <div class="bars wide" id="bars-inc-estudios"></div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <div class="card-head">
-            <div>
-              <h3>Mapa de calor · día × hora</h3>
-              <p class="csub" id="sub-inc-heat">Concentración de incumplimientos por horario prometido (hora del día)</p>
-            </div>
-            <div>
-              <div class="nav-label" style="margin-bottom:8px">Departamento</div>
-              <div class="unit-bar" id="inc-dep-bar" style="margin:0"></div>
-            </div>
-          </div>
-          <div class="heat-scroll"><div id="heat-inc"></div></div>
-          <div class="heat-leg" id="heat-leg-inc"></div>
-          <div class="line-note" id="nota-inc-heat" style="margin-top:12px"></div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <h3>Conclusiones</h3>
-          <p class="csub">Patrones principales del incumplimiento (enero–julio 2026)</p>
-          <ul class="findings">
-            <li>Dos unidades concentran el <b>72%</b>: <b>López Mateos</b> (726) y <b>Acueducto</b> (315).</li>
-            <li><b>Radiología</b> (358) y <b>Resonancia Magnética</b> (294) suman el <b>45%</b> de los casos.</li>
-            <li>Un solo estudio, <b>Densitometría de Cadera y Columna Lumbar</b>, aporta 141 casos (10%).</li>
-            <li>Por mes, <b>febrero</b> fue el peor (391) y <b>abril</b> el mejor (129); el <b>lunes</b> es el peor día (323, 22%).</li>
-            <li>La mediana de retraso es <b>0.8 h</b>: casi todo se entrega tarde por minutos… pero <b>194 casos ≥ 24 h</b> (hasta 1,864 h) elevan el promedio a 32.9 h.</li>
-          </ul>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <h3>Recomendaciones</h3>
-          <p class="csub">Acciones sugeridas, ordenadas por impacto potencial</p>
-          <ol class="reco">
-            <li><span><b>Enfocar López Mateos y Acueducto.</b> Ahí está el 72% del problema; revisar capacidad y flujo de Radiología y Resonancia en esas sedes daría el mayor retorno.</span></li>
-            <li><span><b>Recalibrar la promesa de Densitometría de Cadera y Columna Lumbar.</b> 141 incumplimientos de un mismo estudio apunta a un tiempo de promesa irreal o a un cuello de botella puntual en ese equipo.</span></li>
-            <li><span><b>Revisar qué pasó en febrero.</b> Fue el peor mes (391, indicador 94.0%); abril (129, 98.5%) muestra que sí es alcanzable la meta.</span></li>
-            <li><span><b>Reforzar los lunes</b> y las franjas de mayor carga (mediodía y tarde, ver mapa de calor); coinciden con acumulación de fin de semana y relevos de turno.</span></li>
-            <li><span><b>Tratar aparte los 194 casos ≥ 24 h.</b> Son estudios "atorados" (hasta 78 días); conviene una alerta automática al superar las 24 h para que no se pierdan.</span></li>
-            <li><span><b>Afinar el último tramo.</b> Como la mayoría falla por menos de 1 h, un ajuste pequeño en la entrega final (o en la hora prometida) recuperaría buena parte del indicador.</span></li>
-          </ol>
-        </div>
-      </section>
 
       <!-- ===================== DEPARTAMENTOS ===================== -->
       <section class="view" id="departamentos">
@@ -2878,14 +2789,6 @@ function renderAll(){
     b.onclick=()=>{ indMode=b.dataset.m;
       document.querySelectorAll('#ind-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
       renderIndicadorTemporal(); });
-  // Incumplimiento (unidad × temporalidad)
-  buildIncUnitBar();
-  buildIncDepBar();
-  renderIncumpl();
-  document.querySelectorAll('#inc-seg .seg-b').forEach(b=>
-    b.onclick=()=>{ incMode=b.dataset.m; incPer='ALL'; incDep='ALL';
-      document.querySelectorAll('#inc-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
-      buildIncPerBar(); buildIncDepBar(); renderIncumpl(); });
   // Departamentos (evolución)
   renderDeptos();
 }
@@ -2917,6 +2820,15 @@ function renderIncDetail(nombre){
   const u=unidades[nombre]; if(!u) return;
   incCurUnit=nombre;
   const et=(nombre==='Todas')?'todas las unidades':nombre;
+  const uI = nombre==='Todas' ? -1 : incRecs.unidades.indexOf(nombre);
+  const rs = incRecs.recs.filter(r=> r[0]===6 && (uI<0 || r[2]===uI));  // incumplimientos de julio de la unidad
+  const agg = incAgg(rs);
+  // --- KPIs ---
+  document.getElementById('incd-kpi-total').textContent=fmt(u.incumpl);
+  document.getElementById('incd-kpi-med').textContent=(rs.length?agg.mediana:0)+' h';
+  document.getElementById('incd-kpi-ge24').textContent=fmt(u.excl24);
+  document.getElementById('incd-kpi-norec').textContent=fmt(u.notrec);
+  // --- por rango de horas ---
   const horasEl=document.getElementById('bars-horas');
   if(u.neg===0){
     horasEl.innerHTML='<div class="empty">Sin estudios con retraso por horas en esta unidad'+
@@ -2927,9 +2839,34 @@ function renderIncDetail(nombre){
   const dentro=u.neg-u.excl24;
   document.getElementById('nota-horas').innerHTML=
     `${dentro} con retraso &lt; 24 h + ${u.notrec} no recibido${u.notrec===1?'':'s'} = <b>${u.incumpl}</b> incumplido${u.incumpl===1?'':'s'}.${u.excl24?` Los ${u.excl24} con ≥ 24 h se cuentan como cumplimiento (seguimientos de calidad).`:''} El histograma muestra solo los negativos dentro de 24 h.`;
+  // --- por departamento ---
   const dep=incByDeptoUnit(nombre), depEl=document.getElementById('inc-por-depto');
   if(dep.length){ barChart(depEl, dep, '#c96f63'); }
   else { depEl.innerHTML='<div class="empty">Sin incumplimiento registrado en esta unidad en julio.</div>'; }
+  // --- por día de la semana ---
+  const diaEl=document.getElementById('incd-por-dia');
+  if(rs.length){
+    vbarChart(diaEl, agg.porDia.map((v,i)=>({name:incRecs.dias[i],v})), '#c96f63');
+    let wi=0; agg.porDia.forEach((v,i)=>{ if(v>agg.porDia[wi]) wi=i; });
+    const pct=agg.total?Math.round(agg.porDia[wi]/agg.total*100):0;
+    document.getElementById('incd-nota-dia').innerHTML=`El día con más incumplimiento es <b>${incRecs.dias[wi]}</b> (${fmt(agg.porDia[wi])}, ${pct}%).`;
+  } else {
+    diaEl.innerHTML='<div class="empty">Sin datos.</div>';
+    document.getElementById('incd-nota-dia').textContent='';
+  }
+  // --- top 5 estudios ---
+  const topEl=document.getElementById('incd-top-estudios');
+  if(agg.top.length){ barChart(topEl, agg.top.map(t=>({name:t[0],v:t[1]})), '#c96f63'); }
+  else { topEl.innerHTML='<div class="empty">Sin datos.</div>'; }
+  // --- mapa de calor día × hora ---
+  heatmap('incd-heat','incd-heat-leg', agg.heat, incRecs.horas, incRecs.dias);
+  const heatNota=document.getElementById('incd-nota-heat');
+  if(rs.length){
+    let bk=null,bv=-1; for(const k in agg.heat){ if(agg.heat[k]>bv){bv=agg.heat[k];bk=k;} }
+    if(bk){ const [dd,hh]=bk.split(','); heatNota.innerHTML=`Mayor concentración: <b>${incRecs.dias[+dd]} ${hh}:00</b> (${bv} tarde). Hora de la fecha prometida.`; }
+    else heatNota.textContent='';
+  } else heatNota.textContent='';
+  // --- encabezado ---
   document.getElementById('inc-detail-unit').textContent=et;
   document.getElementById('inc-detail-sub').textContent=
     `${fmt(u.incumpl)} incumplido${u.incumpl===1?'':'s'} de ${fmt(u.prometidos)} estudios · julio 2026`;
