@@ -485,29 +485,6 @@
         <div class="nav-label" style="margin:0 0 8px">Unidad</div>
         <div class="unit-bar" id="unit-bar"></div>
 
-        <div class="grid kpis">
-          <div class="card kpi">
-            <div class="k-label">Indicador (real)</div>
-            <div class="k-value" id="kpi-indicador">97.3%</div>
-            <div class="k-foot">objetivo ≥ 98%</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">Estudios prometidos</div>
-            <div class="k-value" id="kpi-prometidos">8,021</div>
-            <div class="k-foot" id="foot-prometidos">julio 2026 · todas las unidades</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">Cumplimiento (real)</div>
-            <div class="k-value" id="kpi-cumplidos">7,803</div>
-            <div class="k-foot">entregados a tiempo</div>
-          </div>
-          <div class="card kpi">
-            <div class="k-label">Incumplimiento (real)</div>
-            <div class="k-value" id="kpi-incumplidos">218</div>
-            <div class="k-foot">no entregados a tiempo</div>
-          </div>
-        </div>
-
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
@@ -2890,12 +2867,6 @@ function renderIndicador(nombre){
   const u=unidades[nombre]; if(!u) return;
   const et=(nombre==='Todas')?'todas las unidades':nombre;
   const col=thColor(u.indicador);
-  const ki=document.getElementById('kpi-indicador');
-  ki.textContent=u.indicador.toFixed(1)+'%'; ki.style.color=col;
-  document.getElementById('kpi-prometidos').textContent=fmt(u.prometidos);
-  document.getElementById('kpi-cumplidos').textContent=fmt(u.cumpl);
-  document.getElementById('kpi-incumplidos').textContent=fmt(u.incumpl);
-  document.getElementById('foot-prometidos').textContent='julio 2026 · '+et;
   gaugeChart(document.getElementById('gauge-indicador'), u.indicador, 98, col);
   donutChart(document.getElementById('donut-cumpl'), document.getElementById('legend-cumpl'),
     [{name:'Cumplimiento',v:u.cumpl},{name:'Incumplimiento',v:u.incumpl}], ['#4c8c6f','#c96f63']);
