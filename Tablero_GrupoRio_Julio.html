@@ -1343,7 +1343,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div class="card-head">
             <div>
               <h3>Efectividad por colaborador</h3>
-              <p class="csub">Enero – junio 2026 · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
+              <p class="csub">Transcriptores SIO ene–jul · grupo Entregas ene–jun · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
             </div>
             <div class="k-value" id="eff-global" style="font-size:26px">—</div>
           </div>
@@ -2848,16 +2848,16 @@ function trLegend(items){
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
 const effRows = [
-  {n:'Hugo Tabares',      lg:'hugotm',     e:3, d:3346, f:'SIO'},
-  {n:'Laura García',      lg:'lauragg',    e:2, d:2762, f:'SIO'},
-  {n:'Mónica Anaya',      lg:'monicaac',   e:1, d:2595, f:'SIO'},
-  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1124, f:'SIO'},
-  {n:'Iván Enríquez',     lg:'manuelev',   e:1, d:476,  f:'SIO'},
-  {n:'Estefanía Martínez',lg:'sandrama',   e:1, d:887,  f:'SIO'},
-  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:2922, f:'SIO'},
-  {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:0, d:10329, f:'Entregas'},
-  {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:1, d:5587,  f:'Entregas'},
-  {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas'}
+  {n:'Hugo Tabares',      lg:'hugotm',     e:3, d:3566, f:'SIO', cut:7},
+  {n:'Laura García',      lg:'lauragg',    e:2, d:3035, f:'SIO', cut:7},
+  {n:'Mónica Anaya',      lg:'monicaac',   e:1, d:2799, f:'SIO', cut:7},
+  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1239, f:'SIO', cut:7},
+  {n:'Iván Enríquez',     lg:'manuelev',   e:2, d:536,  f:'SIO', cut:7},
+  {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1097, f:'SIO', cut:7},
+  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3265, f:'SIO', cut:7},
+  {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:0, d:10329, f:'Entregas', cut:6},
+  {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:1, d:5587,  f:'Entregas', cut:6},
+  {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas', cut:6}
 ];
 const effTipos = [
   {name:'Error ortográfico',v:4},{name:'Error en interpretación',v:4},
@@ -2906,13 +2906,14 @@ function renderEfect(){
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
   document.getElementById('eff-nota').innerHTML =
     '<b>Fuente.</b> Hoja «Hoja2» de <i>Incidencias Internas Colaboradores.xlsx</i> '+
-    '(SharePoint · Documentos/Importante, corte 8 ago). Trae <b>18 incidencias en 2026</b>; la efectividad por colaborador usa las 12 '+
-    'de enero a junio porque los denominadores (SIO y Usuario recibe Entregas) llegan hasta junio. Las 6 posteriores — 4 de julio '+
-    '(Iván Enríquez, Estefanía Martínez y dos de Oswaldo Ríos) y 2 de agosto (Hugo Tabares, transcripción; Samanta Mora, estudio sin '+
-    'interpretación) — ya cuentan en «Tipo de error» y «Errores por mes», y entrarán a la efectividad al cerrar cada mes. '+
-    'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, '+
-    'que van contra la columna Usuario recibe Entregas de los reportes mensuales. '+
-    'Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción.';
+    '(SharePoint · Documentos/Importante, corte 8 ago). Trae <b>18 incidencias en 2026</b>. '+
+    'Los <b>7 transcriptores SIO</b> se calculan sobre <b>enero–julio</b>: al denominador ene–jun se le sumó la producción de julio '+
+    '(Productividad de Transcripción, Datos Tablero, semanas 28–31, del 1 al 26 jul), por lo que los errores de julio de Iván Enríquez '+
+    '(1 jul) y Estefanía Martínez (24 jul) ya pesan en su efectividad. El <b>grupo de Entregas</b> (Samanta, Oswaldo, Heli) sigue en '+
+    '<b>enero–junio</b> mientras se integra su julio de «Usuario recibe Entregas»; por eso los 2 errores de julio de Oswaldo Ríos y '+
+    'las 2 incidencias de agosto (Hugo Tabares y Samanta Mora) aún no pesan en la efectividad, aunque ya cuentan en «Tipo de error» y '+
+    '«Errores por mes». El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, que van contra '+
+    'Usuario recibe Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción.';
 }
 
 /* Detalle de errores por colaborador (desplegable) · Incidencias Internas Colaboradores.xlsx */
@@ -2956,32 +2957,37 @@ const effDetalle = {
     {f:'23 mar 2026', px:'Martínez Martínez Diana Noemi',   t:'Error en etiqueta',      m:'mar'}
   ]
 };
-const effPost = new Set(['jul','ago','sep','oct','nov','dic']);
+const EFF_MONTHS = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 let effOpenLg = null;
 function renderEffDetail(lg){
   const r = effRows.find(x=>x.lg===lg); if(!r) return;
   const det = effDetalle[lg] || [];
+  const cut = r.cut || 6;
+  const periodo = cut>=7 ? 'ene–jul' : 'ene–jun';
+  const cierre  = cut>=7 ? 'julio'   : 'junio';
+  const postTag = cut>=7 ? 'post-jul' : 'post-jun';
+  const isPost  = e => (EFF_MONTHS.indexOf(e.m)+1) > cut;
   const fuente = r.f==='SIO' ? 'transcripciones en SIO' : 'Usuario recibe Entregas';
   const ef = r.d ? ((1-r.e/r.d)*100).toFixed(2)+'%' : '—';
   let items = det.map(e=>{
-    const post = effPost.has(e.m);
+    const post = isPost(e);
     return `<div class="eff-err">`+
       `<span class="eff-err-date">${e.f}</span>`+
       `<span class="eff-err-type"><b>${e.t}</b><span class="eff-err-px">${e.px}</span></span>`+
-      `<span class="eff-err-tag${post?' post':''}">${e.m}${post?' · post-jun':''}</span></div>`;
+      `<span class="eff-err-tag${post?' post':''}">${e.m}${post?' · '+postTag:''}</span></div>`;
   }).join('');
   if(!items) items = `<div class="eff-err none">Sin incidencias registradas en 2026. 🎉</div>`;
-  const n = det.length, nPost = det.filter(e=>effPost.has(e.m)).length;
+  const n = det.length, nPost = det.filter(isPost).length;
   const resumen = n
-    ? `<b>${n}</b> incidencia${n===1?'':'s'} en 2026`+(nPost?` · ${nPost} posterior${nPost===1?'':'es'} al cierre de junio (aún no pesan en la efectividad)`:'')
+    ? `<b>${n}</b> incidencia${n===1?'':'s'} en 2026`+(nPost?` · ${nPost} posterior${nPost===1?'':'es'} al cierre de ${cierre} (aún no pesan en la efectividad)`:'')
     : 'sin incidencias en 2026';
   document.getElementById('eff-detail').innerHTML =
     `<div class="eff-detail-head">
-       <div><b>${r.n}</b> · ${ef} de efectividad (ene–jun) · ${resumen} · ${fmt(r.d)} estudios (${fuente})</div>
+       <div><b>${r.n}</b> · ${ef} de efectividad (${periodo}) · ${resumen} · ${fmt(r.d)} estudios (${fuente})</div>
        <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
-     <div class="line-note" style="margin-top:10px">Fuente: <i>Incidencias Internas Colaboradores.xlsx</i> · hoja «Hoja2» (SharePoint · Documentos/Importante). Cada renglón es una incidencia con su fecha, paciente y tipo. La efectividad usa solo las de enero–junio, porque los denominadores (SIO / Usuario recibe Entregas) llegan hasta junio.</div>`;
+     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Incidencias Internas Colaboradores.xlsx</i> · «Hoja2». Denominador: los transcriptores SIO usan <b>enero–julio</b> (Productividad de Transcripción · Datos Tablero, al 26 jul); el grupo de Entregas usa <b>enero–junio</b> mientras se integra julio.</div>`;
   document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
 }
 function setEffDetail(lg){
