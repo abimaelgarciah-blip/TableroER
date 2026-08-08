@@ -245,6 +245,25 @@
   .inc-close:hover{color:var(--ink);background:var(--hover)}
   @media (prefers-reduced-motion: reduce){ .inc-detail{transition:opacity .2s ease} }
 
+  /* ---------- Detalle de errores por colaborador (desplegable) ---------- */
+  .bar-row.eff-click{cursor:pointer;border-radius:8px;transition:background .15s}
+  .bar-row.eff-click:hover{background:var(--hover)}
+  .bar-row.eff-click.active{background:var(--active)}
+  .eff-detail{max-height:0;opacity:0;overflow:hidden;transform:translateY(-8px);
+    transition:max-height .5s cubic-bezier(.22,.61,.36,1),opacity .4s ease,transform .4s ease,margin .4s ease;margin-top:0}
+  .eff-detail.open{max-height:900px;opacity:1;transform:none;margin-top:14px}
+  .eff-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+    border-top:1px solid var(--border);padding-top:14px;font-size:13.5px;color:var(--ink-2)}
+  .eff-err-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+  .eff-err{display:flex;align-items:center;gap:10px;font-size:13px;background:var(--sidebar);
+    border:1px solid var(--border);border-radius:8px;padding:8px 12px}
+  .eff-err-date{font-variant-numeric:tabular-nums;color:var(--muted);min-width:96px}
+  .eff-err-type{color:var(--ink);font-weight:500;flex:1}
+  .eff-err-tag{font-size:11px;font-weight:600;color:#fff;background:var(--c-serv);border-radius:20px;padding:2px 9px;white-space:nowrap}
+  .eff-err-tag.muted{background:var(--track);color:var(--muted)}
+  .eff-err.none{color:var(--muted);background:none;border:none;padding:6px 0}
+  @media (prefers-reduced-motion: reduce){ .eff-detail{transition:opacity .2s ease} }
+
   /* ---------- Line chart ---------- */
   .line-wrap svg{width:100%;height:auto;display:block}
   .line-note{font-size:11.5px;color:var(--muted);margin-top:10px}
@@ -1326,6 +1345,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             <div class="k-value" id="eff-global" style="font-size:26px">—</div>
           </div>
           <div id="eff-list"></div>
+          <div class="eff-detail" id="eff-detail"></div>
         </div>
 
         <div class="grid two" style="margin-bottom:16px">
@@ -2853,7 +2873,7 @@ function effList(el, rows){
   const w = ef => Math.max(2, Math.min(100, (ef-EFF_FLOOR)/(100-EFF_FLOOR)*100));
   el.innerHTML = con.map(r=>{
     const col = r.ef>=99.9 ? '#4e8c70' : (r.ef>=99.8 ? '#ab7a45' : '#b5524a');
-    return `<div class="bar-row" data-tip="<b>${r.n}</b> · ${r.e} error${r.e===1?'':'es'} en ${fmt(r.d)} estudios · ${r.f==='SIO'?'transcripciones en SIO':'Usuario recibe Entregas'}">
+    return `<div class="bar-row eff-click" data-lg="${r.lg}" data-tip="<b>${r.n}</b> · clic para ver el detalle de errores">
       <div class="bar-label">${r.n}</div>
       <div class="bar-track"><div class="bar-fill" data-w="${w(r.ef)}" style="background:${col}"></div></div>
       <div class="bar-val">${r.ef.toFixed(2)}%</div>
@@ -2873,6 +2893,10 @@ function renderEfect(){
   document.getElementById('eff-global').textContent = g.toFixed(2)+'%';
   const nS=effRows.filter(r=>r.f==='SIO').length, nE=effRows.length-nS;
   document.getElementById('eff-den').textContent = nS+' contra transcripciones en SIO y '+nE+' contra Usuario recibe Entregas';
+  document.getElementById('eff-list').onclick = e=>{
+    const row = e.target.closest('.bar-row[data-lg]'); if(!row) return;
+    setEffDetail(row.dataset.lg);
+  };
   barChart(document.getElementById('eff-tipos'), effTipos, 'var(--c-serv)',
            {fmt:v=>v, tip:d=>`<b>${d.name}</b> · ${d.v} caso${d.v===1?'':'s'}`});
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
@@ -2885,6 +2909,52 @@ function renderEfect(){
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, '+
     'que van contra la columna Usuario recibe Entregas de los reportes mensuales. '+
     'Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción.';
+}
+
+/* Detalle de errores por colaborador (desplegable) · Incidencias Internas Colaboradores.xlsx */
+const effDetalle = {
+  'hugotm':      {jul:[]},
+  'lauragg':     {jul:[]},
+  'monicaac':    {jul:[]},
+  'nestorgm':    {jul:[]},
+  'manuelev':    {jul:[{f:'01 jul 2026', t:'Error en interpretación'}]},
+  'sandrama':    {jul:[{f:'24 jul 2026', t:'Error ortográfico'}]},
+  'gracielacv':  {jul:[]},
+  'Mora Ponce Samanta Noemi': {jul:[]},
+  'Rios Meza Oswaldo Josue':  {jul:[{f:'27 jul 2026', t:'Omite disco en estudio'},{f:'27 jul 2026', t:'Faltó firma de gammagrama'}]},
+  'Perez Rodriguez Heli Janette': {jul:[]}
+};
+let effOpenLg = null;
+function renderEffDetail(lg){
+  const r = effRows.find(x=>x.lg===lg); if(!r) return;
+  const det = effDetalle[lg] || {jul:[]};
+  const fuente = r.f==='SIO' ? 'transcripciones en SIO' : 'Usuario recibe Entregas';
+  const ef = r.d ? ((1-r.e/r.d)*100).toFixed(2)+'%' : '—';
+  let items = det.jul.map(e=>
+    `<div class="eff-err"><span class="eff-err-date">${e.f}</span>`+
+    `<span class="eff-err-type">${e.t}</span><span class="eff-err-tag">julio</span></div>`).join('');
+  if(r.e>0){
+    items += `<div class="eff-err"><span class="eff-err-date">Ene–jun 2026</span>`+
+      `<span class="eff-err-type">${r.e} incidencia${r.e===1?'':'s'} interna${r.e===1?'':'s'} registrada${r.e===1?'':'s'}</span>`+
+      `<span class="eff-err-tag muted">registro interno</span></div>`;
+  }
+  if(!items) items = `<div class="eff-err none">Sin errores registrados en 2026. 🎉</div>`;
+  const totalErr = r.e + det.jul.length;
+  document.getElementById('eff-detail').innerHTML =
+    `<div class="eff-detail-head">
+       <div><b>${r.n}</b> · ${ef} de efectividad · <b>${totalErr}</b> error${totalErr===1?'':'es'} en 2026 · ${fmt(r.d)} estudios (${fuente})</div>
+       <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
+     </div>
+     <div class="eff-err-list">${items}</div>
+     <div class="line-note" style="margin-top:10px">Fuente: <i>Incidencias Internas Colaboradores.xlsx</i> (SharePoint · Documentos/Importante). El detalle fino (fecha y tipo por incidencia) de enero–junio no está itemizado en el archivo actual; se muestra el resumen.</div>`;
+  document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
+}
+function setEffDetail(lg){
+  const panel = document.getElementById('eff-detail');
+  const open = lg && lg!==effOpenLg;
+  if(open){ effOpenLg=lg; renderEffDetail(lg); panel.classList.add('open'); }
+  else { effOpenLg=null; panel.classList.remove('open'); }
+  document.querySelectorAll('#eff-list .bar-row').forEach(b=>b.classList.toggle('active', b.dataset.lg===effOpenLg));
 }
 
 
