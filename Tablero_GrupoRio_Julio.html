@@ -1354,12 +1354,12 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="grid two" style="margin-bottom:16px">
           <div class="card">
             <h3>Tipo de error</h3>
-            <p class="csub">Los 16 registros de 2026 (ene – 27 jul)</p>
+            <p class="csub">Los 18 registros de 2026 (ene – 7 ago)</p>
             <div class="bars" id="eff-tipos"></div>
           </div>
           <div class="card">
             <h3>Errores por mes</h3>
-            <p class="csub">Registro de incidencias internas · julio al día 27</p>
+            <p class="csub">Registro de incidencias internas · agosto al día 7</p>
             <div id="eff-mes"></div>
           </div>
         </div>
@@ -2864,9 +2864,10 @@ const effTipos = [
   {name:'Error de RM 1,5 / 3,0',v:2},{name:'Error de médico intérprete',v:1},
   {name:'Error en etiqueta',v:1},{name:'Omite dato de mCi',v:1},
   {name:'Datos incorrectos en orden',v:1},{name:'Omite disco en estudio',v:1},
-  {name:'Faltó firma gammagrama',v:1}
+  {name:'Faltó firma gammagrama',v:1},{name:'Error de transcripción',v:1},
+  {name:'Pasa estudio sin interpretación',v:1}
 ];
-const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:3},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:0}];
+const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:3},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:2}];
 const EFF_FLOOR = 99.5;
 
 function effList(el, rows){
@@ -2904,11 +2905,11 @@ function renderEfect(){
            {fmt:v=>v, tip:d=>`<b>${d.name}</b> · ${d.v} caso${d.v===1?'':'s'}`});
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
   document.getElementById('eff-nota').innerHTML =
-    '<b>Fuente.</b> Hoja «Registro por colaborador» de <i>Incidencias Internas Colaboradores.xlsx</i> '+
-    '(SharePoint · Documentos/Importante, corte 28 jul). Trae <b>16 errores en 2026</b>; la efectividad por colaborador usa los 12 '+
-    'de enero a junio porque los denominadores (SIO y Usuario recibe Entregas) llegan hasta junio. Los 4 de julio — '+
-    'Iván Enríquez (1 jul, interpretación), Estefanía Martínez (24 jul, ortográfico) y dos de Oswaldo Ríos (27 jul: omite disco '+
-    'y falta firma de gammagrama) — ya cuentan en «Tipo de error» y «Errores por mes», y entrarán a la efectividad al cerrar julio. '+
+    '<b>Fuente.</b> Hoja «Hoja2» de <i>Incidencias Internas Colaboradores.xlsx</i> '+
+    '(SharePoint · Documentos/Importante, corte 8 ago). Trae <b>18 incidencias en 2026</b>; la efectividad por colaborador usa las 12 '+
+    'de enero a junio porque los denominadores (SIO y Usuario recibe Entregas) llegan hasta junio. Las 6 posteriores — 4 de julio '+
+    '(Iván Enríquez, Estefanía Martínez y dos de Oswaldo Ríos) y 2 de agosto (Hugo Tabares, transcripción; Samanta Mora, estudio sin '+
+    'interpretación) — ya cuentan en «Tipo de error» y «Errores por mes», y entrarán a la efectividad al cerrar cada mes. '+
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, '+
     'que van contra la columna Usuario recibe Entregas de los reportes mensuales. '+
     'Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción.';
