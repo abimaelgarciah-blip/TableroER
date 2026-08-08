@@ -267,6 +267,20 @@
   .eff-err.none{color:var(--muted);background:none;border:none;padding:6px 0}
   @media (prefers-reduced-motion: reduce){ .eff-detail{transition:opacity .2s ease} }
 
+  /* ---------- Interpretación y transcripción (100% apilado) ---------- */
+  .dist-wrap{display:flex;gap:26px;align-items:flex-end;overflow-x:auto;padding:8px 2px 0}
+  .dist-group{display:flex;flex-direction:column;gap:8px;flex:0 0 auto}
+  .dist-bars{display:flex;gap:7px;align-items:flex-end}
+  .dist-col{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .dist-bar{width:34px;height:250px;border-radius:5px;overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .dist-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;
+    min-height:0;flex-shrink:0;transition:height .6s cubic-bezier(.22,.61,.36,1)}
+  .dist-seg.small{font-size:0}
+  .dist-x{font-size:11px;color:var(--muted)}
+  .dist-year{text-align:center;font-weight:700;color:var(--ink-2);font-size:13px;border-top:2px solid var(--border);padding-top:6px}
+  @media (prefers-reduced-motion: reduce){ .dist-seg{transition:none} }
+
   /* ---------- Line chart ---------- */
   .line-wrap svg{width:100%;height:auto;display:block}
   .line-note{font-size:11.5px;color:var(--muted);margin-top:10px}
@@ -1293,6 +1307,18 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           </div>
         </div>
 
+        <div class="card" style="margin-top:16px">
+          <div class="card-head">
+            <div>
+              <h3>Interpretación y transcripción</h3>
+              <p class="csub">Reparto mensual de las interpretaciones · % del total</p>
+            </div>
+            <div class="legend" id="dist-legend"></div>
+          </div>
+          <div id="dist-chart"></div>
+          <p class="line-note" style="margin-top:10px"><b>Transcriptores</b> = Medicina Nuclear + Densitometría + Resonancia + Tomografía de las cuentas de transcripción. <b>Intervención</b> = los demás estudios de transcripción. <b>Doctores</b> = todo lo que interpretan las cuentas de doctores. 2025 de referencia; 2026 calculado del SIO (Productividad de Transcripción).</p>
+        </div>
+
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
 
         <div class="grid kpis">
@@ -2268,6 +2294,40 @@ function initRad(){
     renderRad();
   }));
   renderRad();
+}
+/* Interpretación y transcripción · % del total · 2025 (referencia) + 2026 (SIO) */
+const distData = {
+  '2025':[{m:'Ene',t:20,i:28,d:52},{m:'Feb',t:25,i:27,d:48},{m:'Mar',t:22,i:30,d:48},{m:'Abr',t:14,i:40,d:46},{m:'May',t:19,i:30,d:51},{m:'Jun',t:21,i:30,d:49},{m:'Jul',t:26,i:28,d:46},{m:'Ago',t:21,i:30,d:49},{m:'Sep',t:18,i:36,d:46},{m:'Oct',t:19,i:33,d:48},{m:'Nov',t:18.5,i:36.5,d:45},{m:'Dic',t:22,i:30,d:48}],
+  '2026':[{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:9,i:33,d:58}]
+};
+const DIST_SRC=[['t','Transcriptores','#6b73d6'],['i','Intervención','#d6218a'],['d','Doctores','#17a2a2']];
+function renderDist(){
+  const fmtv=v=>Number.isInteger(v)?v:v.toFixed(1);
+  const wrap=document.createElement('div'); wrap.className='dist-wrap';
+  Object.keys(distData).forEach(yr=>{
+    const g=document.createElement('div'); g.className='dist-group';
+    const bars=document.createElement('div'); bars.className='dist-bars';
+    distData[yr].forEach(mo=>{
+      const col=document.createElement('div'); col.className='dist-col';
+      const bar=document.createElement('div'); bar.className='dist-bar';
+      bar.setAttribute('data-tip',`<b>${mo.m} ${yr}</b> · Transcriptores ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Doctores ${fmtv(mo.d)}%`);
+      [['d','#17a2a2'],['i','#d6218a'],['t','#6b73d6']].forEach(([k,c])=>{
+        const s=document.createElement('div'); s.className='dist-seg'+(mo[k]<6?' small':'');
+        s.style.background=c; s.dataset.h=mo[k]; s.style.height='0%'; s.textContent=fmtv(mo[k]);
+        bar.appendChild(s);
+      });
+      const x=document.createElement('div'); x.className='dist-x'; x.textContent=mo.m;
+      col.appendChild(bar); col.appendChild(x); bars.appendChild(col);
+    });
+    const yl=document.createElement('div'); yl.className='dist-year'; yl.textContent=yr;
+    g.appendChild(bars); g.appendChild(yl); wrap.appendChild(g);
+  });
+  const host=document.getElementById('dist-chart'); host.innerHTML=''; host.appendChild(wrap);
+  document.getElementById('dist-legend').innerHTML=DIST_SRC.map(([k,nm,c])=>
+    `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-left:14px"><span style="width:11px;height:11px;border-radius:3px;background:${c};display:inline-block"></span>${nm}</span>`).join('');
+  const segs=host.querySelectorAll('.dist-seg');
+  if(typeof reduce!=='undefined' && reduce){ segs.forEach(s=>s.style.height=s.dataset.h+'%'); }
+  else { requestAnimationFrame(()=>requestAnimationFrame(()=>segs.forEach(s=>s.style.height=s.dataset.h+'%'))); }
 }
 const servicios = [
   {name:'Ecosonografía',v:289},
@@ -3493,6 +3553,7 @@ function renderAll(){
   lineChart(document.getElementById('line-interp'), trendInterp, getComputedStyle(document.documentElement).getPropertyValue('--c-interp').trim());
   lineChart(document.getElementById('line-trans'),  trendTrans,  getComputedStyle(document.documentElement).getPropertyValue('--c-trans').trim());
   initRad();
+  renderDist();
   initServicios();
   barChart(document.getElementById('bars-transcriptores'), transcriptores, 'var(--c-people)');
   initTrans();
