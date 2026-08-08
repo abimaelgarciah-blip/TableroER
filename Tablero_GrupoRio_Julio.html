@@ -257,9 +257,12 @@
   .eff-err-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
   .eff-err{display:flex;align-items:center;gap:10px;font-size:13px;background:var(--sidebar);
     border:1px solid var(--border);border-radius:8px;padding:8px 12px}
-  .eff-err-date{font-variant-numeric:tabular-nums;color:var(--muted);min-width:96px}
-  .eff-err-type{color:var(--ink);font-weight:500;flex:1}
-  .eff-err-tag{font-size:11px;font-weight:600;color:#fff;background:var(--c-serv);border-radius:20px;padding:2px 9px;white-space:nowrap}
+  .eff-err-date{font-variant-numeric:tabular-nums;color:var(--muted);min-width:92px;flex-shrink:0}
+  .eff-err-type{color:var(--ink);flex:1;display:flex;flex-direction:column;gap:1px}
+  .eff-err-type b{font-weight:600}
+  .eff-err-px{font-size:11.5px;color:var(--muted);font-weight:400}
+  .eff-err-tag{font-size:11px;font-weight:600;color:var(--muted);background:var(--track);border-radius:20px;padding:2px 9px;white-space:nowrap;flex-shrink:0;text-transform:capitalize}
+  .eff-err-tag.post{background:var(--c-serv);color:#fff}
   .eff-err-tag.muted{background:var(--track);color:var(--muted)}
   .eff-err.none{color:var(--muted);background:none;border:none;padding:6px 0}
   @media (prefers-reduced-motion: reduce){ .eff-detail{transition:opacity .2s ease} }
@@ -2913,40 +2916,71 @@ function renderEfect(){
 
 /* Detalle de errores por colaborador (desplegable) · Incidencias Internas Colaboradores.xlsx */
 const effDetalle = {
-  'hugotm':      {jul:[]},
-  'lauragg':     {jul:[]},
-  'monicaac':    {jul:[]},
-  'nestorgm':    {jul:[]},
-  'manuelev':    {jul:[{f:'01 jul 2026', t:'Error en interpretación'}]},
-  'sandrama':    {jul:[{f:'24 jul 2026', t:'Error ortográfico'}]},
-  'gracielacv':  {jul:[]},
-  'Mora Ponce Samanta Noemi': {jul:[]},
-  'Rios Meza Oswaldo Josue':  {jul:[{f:'27 jul 2026', t:'Omite disco en estudio'},{f:'27 jul 2026', t:'Faltó firma de gammagrama'}]},
-  'Perez Rodriguez Heli Janette': {jul:[]}
+  'hugotm':[
+    {f:'08 ene 2026', px:'Rocha Conchas Miguel',            t:'Error ortográfico',     m:'ene'},
+    {f:'25 mar 2026', px:'Santiago Trujillo Ma Esperanza',  t:'Error ortográfico',     m:'mar'},
+    {f:'22 jun 2026', px:'Bernache Benavides María Cristina',t:'Error en RM 1,5 / 3,0', m:'jun'},
+    {f:'07 ago 2026', px:'Díaz García Ma Paz',              t:'Error de transcripción', m:'ago'}
+  ],
+  'lauragg':[
+    {f:'21 abr 2026', px:'Delgadillo Hinojosa Ramiro',      t:'Omite dato de mCi',      m:'abr'},
+    {f:'10 jun 2026', px:'Guemez Castillo Marisela',        t:'Error en interpretación', m:'jun'}
+  ],
+  'monicaac':[
+    {f:'02 abr 2026', px:'Guerra González Najib Raúl',      t:'Error de médico intérprete', m:'abr'}
+  ],
+  'nestorgm':[
+    {f:'01 abr 2026', px:'Yanes Quintana Alberto Antonio',  t:'Error en interpretación', m:'abr'}
+  ],
+  'manuelev':[
+    {f:'09 ene 2026', px:'Gascón Carranza Simona Elizabeth', t:'Error ortográfico',     m:'ene'},
+    {f:'01 jul 2026', px:'Ortega Moreno Aurelia',           t:'Error en interpretación', m:'jul'}
+  ],
+  'sandrama':[
+    {f:'03 jun 2026', px:'Mn 43964',                        t:'Error en interpretación', m:'jun'},
+    {f:'24 jul 2026', px:'Anaya Gudiño Manuel',             t:'Error ortográfico',     m:'jul'}
+  ],
+  'gracielacv':[
+    {f:'29 may 2026', px:'Vargas Gutiérrez Araceli',        t:'Error de RM 1,5 / 3,0', m:'may'}
+  ],
+  'Mora Ponce Samanta Noemi':[
+    {f:'07 ago 2026', px:'Cervantes Reyes Natalia Guadalupe', t:'Pasa estudio sin interpretación', m:'ago'}
+  ],
+  'Rios Meza Oswaldo Josue':[
+    {f:'11 mar 2026', px:'Araujo Silva José Emilio',        t:'Datos incorrectos en orden de servicio', m:'mar'},
+    {f:'27 jul 2026', px:'Hernández Toscano Ma del Refugio', t:'Omite disco en estudio', m:'jul'},
+    {f:'27 jul 2026', px:'Valencia Vázquez Oscar Ernesto',  t:'Faltó firma de gammagrama', m:'jul'}
+  ],
+  'Perez Rodriguez Heli Janette':[
+    {f:'23 mar 2026', px:'Martínez Martínez Diana Noemi',   t:'Error en etiqueta',      m:'mar'}
+  ]
 };
+const effPost = new Set(['jul','ago','sep','oct','nov','dic']);
 let effOpenLg = null;
 function renderEffDetail(lg){
   const r = effRows.find(x=>x.lg===lg); if(!r) return;
-  const det = effDetalle[lg] || {jul:[]};
+  const det = effDetalle[lg] || [];
   const fuente = r.f==='SIO' ? 'transcripciones en SIO' : 'Usuario recibe Entregas';
   const ef = r.d ? ((1-r.e/r.d)*100).toFixed(2)+'%' : '—';
-  let items = det.jul.map(e=>
-    `<div class="eff-err"><span class="eff-err-date">${e.f}</span>`+
-    `<span class="eff-err-type">${e.t}</span><span class="eff-err-tag">julio</span></div>`).join('');
-  if(r.e>0){
-    items += `<div class="eff-err"><span class="eff-err-date">Ene–jun 2026</span>`+
-      `<span class="eff-err-type">${r.e} incidencia${r.e===1?'':'s'} interna${r.e===1?'':'s'} registrada${r.e===1?'':'s'}</span>`+
-      `<span class="eff-err-tag muted">registro interno</span></div>`;
-  }
-  if(!items) items = `<div class="eff-err none">Sin errores registrados en 2026. 🎉</div>`;
-  const totalErr = r.e + det.jul.length;
+  let items = det.map(e=>{
+    const post = effPost.has(e.m);
+    return `<div class="eff-err">`+
+      `<span class="eff-err-date">${e.f}</span>`+
+      `<span class="eff-err-type"><b>${e.t}</b><span class="eff-err-px">${e.px}</span></span>`+
+      `<span class="eff-err-tag${post?' post':''}">${e.m}${post?' · post-jun':''}</span></div>`;
+  }).join('');
+  if(!items) items = `<div class="eff-err none">Sin incidencias registradas en 2026. 🎉</div>`;
+  const n = det.length, nPost = det.filter(e=>effPost.has(e.m)).length;
+  const resumen = n
+    ? `<b>${n}</b> incidencia${n===1?'':'s'} en 2026`+(nPost?` · ${nPost} posterior${nPost===1?'':'es'} al cierre de junio (aún no pesan en la efectividad)`:'')
+    : 'sin incidencias en 2026';
   document.getElementById('eff-detail').innerHTML =
     `<div class="eff-detail-head">
-       <div><b>${r.n}</b> · ${ef} de efectividad · <b>${totalErr}</b> error${totalErr===1?'':'es'} en 2026 · ${fmt(r.d)} estudios (${fuente})</div>
+       <div><b>${r.n}</b> · ${ef} de efectividad (ene–jun) · ${resumen} · ${fmt(r.d)} estudios (${fuente})</div>
        <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
-     <div class="line-note" style="margin-top:10px">Fuente: <i>Incidencias Internas Colaboradores.xlsx</i> (SharePoint · Documentos/Importante). El detalle fino (fecha y tipo por incidencia) de enero–junio no está itemizado en el archivo actual; se muestra el resumen.</div>`;
+     <div class="line-note" style="margin-top:10px">Fuente: <i>Incidencias Internas Colaboradores.xlsx</i> · hoja «Hoja2» (SharePoint · Documentos/Importante). Cada renglón es una incidencia con su fecha, paciente y tipo. La efectividad usa solo las de enero–junio, porque los denominadores (SIO / Usuario recibe Entregas) llegan hasta junio.</div>`;
   document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
 }
 function setEffDetail(lg){
