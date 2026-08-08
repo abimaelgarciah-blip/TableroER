@@ -2848,13 +2848,13 @@ function trLegend(items){
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
 const effRows = [
-  {n:'Hugo Tabares',      lg:'hugotm',     e:3, d:3566, f:'SIO', cut:7},
-  {n:'Laura García',      lg:'lauragg',    e:2, d:3035, f:'SIO', cut:7},
-  {n:'Mónica Anaya',      lg:'monicaac',   e:1, d:2799, f:'SIO', cut:7},
-  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1239, f:'SIO', cut:7},
-  {n:'Iván Enríquez',     lg:'manuelev',   e:2, d:536,  f:'SIO', cut:7},
-  {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1097, f:'SIO', cut:7},
-  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3265, f:'SIO', cut:7},
+  {n:'Hugo Tabares',      lg:'hugotm',     e:3, d:3621, f:'SIO', cut:7},
+  {n:'Laura García',      lg:'lauragg',    e:2, d:3087, f:'SIO', cut:7},
+  {n:'Mónica Anaya',      lg:'monicaac',   e:1, d:2851, f:'SIO', cut:7},
+  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1263, f:'SIO', cut:7},
+  {n:'Iván Enríquez',     lg:'manuelev',   e:2, d:542,  f:'SIO', cut:7},
+  {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1143, f:'SIO', cut:7},
+  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3332, f:'SIO', cut:7},
   {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:0, d:12672, f:'Entregas', cut:7},
   {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:3, d:6568,  f:'Entregas', cut:7},
   {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas', cut:7}
@@ -2908,7 +2908,7 @@ function renderEfect(){
     '<b>Fuente.</b> Hoja «Hoja2» de <i>Incidencias Internas Colaboradores.xlsx</i> '+
     '(SharePoint · Documentos/Importante, corte 8 ago). Trae <b>18 incidencias en 2026</b>. La efectividad se calcula sobre '+
     '<b>enero–julio</b>: a cada denominador ene–jun se le sumó julio. Para los <b>7 transcriptores SIO</b>, julio viene de '+
-    'Productividad de Transcripción (Datos Tablero, semanas 28–31, del 1 al 26 jul). Para el <b>grupo de Entregas</b> '+
+    'Productividad de Transcripción (Datos Tablero, del 1 al 31 jul). Para el <b>grupo de Entregas</b> '+
     '(Samanta +2 343, Oswaldo +981, Heli 0), julio viene de la columna «Usuario Recibe Entregas» del export '+
     '<i>Tiempo promesa de entrega</i> (julio completo). Así, los 4 errores de julio — Iván Enríquez (1 jul), Estefanía Martínez '+
     '(24 jul) y los dos de Oswaldo Ríos (27 jul) — ya pesan en la efectividad. Solo quedan fuera las <b>2 incidencias de agosto</b> '+
@@ -2988,7 +2988,7 @@ function renderEffDetail(lg){
        <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
-     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Incidencias Internas Colaboradores.xlsx</i> · «Hoja2». Denominador enero–julio: transcriptores SIO por Productividad de Transcripción (al 26 jul); grupo de Entregas por «Usuario Recibe Entregas» del export Tiempo promesa (julio completo).</div>`;
+     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Incidencias Internas Colaboradores.xlsx</i> · «Hoja2». Denominador enero–julio (julio completo, 1–31 jul): transcriptores SIO por Productividad de Transcripción; grupo de Entregas por «Usuario Recibe Entregas» del export Tiempo promesa.</div>`;
   document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
 }
 function setEffDetail(lg){
