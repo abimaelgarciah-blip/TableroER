@@ -1320,6 +1320,18 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <p class="line-note" style="margin-top:10px"><b>Transcriptores</b> = Medicina Nuclear + Densitometría + Resonancia + Tomografía de las cuentas de transcripción. <b>Intervención</b> = los demás estudios de transcripción. <b>Doctores</b> = todo lo que interpretan las cuentas de doctores. 2025 de referencia; 2026 calculado del SIO (Productividad de Transcripción).</p>
         </div>
 
+        <div class="card" style="margin-top:16px">
+          <div class="card-head">
+            <div>
+              <h3>Transcriptores: SIO vs Exa · jun – jul</h3>
+              <p class="csub">La franja de imagen (Densi/MN/RM/TAC) medida con SIO vs con el total de Exa</p>
+            </div>
+            <div class="legend" id="distcmp-legend"></div>
+          </div>
+          <div id="distcmp-chart"></div>
+          <p class="line-note" style="margin-top:10px">Misma partición, pero <b>Transcriptores</b> se toma del <b>total de Exa</b> (lo efectivamente leído: 793 en junio, 973 en julio) en lugar del conteo de imagen del SIO, sobre el mismo total de interpretaciones. En julio el SIO atribuye poca imagen a transcriptores (5%) porque la registra a cuentas de doctores; medido con Exa sube a <b>12%</b>.</p>
+        </div>
+
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
 
         <div class="grid kpis">
@@ -2302,16 +2314,16 @@ const distData = {
   '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:9,i:33,d:58},{m:'Jul',t:5,i:32,d:63}]
 };
 const DIST_SRC=[['t','Transcriptores','#6b73d6'],['i','Intervención','#d6218a'],['d','Doctores','#17a2a2']];
-function renderDist(){
+function drawStacked(hostId, legendId, groups){
   const fmtv=v=>Number.isInteger(v)?v:v.toFixed(1);
   const wrap=document.createElement('div'); wrap.className='dist-wrap';
-  Object.keys(distData).forEach(yr=>{
+  Object.keys(groups).forEach(grp=>{
     const g=document.createElement('div'); g.className='dist-group';
     const bars=document.createElement('div'); bars.className='dist-bars';
-    distData[yr].forEach(mo=>{
+    groups[grp].forEach(mo=>{
       const col=document.createElement('div'); col.className='dist-col';
       const bar=document.createElement('div'); bar.className='dist-bar';
-      bar.setAttribute('data-tip',`<b>${mo.m} ${yr}</b> · Transcriptores ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Doctores ${fmtv(mo.d)}%`);
+      bar.setAttribute('data-tip',`<b>${mo.m} · ${grp}</b> · Transcriptores ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Doctores ${fmtv(mo.d)}%`);
       [['d','#17a2a2'],['i','#d6218a'],['t','#6b73d6']].forEach(([k,c])=>{
         const s=document.createElement('div'); s.className='dist-seg'+(mo[k]<6?' small':'');
         s.style.background=c; s.dataset.h=mo[k]; s.style.height='0%'; s.textContent=fmtv(mo[k]);
@@ -2320,16 +2332,23 @@ function renderDist(){
       const x=document.createElement('div'); x.className='dist-x'; x.textContent=mo.m;
       col.appendChild(bar); col.appendChild(x); bars.appendChild(col);
     });
-    const yl=document.createElement('div'); yl.className='dist-year'; yl.textContent=yr;
+    const yl=document.createElement('div'); yl.className='dist-year'; yl.textContent=grp;
     g.appendChild(bars); g.appendChild(yl); wrap.appendChild(g);
   });
-  const host=document.getElementById('dist-chart'); host.innerHTML=''; host.appendChild(wrap);
-  document.getElementById('dist-legend').innerHTML=DIST_SRC.map(([k,nm,c])=>
+  const host=document.getElementById(hostId); host.innerHTML=''; host.appendChild(wrap);
+  if(legendId) document.getElementById(legendId).innerHTML=DIST_SRC.map(([k,nm,c])=>
     `<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-left:14px"><span style="width:11px;height:11px;border-radius:3px;background:${c};display:inline-block"></span>${nm}</span>`).join('');
   const segs=host.querySelectorAll('.dist-seg');
   if(typeof reduce!=='undefined' && reduce){ segs.forEach(s=>s.style.height=s.dataset.h+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>segs.forEach(s=>s.style.height=s.dataset.h+'%'))); }
 }
+/* Comparación: Transcriptores medido con SIO vs con el total de Exa (jun–jul) */
+const distCmp = {
+  'Junio':[{m:'SIO',t:9,i:33,d:58},{m:'Exa',t:10,i:33,d:57}],
+  'Julio':[{m:'SIO',t:5,i:32,d:63},{m:'Exa',t:12,i:32,d:56}]
+};
+function renderDist(){ drawStacked('dist-chart','dist-legend', distData); }
+function renderDistCmp(){ drawStacked('distcmp-chart','distcmp-legend', distCmp); }
 const servicios = [
   {name:'Ecosonografía',v:289},
   {name:'Radiología',v:264},
@@ -3555,6 +3574,7 @@ function renderAll(){
   lineChart(document.getElementById('line-trans'),  trendTrans,  getComputedStyle(document.documentElement).getPropertyValue('--c-trans').trim());
   initRad();
   renderDist();
+  renderDistCmp();
   initServicios();
   barChart(document.getElementById('bars-transcriptores'), transcriptores, 'var(--c-people)');
   initTrans();
