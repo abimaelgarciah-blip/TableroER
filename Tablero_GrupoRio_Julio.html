@@ -1323,13 +1323,13 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="card" style="margin-top:16px">
           <div class="card-head">
             <div>
-              <h3>Transcriptores: SIO vs Exa · jun – jul</h3>
-              <p class="csub">La franja de imagen (Densi/MN/RM/TAC) medida con SIO vs con el total de Exa</p>
+              <h3>Interpretación y transcripción · según Exa (jun – jul)</h3>
+              <p class="csub">Reparto usando el total de Exa como imagen transcrita · % del total</p>
             </div>
             <div class="legend" id="distcmp-legend"></div>
           </div>
           <div id="distcmp-chart"></div>
-          <p class="line-note" style="margin-top:10px">Misma partición, pero <b>Transcriptores</b> se toma del <b>total de Exa</b> (lo efectivamente leído: 793 en junio, 973 en julio) en lugar del conteo de imagen del SIO, sobre el mismo total de interpretaciones. En julio el SIO atribuye poca imagen a transcriptores (5%) porque la registra a cuentas de doctores; medido con Exa sube a <b>12%</b>.</p>
+          <p class="line-note" style="margin-top:10px">Aquí <b>Transcriptores</b> se toma del <b>total de Exa</b> (lo efectivamente leído: 793 en junio, 973 en julio) como la imagen que transcriben, en lugar del conteo del SIO. Exa refleja quién leyó realmente la imagen, por lo que es la fuente <b>más fidedigna</b>: en julio los transcriptores pasan de 5% (SIO) a <b>12%</b>.</p>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
@@ -2342,10 +2342,9 @@ function drawStacked(hostId, legendId, groups){
   if(typeof reduce!=='undefined' && reduce){ segs.forEach(s=>s.style.height=s.dataset.h+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>segs.forEach(s=>s.style.height=s.dataset.h+'%'))); }
 }
-/* Comparación: Transcriptores medido con SIO vs con el total de Exa (jun–jul) */
+/* Interpretación y transcripción según Exa (jun–jul) · Exa como imagen transcrita */
 const distCmp = {
-  'Junio':[{m:'SIO',t:9,i:33,d:58},{m:'Exa',t:10,i:33,d:57}],
-  'Julio':[{m:'SIO',t:5,i:32,d:63},{m:'Exa',t:12,i:32,d:56}]
+  '2026 · Exa':[{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56}]
 };
 function renderDist(){ drawStacked('dist-chart','dist-legend', distData); }
 function renderDistCmp(){ drawStacked('distcmp-chart','distcmp-legend', distCmp); }
