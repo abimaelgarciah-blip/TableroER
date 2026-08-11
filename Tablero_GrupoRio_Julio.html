@@ -1317,19 +1317,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             <div class="legend" id="dist-legend"></div>
           </div>
           <div id="dist-chart"></div>
-          <p class="line-note" style="margin-top:10px"><b>Transcriptores</b> = Medicina Nuclear + Densitometría + Resonancia + Tomografía de las cuentas de transcripción. <b>Intervención</b> = los demás estudios de transcripción. <b>Doctores</b> = todo lo que interpretan las cuentas de doctores. 2025 de referencia; 2026 calculado del SIO (Productividad de Transcripción).</p>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <div class="card-head">
-            <div>
-              <h3>Interpretación y transcripción · según Exa (jun – jul)</h3>
-              <p class="csub">Reparto usando el total de Exa como imagen transcrita · % del total</p>
-            </div>
-            <div class="legend" id="distcmp-legend"></div>
-          </div>
-          <div id="distcmp-chart"></div>
-          <p class="line-note" style="margin-top:10px">Aquí <b>Transcriptores</b> se toma del <b>total de Exa</b> (lo efectivamente leído: 793 en junio, 973 en julio) como la imagen que transcriben, en lugar del conteo del SIO. Exa refleja quién leyó realmente la imagen, por lo que es la fuente <b>más fidedigna</b>: en julio los transcriptores pasan de 5% (SIO) a <b>12%</b>.</p>
+          <p class="line-note" style="margin-top:10px"><b>Transcriptores</b> = Medicina Nuclear + Densitometría + Resonancia + Tomografía de las cuentas de transcripción. <b>Intervención</b> = los demás estudios de transcripción. <b>Doctores</b> = todo lo que interpretan las cuentas de doctores. 2025 de referencia; 2026 del SIO (Productividad de Transcripción), salvo <b>junio y julio</b>, donde Transcriptores usa el <b>total de Exa</b> (lo efectivamente leído: 793 y 973), la fuente más fidedigna para la lectura de imagen.</p>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
@@ -2311,9 +2299,10 @@ function initRad(){
 /* Interpretación y transcripción · % del total · 2025 (referencia) + 2026 (SIO) */
 const distData = {
   '2025':[{m:'Ene',t:20,i:28,d:52},{m:'Feb',t:25,i:27,d:48},{m:'Mar',t:22,i:30,d:48},{m:'Abr',t:14,i:40,d:46},{m:'May',t:19,i:30,d:51},{m:'Jun',t:21,i:30,d:49},{m:'Jul',t:26,i:28,d:46},{m:'Ago',t:21,i:30,d:49},{m:'Sep',t:18,i:36,d:46},{m:'Oct',t:19,i:33,d:48},{m:'Nov',t:18.5,i:36.5,d:45},{m:'Dic',t:22,i:30,d:48}],
-  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:9,i:33,d:58},{m:'Jul',t:5,i:32,d:63}]
+  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56}]
 };
-const DIST_SRC=[['t','Transcriptores','#6b73d6'],['i','Intervención','#d6218a'],['d','Doctores','#17a2a2']];
+const DIST_SRC=[['t','Transcriptores','var(--c-trans)'],['i','Intervención','var(--c-serv)'],['d','Doctores','var(--c-interp)']];
+const DIST_COL=Object.fromEntries(DIST_SRC.map(s=>[s[0],s[2]]));
 function drawStacked(hostId, legendId, groups){
   const fmtv=v=>Number.isInteger(v)?v:v.toFixed(1);
   const wrap=document.createElement('div'); wrap.className='dist-wrap';
@@ -2324,9 +2313,9 @@ function drawStacked(hostId, legendId, groups){
       const col=document.createElement('div'); col.className='dist-col';
       const bar=document.createElement('div'); bar.className='dist-bar';
       bar.setAttribute('data-tip',`<b>${mo.m} · ${grp}</b> · Transcriptores ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Doctores ${fmtv(mo.d)}%`);
-      [['d','#17a2a2'],['i','#d6218a'],['t','#6b73d6']].forEach(([k,c])=>{
+      ['d','i','t'].forEach(k=>{
         const s=document.createElement('div'); s.className='dist-seg'+(mo[k]<6?' small':'');
-        s.style.background=c; s.dataset.h=mo[k]; s.style.height='0%'; s.textContent=fmtv(mo[k]);
+        s.style.background=DIST_COL[k]; s.dataset.h=mo[k]; s.style.height='0%'; s.textContent=fmtv(mo[k]);
         bar.appendChild(s);
       });
       const x=document.createElement('div'); x.className='dist-x'; x.textContent=mo.m;
@@ -2342,12 +2331,7 @@ function drawStacked(hostId, legendId, groups){
   if(typeof reduce!=='undefined' && reduce){ segs.forEach(s=>s.style.height=s.dataset.h+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>segs.forEach(s=>s.style.height=s.dataset.h+'%'))); }
 }
-/* Interpretación y transcripción según Exa (jun–jul) · Exa como imagen transcrita */
-const distCmp = {
-  '2026 · Exa':[{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56}]
-};
 function renderDist(){ drawStacked('dist-chart','dist-legend', distData); }
-function renderDistCmp(){ drawStacked('distcmp-chart','distcmp-legend', distCmp); }
 const servicios = [
   {name:'Ecosonografía',v:289},
   {name:'Radiología',v:264},
@@ -3573,7 +3557,6 @@ function renderAll(){
   lineChart(document.getElementById('line-trans'),  trendTrans,  getComputedStyle(document.documentElement).getPropertyValue('--c-trans').trim());
   initRad();
   renderDist();
-  renderDistCmp();
   initServicios();
   barChart(document.getElementById('bars-transcriptores'), transcriptores, 'var(--c-people)');
   initTrans();
