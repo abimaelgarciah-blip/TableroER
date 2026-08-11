@@ -1430,7 +1430,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="card" style="margin-bottom:16px">
           <h3>Incidencias por colaborador</h3>
-          <p class="csub" id="incc-sub">Registro de incidencias · ET (errores de transcripción) y R (reincidencias)</p>
+          <p class="csub" id="incc-sub">Registro de incidencias · ET = Error de Transcripción · R = Retardos</p>
           <div id="bars-inc-colab"></div>
           <div class="line-note" style="margin-top:10px" id="incc-nota"></div>
         </div>
@@ -3105,7 +3105,7 @@ function renderIncColab(){
     const w = r.tot/max*100;
     const etW = r.tot? r.et/r.tot*w : 0;
     const rW = r.tot? r.r/r.tot*w : 0;
-    const tip = `<b>${r.name}</b> · ET ${r.et} · R ${r.r}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
+    const tip = `<b>${r.name}</b> · Error de transcripción ${r.et} · Retardos ${r.r}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
     return `<div class="bar-row" data-tip="${tip}">
       <div class="bar-label">${r.name}</div>
       <div class="bar-track">
@@ -3120,10 +3120,10 @@ function renderIncColab(){
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
   const totET=rows.reduce((a,r)=>a+r.et,0), totR=rows.reduce((a,r)=>a+r.r,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
   document.getElementById('incc-nota').innerHTML =
-    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>ET · ${totET}</span>`+
-    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>R · ${totR}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>Error de transcripción (ET) · ${totET}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>Retardos (R) · ${totR}</span>`+
     (totActa?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#ba544c;display:inline-block"></span>Acta administrativa · ${totActa}</span>`:'')+
-    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). El archivo no define qué significan las columnas «ET» y «R»; se muestran tal cual las trae la fuente, junto con «Acta Administrativa» cuando aplica.</div>`;
+    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de sus 2 retardos.</div>`;
 }
 
 /* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul 2026) */
