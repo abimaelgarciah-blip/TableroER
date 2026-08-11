@@ -613,6 +613,11 @@
               <div class="heat-leg" id="incd-heat-leg"></div>
               <div class="line-note" id="incd-nota-heat" style="margin-top:10px"></div>
             </div>
+            <div style="margin-top:16px">
+              <h4 class="mini-h">Motivos de incumplimiento · julio 2026</h4>
+              <div class="bars wide" id="bars-inc-motivos"></div>
+              <div class="line-note" style="margin-top:10px" id="inc-motivos-nota"></div>
+            </div>
             <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con 24 h o más de retraso se cuentan como cumplimiento (seguimientos de calidad) y se excluyen del histograma. Datos del reporte de julio 2026.</div>
           </div>
         </div>
@@ -3566,6 +3571,7 @@ function renderAll(){
   // Indicador por unidad (junio) + tendencia temporal
   buildUnitBar();
   renderIndicador('Todas');
+  renderIncMotivos();
   document.getElementById('inc-toggle').onclick=()=>setIncDetail(!incDetailOpen);
   document.getElementById('inc-close').onclick=()=>setIncDetail(false);
   document.querySelectorAll('#ind-seg .seg-b').forEach(b=>
@@ -3598,6 +3604,25 @@ function incByDeptoUnit(unit){
     cnt[d]=(cnt[d]||0)+1;
   });
   return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({name,v}));
+}
+/* Motivos de incumplimiento · muestra cualitativa "Rojos" · julio 2026 (48 estudios con motivo registrado) */
+const incMotivosJul = [
+  {name:'Carga de trabajo por falta de radiólogos', v:14},
+  {name:'Proceso administrativo / insumos', v:10},
+  {name:'Calidad / revisión de interpretación', v:8},
+  {name:'Error de sistema (Exa / SIOW)', v:5},
+  {name:'Evento especial (capacitación)', v:5},
+  {name:'Firma o documentación', v:3},
+  {name:'Falla de infraestructura (luz)', v:3}
+];
+function renderIncMotivos(){
+  const el=document.getElementById('bars-inc-motivos'); if(!el) return;
+  barChart(el, incMotivosJul, '#c96f63', {tip:d=>`<b>${d.name}</b> · ${d.v} caso${d.v===1?'':'s'}`});
+  const tot=incMotivosJul.reduce((a,r)=>a+r.v,0), top=incMotivosJul[0];
+  document.getElementById('inc-motivos-nota').innerHTML =
+    `Muestra cualitativa de <b>${tot} estudios "rojos"</b> (incumplidos) de julio 2026, con su motivo registrado (bitácora de calidad, no cubre el total de incumplidos del mes). `+
+    `<b>${top.name}</b> es el motivo más frecuente (<b>${top.v} de ${tot}</b>, ${Math.round(top.v/tot*100)}%): estudios detenidos porque el radiólogo estaba ocupado en otro estudio o procedimiento, casos complejos, o en espera de aprobación de otro radiólogo — no venía como categoría explícita en la bitácora, se consolidó a partir de los motivos individuales que lo describen. `+
+    `Le siguen procesos administrativos e insumos (${incMotivosJul[1].v}) y calidad/revisión de la interpretación (${incMotivosJul[2].v}).`;
 }
 function renderIncDetail(nombre){
   const u=unidades[nombre]; if(!u) return;
