@@ -2272,16 +2272,65 @@ const incRecs = {"dias":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],"horas":[9
 /* Estudios por transcriptor (Exa · lectura MR/CT) · jun–jul 2026 · radiólogos excluidos (Abimael G.H.) */
 const radData = {
   months: [
-    {k:'jun', lab:'Junio 2026 · 1 – 30 jun', tot:771,
-      rad:[{name:'Tabares Martínez, Hugo',v:193},{name:'Anaya Constante, Mónica',v:141},{name:'García Godínez, Laura',v:135},{name:'Martínez Andrade, Sandra',v:101},{name:'González Medina, Néstor',v:99},{name:'Enríquez Velázquez, Manuel',v:96},{name:'Cortés Vázquez, Graciela',v:4},{name:'González Pérez, Humberto',v:2}],
-      mod:[{name:'Resonancia (MR)',v:629},{name:'Tomografía (CT)',v:134},{name:'Rayos X (DX)',v:4},{name:'Ultrasonido (US)',v:3},{name:'Otro (OT)',v:1}],
-      sede:[{name:'Unidad López Mateos',v:500},{name:'Chamizal',v:157},{name:'Acueducto',v:110},{name:'Medicina Preventiva',v:4}]},
-    {k:'jul', lab:'Julio 2026 · 1 – 31 jul', tot:963,
-      rad:[{name:'Tabares Martínez, Hugo',v:208},{name:'Anaya Constante, Mónica',v:172},{name:'González Medina, Néstor',v:162},{name:'García Godínez, Laura',v:155},{name:'Enríquez Velázquez, Manuel',v:131},{name:'Martínez Andrade, Sandra',v:128},{name:'Cortés Vázquez, Graciela',v:6},{name:'González Pérez, Humberto',v:1}],
-      mod:[{name:'Resonancia (MR)',v:837},{name:'Tomografía (CT)',v:120},{name:'Ultrasonido (US)',v:3},{name:'Rayos X (DX)',v:2},{name:'Densitometría (BMD)',v:1}],
-      sede:[{name:'Unidad López Mateos',v:611},{name:'Acueducto',v:187},{name:'Chamizal',v:162},{name:'Medicina Preventiva',v:2},{name:'Clínica de la Mujer',v:1}]}
+    {k:'Ene25', lab:'Enero 2025 · RM+Densi+MN+TAC', tot:925,
+      rad:[{name:'Casandra Ceballos',v:419},{name:'Mónica Anaya',v:313},{name:'Hugo Tabares',v:143},{name:'Graciela Cortés',v:20},{name:'Alberto Valdez',v:15},{name:'Humberto González',v:11},{name:'Iván Enríquez',v:3},{name:'Samanta Mora',v:1}],
+      mod:[{name:'Resonancia',v:408},{name:'Tomografía',v:238},{name:'Densitometría',v:161},{name:'Medicina Nuclear',v:118}], sede:[]},
+    {k:'Feb25', lab:'Febrero 2025 · RM+Densi+MN+TAC', tot:862,
+      rad:[{name:'Casandra Ceballos',v:409},{name:'Mónica Anaya',v:213},{name:'Graciela Cortés',v:119},{name:'Hugo Tabares',v:93},{name:'Humberto González',v:15},{name:'Iván Enríquez',v:11},{name:'Laura García',v:1},{name:'Alberto Valdez',v:1}],
+      mod:[{name:'Resonancia',v:381},{name:'Tomografía',v:204},{name:'Densitometría',v:159},{name:'Medicina Nuclear',v:118}], sede:[]},
+    {k:'Mar25', lab:'Marzo 2025 · RM+Densi+MN+TAC', tot:1106,
+      rad:[{name:'Casandra Ceballos',v:451},{name:'Mónica Anaya',v:339},{name:'Graciela Cortés',v:140},{name:'Hugo Tabares',v:127},{name:'Humberto González',v:35},{name:'Iván Enríquez',v:8},{name:'Laura García',v:3},{name:'Alberto Valdez',v:2},{name:'Samanta Mora',v:1}],
+      mod:[{name:'Resonancia',v:487},{name:'Tomografía',v:285},{name:'Densitometría',v:217},{name:'Medicina Nuclear',v:117}], sede:[]},
+    {k:'Abr25', lab:'Abril 2025 · RM+Densi+MN+TAC', tot:1336,
+      rad:[{name:'Casandra Ceballos',v:629},{name:'Mónica Anaya',v:361},{name:'Hugo Tabares',v:173},{name:'Graciela Cortés',v:97},{name:'Iván Enríquez',v:44},{name:'Humberto González',v:24},{name:'Samanta Mora',v:5},{name:'Laura García',v:1},{name:'Alberto Valdez',v:1},{name:'Mayra Gallegos',v:1}],
+      mod:[{name:'Resonancia',v:645},{name:'Densitometría',v:376},{name:'Tomografía',v:249},{name:'Medicina Nuclear',v:66}], sede:[]},
+    {k:'May25', lab:'Mayo 2025 · RM+Densi+MN+TAC', tot:1276,
+      rad:[{name:'Mónica Anaya',v:455},{name:'Hugo Tabares',v:303},{name:'Casandra Ceballos',v:235},{name:'Laura García',v:149},{name:'Graciela Cortés',v:74},{name:'Iván Enríquez',v:34},{name:'Humberto González',v:21},{name:'Samanta Mora',v:3},{name:'Alberto Valdez',v:2}],
+      mod:[{name:'Resonancia',v:655},{name:'Densitometría',v:302},{name:'Tomografía',v:227},{name:'Medicina Nuclear',v:92}], sede:[]},
+    {k:'Jun25', lab:'Junio 2025 · RM+Densi+MN+TAC', tot:1169,
+      rad:[{name:'Hugo Tabares',v:401},{name:'Mónica Anaya',v:384},{name:'Laura García',v:148},{name:'Graciela Cortés',v:88},{name:'Casandra Ceballos',v:59},{name:'Iván Enríquez',v:38},{name:'Alberto Valdez',v:36},{name:'Humberto González',v:12},{name:'Samanta Mora',v:3}],
+      mod:[{name:'Resonancia',v:579},{name:'Densitometría',v:262},{name:'Tomografía',v:260},{name:'Medicina Nuclear',v:68}], sede:[]},
+    {k:'Jul25', lab:'Julio 2025 · RM+Densi+MN+TAC', tot:1517,
+      rad:[{name:'Hugo Tabares',v:652},{name:'Mónica Anaya',v:368},{name:'Laura García',v:297},{name:'Graciela Cortés',v:69},{name:'Casandra Ceballos',v:54},{name:'Humberto González',v:32},{name:'Alberto Valdez',v:26},{name:'Iván Enríquez',v:11},{name:'Samanta Mora',v:7},{name:'Oswaldo Ríos',v:1}],
+      mod:[{name:'Resonancia',v:839},{name:'Tomografía',v:348},{name:'Densitometría',v:267},{name:'Medicina Nuclear',v:63}], sede:[]},
+    {k:'Ago25', lab:'Agosto 2025 · RM+Densi+MN+TAC', tot:1228,
+      rad:[{name:'Hugo Tabares',v:538},{name:'Mónica Anaya',v:291},{name:'Laura García',v:237},{name:'Graciela Cortés',v:62},{name:'Humberto González',v:34},{name:'Casandra Ceballos',v:20},{name:'Iván Enríquez',v:18},{name:'Néstor González',v:11},{name:'Alberto Valdez',v:7},{name:'Samanta Mora',v:6},{name:'Oswaldo Ríos',v:4}],
+      mod:[{name:'Resonancia',v:710},{name:'Densitometría',v:247},{name:'Tomografía',v:217},{name:'Medicina Nuclear',v:54}], sede:[]},
+    {k:'Sep25', lab:'Septiembre 2025 · RM+Densi+MN+TAC', tot:1071,
+      rad:[{name:'Hugo Tabares',v:359},{name:'Laura García',v:304},{name:'Mónica Anaya',v:303},{name:'Humberto González',v:33},{name:'Graciela Cortés',v:30},{name:'Samanta Mora',v:18},{name:'Iván Enríquez',v:13},{name:'Casandra Ceballos',v:7},{name:'Néstor González',v:2},{name:'Alberto Valdez',v:2}],
+      mod:[{name:'Resonancia',v:562},{name:'Densitometría',v:273},{name:'Tomografía',v:217},{name:'Medicina Nuclear',v:19}], sede:[]},
+    {k:'Oct25', lab:'Octubre 2025 · RM+Densi+MN+TAC', tot:1170,
+      rad:[{name:'Hugo Tabares',v:403},{name:'Mónica Anaya',v:329},{name:'Laura García',v:301},{name:'Graciela Cortés',v:42},{name:'Humberto González',v:40},{name:'Iván Enríquez',v:24},{name:'Samanta Mora',v:15},{name:'Néstor González',v:12},{name:'Casandra Ceballos',v:3},{name:'Oswaldo Ríos',v:1}],
+      mod:[{name:'Resonancia',v:603},{name:'Densitometría',v:331},{name:'Tomografía',v:214},{name:'Medicina Nuclear',v:22}], sede:[]},
+    {k:'Nov25', lab:'Noviembre 2025 · RM+Densi+MN+TAC', tot:1174,
+      rad:[{name:'Hugo Tabares',v:474},{name:'Laura García',v:249},{name:'Mónica Anaya',v:225},{name:'Néstor González',v:56},{name:'Graciela Cortés',v:55},{name:'Iván Enríquez',v:53},{name:'Humberto González',v:48},{name:'Samanta Mora',v:13},{name:'Casandra Ceballos',v:1}],
+      mod:[{name:'Resonancia',v:511},{name:'Densitometría',v:359},{name:'Tomografía',v:284},{name:'Medicina Nuclear',v:20}], sede:[]},
+    {k:'Dic25', lab:'Diciembre 2025 · RM+Densi+MN+TAC', tot:946,
+      rad:[{name:'Hugo Tabares',v:362},{name:'Laura García',v:263},{name:'Mónica Anaya',v:179},{name:'Néstor González',v:51},{name:'Graciela Cortés',v:27},{name:'Iván Enríquez',v:20},{name:'Humberto González',v:19},{name:'Samanta Mora',v:17},{name:'Oswaldo Ríos',v:4},{name:'Alberto Valdez',v:3},{name:'Mayra Gallegos',v:1}],
+      mod:[{name:'Resonancia',v:475},{name:'Densitometría',v:257},{name:'Tomografía',v:202},{name:'Medicina Nuclear',v:12}], sede:[]},
+    {k:'Ene26', lab:'Enero 2026 · RM+Densi+MN+TAC', tot:1139,
+      rad:[{name:'Hugo Tabares',v:454},{name:'Laura García',v:282},{name:'Mónica Anaya',v:273},{name:'Graciela Cortés',v:46},{name:'Néstor González',v:42},{name:'Iván Enríquez',v:29},{name:'Humberto González',v:7},{name:'Samanta Mora',v:4},{name:'Oswaldo Ríos',v:2}],
+      mod:[{name:'Resonancia',v:499},{name:'Tomografía',v:294},{name:'Densitometría',v:264},{name:'Medicina Nuclear',v:82}], sede:[]},
+    {k:'Feb26', lab:'Febrero 2026 · RM+Densi+MN+TAC', tot:962,
+      rad:[{name:'Hugo Tabares',v:317},{name:'Mónica Anaya',v:265},{name:'Laura García',v:207},{name:'Iván Enríquez',v:52},{name:'Graciela Cortés',v:49},{name:'Néstor González',v:39},{name:'Humberto González',v:27},{name:'Samanta Mora',v:4},{name:'Alberto Valdez',v:1},{name:'Oswaldo Ríos',v:1}],
+      mod:[{name:'Resonancia',v:421},{name:'Densitometría',v:225},{name:'Tomografía',v:218},{name:'Medicina Nuclear',v:98}], sede:[]},
+    {k:'Mar26', lab:'Marzo 2026 · RM+Densi+MN+TAC', tot:1175,
+      rad:[{name:'Hugo Tabares',v:370},{name:'Mónica Anaya',v:307},{name:'Laura García',v:290},{name:'Graciela Cortés',v:79},{name:'Néstor González',v:61},{name:'Estefanía Martínez',v:22},{name:'Iván Enríquez',v:20},{name:'Humberto González',v:17},{name:'Samanta Mora',v:8},{name:'Oswaldo Ríos',v:1}],
+      mod:[{name:'Resonancia',v:504},{name:'Tomografía',v:261},{name:'Densitometría',v:230},{name:'Medicina Nuclear',v:180}], sede:[]},
+    {k:'Abr26', lab:'Abril 2026 · RM+Densi+MN+TAC', tot:1098,
+      rad:[{name:'Laura García',v:276},{name:'Mónica Anaya',v:272},{name:'Hugo Tabares',v:256},{name:'Graciela Cortés',v:129},{name:'Estefanía Martínez',v:70},{name:'Néstor González',v:48},{name:'Humberto González',v:23},{name:'Samanta Mora',v:11},{name:'Iván Enríquez',v:8},{name:'Oswaldo Ríos',v:3},{name:'Ana Lidia Ochoa',v:2}],
+      mod:[{name:'Resonancia',v:459},{name:'Tomografía',v:292},{name:'Densitometría',v:261},{name:'Medicina Nuclear',v:86}], sede:[]},
+    {k:'May26', lab:'Mayo 2026 · RM+Densi+MN+TAC', tot:1175,
+      rad:[{name:'Hugo Tabares',v:316},{name:'Laura García',v:248},{name:'Mónica Anaya',v:232},{name:'Estefanía Martínez',v:160},{name:'Graciela Cortés',v:73},{name:'Néstor González',v:53},{name:'Iván Enríquez',v:44},{name:'Samanta Mora',v:26},{name:'Humberto González',v:16},{name:'Oswaldo Ríos',v:4},{name:'Casandra Ceballos',v:3}],
+      mod:[{name:'Resonancia',v:483},{name:'Tomografía',v:269},{name:'Densitometría',v:250},{name:'Medicina Nuclear',v:173}], sede:[]},
+    {k:'Jun26', lab:'Junio 2026 · RM+Densi+MN+TAC', tot:704,
+      rad:[{name:'Estefanía Martínez',v:166},{name:'Hugo Tabares',v:160},{name:'Laura García',v:131},{name:'Mónica Anaya',v:110},{name:'Graciela Cortés',v:44},{name:'Néstor González',v:41},{name:'Humberto González',v:21},{name:'Samanta Mora',v:16},{name:'Iván Enríquez',v:10},{name:'Oswaldo Ríos',v:5}],
+      mod:[{name:'Densitometría',v:212},{name:'Resonancia',v:172},{name:'Medicina Nuclear',v:172},{name:'Tomografía',v:148}], sede:[]},
+    {k:'Jul26', lab:'Julio 2026 · RM+Densi+MN+TAC', tot:430,
+      rad:[{name:'Estefanía Martínez',v:128},{name:'Hugo Tabares',v:72},{name:'Laura García',v:70},{name:'Mónica Anaya',v:52},{name:'Graciela Cortés',v:41},{name:'Néstor González',v:30},{name:'Iván Enríquez',v:18},{name:'Samanta Mora',v:9},{name:'Oswaldo Ríos',v:6},{name:'Humberto González',v:4}],
+      mod:[{name:'Densitometría',v:147},{name:'Medicina Nuclear',v:131},{name:'Tomografía',v:106},{name:'Resonancia',v:46}], sede:[]}
   ],
-  weeks: [
+    weeks: [
     {k:'S27', lab:'Semana 27 · 29 jun – 5 jul', tot:188,
       rad:[{name:'García Godínez, Laura',v:45},{name:'Anaya Constante, Mónica',v:34},{name:'Enríquez Velázquez, Manuel',v:27},{name:'González Medina, Néstor',v:27},{name:'Martínez Andrade, Sandra',v:27},{name:'Tabares Martínez, Hugo',v:26},{name:'González Pérez, Humberto',v:2}],
       mod:[{name:'Resonancia (MR)',v:149},{name:'Tomografía (CT)',v:39}],
@@ -2304,7 +2353,7 @@ const radData = {
       sede:[{name:'Unidad López Mateos',v:130},{name:'Chamizal',v:46},{name:'Acueducto',v:36}]}
   ]
 };
-let radMode='mes', radMonth='jul', radWeek='S31';
+let radMode='mes', radMonth='Jul26', radWeek='S31';
 function radCur(){ return radMode==='mes'
   ? (radData.months.find(m=>m.k===radMonth)||radData.months[radData.months.length-1])
   : (radData.weeks.find(w=>w.k===radWeek)||radData.weeks[radData.weeks.length-1]); }
@@ -2312,8 +2361,12 @@ function renderRad(){
   const c = radCur();
   barChart(document.getElementById('bars-radiologos'), c.rad, 'var(--c-interp)');
   donutChart(document.getElementById('donut-modalidad'), document.getElementById('legend-modalidad'), c.mod, ['#3b6ea5','#7ba0c6','#c3a15c','#9c7bb0','#6f9e7e','#b5776b']);
-  barChart(document.getElementById('bars-sedes'), c.sede, 'var(--c-sede)');
-  document.getElementById('rad-sub').textContent = radMode==='mes' ? 'Total de estudios leídos en el mes' : 'Total de estudios leídos en la semana';
+  const sedeEl=document.getElementById('bars-sedes');
+  if(c.sede && c.sede.length){ barChart(sedeEl, c.sede, 'var(--c-sede)'); }
+  else { sedeEl.innerHTML='<div class="empty">No disponible: el SIO (fuente de esta vista mensual) no reporta sucursal. Disponible en la vista semanal (fuente Exa).</div>'; }
+  document.getElementById('rad-sub').textContent = radMode==='mes'
+    ? 'Resonancia + Densitometría + Medicina Nuclear + Tomografía transcritas en el mes (SIO)'
+    : 'Total de estudios leídos en la semana (Exa)';
   document.getElementById('mod-sub').textContent = 'Distribución de los '+c.tot+' estudios';
   document.getElementById('rad-badge').textContent = c.lab;
 }
