@@ -463,6 +463,10 @@
       <svg class="ico ico-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="l1" d="M4 5h16"/><path class="l2" d="M4 10h16"/><path class="l3" d="M4 15h11"/><path class="l4" d="M4 20h7"/></svg>
       Transcripción
     </button>
+    <button class="nav-item" data-view="efectividad">
+      <svg class="ico ico-efect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path class="tick" d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+      Efectividad
+    </button>
     <button class="nav-item" data-view="transcripcion">
       <svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="7"/><line class="handle" x1="16" y1="16" x2="21" y2="21"/></svg>
       Interpretación
@@ -1385,8 +1389,15 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div id="tr-cmp"></div>
         </div>
 
+        <div class="empty" id="tr-nota"></div>
+      </section>
 
-        <div class="nav-label" style="margin:30px 0 10px">Efectividad vs incidencias internas</div>
+      <!-- ================== EFECTIVIDAD ================== -->
+      <section class="view" id="efectividad">
+        <div class="page-head">
+          <h1>Efectividad</h1>
+          <p>Efectividad vs incidencias internas <span class="badge">Enero – julio 2026</span></p>
+        </div>
 
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
@@ -1415,7 +1426,21 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="empty" id="eff-nota"></div>
 
-        <div class="empty" id="tr-nota"></div>
+        <div class="nav-label" style="margin:30px 0 10px">Incidencias por colaborador</div>
+
+        <div class="card" style="margin-bottom:16px">
+          <h3>Incidencias por colaborador</h3>
+          <p class="csub" id="incc-sub">Registro de incidencias · ET (errores de transcripción) y R (reincidencias)</p>
+          <div id="bars-inc-colab"></div>
+          <div class="line-note" style="margin-top:10px" id="incc-nota"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <h3>Faltas e incapacidades</h3>
+          <p class="csub" id="falt-sub">Registro de asistencia · julio 2026</p>
+          <div style="overflow-x:auto"><table class="dtab" id="tab-faltas"></table></div>
+          <div class="line-note" style="margin-top:10px" id="falt-nota"></div>
+        </div>
       </section>
 
       <!-- ================== TRANSCRIPCIÓN ================== -->
@@ -3062,6 +3087,65 @@ function renderEfect(){
     'Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción.';
 }
 
+/* Incidencias por colaborador · Registro de incidencias.xlsx (SharePoint · Documentos/Importante) */
+const incColabData = [
+  {lg:'monicaac',    name:'Mónica Anaya',      et:0, r:3, acta:0},
+  {lg:'manuelev',    name:'Iván Enríquez',     et:1, r:0, acta:0},
+  {lg:'lauragg',     name:'Laura García',      et:0, r:2, acta:1},
+  {lg:'humbertogp1', name:'Humberto González', et:0, r:1, acta:0},
+  {lg:'nestorgm',    name:'Néstor González',   et:1, r:0, acta:0},
+  {lg:'oswaldorm',   name:'Oswaldo Ríos',      et:0, r:2, acta:0},
+  {lg:'gracielacv',  name:'Graciela Cortés',   et:0, r:1, acta:0}
+];
+function renderIncColab(){
+  const rows=incColabData.map(r=>({...r, tot:r.et+r.r})).sort((a,b)=>b.tot-a.tot);
+  const max=Math.max(...rows.map(r=>r.tot),1);
+  const el=document.getElementById('bars-inc-colab');
+  el.innerHTML = rows.map(r=>{
+    const w = r.tot/max*100;
+    const etW = r.tot? r.et/r.tot*w : 0;
+    const rW = r.tot? r.r/r.tot*w : 0;
+    const tip = `<b>${r.name}</b> · ET ${r.et} · R ${r.r}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
+    return `<div class="bar-row" data-tip="${tip}">
+      <div class="bar-label">${r.name}</div>
+      <div class="bar-track">
+        <div class="bar-fill" data-w="${etW}" style="background:var(--c-serv);position:absolute;left:0"></div>
+        <div class="bar-fill" data-w="${rW}" style="background:var(--c-people);position:absolute;left:${etW}%"></div>
+      </div>
+      <div class="bar-val">${r.tot}${r.acta?' <span class="pill" style="background:#ba544c;color:#fff;padding:1px 7px;border-radius:9px;font-size:10px;margin-left:3px;vertical-align:1px">Acta</span>':''}</div>
+    </div>`;
+  }).join('');
+  const fills=el.querySelectorAll('.bar-fill');
+  if(reduce){ fills.forEach(f=>f.style.width=f.dataset.w+'%'); }
+  else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
+  const totET=rows.reduce((a,r)=>a+r.et,0), totR=rows.reduce((a,r)=>a+r.r,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
+  document.getElementById('incc-nota').innerHTML =
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>ET · ${totET}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>R · ${totR}</span>`+
+    (totActa?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#ba544c;display:inline-block"></span>Acta administrativa · ${totActa}</span>`:'')+
+    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). El archivo no define qué significan las columnas «ET» y «R»; se muestran tal cual las trae la fuente, junto con «Acta Administrativa» cuando aplica.</div>`;
+}
+
+/* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul 2026) */
+const faltasData = [
+  {emp:'Ana Lidia Ochoa Roman',       tipo:'Falta injustificada', fecha:'01/jul/2026', coment:'Avisó que no se presentó'},
+  {emp:'Manuel Ivan Enriquez',        tipo:'Falta injustificada', fecha:'06/jul/2026', coment:'FALTA JUSTIFICADA'},
+  {emp:'Monica Anaya',                tipo:'Falta injustificada', fecha:'16/jul/2026', coment:'Avisa que no se presentará'},
+  {emp:'Casandra Ceballos Romero',    tipo:'Falta injustificada', fecha:'17/jul/2026', coment:'Avisó que no se presentaría'},
+  {emp:'Graciela F. Cortés Vázquez',  tipo:'Incapacidad',         fecha:'25/jul/2026', coment:'—'}
+];
+function renderFaltas(){
+  document.getElementById('tab-faltas').innerHTML =
+    '<thead><tr><th>Colaborador</th><th>Fecha</th><th>Tipo</th><th>Descripción</th></tr></thead><tbody>'+
+    faltasData.map(r=>`<tr><td>${r.emp}</td><td class="d">${r.fecha}</td><td><span class="pill${r.tipo==='Incapacidad'?' red':''}">${r.tipo}</span></td><td>${r.coment}</td></tr>`).join('')+
+    '</tbody>';
+  const nF=faltasData.filter(r=>r.tipo==='Falta injustificada').length, nI=faltasData.filter(r=>r.tipo==='Incapacidad').length;
+  document.getElementById('falt-nota').innerHTML =
+    `<b>${nF}</b> falta${nF===1?'':'s'} injustificada${nF===1?'':'s'} y <b>${nI}</b> incapacidad${nI===1?'':'es'} registrada${nI===1?'':'s'} en julio 2026, de los 15 colaboradores del equipo de Transcripción. `+
+    `Fuente: <i>RH Reporte de asistencia · Grupo Río</i> (checador, 01–31 jul 2026, tabla «Vacaciones y permisos» de cada colaborador). Se excluyen descansos, vacaciones, permisos y cambios de horario. `+
+    `El comentario de Manuel Ivan Enríquez («FALTA JUSTIFICADA») se muestra tal cual lo registró RH, aunque contradice la etiqueta «Falta injustificada» del tipo de permiso.`;
+}
+
 /* Detalle de errores por colaborador (desplegable) · Incidencias Internas Colaboradores.xlsx */
 const effDetalle = {
   'hugotm':[
@@ -3583,6 +3667,8 @@ function renderAll(){
   barChart(document.getElementById('bars-transcriptores'), transcriptores, 'var(--c-people)');
   initTrans();
   renderEfect();
+  renderIncColab();
+  renderFaltas();
   initEntregas();
   initChequeos();
   // Indicador por unidad (junio) + tendencia temporal
