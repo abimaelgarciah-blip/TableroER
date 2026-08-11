@@ -426,6 +426,7 @@
   .dtab .d{font-variant-numeric:tabular-nums;font-weight:600}
   .dtab .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;background:var(--track);color:var(--ink-2)}
   .dtab .pill.red{background:rgba(186,84,76,.13);color:#a5473f}
+  .dtab .pill.rad{background:var(--c-interp);color:#fff}
 
 /* --- Estudios --- */
 .nav-item .ico-estudios line{transform-box:fill-box;transform-origin:bottom;transition:transform .32s cubic-bezier(.34,1.56,.64,1)}
@@ -615,8 +616,9 @@
             </div>
             <div style="margin-top:16px">
               <h4 class="mini-h">Motivos de incumplimiento · julio 2026</h4>
-              <div class="bars wide" id="bars-inc-motivos"></div>
-              <div class="line-note" style="margin-top:10px" id="inc-motivos-nota"></div>
+              <div class="line-note" id="inc-motivos-nota" style="margin-bottom:10px"></div>
+              <div style="overflow-x:auto"><table class="dtab" id="tab-inc-motivos"></table></div>
+              <div class="line-note" style="margin-top:10px">Lista tal cual está registrada en la bitácora de calidad (columna Motivo, sin modificar el texto). La etiqueta <span class="pill rad" style="padding:1px 8px">Radiólogos</span> marca los casos que describen carga de trabajo por falta de radiólogos (doctor ocupado en otro estudio, casos complejos, en espera de aprobación de otro radiólogo), aunque esa frase no aparece como opción en el formato de origen.</div>
             </div>
             <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con 24 h o más de retraso se cuentan como cumplimiento (seguimientos de calidad) y se excluyen del histograma. Datos del reporte de julio 2026.</div>
           </div>
@@ -3605,24 +3607,66 @@ function incByDeptoUnit(unit){
   });
   return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({name,v}));
 }
-/* Motivos de incumplimiento · muestra cualitativa "Rojos" · julio 2026 (48 estudios con motivo registrado) */
-const incMotivosJul = [
-  {name:'Carga de trabajo por falta de radiólogos', v:14},
-  {name:'Proceso administrativo / insumos', v:10},
-  {name:'Calidad / revisión de interpretación', v:8},
-  {name:'Error de sistema (Exa / SIOW)', v:5},
-  {name:'Evento especial (capacitación)', v:5},
-  {name:'Firma o documentación', v:3},
-  {name:'Falla de infraestructura (luz)', v:3}
+/* Motivos de incumplimiento · muestra cualitativa "Rojos" · julio 2026 (48 estudios, texto tal cual registrado) */
+const incRojosJul = [
+  {px:'Centeno Márquez Alicia', est:'RM 3.0T Digital - Articulación - Rodilla', mot:'Modificación de párrafo', rad:false},
+  {px:'Prado Ruiz Lilia Karla', est:'Eco de Pelvis', mot:'Calidad', rad:false},
+  {px:'Rondero Márquez María Cristina', est:'Densitometría de Cadera y Columna Lumbar', mot:'Peso incorrecto', rad:false},
+  {px:'Oyervides Morales Kevin Hiram', est:'Oyervides Morales Kevin Hiram', mot:'Calidad', rad:false},
+  {px:'Nettrour Sharon Ann', est:'Eco de Pelvis Transvaginal', mot:'Calidad', rad:false},
+  {px:'Robles Robles Xavier Alonso', est:'RX Dedo(s) - 1P (1, 2, 3 P)', mot:'Técnico no envía imágenes de Rx UAC 17:00', rad:false},
+  {px:'Robles Robles Xavier Alonso', est:'RX Dedo(s) - 1P (1, 2, 3 P)', mot:'Técnico no envía imágenes de Rx UAC 17:00', rad:false},
+  {px:'Uriarte Araujo Armando', est:'Eco de Hígado y Vías Biliares con Elastografía', mot:'Cambian concepto', rad:false},
+  {px:'Salazar Galindo Luz Gabriela', est:'RM 3.0T Digital - Pelvis Femenina (Endometriosis)', mot:'Aseguradora', rad:false},
+  {px:'Montes Toscano Demetrio', est:'Eco de Tiroides con Biopsia Unilateral', mot:'En espera de interpretación', rad:true},
+  {px:'Robles Godinez Claudia Dolores', est:'Densitometría de Cadera y Columna Lumbar', mot:'Ligado en SIOW pero no se refleja en SIOWEB', rad:false},
+  {px:'Colmenares Hernández Leidy Yohanna', est:'Eco de Tiroides', mot:'Se firma estudio sin tabla Tirads', rad:false},
+  {px:'Pérez Hernández María de Guadalupe', est:'Densitometría de 3 Regiones (excepto Cuerpo entero)', mot:'Sin luz', rad:false},
+  {px:'González Godínez Jessica María Luisa', est:'Eco de Tiroides con Biopsia Unilateral', mot:'Imágenes no se pueden ligar en Exa', rad:false},
+  {px:'Guzmán Padilla Karla Paola', est:'Eco de Mama', mot:'Falla de Luz', rad:false},
+  {px:'García Rivera Elizabeth', est:'Eco de Mama', mot:'Falla de Luz', rad:false},
+  {px:'Pantoja García Ramón', est:'RM 3.0T Digital - Cráneo con Angio Simple', mot:'Firma cortada - se liberó para corregirlo', rad:false},
+  {px:'Zepeda Flores Gerardo', est:'TAC - 2R - Tórax y Abdomen [C]', mot:'Pendiente por interpretar, se asigna trabajo del sábado', rad:true},
+  {px:'Contreras Aguirre Guadalupe Olivia', est:'Eco de Tiroides', mot:'Atraso en estudio, biopsia + fusión no se ligó en exa', rad:false},
+  {px:'Godínez Andrade Rosa', est:'Eco de Abdomen', mot:'Dr. David en capación + en otro estudio', rad:true},
+  {px:'Román Galaviz Jaime Eduardo', est:'RX Rodillas Comparativas - 2P', mot:'Realiza Dra. Iñiguez, en espera de aprobación por otro radiólogo', rad:true},
+  {px:'Díaz Díaz Anabel', est:'Agudeza Visual', mot:'No se entregó por falta de tabla y formato de cotización', rad:false},
+  {px:'Tamayo Rodríguez Irving Alonso', est:'RM 1.5T - Articulación - Rodilla', mot:'Sin firma Dr. Iván - Transcriptor no pasa s siow', rad:false},
+  {px:'Martínez Basich Ma. Mercedes', est:'RM 3.0T Digital - Columna - Cervical y Cráneo', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
+  {px:'Corona Jiménez José Francisco', est:'RM 3.0T Digital - Cráneo con Angio Simple', mot:'Dra, Monse se atrasa por casos complejos', rad:true},
+  {px:'García Jiménez Ángel', est:'TAC - Oídos', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
+  {px:'Becerra Espinoza Salvador', est:'TAC - Angio de Arterias Renales [C]', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
+  {px:'Lemus Basulto Regina Sabine', est:'RX Panorámica de Miembros Inferiores (Escanometría)', mot:'Se tardó en llegar a Exa, disparo de rx hace que no se liguen en exa', rad:false},
+  {px:'Ortega Rosales Carmen del Refugio', est:'RX Columna Cervical - 2P', mot:'Doctor realizando eco', rad:true},
+  {px:'García Morales Lucía', est:'Densitometría de Cadera y Columna Lumbar', mot:'Se solicitó modificación de medida', rad:false},
+  {px:'Rodríguez Rodríguez Hada Celeste', est:'RX Tobillo - 2P', mot:'Estabamos en junta', rad:false},
+  {px:'Ochoa Gutiérrez Miryam', est:'Evaluación Médico Internista (2 consultas)', mot:'Atraso por prolongar tiempos de entrega, evento Sulvarán', rad:false},
+  {px:'Lizárraga Osuna María Teresa', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
+  {px:'Esqueda Landinos Eugenio', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
+  {px:'Santos Casillas Jesús', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
+  {px:'Santos Romero Carolina', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
+  {px:'Buenrostro Barbosa Ma Guadalupe', est:'Holter 24 horas', mot:'Error en la interpretación no tiene datos del medico', rad:false},
+  {px:'Avelar Enríquez César', est:'Holter 24 horas', mot:'Médico no anexa su firma en la interpretación', rad:false},
+  {px:'Fernández Meza Michelle Alejandra', est:'RM 3.0T Digital - Cráneo y Cervical', mot:'Carga de trabajo o posibles casos complejos', rad:true},
+  {px:'Flores Casillas Sergio Axel', est:'RM 1.5T - Columna - Dorsal', mot:'UCH da de baja tarde', rad:false},
+  {px:'Rodríguez Lara Amparo', est:'TAC - Tórax (Pulmonar o Mediastino) [C]', mot:'Atraso en TAC Dr. González', rad:true},
+  {px:'Jiménez Hernández Gloria Margarita', est:'RX Rodilla - 2P', mot:'Doctor realizando otro estudio', rad:true},
+  {px:'Bobadilla Fernández Luna Valentina', est:'RX Pelvis', mot:'Doctor haciendo otro estudio, da prioridad a TAC', rad:true},
+  {px:'Burgueño Millán Raquel Abigail', est:'Evaluación Oftalmológica', mot:'Dra. Itzel no transcribe estudio', rad:false},
+  {px:'Ramírez Pérez Lilia', est:'Eco de Cuello (No Tiroideo)', mot:'Atraso por promesa 9am varios estudios día anterior', rad:false},
+  {px:'Padilla Espinosa de los Monteros Guadalupe Jeanette', est:'RX Columna Lumbar - 4P', mot:'Atraso Dra. Íñiguez', rad:true},
+  {px:'Cabrera Arana de Solís Elvia Dolores', est:'Eco de Ganglio con Biopsia Unilateral', mot:'Habilitada casilla de no requiere interpretación', rad:false},
+  {px:'Zárate Sanabia Maria Rosenda', est:'Densitometría de Cadera y Columna Lumbar', mot:'Estudio no ligado en Exa - No está el registro tampoco', rad:false}
 ];
 function renderIncMotivos(){
-  const el=document.getElementById('bars-inc-motivos'); if(!el) return;
-  barChart(el, incMotivosJul, '#c96f63', {tip:d=>`<b>${d.name}</b> · ${d.v} caso${d.v===1?'':'s'}`});
-  const tot=incMotivosJul.reduce((a,r)=>a+r.v,0), top=incMotivosJul[0];
+  const el=document.getElementById('tab-inc-motivos'); if(!el) return;
+  el.innerHTML = '<thead><tr><th>Paciente</th><th>Estudio</th><th>Motivo</th></tr></thead><tbody>'+
+    incRojosJul.map(r=>`<tr><td>${r.px}</td><td>${r.est}</td><td>${r.mot}${r.rad?' <span class="pill rad">Radiólogos</span>':''}</td></tr>`).join('')+
+    '</tbody>';
+  const tot=incRojosJul.length, rad=incRojosJul.filter(r=>r.rad).length;
   document.getElementById('inc-motivos-nota').innerHTML =
-    `Muestra cualitativa de <b>${tot} estudios "rojos"</b> (incumplidos) de julio 2026, con su motivo registrado (bitácora de calidad, no cubre el total de incumplidos del mes). `+
-    `<b>${top.name}</b> es el motivo más frecuente (<b>${top.v} de ${tot}</b>, ${Math.round(top.v/tot*100)}%): estudios detenidos porque el radiólogo estaba ocupado en otro estudio o procedimiento, casos complejos, o en espera de aprobación de otro radiólogo — no venía como categoría explícita en la bitácora, se consolidó a partir de los motivos individuales que lo describen. `+
-    `Le siguen procesos administrativos e insumos (${incMotivosJul[1].v}) y calidad/revisión de la interpretación (${incMotivosJul[2].v}).`;
+    `Muestra cualitativa de <b>${tot} estudios "rojos"</b> (incumplidos) de julio 2026, con su motivo registrado en la bitácora de calidad (no cubre el total de incumplidos del mes). `+
+    `De ellos, <b>${rad} (${Math.round(rad/tot*100)}%)</b> corresponden a <b>carga de trabajo por falta de radiólogos</b> — el motivo principal del mes, aunque no viene como opción explícita en el formato de origen.`;
 }
 function renderIncDetail(nombre){
   const u=unidades[nombre]; if(!u) return;
