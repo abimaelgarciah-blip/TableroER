@@ -1437,8 +1437,9 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="card" style="margin-bottom:16px">
           <h3>Faltas e incapacidades</h3>
-          <p class="csub" id="falt-sub">Registro de asistencia · julio 2026</p>
-          <div style="overflow-x:auto"><table class="dtab" id="tab-faltas"></table></div>
+          <p class="csub" id="falt-sub">Registro de asistencia · julio 2026 · clic en un colaborador para ver el detalle</p>
+          <div id="falt-list"></div>
+          <div class="eff-detail" id="falt-detail"></div>
           <div class="line-note" style="margin-top:10px" id="falt-nota"></div>
         </div>
       </section>
@@ -3134,16 +3135,62 @@ const faltasData = [
   {emp:'Casandra Ceballos Romero',    tipo:'Falta injustificada', fecha:'17/jul/2026', coment:'Avisó que no se presentaría'},
   {emp:'Graciela F. Cortés Vázquez',  tipo:'Incapacidad',         fecha:'25/jul/2026', coment:'—'}
 ];
-function renderFaltas(){
-  document.getElementById('tab-faltas').innerHTML =
-    '<thead><tr><th>Colaborador</th><th>Fecha</th><th>Tipo</th><th>Descripción</th></tr></thead><tbody>'+
-    faltasData.map(r=>`<tr><td>${r.emp}</td><td class="d">${r.fecha}</td><td><span class="pill${r.tipo==='Incapacidad'?' red':''}">${r.tipo}</span></td><td>${r.coment}</td></tr>`).join('')+
-    '</tbody>';
+function faltasByColab(){
+  const byColab={};
+  faltasData.forEach(r=>{ (byColab[r.emp]=byColab[r.emp]||[]).push(r); });
+  return Object.keys(byColab).map(name=>({name, recs:byColab[name]}))
+    .sort((a,b)=> b.recs.length-a.recs.length || a.name.localeCompare(b.name));
+}
+let faltOpenName=null;
+function renderFaltasList(){
+  const rows=faltasByColab();
+  const max=Math.max(...rows.map(r=>r.recs.length),1);
+  const el=document.getElementById('falt-list');
+  el.innerHTML = rows.map(r=>{
+    const w=Math.max(10, r.recs.length/max*100);
+    const hasIncap=r.recs.some(x=>x.tipo==='Incapacidad');
+    const col=hasIncap?'#ba544c':'var(--c-serv)';
+    return `<div class="bar-row eff-click" data-name="${r.name}" data-tip="<b>${r.name}</b> · clic para ver el detalle">
+      <div class="bar-label">${r.name}</div>
+      <div class="bar-track"><div class="bar-fill" data-w="${w}" style="background:${col}"></div></div>
+      <div class="bar-val">${r.recs.length}</div>
+    </div>`;
+  }).join('');
+  el.onclick = e=>{
+    const row=e.target.closest('.bar-row[data-name]'); if(!row) return;
+    setFaltDetail(row.dataset.name);
+  };
+  const fills=el.querySelectorAll('.bar-fill');
+  if(reduce){ fills.forEach(f=>f.style.width=f.dataset.w+'%'); }
+  else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
   const nF=faltasData.filter(r=>r.tipo==='Falta injustificada').length, nI=faltasData.filter(r=>r.tipo==='Incapacidad').length;
   document.getElementById('falt-nota').innerHTML =
     `<b>${nF}</b> falta${nF===1?'':'s'} injustificada${nF===1?'':'s'} y <b>${nI}</b> incapacidad${nI===1?'':'es'} registrada${nI===1?'':'s'} en julio 2026, de los 15 colaboradores del equipo de Transcripción. `+
     `Fuente: <i>RH Reporte de asistencia · Grupo Río</i> (checador, 01–31 jul 2026, tabla «Vacaciones y permisos» de cada colaborador). Se excluyen descansos, vacaciones, permisos y cambios de horario. `+
     `El comentario de Manuel Ivan Enríquez («FALTA JUSTIFICADA») se muestra tal cual lo registró RH, aunque contradice la etiqueta «Falta injustificada» del tipo de permiso.`;
+}
+function renderFaltDetail(name){
+  const recs=faltasData.filter(r=>r.emp===name); if(!recs.length) return;
+  const items=recs.map(r=>
+    `<div class="eff-err"><span class="eff-err-date">${r.fecha}</span>`+
+    `<span class="eff-err-type"><b>${r.tipo}</b><span class="eff-err-px">${r.coment}</span></span>`+
+    `<span class="eff-err-tag${r.tipo==='Incapacidad'?' post':''}">${r.tipo==='Incapacidad'?'incapacidad':'falta'}</span></div>`
+  ).join('');
+  document.getElementById('falt-detail').innerHTML =
+    `<div class="eff-detail-head">
+       <div><b>${name}</b> · ${recs.length} registro${recs.length===1?'':'s'} en julio 2026</div>
+       <button class="inc-close" id="falt-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
+     </div>
+     <div class="eff-err-list">${items}</div>
+     <div class="line-note" style="margin-top:10px">Fuente: <i>RH Reporte de asistencia · Grupo Río</i> (checador, tabla «Vacaciones y permisos»).</div>`;
+  document.getElementById('falt-detail-close').onclick = ()=>setFaltDetail(null);
+}
+function setFaltDetail(name){
+  const panel=document.getElementById('falt-detail');
+  const open = name && name!==faltOpenName;
+  if(open){ faltOpenName=name; renderFaltDetail(name); panel.classList.add('open'); }
+  else { faltOpenName=null; panel.classList.remove('open'); }
+  document.querySelectorAll('#falt-list .bar-row').forEach(b=>b.classList.toggle('active', b.dataset.name===faltOpenName));
 }
 
 /* Detalle de errores por colaborador (desplegable) · Incidencias Internas Colaboradores.xlsx */
@@ -3668,7 +3715,7 @@ function renderAll(){
   initTrans();
   renderEfect();
   renderIncColab();
-  renderFaltas();
+  renderFaltasList();
   initEntregas();
   initChequeos();
   // Indicador por unidad (junio) + tendencia temporal
