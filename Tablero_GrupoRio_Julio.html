@@ -2260,14 +2260,14 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
   <div class="grid two" style="margin-bottom:16px">
     <div class="card">
-      <h3>Incumplimiento por doctor</h3>
-      <p class="csub">Según el nombre citado en el motivo registrado</p>
+      <h3>Incumplimiento por radiólogo o motivo</h3>
+      <p class="csub">Columna "Radiólogo o motivo" del export, tal como se registró</p>
       <div class="bars" id="an-bars-doctor"></div>
       <div class="empty" id="an-doctor-nota" style="margin-top:12px"></div>
     </div>
     <div class="card">
       <h3>Indicador por radiólogo · horario de agenda ULM</h3>
-      <p class="csub">L-V 7:00–16:00 = Dr. René · L-V 16:00–fin y sábados = Macías</p>
+      <p class="csub">Normal: L-V 7–16h René, 16h-fin y sábado Macías · con cobertura de Venegas en los días señalados</p>
       <div style="overflow-x:auto"><table class="dtab" id="an-rad-tab"></table></div>
       <div class="empty" id="an-rad-nota" style="margin-top:12px"></div>
     </div>
@@ -3237,21 +3237,25 @@ function renderEstudiosJulio(){
 
 /* ===== Análisis · incumplimiento Tomografía (jul + ago 2026 parcial) =====
    Fuente: exports "Tiempo promesa de entrega" filtrados a Tomografía Axial
-   Computada. Incumplido = A—F negativo (entregado después de la promesa);
-   el motivo (última columna del export) sólo viene poblado en esas filas. */
-const anIncList = [{"mes": "Julio", "fecha": "30 jun", "wd": "Mar", "suc": "López Mateos", "px": "LLG E4910004 CICLO 63", "est": "TAC - Abdomen - Total [C]", "mot": "Transcripción tarde", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "30 jun", "wd": "Mar", "suc": "López Mateos", "px": "LLG E4910004 CICLO 63", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Transcripción tarde", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "02 jul", "wd": "Jue", "suc": "López Mateos", "px": "Pérez González Bertha Angélica", "est": "TAC - Columna Cervical", "mot": "Modificación de interpretación al día siguiente por la tarde, posible calidad", "doc": null, "excl": true}, {"mes": "Julio", "fecha": "03 jul", "wd": "Vie", "suc": "López Mateos", "px": "Salas Guillén Jorge Guillermo", "est": "TAC - Abdomen - Total [C]", "mot": "Firmado 10 minutos antes", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "03 jul", "wd": "Vie", "suc": "López Mateos", "px": "Castañeda Tamayo Irasema Lizbet", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Firmado 5 minutos antes", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "07 jul", "wd": "Mar", "suc": "López Mateos", "px": "Zermeño Ramos Alma", "est": "TAC - Renal para Donador [C]", "mot": "Dr. René, firmado 5 minutos tarde", "doc": "René", "excl": false}, {"mes": "Julio", "fecha": "07 jul", "wd": "Mar", "suc": "López Mateos", "px": "Leonor Pitones Francisco David", "est": "TAC - (3D) 1 Región Anatómica", "mot": "Dr. René firmado 5 minutos tarde", "doc": "René", "excl": false}, {"mes": "Julio", "fecha": "09 jul", "wd": "Jue", "suc": "López Mateos", "px": "Lomelí Sandoval Andrés", "est": "TAC - Abdomen - Total [C]", "mot": "Firmado 4 minutos antes", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "09 jul", "wd": "Jue", "suc": "López Mateos", "px": "Rodríguez Marín María Ángela", "est": "TAC - Abdomen - Total", "mot": "Firmado 3 minutos tarde", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "10 jul", "wd": "Vie", "suc": "López Mateos", "px": "Gudiño González Mónica", "est": "TAC - Cráneo", "mot": "Firmado 12 minutos tarde", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "13 jul", "wd": "Lun", "suc": "López Mateos", "px": "Terán Bravo María Elena", "est": "TAC - Angio de Arterias Renales [C]", "mot": "Sin sistema, se ingresa al sistema tarde", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "15 jul", "wd": "Mié", "suc": "López Mateos", "px": "De La Cerda Gonsález Ma. De Jesús", "est": "TAC - Cráneo [C]", "mot": "Dr. René, firmado 1 min tarde", "doc": "René", "excl": false}, {"mes": "Julio", "fecha": "16 jul", "wd": "Jue", "suc": "López Mateos", "px": "Navarro Camacho María Angélica", "est": "TAC - Cráneo", "mot": "Firmado a tiempo, entregado tarde Oswaldo", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "16 jul", "wd": "Jue", "suc": "López Mateos", "px": "Martínez Ruiz David", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Firmado a tiempo, entregado tarde Oswaldo", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "17 jul", "wd": "Vie", "suc": "López Mateos", "px": "Vargas Sánchez Erika Alejandra", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Dr. René, firmado 22 min después", "doc": "René", "excl": false}, {"mes": "Julio", "fecha": "20 jul", "wd": "Lun", "suc": "López Mateos", "px": "Valenzuela Quintero Leticia", "est": "TAC - Abdomen - Total [C]", "mot": "Carga de trabajo, realizando biopsia Dr. René", "doc": "René", "excl": false}, {"mes": "Julio", "fecha": "20 jul", "wd": "Lun", "suc": "López Mateos", "px": "García Jiménez Ángel", "est": "TAC - Oídos", "mot": "Casos complejos Dra. Monse", "doc": "Monse", "excl": false}, {"mes": "Julio", "fecha": "29 jul", "wd": "Mié", "suc": "López Mateos", "px": "Coronado González Consuelo", "est": "TAC - Angio Pulmón [C]", "mot": "Estudio no ligado", "doc": null, "excl": false}, {"mes": "Julio", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Columna Lumbar", "mot": "Separación de citas", "doc": null, "excl": true}, {"mes": "Julio", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Abdomen - Total [C]", "mot": "Separación de citas", "doc": null, "excl": true}, {"mes": "Agosto", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Chavez Alcantar Fabiola", "est": "TAC - Cráneo", "mot": "Dra. Monse no interpreta cervical, se avisa y libera estudio para agregar cevical", "doc": "Monse", "excl": false}, {"mes": "Agosto", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Chavez Alcantar Fabiola", "est": "TAC - Columna Cervical", "mot": "Dra. Monse no interpreta cervical, se avisa y libera estudio para agregar cevical", "doc": "Monse", "excl": false}, {"mes": "Agosto", "fecha": "05 ago", "wd": "Mié", "suc": "López Mateos", "px": "Morales Hernández Manuel", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Dr. René, firmado 14 minutos tarde, promesa de 1:54", "doc": "René", "excl": false}, {"mes": "Agosto", "fecha": "05 ago", "wd": "Mié", "suc": "Acueducto", "px": "Rodríguez Ávalos José Carlos", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Dr. González, firmada 4 minutos antes", "doc": "González", "excl": false}, {"mes": "Agosto", "fecha": "06 ago", "wd": "Jue", "suc": "López Mateos", "px": "Vizcarra Álvarez Silvia", "est": "TAC - 3R - Cráneo, Cuello y Tórax [C]", "mot": "Dr. René, firmado 8 minutos tarde", "doc": "René", "excl": false}, {"mes": "Agosto", "fecha": "06 ago", "wd": "Jue", "suc": "Acueducto", "px": "Cruz Velázquez Blanca Angélica Lusmila", "est": "TAC - Abdomen - Total [C]", "mot": "Dr. González, firmado 6 minutos tarde", "doc": "González", "excl": false}, {"mes": "Agosto", "fecha": "07 ago", "wd": "Vie", "suc": "López Mateos", "px": "Cervantes Membrila Mateo Israel", "est": "TAC - Cráneo", "mot": "En espera de placas, interpretado a tiempo", "doc": null, "excl": false}, {"mes": "Agosto", "fecha": "07 ago", "wd": "Vie", "suc": "López Mateos", "px": "Navel Meza Adriana Guadalupe", "est": "TAC - Cráneo", "mot": "En espera de placas, interpretado a tiempo", "doc": null, "excl": false}];
+   Computada, re-enviados con la columna "Radiólogo o motivo" (valor exacto
+   por caso). Incumplido = A—F negativo (entregado después de la promesa);
+   esa columna sólo viene poblada en esas filas. */
+const anIncList = [{"mes": "Julio", "fecha": "30 jun", "wd": "Mar", "suc": "López Mateos", "px": "LLG E4910004 CICLO 63", "est": "TAC - Abdomen - Total [C]", "mot": "Transcripción tarde, Monica", "radm": "Duda con protocolo", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "30 jun", "wd": "Mar", "suc": "López Mateos", "px": "LLG E4910004 CICLO 63", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Transcripción tarde, Monica", "radm": "Duda con protocolo", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "02 jul", "wd": "Jue", "suc": "López Mateos", "px": "Pérez González Bertha Angélica", "est": "TAC - Columna Cervical", "mot": "Modificación de interpretación al día siguiente por la tarde, posible calidad", "radm": "Calidad", "isDoc": false, "excl": true}, {"mes": "Julio", "fecha": "03 jul", "wd": "Vie", "suc": "López Mateos", "px": "Salas Guillén Jorge Guillermo", "est": "TAC - Abdomen - Total [C]", "mot": "Firmado 10 minutos antes", "radm": "Macías", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "03 jul", "wd": "Vie", "suc": "López Mateos", "px": "Castañeda Tamayo Irasema Lizbet", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Firmado 5 minutos antes", "radm": "Macías", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "07 jul", "wd": "Mar", "suc": "López Mateos", "px": "Zermeño Ramos Alma", "est": "TAC - Renal para Donador [C]", "mot": "Dr. Venegas, firmado 5 minutos tarde", "radm": "Venegas", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "07 jul", "wd": "Mar", "suc": "López Mateos", "px": "Leonor Pitones Francisco David", "est": "TAC - (3D) 1 Región Anatómica", "mot": "Dr. René firmado 5 minutos tarde", "radm": "René", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "09 jul", "wd": "Jue", "suc": "López Mateos", "px": "Lomelí Sandoval Andrés", "est": "TAC - Abdomen - Total [C]", "mot": "Firmado 4 minutos antes", "radm": "Macías", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "09 jul", "wd": "Jue", "suc": "López Mateos", "px": "Rodríguez Marín María Ángela", "est": "TAC - Abdomen - Total", "mot": "Firmado 3 minutos tarde", "radm": "Macías", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "10 jul", "wd": "Vie", "suc": "López Mateos", "px": "Gudiño González Mónica", "est": "TAC - Cráneo", "mot": "Firmado 12 minutos tarde", "radm": "Venegas", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "13 jul", "wd": "Lun", "suc": "López Mateos", "px": "Terán Bravo María Elena", "est": "TAC - Angio de Arterias Renales [C]", "mot": "Sin sistema, se ingresa al sistema tarde", "radm": "Sistema", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "15 jul", "wd": "Mié", "suc": "López Mateos", "px": "De La Cerda Gonsález Ma. De Jesús", "est": "TAC - Cráneo [C]", "mot": "Dr. René, firmado 1 min tarde", "radm": "René", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "16 jul", "wd": "Jue", "suc": "López Mateos", "px": "Navarro Camacho María Angélica", "est": "TAC - Cráneo", "mot": "Firmado a tiempo, entregado tarde Oswaldo", "radm": "Transcripción", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "16 jul", "wd": "Jue", "suc": "López Mateos", "px": "Martínez Ruiz David", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Firmado a tiempo, entregado tarde Oswaldo", "radm": "Transcripción", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "17 jul", "wd": "Vie", "suc": "López Mateos", "px": "Vargas Sánchez Erika Alejandra", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Dr. Venegas, firmado 22 min después", "radm": "Venegas", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "20 jul", "wd": "Lun", "suc": "López Mateos", "px": "Valenzuela Quintero Leticia", "est": "TAC - Abdomen - Total [C]", "mot": "Carga de trabajo, realizando biopsia Dr. René", "radm": "René", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "20 jul", "wd": "Lun", "suc": "López Mateos", "px": "García Jiménez Ángel", "est": "TAC - Oídos", "mot": "Casos complejos Dra. Monse", "radm": "Monse", "isDoc": true, "excl": false}, {"mes": "Julio", "fecha": "29 jul", "wd": "Mié", "suc": "López Mateos", "px": "Coronado González Consuelo", "est": "TAC - Angio Pulmón [C]", "mot": "Estudio no ligado", "radm": "Transcripción", "isDoc": false, "excl": false}, {"mes": "Julio", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Columna Lumbar", "mot": "Separación de citas", "radm": "Coordinación", "isDoc": false, "excl": true}, {"mes": "Julio", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Abdomen - Total [C]", "mot": "Separación de citas", "radm": "Coordinación", "isDoc": false, "excl": true}, {"mes": "Agosto", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Chavez Alcantar Fabiola", "est": "TAC - Cráneo", "mot": "Dra. Monse no interpreta cervical, se avisa y libera estudio para agregar cevical", "radm": "Monse", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "31 jul", "wd": "Vie", "suc": "López Mateos", "px": "Chavez Alcantar Fabiola", "est": "TAC - Columna Cervical", "mot": "Dra. Monse no interpreta cervical, se avisa y libera estudio para agregar cevical", "radm": "Monse", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "05 ago", "wd": "Mié", "suc": "López Mateos", "px": "Morales Hernández Manuel", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Dr. René, firmado 14 minutos tarde, promesa de 1:54", "radm": "René", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "05 ago", "wd": "Mié", "suc": "Acueducto", "px": "Rodríguez Ávalos José Carlos", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Dr. González, firmada 4 minutos antes", "radm": "González", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "06 ago", "wd": "Jue", "suc": "López Mateos", "px": "Vizcarra Álvarez Silvia", "est": "TAC - 3R - Cráneo, Cuello y Tórax [C]", "mot": "Dr. René, firmado 8 minutos tarde", "radm": "René", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "06 ago", "wd": "Jue", "suc": "Acueducto", "px": "Cruz Velázquez Blanca Angélica Lusmila", "est": "TAC - Abdomen - Total [C]", "mot": "Dr. González, firmado 6 minutos tarde", "radm": "González", "isDoc": true, "excl": false}, {"mes": "Agosto", "fecha": "07 ago", "wd": "Vie", "suc": "López Mateos", "px": "Cervantes Membrila Mateo Israel", "est": "TAC - Cráneo", "mot": "En espera de placas, interpretado a tiempo, 7 minutos tarde", "radm": "Procedimiento", "isDoc": false, "excl": false}, {"mes": "Agosto", "fecha": "07 ago", "wd": "Vie", "suc": "López Mateos", "px": "Navel Meza Adriana Guadalupe", "est": "TAC - Cráneo", "mot": "En espera de placas, interpretado a tiempo, 11 minutos tarde", "radm": "Procedimiento", "isDoc": false, "excl": false}];
 
 // Totales del universo (todas las filas, no sólo incumplidos), por mes y L-V/Sáb/Dom.
 const anTotals = {
   jul: {lv:{tot:394,inc:20}, sab:{tot:55,inc:0}, dom:{tot:4,inc:0}},
   ago: {lv:{tot:148,inc:8},  sab:{tot:30,inc:0}, dom:{tot:2,inc:0}}
 };
-// Universo Tomografía López Mateos (jul+ago) por ventana de horario de agenda.
+// Universo Tomografía López Mateos (jul+ago), asignado por horario de agenda [B],
+// incluyendo las fechas en que René no asistió (Venegas cubre AM, Macías PM/todo el día).
 const anUlmSched = {
-  rene:      {tot:435, inc:19, label:'Dr. René · L-V 7:00–16:00'},
-  maciasPm:  {tot:76,  inc:7,  label:'Macías · L-V 16:00–fin'},
-  maciasSab: {tot:73,  inc:0,  label:'Macías · sábado'}
+  rene:    {tot:257, inc:8,  label:'Dr. René · días normales, L-V 7:00–16:00'},
+  venegas: {tot:155, inc:8,  label:'Dr. Venegas · cobertura, 7:00–15:00'},
+  macias:  {tot:184, inc:10, label:'Macías · tardes L-V, sábados y 3 jul (día completo)'}
 };
+// Otras unidades (Acueducto) con sus propios radiólogos, fuera del horario ULM.
+const anOtraSede = {tot:31, inc:2};
 
 function anPct(inc,tot){ return tot ? (inc/tot*100) : 0; }
 
@@ -3283,35 +3287,43 @@ function renderAnalisis(){
     `ningún estudio de sábado (${fmt(combSab.tot)} en el periodo) resultó incumplido. `+
     `Además existen ${T.jul.dom.tot+T.ago.dom.tot} estudios con fecha de agenda en domingo (agenda de madrugada/fin de semana), sin incumplidos; se excluyen de esta tabla por no ser parte de lunes-viernes ni sábado.`;
 
-  // Por doctor (según motivo)
-  const docCounts = {};
-  anIncList.forEach(r=>{ const k=r.doc||'Sin doctor identificado'; docCounts[k]=(docCounts[k]||0)+1; });
-  const docOrder = Object.keys(docCounts).sort((a,b)=>docCounts[b]-docCounts[a]);
+  // Por radiólogo o motivo (columna exacta del export)
+  const radmCounts = {};
+  anIncList.forEach(r=>{ radmCounts[r.radm]=(radmCounts[r.radm]||0)+1; });
+  const radmOrder = Object.keys(radmCounts).sort((a,b)=>radmCounts[b]-radmCounts[a]);
+  const DOC_COLOR='var(--c-serv)', MOT_COLOR='var(--muted)';
   barChart(document.getElementById('an-bars-doctor'),
-    docOrder.map(k=>({name:k, v:docCounts[k]})), 'var(--c-serv)');
+    radmOrder.map(k=>({name:k, v:radmCounts[k]})), DOC_COLOR,
+    {colorFn:(v,d)=> (anIncList.find(r=>r.radm===d.name)||{}).isDoc ? DOC_COLOR : MOT_COLOR});
+  const docTotal = anIncList.filter(r=>r.isDoc).length;
+  const docNames = radmOrder.filter(k=>(anIncList.find(r=>r.radm===k)||{}).isDoc);
   document.getElementById('an-doctor-nota').innerHTML =
-    `De ${anIncList.length} incumplimientos, <b>${anIncList.length-(docCounts['Sin doctor identificado']||0)}</b> mencionan a un médico específico en el motivo (${docOrder.filter(k=>k!=='Sin doctor identificado').join(', ')}). `+
-    `El resto son causas de proceso (transcripción, sistema, entrega, ligado en Exa, separación de citas) sin un médico atribuible.`;
+    `De ${anIncList.length} incumplimientos, <b>${docTotal}</b> tienen un radiólogo asignado en el export (${docNames.join(', ')}). `+
+    `El resto quedó registrado como motivo de proceso (${radmOrder.filter(k=>!docNames.includes(k)).join(', ')}), sin un médico atribuible. `+
+    `Colores: <span style="color:${DOC_COLOR}">▉</span> radiólogo · <span style="color:${MOT_COLOR}">▉</span> motivo de proceso.`;
 
-  // Indicador por radiólogo (horario agenda ULM)
+  // Indicador por radiólogo (horario agenda ULM, con cobertura Venegas/Macías en ausencias de René)
   const S = anUlmSched;
   const radRow = (d)=>`<tr><td>${d.label}</td><td class="d">${fmt(d.tot)}</td><td class="d">${fmt(d.inc)}</td><td class="d">${anPct(d.inc,d.tot).toFixed(1)}%</td></tr>`;
   document.getElementById('an-rad-tab').innerHTML =
     '<thead><tr><th>Radiólogo (por horario)</th><th>Estudios</th><th>Incumplidos</th><th>Tasa</th></tr></thead><tbody>'+
-    radRow(S.rene)+radRow(S.maciasPm)+radRow(S.maciasSab)+'</tbody>';
+    radRow(S.rene)+radRow(S.venegas)+radRow(S.macias)+'</tbody>';
   document.getElementById('an-rad-nota').innerHTML =
-    `Sólo Tomografía · López Mateos, jul+ago (parcial). La asignación es por <b>ventana de horario de agenda [B]</b>, no por el nombre real registrado en cada caso `+
-    `(el export no trae un radiólogo por fila de forma consistente) — es una estimación operativa, no una atribución verificada estudio por estudio. `+
-    `Se excluyen unos pocos estudios con fecha de agenda en domingo, fuera de las ventanas definidas.`;
+    `Sólo Tomografía · López Mateos, jul+ago (parcial). Incorpora las ausencias de René reportadas: `+
+    `<b>3 jul</b> (Macías todo el día), <b>7–10, 17, 23–24 y 27–31 jul</b> (Venegas 7:00–15:00, Macías 15:00–fin). `+
+    `El resto de los días L-V sigue el horario normal (René 7:00–16:00, Macías 16:00–fin); sábados siempre Macías. `+
+    `La asignación es por <b>ventana de horario de agenda [B]</b>, no una atribución verificada estudio por estudio — para los ${anIncList.length} incumplidos sí se cuenta con el radiólogo exacto (tabla de abajo). `+
+    `Acueducto (${fmt(anOtraSede.tot)} estudios, ${fmt(anOtraSede.inc)} incumplidos) tiene sus propios radiólogos (p. ej. Dr. González) y no aplica este horario de ULM.`;
 
   // Lista completa
   document.getElementById('an-lista-tab').innerHTML =
-    '<thead><tr><th>Mes</th><th>Fecha</th><th>Día</th><th>Sucursal</th><th>Paciente</th><th>Estudio</th><th>Motivo</th></tr></thead><tbody>'+
+    '<thead><tr><th>Mes</th><th>Fecha</th><th>Día</th><th>Sucursal</th><th>Paciente</th><th>Estudio</th><th>Motivo</th><th>Radiólogo o motivo</th></tr></thead><tbody>'+
     anIncList.map(r=>`<tr><td>${r.mes}</td><td class="d">${r.fecha}</td><td>${r.wd}</td><td>${r.suc}</td><td>${r.px}</td><td>${r.est}</td>`+
-      `<td>${r.mot}${r.excl?' <span class="pill red">excluido del indicador corregido</span>':''}${r.doc?` <span class="pill rad">Dr(a). ${r.doc}</span>`:''}</td></tr>`).join('')+
+      `<td>${r.mot}${r.excl?' <span class="pill red">excluido del indicador corregido</span>':''}</td>`+
+      `<td><span class="pill${r.isDoc?' rad':''}">${r.radm}</span></td></tr>`).join('')+
     '</tbody>';
   document.getElementById('an-lista-nota').innerHTML =
-    `${anIncList.length} estudios de Tomografía incumplidos entre julio y agosto (parcial, al 11 de agosto), con el motivo tal como se registró en el export de origen. `+
+    `${anIncList.length} estudios de Tomografía incumplidos entre julio y agosto (parcial, al 11 de agosto), con el motivo detallado y la columna "Radiólogo o motivo" tal como se registraron en el export de origen. `+
     `${excluidos} se excluyen del indicador corregido (separación de citas / modificación al día siguiente).`;
 }
 
