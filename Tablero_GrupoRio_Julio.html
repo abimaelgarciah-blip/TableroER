@@ -1646,25 +1646,24 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 <section class="view" id="estudios">
   <div class="page-head">
     <h1>Estudios</h1>
-    <p>Volumen de estudios por unidad y departamento <span class="badge">Julio 2026 · parcial, datos al 26</span></p>
+    <p>Volumen de estudios por unidad y departamento <span class="badge">Julio 2026 · mes completo</span></p>
   </div>
 
   <div class="card" style="margin-bottom:16px">
     <div class="card-head">
       <div>
-        <h3>Análisis de julio · por unidad</h3>
-        <p class="csub" id="est-jul-sub">Junio vs. julio 2026 (parcial) · fuente: Tiempo promesa de entrega</p>
+        <h3>Estudios realizados · por unidad</h3>
+        <p class="csub" id="est-jul-sub">Julio 2026, mes completo · las 9 unidades · fuente: Tiempo promesa de entrega</p>
       </div>
       <div class="k-value" id="est-jul-total" style="font-size:26px">—</div>
     </div>
-    <div id="est-jul-chart"></div>
-    <div class="legend" id="est-jul-legend"></div>
+    <div class="bars" id="est-jul-chart"></div>
     <div class="empty" id="est-jul-nota" style="margin-top:12px"></div>
   </div>
 
   <div class="card" style="margin-bottom:16px">
     <h3>Estudios por departamento · julio 2026</h3>
-    <p class="csub">Suma de todas las unidades · comparado contra junio 2026 · datos al 26 de julio</p>
+    <p class="csub">Suma de las 9 unidades · mes completo</p>
     <div style="overflow-x:auto">
       <table class="dtab" id="est-jul-dept-tab"></table>
     </div>
@@ -3244,52 +3243,42 @@ function trLegend(items){
   return items.map(it=>`<div class="li"><span class="sw" style="background:${it.color}"></span><span class="ln">${it.name}</span></div>`).join('');
 }
 
-/* ===== Estudios · análisis de julio 2026 (jun vs jul, por unidad y depto) =====
-   Fuente: DATA5 del panel embebido "Estudios por unidad, departamento y total"
-   (reporte Tiempo promesa de entrega), datos de julio al día 26 (parcial). */
+/* ===== Estudios · julio 2026, mes completo (por unidad y departamento) =====
+   Fuente: export completo "Tiempo promesa de entrega" de julio 2026 (8,021 filas,
+   1–31 jul, las 9 unidades) — reemplaza el conteo anterior (parcial al 26, 6
+   unidades, sin Medicina Preventiva) por el total real del mes. */
 const estJulUnitRows = [
-  ["López Mateos", 3453, 3560], ["Acueducto", 899, 1007], ["Clínica de la Mujer", 651, 561],
-  ["Chamizal", 266, 231], ["Guadalupe", 15, 20], ["Las Águilas", 14, 18]
+  ["López Mateos", 3560], ["Medicina Preventiva", 2615], ["Acueducto", 1007],
+  ["Clínica de la Mujer", 561], ["Chamizal", 231], ["Guadalupe", 20],
+  ["Las Águilas", 18], ["Ciudad Granja", 5], ["Plaza Universidad", 4]
 ];
 const estJulDeptRows = [
-  ["Resonancia", 1047, 1050], ["Ultrasonido", 1027, 977], ["Radiología", 861, 850],
-  ["Tomografía", 507, 609], ["Salud Visual", 393, 492], ["Mamografía", 378, 330],
-  ["Densitometría", 298, 296], ["Cardiología", 308, 246], ["Medicina Nuclear", 173, 150],
-  ["EEG", 84, 104], ["Servicios Especiales", 67, 101], ["Espirometría", 40, 67],
-  ["Paquetes", 65, 63], ["Electromiografía", 43, 45], ["Bioimpedanciología", 7, 17]
+  ["Ecosonografía", 1369], ["Radiología", 1228], ["Resonancia Magnética", 1062],
+  ["Servicios Especiales", 959], ["Cardiología", 767], ["Tomografía Axial Computada", 609],
+  ["Salud Visual", 500], ["Mamografía", 384], ["Densitometría", 346], ["Espirometría", 253],
+  ["Medicina Nuclear", 150], ["Bioimpedanciología", 122], ["Eeg y mapeo cerebral", 104],
+  ["Paquetes", 63], ["Servicio dental", 58], ["Electromiografía y potenciales evocados", 45],
+  ["Chequeos médicos", 2]
 ];
 function renderEstudiosJulio(){
-  const totJun = estJulUnitRows.reduce((a,r)=>a+r[1],0);
-  const totJul = estJulUnitRows.reduce((a,r)=>a+r[2],0);
-  document.getElementById('est-jul-total').textContent = fmt(totJul);
+  const totUnit = estJulUnitRows.reduce((a,r)=>a+r[1],0);
+  document.getElementById('est-jul-total').textContent = fmt(totUnit);
 
-  const series = [
-    {name:'Junio 2026', color:'var(--track)', vals: estJulUnitRows.map(r=>r[1])},
-    {name:'Julio 2026 (parcial)', color:'var(--c-sede)', vals: estJulUnitRows.map(r=>r[2])}
-  ];
-  groupBarChart(document.getElementById('est-jul-chart'), estJulUnitRows.map(r=>r[0]), series, ' est.');
-  document.getElementById('est-jul-legend').innerHTML = trLegend(series);
+  barChart(document.getElementById('est-jul-chart'),
+    estJulUnitRows.map(([name,v])=>({name,v})), 'var(--c-sede)', {fmt:v=>fmt(v)+' est.'});
 
-  const movers = estJulUnitRows.map(([u,jun,jul])=>[u,jun,jul, jun?((jul-jun)/jun*100):0])
-    .filter(r=>r[1]>=100)
-    .sort((a,b)=>Math.abs(b[3])-Math.abs(a[3]));
-  const [mu,,,mp] = movers[0];
-  const dPct = totJun ? ((totJul-totJun)/totJun*100) : 0;
+  const top3 = estJulUnitRows.slice(0,3);
+  const top3Pct = (top3.reduce((a,r)=>a+r[1],0)/totUnit*100).toFixed(0);
   document.getElementById('est-jul-nota').innerHTML =
-    `Julio 2026 (datos al día 26, mes parcial) suma <b>${fmt(totJul)}</b> estudios frente a <b>${fmt(totJun)}</b> en junio `+
-    `(${dPct>=0?'+':''}${dPct.toFixed(1)}%). El mayor movimiento entre unidades con volumen relevante es <b>${mu}</b> (${mp>=0?'+':''}${mp.toFixed(1)}%). `+
-    `López Mateos y Acueducto concentran la mayor parte del volumen; Guadalupe y Las Águilas operan con bases muy pequeñas (14–20 estudios/mes), por lo que sus variaciones porcentuales no son representativas.`;
+    `Julio 2026 (mes completo) suma <b>${fmt(totUnit)}</b> estudios en las 9 unidades. `+
+    `<b>López Mateos</b> y <b>Medicina Preventiva</b> concentran la mayor parte del volumen (${top3.map(r=>r[0]).join(', ')} ≈ ${top3Pct}% del total); `+
+    `Ciudad Granja y Plaza Universidad operan con bases muy pequeñas (4–5 estudios en el mes).`;
 
-  const tbody = estJulDeptRows.map(([d,jun,jul])=>{
-    const delta = jul-jun, pct = jun ? (delta/jun*100) : (jul?100:0);
-    const up = delta>0, down = delta<0;
-    const pill = up ? `<span class="pill" style="background:rgba(76,140,111,.13);color:#3a7057">▲ +${fmt(delta)} (${pct.toFixed(1)}%)</span>`
-               : down ? `<span class="pill red">▼ ${fmt(delta)} (${pct.toFixed(1)}%)</span>`
-               : `<span class="pill">≈ sin cambio</span>`;
-    return `<tr><td>${d}</td><td class="d">${fmt(jun)}</td><td class="d">${fmt(jul)}</td><td>${pill}</td></tr>`;
-  }).join('');
+  const totDept = estJulDeptRows.reduce((a,r)=>a+r[1],0);
+  const tbody = estJulDeptRows.map(([d,v])=>
+    `<tr><td>${d}</td><td class="d">${fmt(v)}</td><td class="d">${(v/totDept*100).toFixed(1)}%</td></tr>`).join('');
   document.getElementById('est-jul-dept-tab').innerHTML =
-    `<thead><tr><th>Departamento</th><th>Junio</th><th>Julio (al 26)</th><th>Variación</th></tr></thead><tbody>${tbody}</tbody>`;
+    `<thead><tr><th>Departamento</th><th>Estudios</th><th>% del total</th></tr></thead><tbody>${tbody}</tbody>`;
 }
 
 /* ===== Análisis · incumplimiento Tomografía (jul + ago 2026 parcial) =====
