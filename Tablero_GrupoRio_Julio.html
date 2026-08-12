@@ -1653,22 +1653,25 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
     <div class="card-head">
       <div>
         <h3>Comparativa · julio 2025 vs. julio 2026</h3>
-        <p class="csub" id="est-yoy-sub">Mismo mes, año contra año</p>
+        <p class="csub" id="est-yoy-all-sub">Todas las unidades</p>
       </div>
-      <div class="k-value" id="est-yoy-total" style="font-size:26px">—</div>
+      <div class="k-value" id="est-yoy-all-total" style="font-size:26px">—</div>
     </div>
+    <div class="empty" id="est-yoy-all-nota" style="margin-top:12px"></div>
+
+    <p class="csub" style="margin-top:18px" id="est-yoy-sub">Detalle por unidad · sólo las unidades con dato de julio 2025 por sucursal</p>
     <div id="est-yoy-chart"></div>
     <div class="legend" id="est-yoy-legend"></div>
     <div class="empty" id="est-yoy-nota" style="margin-top:12px"></div>
 
-    <p class="csub" style="margin-top:18px">Unidades sin dato de julio 2025 disponible</p>
+    <p class="csub" style="margin-top:18px">Unidades sin desglose 2025 por sucursal</p>
     <div class="bars" id="est-yoy-nodata"></div>
     <div class="empty" id="est-yoy-nodata-nota" style="margin-top:12px"></div>
   </div>
 
   <div class="card" style="margin-bottom:16px">
     <h3>Estudios por departamento · julio 2026</h3>
-    <p class="csub">Suma de las 9 unidades · mes completo · variación vs. julio 2025 en las 6 unidades con histórico</p>
+    <p class="csub">Suma de las 9 unidades · mes completo · variación vs. julio 2025, todas las unidades</p>
     <div style="overflow-x:auto">
       <table class="dtab" id="est-jul-dept-tab"></table>
     </div>
@@ -3259,25 +3262,25 @@ const estJulDeptRows = [
   ["Paquetes", 63], ["Servicio dental", 58], ["Electromiografía y potenciales evocados", 45],
   ["Chequeos médicos", 2]
 ];
-// % variación vs julio 2025, calculada SOLO sobre las 6 unidades con histórico 2025
-// disponible (López Mateos, Acueducto, Clínica de la Mujer, Chamizal, Guadalupe, Las
-// Águilas) para que la comparación sea justa — no mezcla unidades sin dato 2025.
-// "Servicio dental" y "Chequeos médicos" son casi en su totalidad de Medicina
-// Preventiva (sin dato 2025), por eso no tienen variación calculable.
+// % variación vs julio 2025, ahora con las 9 unidades en ambos años (export completo
+// "Todas unidades" de julio 2025, 8,696 estudios prometidos, mismo origen de reporte
+// que el de julio 2026). Ya no hace falta excluir unidades: cubre todo el volumen.
 const estDeptYoyPct = {
-  "Resonancia Magnética": -23.7, "Ecosonografía": -19.3, "Radiología": -18.0,
-  "Tomografía Axial Computada": -9.4, "Mamografía": -20.9, "Cardiología": -37.7,
-  "Densitometría": -7.8, "Medicina Nuclear": -34.5, "Eeg y mapeo cerebral": -29.3,
-  "Salud Visual": 290.5, "Servicios Especiales": -8.2, "Paquetes": -21.2,
-  "Electromiografía y potenciales evocados": -6.2, "Espirometría": 67.5, "Bioimpedanciología": 325.0
+  "Ecosonografía": -13.7, "Radiología": -10.7, "Resonancia Magnética": -25.3,
+  "Servicios Especiales": 14.9, "Cardiología": -16.0, "Tomografía Axial Computada": -10.6,
+  "Salud Visual": 303.2, "Mamografía": -18.8, "Densitometría": -6.7, "Espirometría": 14.0,
+  "Medicina Nuclear": -37.0, "Bioimpedanciología": 11.9, "Eeg y mapeo cerebral": -30.7,
+  "Paquetes": -30.0, "Servicio dental": 5.5, "Electromiografía y potenciales evocados": -8.2,
+  "Chequeos médicos": 0.0
 };
 function renderEstudiosJulio(){
   const totDept = estJulDeptRows.reduce((a,r)=>a+r[1],0);
   const tbody = estJulDeptRows.map(([d,v])=>{
     const pct = estDeptYoyPct[d];
     const pctCell = pct==null ? `<span class="pill">sin dato 2025</span>`
-      : pct>=0 ? `<span class="pill" style="background:rgba(76,140,111,.13);color:#3a7057">▲ +${pct.toFixed(1)}%</span>`
-                : `<span class="pill red">▼ ${pct.toFixed(1)}%</span>`;
+      : pct>0 ? `<span class="pill" style="background:rgba(76,140,111,.13);color:#3a7057">▲ +${pct.toFixed(1)}%</span>`
+      : pct<0 ? `<span class="pill red">▼ ${pct.toFixed(1)}%</span>`
+                : `<span class="pill">≈ sin cambio</span>`;
     return `<tr><td>${d}</td><td class="d">${fmt(v)}</td><td class="d">${(v/totDept*100).toFixed(1)}%</td><td>${pctCell}</td></tr>`;
   }).join('');
   document.getElementById('est-jul-dept-tab').innerHTML =
@@ -3285,11 +3288,14 @@ function renderEstudiosJulio(){
 }
 
 /* ===== Estudios · comparativa julio 2025 vs julio 2026 =====
-   Fuente: DATA5 (panel embebido "Estudios por unidad, departamento y total"),
-   único origen con histórico 2025. Sólo cubre 6 unidades — no incluye Medicina
-   Preventiva, Ciudad Granja ni Plaza Universidad, que no tienen dato 2025
-   disponible ahí (el propio panel embebido las excluye explícitamente de su
-   serie histórica). Esas 3 se muestran aparte, solo con su valor de 2026. */
+   Total todas-las-unidades: export completo "Todas unidades" de julio 2025 (8,696
+   estudios prometidos, mismo tipo de reporte "Tiempo promesa de entrega" que julio
+   2026) — SÍ incluye Medicina Preventiva en el total. Su columna Sucursal, sin
+   embargo, sólo viene poblada en las primeras 66 filas del archivo (defecto de
+   paginación del export); el resto queda en blanco, así que no se puede reconstruir
+   el desglose por unidad de 2025 de forma confiable — por eso el detalle por unidad
+   de abajo sigue limitado a las 6 unidades que sí tienen ese desglose (vía DATA5). */
+const estYoyAll = {tot25: 8696, tot26: 8021};
 const estYoyRows = [
   ["López Mateos", 4141, 3560], ["Acueducto", 1083, 1007], ["Clínica de la Mujer", 627, 561],
   ["Chamizal", 300, 231], ["Guadalupe", 59, 20], ["Las Águilas", 3, 18]
@@ -3298,12 +3304,17 @@ const estYoyNoData = [
   ["Medicina Preventiva", 2615], ["Ciudad Granja", 5], ["Plaza Universidad", 4]
 ];
 function renderEstudiosYoy(){
+  const dAllPct = (estYoyAll.tot26-estYoyAll.tot25)/estYoyAll.tot25*100;
+  document.getElementById('est-yoy-all-total').textContent = (dAllPct>=0?'+':'')+dAllPct.toFixed(1)+'%';
+  document.getElementById('est-yoy-all-sub').textContent =
+    `Todas las unidades · ${fmt(estYoyAll.tot25)} → ${fmt(estYoyAll.tot26)} estudios`;
+  document.getElementById('est-yoy-all-nota').innerHTML =
+    `Julio 2026 quedó <b>${dAllPct.toFixed(1)}%</b> por debajo de julio 2025 en el total de la compañía (${fmt(estYoyAll.tot25)} → ${fmt(estYoyAll.tot26)} estudios), `+
+    `usando el export completo "Todas unidades" de julio 2025 — este total ya incluye a Medicina Preventiva.`;
+
   const tot25 = estYoyRows.reduce((a,r)=>a+r[1],0);
   const tot26 = estYoyRows.reduce((a,r)=>a+r[2],0);
   const dPct = (tot26-tot25)/tot25*100;
-  document.getElementById('est-yoy-total').textContent = (dPct>=0?'+':'')+dPct.toFixed(1)+'%';
-  document.getElementById('est-yoy-sub').textContent =
-    `Mismo mes, año contra año · ${fmt(tot25)} → ${fmt(tot26)} estudios`;
 
   const series = [
     {name:'Julio 2025', color:'var(--track)', vals: estYoyRows.map(r=>r[1])},
@@ -3316,14 +3327,16 @@ function renderEstudiosYoy(){
     .sort((a,b)=>Math.abs(b[3])-Math.abs(a[3]));
   const [mu,,,mp] = movers[0];
   document.getElementById('est-yoy-nota').innerHTML =
-    `Julio 2026 quedó <b>${dPct.toFixed(1)}%</b> por debajo de julio 2025 (${fmt(tot25)} → ${fmt(tot26)} estudios) en las 6 unidades con histórico disponible. `+
-    `El mayor movimiento es <b>${mu}</b> (${mp>=0?'+':''}${mp.toFixed(1)}%); Guadalupe cae fuerte mientras Las Águilas crece, pero ambas parten de bases muy pequeñas (3–59 estudios/mes).`;
+    `En estas 6 unidades (${fmt(tot25)} → ${fmt(tot26)} estudios, ${dPct.toFixed(1)}%) el mayor movimiento es <b>${mu}</b> (${mp>=0?'+':''}${mp.toFixed(1)}%); `+
+    `Guadalupe cae fuerte mientras Las Águilas crece, pero ambas parten de bases muy pequeñas (3–59 estudios/mes).`;
 
   barChart(document.getElementById('est-yoy-nodata'),
     estYoyNoData.map(([name,v])=>({name,v})), 'var(--muted)', {fmt:v=>fmt(v)+' est. (jul 2026)'});
   document.getElementById('est-yoy-nodata-nota').innerHTML =
-    `<b>Medicina Preventiva</b>, Ciudad Granja y Plaza Universidad no tienen julio 2025 registrado en ninguna de las fuentes disponibles — el panel de donde sale el histórico las excluye explícitamente. `+
-    `Se muestran solo con su volumen de julio 2026 para no perderlas de vista; si compartes un export de julio 2025 que las incluya, agrego la comparación completa.`;
+    `El total de la compañía de arriba (8,696 → 8,021) sí incluye a <b>Medicina Preventiva</b>, Ciudad Granja y Plaza Universidad, `+
+    `pero el archivo de julio 2025 con todas las unidades trae la columna de sucursal vacía después de las primeras filas (un defecto del export), `+
+    `así que no se puede aislar el valor 2025 de cada una por separado — sólo se muestra aquí su volumen de julio 2026. `+
+    `Si consigues un export de julio 2025 filtrado por unidad (como los de julio 2026), agrego el desglose completo.`;
 }
 
 /* ===== Análisis · incumplimiento Tomografía (jul + ago 2026 parcial) =====
