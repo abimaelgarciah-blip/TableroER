@@ -436,6 +436,26 @@
 #estudios{padding:0 !important}
 .est-wrap{width:100%}
 .est-frame{width:100%;border:0;display:block;height:1400px;background:#fbfbfa}
+
+/* --- Calendario de biopsias vs incumplimientos --- */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-wd{font-size:10px;color:var(--muted);text-align:center;text-transform:uppercase;letter-spacing:.05em;padding-bottom:2px}
+.cal-day{position:relative;border-radius:8px;min-height:56px;padding:6px 6px 5px;display:flex;flex-direction:column;gap:5px}
+.cal-day.empty{visibility:hidden}
+.cal-day.nodata{background:repeating-linear-gradient(45deg,var(--track),var(--track) 5px,transparent 5px,transparent 10px)}
+.cal-num{font-size:11px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.cal-dots{display:flex;flex-wrap:wrap;gap:3px}
+.cal-dot{width:7px;height:7px;border-radius:50%;flex:none}
+.cal-legend{display:flex;flex-wrap:wrap;gap:12px;align-items:center;font-size:11.5px;color:var(--muted);margin-top:12px}
+.cal-legend .li{display:flex;align-items:center;gap:5px}
+.cal-legend .sw{width:9px;height:9px;border-radius:50%;display:inline-block}
+.cal-scale{display:flex;gap:2px;align-items:center}
+.cal-scale i{width:14px;height:9px;border-radius:2px;display:inline-block}
+.an-detail-toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--c-people);
+  cursor:pointer;user-select:none;background:none;border:0;padding:0;margin-top:12px}
+.an-detail-toggle:hover{opacity:.75}
+.an-detail-toggle .arrow{transition:transform .2s}
+.an-detail-toggle.open .arrow{transform:rotate(90deg)}
 </style>
 </head>
 <body>
@@ -2290,9 +2310,24 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
   <div class="card" style="margin-bottom:16px">
     <h3>¿Hubo biopsia agendada el mismo día del incumplimiento?</h3>
-    <p class="csub">Por caso, contra la fecha promesa de entrega [A] · sólo hay datos de biopsias hasta el 23 de julio</p>
-    <div style="overflow-x:auto"><table class="dtab" id="an-bioday-tab"></table></div>
+    <p class="csub">Julio 2026 · color = biopsias agendadas ese día · puntos = incumplidos de Tomografía (fecha promesa)</p>
+    <div style="overflow-x:auto"><div class="cal" id="an-cal"></div></div>
+    <div class="cal-legend" id="an-cal-legend"></div>
+    <div class="grid two" style="margin-top:16px">
+      <div class="card" style="box-shadow:none;border:1px solid var(--border);padding:14px">
+        <p class="csub" style="margin-bottom:8px">Días con incumplimiento que coincidieron con biopsia agendada</p>
+        <div id="an-cal-bar1"></div>
+      </div>
+      <div class="card" style="box-shadow:none;border:1px solid var(--border);padding:14px">
+        <p class="csub" style="margin-bottom:8px">Tasa base: días hábiles de julio con alguna biopsia agendada</p>
+        <div id="an-cal-bar2"></div>
+      </div>
+    </div>
     <div class="empty" id="an-bioday-nota" style="margin-top:12px"></div>
+    <button class="an-detail-toggle" id="an-detail-toggle"><span class="arrow">▸</span> Ver el detalle de los 17 casos con datos disponibles</button>
+    <div class="eff-detail" id="an-bioday-detail">
+      <div style="overflow-x:auto"><table class="dtab" id="an-bioday-tab"></table></div>
+    </div>
   </div>
 </section>
 
@@ -3356,6 +3391,7 @@ function renderAnalisis(){
 
   renderAnHeat();
   renderAnBioDay();
+  renderAnCalendar();
 }
 
 /* ===== Mapa de calor · agenda de biopsias vs. hora promesa de entregas tarde =====
@@ -3453,17 +3489,64 @@ function renderAnBioDay(){
     }).join('')+
     '</tbody>';
 
-  const checkable = anBioDay.filter(r=>r.status!=='sindatos');
-  const uniqDates = [...new Set(checkable.map(r=>r.fecha))];
-  const uniqSi = [...new Set(checkable.filter(r=>r.status==='si').map(r=>r.fecha))];
-  const pctInc = (uniqSi.length/uniqDates.length*100);
-  const pctBase = (anBioBaseRate.diasConBiopsia/anBioBaseRate.diasTotales*100);
+  const toggle = document.getElementById('an-detail-toggle'), detail = document.getElementById('an-bioday-detail');
+  toggle.onclick = ()=>{
+    const open = detail.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    toggle.lastChild.textContent = ' '+(open?'Ocultar el detalle de los 17 casos':'Ver el detalle de los 17 casos con datos disponibles');
+  };
+}
+
+/* ---- Calendario de julio: biopsias agendadas por día + incumplidos ese día ---- */
+const anCalCounts = {1:2,2:0,3:1,4:0,5:0,6:3,7:1,8:3,9:2,10:4,11:0,12:0,13:3,14:3,15:1,16:0,17:4,18:0,19:0,20:3,21:4,22:2,23:2};
+const anCalDataMax = 23; // 24 jul en adelante: el export de biopsias no llega, no es que hayan sido cero
+const anCalInc = {
+  1:['Duda con protocolo','Duda con protocolo'], 2:['Calidad'], 3:['Macías','Macías'],
+  7:['Venegas','René'], 9:['Macías','Macías'], 10:['Venegas'], 13:['Sistema'], 15:['René'],
+  16:['Transcripción','Transcripción'], 17:['Venegas'], 20:['René'], 22:['Monse'],
+  29:['Transcripción'], 31:['Coordinación','Coordinación']
+};
+const anRadmColor = {René:'#3f6fa6', Venegas:'#8a6a9c', Macías:'#ab7a45', Monse:'#4e8c70', 'González':'#5c7d97'};
+const anRadmColorDefault = '#90908a';
+const anBioColor = '#0e9bab';
+function anColorFor(radm){ return anRadmColor[radm] || anRadmColorDefault; }
+
+function renderAnCalendar(){
+  const WD = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const firstDow = 2; // 1 jul 2026 cae en miércoles
+  const maxCount = Math.max(...Object.values(anCalCounts));
+  let html = WD.map(w=>`<div class="cal-wd">${w}</div>`).join('');
+  for(let i=0;i<firstDow;i++) html += `<div class="cal-day empty"></div>`;
+  for(let d=1; d<=31; d++){
+    const noData = d>anCalDataMax;
+    const c = anCalCounts[d]||0;
+    const t = maxCount ? c/maxCount : 0;
+    const bgStyle = noData ? '' : `background:${c? anHexA(anBioColor,0.12+0.78*t) : 'var(--track)'}`;
+    const incs = anCalInc[d]||[];
+    const dots = incs.map(radm=>`<span class="cal-dot" style="background:${anColorFor(radm)}"></span>`).join('');
+    const tip = `<b>${d} jul</b>${noData?' · sin datos de biopsias':' · '+c+' biopsia(s) agendada(s)'}`+
+      (incs.length? ' · '+incs.length+' incumplido(s): '+incs.join(', ') : '');
+    html += `<div class="cal-day${noData?' nodata':''}" style="${bgStyle}" data-tip="${tip.replace(/"/g,'&quot;')}">`+
+      `<div class="cal-num">${d}</div><div class="cal-dots">${dots}</div></div>`;
+  }
+  document.getElementById('an-cal').innerHTML = html;
+
+  const docLegend = Object.entries(anRadmColor).map(([k,v])=>`<span class="li"><span class="sw" style="background:${v}"></span>${k}</span>`).join('');
+  document.getElementById('an-cal-legend').innerHTML =
+    `<span class="li">biopsias: <span class="cal-scale">`+
+      [0.15,0.35,0.55,0.75,0.95].map(a=>`<i style="background:${anHexA(anBioColor,a)}"></i>`).join('')+
+    `</span></span>`+
+    `<span class="li"><i style="width:14px;height:14px;border-radius:3px;display:inline-block;background:repeating-linear-gradient(45deg,var(--track),var(--track) 3px,transparent 3px,transparent 6px)"></i> sin datos (después del 23 jul)</span>`+
+    docLegend+
+    `<span class="li"><span class="sw" style="background:${anRadmColorDefault}"></span>proceso (transcripción, sistema, coordinación…)</span>`;
+
+  const pctInc=83, pctBase=88;
+  barChart(document.getElementById('an-cal-bar1'), [{name:'Días con incumplimiento', v:pctInc}], anBioColor, {max:100, fmt:v=>v+'%'});
+  barChart(document.getElementById('an-cal-bar2'), [{name:'Todos los días hábiles', v:pctBase}], 'var(--muted)', {max:100, fmt:v=>v+'%'});
+
   document.getElementById('an-bioday-nota').innerHTML =
-    `De los ${anIncList.length} incumplidos, sólo ${checkable.length} caen dentro del rango que cubre el archivo de biopsias (1–23 de julio); los del 24 de julio en adelante (incluida toda la parte de agosto) quedan marcados "sin datos" porque no hay ese archivo para agosto. `+
-    `De los ${uniqDates.length} días distintos con incumplimiento y datos disponibles, <b>${uniqSi.length} (${pctInc.toFixed(0)}%)</b> tuvieron al menos una biopsia agendada. `+
-    `Pero esa tasa no es mayor que la normal: en el periodo 1–23 de julio hubo biopsia agendada en <b>${anBioBaseRate.diasConBiopsia} de ${anBioBaseRate.diasTotales} días hábiles (${pctBase.toFixed(0)}%)</b> — es decir, casi todos los días hay alguna biopsia, incumplan o no. `+
-    `Por eso el simple "¿hubo biopsia ese día?" no distingue nada: los únicos 2 días sin ninguna biopsia en todo julio (2 y 16 de julio) son, de hecho, los mismos 2 días con incumplimiento marcados "sin biopsia" arriba. `+
-    `La señal real está en la <b>hora</b>, no en el día: el mapa de calor de arriba sí muestra que René, Venegas y Monse se atrasan justo en las horas siguientes al pico de biopsias (11–13h), mientras Macías y González se atrasan de noche, cuando ya no hay biopsias en agenda.`;
+    `Casi todos los días de julio tuvieron alguna biopsia agendada, así que la coincidencia en días con incumplimiento (${pctInc}%) no supera la tasa normal (${pctBase}%) — el "mismo día" no distingue nada. `+
+    `La señal real sigue estando en la <b>hora</b> (mapa de arriba): René, Venegas y Monse se atrasan justo después del pico de biopsias; Macías y González se atrasan de noche, sin biopsias en agenda.`;
 }
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
