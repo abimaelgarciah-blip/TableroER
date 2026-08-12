@@ -3289,19 +3289,18 @@ function renderEstudiosJulio(){
 
 /* ===== Estudios · comparativa julio 2025 vs julio 2026 =====
    Total todas-las-unidades: export completo "Todas unidades" de julio 2025 (8,696
-   estudios prometidos, mismo tipo de reporte "Tiempo promesa de entrega" que julio
-   2026) — SÍ incluye Medicina Preventiva en el total. Su columna Sucursal, sin
-   embargo, sólo viene poblada en las primeras 66 filas del archivo (defecto de
-   paginación del export); el resto queda en blanco, así que no se puede reconstruir
-   el desglose por unidad de 2025 de forma confiable — por eso el detalle por unidad
-   de abajo sigue limitado a las 6 unidades que sí tienen ese desglose (vía DATA5). */
+   estudios prometidos) — ya incluye Medicina Preventiva.
+   Detalle por unidad: 6 unidades vía DATA5 + Medicina Preventiva vía export propio
+   filtrado a esa unidad (2,414 estudios prometidos jul 2025, Sucursal poblada en
+   el 100% de sus filas). Sólo Ciudad Granja y Plaza Universidad (9 estudios en
+   total en jul 2026) siguen sin dato 2025 disponible. */
 const estYoyAll = {tot25: 8696, tot26: 8021};
 const estYoyRows = [
-  ["López Mateos", 4141, 3560], ["Acueducto", 1083, 1007], ["Clínica de la Mujer", 627, 561],
-  ["Chamizal", 300, 231], ["Guadalupe", 59, 20], ["Las Águilas", 3, 18]
+  ["López Mateos", 4141, 3560], ["Medicina Preventiva", 2414, 2615], ["Acueducto", 1083, 1007],
+  ["Clínica de la Mujer", 627, 561], ["Chamizal", 300, 231], ["Guadalupe", 59, 20], ["Las Águilas", 3, 18]
 ];
 const estYoyNoData = [
-  ["Medicina Preventiva", 2615], ["Ciudad Granja", 5], ["Plaza Universidad", 4]
+  ["Ciudad Granja", 5], ["Plaza Universidad", 4]
 ];
 function renderEstudiosYoy(){
   const dAllPct = (estYoyAll.tot26-estYoyAll.tot25)/estYoyAll.tot25*100;
@@ -3323,20 +3322,20 @@ function renderEstudiosYoy(){
   groupBarChart(document.getElementById('est-yoy-chart'), estYoyRows.map(r=>r[0]), series, ' est.');
   document.getElementById('est-yoy-legend').innerHTML = trLegend(series);
 
-  const movers = estYoyRows.map(([u,a,b])=>[u,a,b,(b-a)/a*100]).filter(r=>r[1]>=50)
+  const mp = estYoyRows.find(r=>r[0]==='Medicina Preventiva');
+  const mpPct = (mp[2]-mp[1])/mp[1]*100;
+  const movers = estYoyRows.map(([u,a,b])=>[u,a,b,(b-a)/a*100]).filter(r=>r[1]>=50 && r[0]!=='Medicina Preventiva')
     .sort((a,b)=>Math.abs(b[3])-Math.abs(a[3]));
-  const [mu,,,mp] = movers[0];
+  const [mu,,,mmp] = movers[0];
   document.getElementById('est-yoy-nota').innerHTML =
-    `En estas 6 unidades (${fmt(tot25)} → ${fmt(tot26)} estudios, ${dPct.toFixed(1)}%) el mayor movimiento es <b>${mu}</b> (${mp>=0?'+':''}${mp.toFixed(1)}%); `+
-    `Guadalupe cae fuerte mientras Las Águilas crece, pero ambas parten de bases muy pequeñas (3–59 estudios/mes).`;
+    `En estas 7 unidades (${fmt(tot25)} → ${fmt(tot26)} estudios, ${dPct.toFixed(1)}%), <b>Medicina Preventiva</b> es la única que crece entre las unidades grandes (${fmt(mp[1])} → ${fmt(mp[2])}, ${mpPct>=0?'+':''}${mpPct.toFixed(1)}%). `+
+    `Fuera de ella, el mayor movimiento es <b>${mu}</b> (${mmp>=0?'+':''}${mmp.toFixed(1)}%); Guadalupe cae fuerte mientras Las Águilas crece, pero ambas parten de bases muy pequeñas (3–59 estudios/mes).`;
 
   barChart(document.getElementById('est-yoy-nodata'),
     estYoyNoData.map(([name,v])=>({name,v})), 'var(--muted)', {fmt:v=>fmt(v)+' est. (jul 2026)'});
   document.getElementById('est-yoy-nodata-nota').innerHTML =
-    `El total de la compañía de arriba (8,696 → 8,021) sí incluye a <b>Medicina Preventiva</b>, Ciudad Granja y Plaza Universidad, `+
-    `pero el archivo de julio 2025 con todas las unidades trae la columna de sucursal vacía después de las primeras filas (un defecto del export), `+
-    `así que no se puede aislar el valor 2025 de cada una por separado — sólo se muestra aquí su volumen de julio 2026. `+
-    `Si consigues un export de julio 2025 filtrado por unidad (como los de julio 2026), agrego el desglose completo.`;
+    `Ciudad Granja y Plaza Universidad no tienen julio 2025 disponible en ninguna fuente compartida — juntas suman sólo ${fmt(estYoyNoData.reduce((a,r)=>a+r[1],0))} estudios en julio 2026, así que su peso en el total es mínimo. `+
+    `Se muestran solo con su volumen de julio 2026; si consigues un export de julio 2025 filtrado a cualquiera de ellas, agrego la comparación.`;
 }
 
 /* ===== Análisis · incumplimiento Tomografía (jul + ago 2026 parcial) =====
