@@ -2280,6 +2280,13 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
     <div style="overflow-x:auto"><table class="dtab" id="an-lista-tab"></table></div>
     <div class="empty" id="an-lista-nota" style="margin-top:12px"></div>
   </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Mapa de calor · agenda de biopsias vs. hora promesa de entregas tarde (Tomografía)</h3>
+    <p class="csub">Hipótesis: la realización de biopsias choca con la hora de entrega prometida de TACs · julio (+ ago parcial)</p>
+    <div style="overflow-x:auto"><div class="heat" id="an-heat"></div></div>
+    <div class="empty" id="an-heat-nota" style="margin-top:12px"></div>
+  </div>
 </section>
 
     </div>
@@ -3339,6 +3346,52 @@ function renderAnalisis(){
   document.getElementById('an-lista-nota').innerHTML =
     `${anIncList.length} estudios de Tomografía incumplidos entre julio y agosto (parcial, al 11 de agosto), con el motivo detallado y la columna "Radiólogo o motivo" tal como se registraron en el export de origen. `+
     `${excluidos} se excluyen del indicador corregido (separación de citas / modificación al día siguiente).`;
+
+  renderAnHeat();
+}
+
+/* ===== Mapa de calor · agenda de biopsias vs. hora promesa de entregas tarde =====
+   Fuente: Biopsias_julio.xls (hora de Fecha Agenda [B], procedimiento de biopsia) y
+   los incumplidos de Tomografía (hora de Fecha Promesa [A]), por el radiólogo/motivo
+   exacto registrado en "Radiólogo o motivo". */
+const anHeatHours = [7,8,9,10,11,12,13,14,15,16,17,18,19];
+const anHeatRows = [
+  {label:'Biopsias · hora de agenda [B]', color:'#0e9bab', counts:{7:1,8:2,9:5,10:11,11:11,12:11,13:7}},
+  {label:'René · hora promesa (tarde)',    color:'#3f6fa6', counts:{11:1,12:2,13:2}},
+  {label:'Venegas · hora promesa (tarde)', color:'#8a6a9c', counts:{13:1,14:1,17:1}},
+  {label:'Macías · hora promesa (tarde)',  color:'#ab7a45', counts:{16:2,19:2}},
+  {label:'Monse · hora promesa (tarde)',   color:'#4e8c70', counts:{13:2,16:1}},
+  {label:'González · hora promesa (tarde)',color:'#5c7d97', counts:{16:1,18:1}}
+];
+function anHexA(hex,a){
+  const h=hex.replace('#','');
+  const r=parseInt(h.substr(0,2),16), g=parseInt(h.substr(2,2),16), b=parseInt(h.substr(4,2),16);
+  return `rgba(${r},${g},${b},${a.toFixed(3)})`;
+}
+function heatmapMulti(elId, rows, horas){
+  const el=document.getElementById(elId); if(!el) return;
+  el.style.gridTemplateColumns=`200px repeat(${horas.length},1fr)`;
+  let html='<div></div>'+horas.map(h=>`<div class="heat-h">${h}h</div>`).join('');
+  rows.forEach(row=>{
+    const max=Math.max(...horas.map(h=>row.counts[h]||0),1);
+    html+=`<div class="heat-d" style="color:${row.color};font-weight:600">${row.label}</div>`;
+    horas.forEach(h=>{
+      const c=row.counts[h]||0, t=c/max;
+      const bg=c? anHexA(row.color,0.14+0.82*t) : 'var(--track)';
+      const fg=t>0.55?'#fff':'var(--ink-2)';
+      html+=`<div class="heat-c" style="background:${bg};color:${fg}" data-tip="<b>${row.label} · ${h}:00</b> · ${c}">${c||''}</div>`;
+    });
+  });
+  el.innerHTML=html;
+}
+function renderAnHeat(){
+  heatmapMulti('an-heat', anHeatRows, anHeatHours);
+  const bioPeak='10–12h', docPeak='11–13h (René, Venegas y Monse)';
+  document.getElementById('an-heat-nota').innerHTML =
+    `Las biopsias se concentran en la mañana (<b>${fmt(48)} en julio</b>, pico ${bioPeak}) porque requieren la sala de ecografía y al radiólogo de forma continua. `+
+    `Las entregas tarde de <b>René, Venegas y Monse</b> se agrupan justo después, entre las ${docPeak} — consistente con la hipótesis de que la biopsia choca con la hora prometida de esos TACs. `+
+    `En cambio, <b>Macías y González</b> se atrasan más tarde (16–19h), fuera de la ventana de biopsias, así que en sus casos el choque no explica el incumplimiento — ahí conviene buscar otra causa. `+
+    `Nota: la muestra de incumplidos por radiólogo es pequeña (2–5 casos cada uno), así que esta lectura es una señal, no una prueba estadística.`;
 }
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
