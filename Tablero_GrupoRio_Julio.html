@@ -2287,6 +2287,13 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
     <div style="overflow-x:auto"><div class="heat" id="an-heat"></div></div>
     <div class="empty" id="an-heat-nota" style="margin-top:12px"></div>
   </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>¿Hubo biopsia agendada el mismo día del incumplimiento?</h3>
+    <p class="csub">Por caso, contra la fecha promesa de entrega [A] · sólo hay datos de biopsias hasta el 23 de julio</p>
+    <div style="overflow-x:auto"><table class="dtab" id="an-bioday-tab"></table></div>
+    <div class="empty" id="an-bioday-nota" style="margin-top:12px"></div>
+  </div>
 </section>
 
     </div>
@@ -3348,6 +3355,7 @@ function renderAnalisis(){
     `${excluidos} se excluyen del indicador corregido (separación de citas / modificación al día siguiente).`;
 
   renderAnHeat();
+  renderAnBioDay();
 }
 
 /* ===== Mapa de calor · agenda de biopsias vs. hora promesa de entregas tarde =====
@@ -3392,6 +3400,70 @@ function renderAnHeat(){
     `Las entregas tarde de <b>René, Venegas y Monse</b> se agrupan justo después, entre las ${docPeak} — consistente con la hipótesis de que la biopsia choca con la hora prometida de esos TACs. `+
     `En cambio, <b>Macías y González</b> se atrasan más tarde (16–19h), fuera de la ventana de biopsias, así que en sus casos el choque no explica el incumplimiento — ahí conviene buscar otra causa. `+
     `Nota: la muestra de incumplidos por radiólogo es pequeña (2–5 casos cada uno), así que esta lectura es una señal, no una prueba estadística.`;
+}
+
+/* ===== ¿Hubo biopsia agendada el mismo día del incumplimiento? =====
+   Por caso, contra la fecha de "Fecha Promesa [A]" (el día en que debía entregarse).
+   Biopsias_julio.xls sólo cubre agenda hasta el 23 de julio; fuera de ese rango no hay
+   datos para verificar, se marca explícitamente en vez de asumir que sí o que no. */
+const anBioDay = [
+  {fecha:'01 jul', wd:'Mié', radm:'Duda con protocolo', prom:'10:00', status:'si', n:2, hrs:[9,10]},
+  {fecha:'01 jul', wd:'Mié', radm:'Duda con protocolo', prom:'10:00', status:'si', n:2, hrs:[9,10]},
+  {fecha:'02 jul', wd:'Jue', radm:'Calidad',             prom:'14:00', status:'no', n:0, hrs:[]},
+  {fecha:'03 jul', wd:'Vie', radm:'Macías',              prom:'19:00', status:'si', n:1, hrs:[11]},
+  {fecha:'03 jul', wd:'Vie', radm:'Macías',              prom:'19:00', status:'si', n:1, hrs:[11]},
+  {fecha:'07 jul', wd:'Mar', radm:'Venegas',             prom:'13:00', status:'si', n:1, hrs:[11]},
+  {fecha:'07 jul', wd:'Mar', radm:'René',                prom:'13:00', status:'si', n:1, hrs:[11]},
+  {fecha:'09 jul', wd:'Jue', radm:'Macías',              prom:'16:00', status:'si', n:2, hrs:[11,12]},
+  {fecha:'09 jul', wd:'Jue', radm:'Macías',              prom:'16:00', status:'si', n:2, hrs:[11,12]},
+  {fecha:'10 jul', wd:'Vie', radm:'Venegas',             prom:'14:00', status:'si', n:4, hrs:[10,11,12,13]},
+  {fecha:'13 jul', wd:'Lun', radm:'Sistema',             prom:'13:00', status:'si', n:3, hrs:[10,11,13]},
+  {fecha:'15 jul', wd:'Mié', radm:'René',                prom:'13:00', status:'si', n:1, hrs:[10]},
+  {fecha:'16 jul', wd:'Jue', radm:'Transcripción',       prom:'19:00', status:'no', n:0, hrs:[]},
+  {fecha:'16 jul', wd:'Jue', radm:'Transcripción',       prom:'19:00', status:'no', n:0, hrs:[]},
+  {fecha:'17 jul', wd:'Vie', radm:'Venegas',             prom:'17:00', status:'si', n:4, hrs:[9,10,11,13]},
+  {fecha:'20 jul', wd:'Lun', radm:'René',                prom:'11:00', status:'si', n:3, hrs:[8,12,13]},
+  {fecha:'22 jul', wd:'Mié', radm:'Monse',               prom:'16:00', status:'si', n:2, hrs:[10,11]},
+  {fecha:'29 jul', wd:'Mié', radm:'Transcripción',       prom:'19:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'31 jul', wd:'Vie', radm:'Coordinación',        prom:'14:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'31 jul', wd:'Vie', radm:'Coordinación',        prom:'14:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'01 ago', wd:'Sáb', radm:'Monse',               prom:'13:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'01 ago', wd:'Sáb', radm:'Monse',               prom:'13:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'05 ago', wd:'Mié', radm:'René',                prom:'12:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'05 ago', wd:'Mié', radm:'González',            prom:'16:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'06 ago', wd:'Jue', radm:'René',                prom:'12:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'06 ago', wd:'Jue', radm:'González',            prom:'18:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'07 ago', wd:'Vie', radm:'Procedimiento',       prom:'18:00', status:'sindatos', n:null, hrs:null},
+  {fecha:'07 ago', wd:'Vie', radm:'Procedimiento',       prom:'18:00', status:'sindatos', n:null, hrs:null}
+];
+// Tasa base: de los 17 días L-V entre el 1 y 23 de julio (rango cubierto por el archivo de
+// biopsias), 15 tuvieron al menos una biopsia agendada — para comparar contra la tasa de
+// coincidencia en los días con incumplimiento.
+const anBioBaseRate = {diasConBiopsia:15, diasTotales:17};
+
+function renderAnBioDay(){
+  const STATUS_LABEL = {si:'✓ sí hubo biopsia', no:'sin biopsia ese día', sindatos:'sin datos (fuera de rango)'};
+  document.getElementById('an-bioday-tab').innerHTML =
+    '<thead><tr><th>Fecha promesa</th><th>Día</th><th>Radiólogo o motivo</th><th>Hora promesa</th><th>Biopsias ese día</th></tr></thead><tbody>'+
+    anBioDay.map(r=>{
+      const pill = r.status==='si' ? `<span class="pill" style="background:rgba(76,140,111,.13);color:#3a7057">${STATUS_LABEL.si} · ${r.n} (${r.hrs.map(h=>h+'h').join(', ')})</span>`
+                 : r.status==='no' ? `<span class="pill red">${STATUS_LABEL.no}</span>`
+                 : `<span class="pill">${STATUS_LABEL.sindatos}</span>`;
+      return `<tr><td class="d">${r.fecha}</td><td>${r.wd}</td><td>${r.radm}</td><td class="d">${r.prom}</td><td>${pill}</td></tr>`;
+    }).join('')+
+    '</tbody>';
+
+  const checkable = anBioDay.filter(r=>r.status!=='sindatos');
+  const uniqDates = [...new Set(checkable.map(r=>r.fecha))];
+  const uniqSi = [...new Set(checkable.filter(r=>r.status==='si').map(r=>r.fecha))];
+  const pctInc = (uniqSi.length/uniqDates.length*100);
+  const pctBase = (anBioBaseRate.diasConBiopsia/anBioBaseRate.diasTotales*100);
+  document.getElementById('an-bioday-nota').innerHTML =
+    `De los ${anIncList.length} incumplidos, sólo ${checkable.length} caen dentro del rango que cubre el archivo de biopsias (1–23 de julio); los del 24 de julio en adelante (incluida toda la parte de agosto) quedan marcados "sin datos" porque no hay ese archivo para agosto. `+
+    `De los ${uniqDates.length} días distintos con incumplimiento y datos disponibles, <b>${uniqSi.length} (${pctInc.toFixed(0)}%)</b> tuvieron al menos una biopsia agendada. `+
+    `Pero esa tasa no es mayor que la normal: en el periodo 1–23 de julio hubo biopsia agendada en <b>${anBioBaseRate.diasConBiopsia} de ${anBioBaseRate.diasTotales} días hábiles (${pctBase.toFixed(0)}%)</b> — es decir, casi todos los días hay alguna biopsia, incumplan o no. `+
+    `Por eso el simple "¿hubo biopsia ese día?" no distingue nada: los únicos 2 días sin ninguna biopsia en todo julio (2 y 16 de julio) son, de hecho, los mismos 2 días con incumplimiento marcados "sin biopsia" arriba. `+
+    `La señal real está en la <b>hora</b>, no en el día: el mapa de calor de arriba sí muestra que René, Venegas y Monse se atrasan justo en las horas siguientes al pico de biopsias (11–13h), mientras Macías y González se atrasan de noche, cuando ya no hay biopsias en agenda.`;
 }
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
