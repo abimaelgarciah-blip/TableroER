@@ -1295,7 +1295,8 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
               <p class="csub" id="rad-sub">Total de estudios leídos en el mes</p>
             </div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-              <select class="unit-select" id="rad-month" style="min-width:170px" aria-label="Mes"></select>
+              <select class="unit-select" id="rad-pers" style="min-width:190px" aria-label="Transcriptor"></select>
+              <select class="unit-select" id="rad-month" style="min-width:170px" aria-label="Mes de referencia"></select>
               <select class="unit-select" id="rad-week" style="min-width:170px;display:none" aria-label="Semana"></select>
               <div class="seg" id="rad-seg">
                 <button class="seg-b active" data-m="mes">Mensual</button>
@@ -1303,7 +1304,9 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
               </div>
             </div>
           </div>
-          <div class="bars" id="bars-radiologos"></div>
+          <div id="line-transcriptor"></div>
+          <div class="legend" id="rad-legend" style="margin-top:6px"></div>
+          <div class="bars" id="bars-radiologos" style="display:none"></div>
         </div>
 
         <div class="grid two">
@@ -2353,39 +2356,82 @@ const radData = {
       sede:[{name:'Unidad López Mateos',v:130},{name:'Chamizal',v:46},{name:'Acueducto',v:36}]}
   ]
 };
-let radMode='mes', radMonth='Jul26', radWeek='S31';
+const radMonthLabels = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26','Jul 26'];
+const radPersSeries = {
+  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72],
+  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52],
+  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30],
+  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128],
+  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18],
+  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70],
+  'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4],
+  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41],
+  'Alberto Valdez': [15,1,2,1,2,36,26,7,2,0,0,3,0,1,0,0,0,0,0],
+  'Casandra Ceballos': [419,409,451,629,235,59,54,20,7,3,1,0,0,0,0,0,3,0,0],
+  'Mayra Gallegos': [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+  'Ana Lidia Ochoa': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0],
+  'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9],
+  'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6]
+};
+const RAD_NAMES = Object.keys(radPersSeries);
+const RAD_COL = {
+  'Hugo Tabares':'#3f6fa6','Mónica Anaya':'#4e8c70','Néstor González':'#ab7a45','Estefanía Martínez':'#8a6a9c',
+  'Iván Enríquez':'#b5524a','Laura García':'#5c7d97','Humberto González':'#c2921f','Graciela Cortés':'#5f8a8b',
+  'Alberto Valdez':'#8a8a8a','Casandra Ceballos':'#6a86a6','Mayra Gallegos':'#a0685c','Ana Lidia Ochoa':'#7c9a5e',
+  'Samanta Mora':'#b0779a','Oswaldo Ríos':'#4a90a4'
+};
+let radMode='mes', radMonth='Jul26', radWeek='S31', radPers='Todos';
 function radCur(){ return radMode==='mes'
   ? (radData.months.find(m=>m.k===radMonth)||radData.months[radData.months.length-1])
   : (radData.weeks.find(w=>w.k===radWeek)||radData.weeks[radData.weeks.length-1]); }
+function renderRadLine(){
+  const series = radPers==='Todos'
+    ? RAD_NAMES.map(n=>({name:n, color:RAD_COL[n], vals:radPersSeries[n]}))
+    : [{name:radPers, color:RAD_COL[radPers], vals:radPersSeries[radPers]}];
+  multiLineChart(document.getElementById('line-transcriptor'), radMonthLabels, series, '');
+  document.getElementById('rad-legend').innerHTML = radPers==='Todos' ? trLegend(series) : '';
+  const sum = (radPers==='Todos' ? RAD_NAMES.reduce((a,n)=>a+radPersSeries[n].reduce((x,y)=>x+y,0),0)
+                                  : radPersSeries[radPers].reduce((a,b)=>a+b,0));
+  document.getElementById('rad-sub').textContent =
+    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO) · ene 2025 – jul 2026 · '+
+    (radPers==='Todos' ? 'los 14 transcriptores' : radPers)+' · '+fmt(sum)+' estudios';
+}
 function renderRad(){
   const c = radCur();
-  barChart(document.getElementById('bars-radiologos'), c.rad, 'var(--c-interp)');
   donutChart(document.getElementById('donut-modalidad'), document.getElementById('legend-modalidad'), c.mod, ['#3b6ea5','#7ba0c6','#c3a15c','#9c7bb0','#6f9e7e','#b5776b']);
   const sedeEl=document.getElementById('bars-sedes');
   if(c.sede && c.sede.length){ barChart(sedeEl, c.sede, 'var(--c-sede)'); }
   else { sedeEl.innerHTML='<div class="empty">No disponible: el SIO (fuente de esta vista mensual) no reporta sucursal. Disponible en la vista semanal (fuente Exa).</div>'; }
-  document.getElementById('rad-sub').textContent = radMode==='mes'
-    ? 'Resonancia + Densitometría + Medicina Nuclear + Tomografía transcritas en el mes (SIO)'
-    : 'Total de estudios leídos en la semana (Exa)';
   document.getElementById('mod-sub').textContent = 'Distribución de los '+c.tot+' estudios';
   document.getElementById('rad-badge').textContent = c.lab;
+  if(radMode==='sem'){ barChart(document.getElementById('bars-radiologos'), c.rad, 'var(--c-interp)'); }
 }
 function initRad(){
-  const msel=document.getElementById('rad-month'), wsel=document.getElementById('rad-week');
+  const psel=document.getElementById('rad-pers'), msel=document.getElementById('rad-month'), wsel=document.getElementById('rad-week');
+  psel.innerHTML = '<option value="Todos">Todos los transcriptores</option>'+RAD_NAMES.map(n=>`<option value="${n}">${n}</option>`).join('');
+  psel.value = radPers;
   msel.innerHTML = radData.months.map(m=>`<option value="${m.k}">${m.lab}</option>`).join('');
   msel.value = radMonth;
   wsel.innerHTML = radData.weeks.map(w=>`<option value="${w.k}">${w.lab}</option>`).join('');
   wsel.value = radWeek;
+  psel.addEventListener('change',e=>{ radPers=e.target.value; renderRadLine(); });
   msel.addEventListener('change',e=>{ radMonth=e.target.value; renderRad(); });
   wsel.addEventListener('change',e=>{ radWeek=e.target.value; renderRad(); });
   document.querySelectorAll('#rad-seg .seg-b').forEach(b=>b.addEventListener('click',()=>{
     radMode=b.dataset.m;
     document.querySelectorAll('#rad-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
-    msel.style.display = radMode==='mes' ? '' : 'none';
-    wsel.style.display = radMode==='sem' ? '' : 'none';
+    const mesMode = radMode==='mes';
+    psel.style.display = mesMode ? '' : 'none';
+    msel.style.display = mesMode ? '' : 'none';
+    wsel.style.display = mesMode ? 'none' : '';
+    document.getElementById('line-transcriptor').style.display = mesMode ? '' : 'none';
+    document.getElementById('rad-legend').style.display = mesMode ? '' : 'none';
+    document.getElementById('bars-radiologos').style.display = mesMode ? 'none' : '';
     renderRad();
+    if(mesMode) renderRadLine();
   }));
   renderRad();
+  renderRadLine();
 }
 /* Interpretación y transcripción · % del total · 2025 (referencia) + 2026 (SIO) */
 const distData = {
@@ -2996,7 +3042,7 @@ const trPers = ["Hugo Tabares", "Laura García", "Manuel Martínez", "Mónica An
 const trMeses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul"];
 const trSems = ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31"];
 const trStats = {"Hugo Tabares": {"mes": [[424, 4.3, 405], [309, 4.6, 294], [364, 4.9, 342], [258, 4.9, 236], [291, 4.7, 251], [333, 5.3, 266], [195, 5.9, 176]], "sem": [[7, 5.4, 7], [107, 3.9, 103], [116, 4.2, 109], [101, 4.5, 98], [106, 4.4, 101], [81, 4.3, 81], [103, 4.8, 101], [62, 4.3, 50], [61, 5.3, 59], [85, 5.3, 78], [61, 4.6, 60], [85, 4.9, 79], [122, 4.6, 115], [15, 4.8, 15], [79, 4.4, 73], [62, 4.9, 55], [83, 4.7, 76], [24, 7.9, 18], [80, 4.6, 72], [69, 5.0, 59], [63, 4.7, 56], [74, 4.7, 63], [65, 5.2, 58], [89, 5.0, 71], [97, 5.6, 74], [55, 5.2, 39], [33, 5.4, 30], [38, 6.3, 35], [106, 6.1, 96], [45, 5.1, 39]]}, "Laura García": {"mes": [[250, 9.7, 246], [167, 11.8, 163], [267, 10.2, 263], [272, 9.0, 267], [217, 8.9, 216], [208, 10.2, 204], [172, 9.0, 167]], "sem": [[3, 10.0, 3], [78, 9.5, 78], [66, 9.6, 65], [54, 10.4, 52], [49, 9.5, 48], [42, 11.2, 40], [57, 10.9, 57], [33, 13.4, 32], [35, 12.4, 34], [73, 8.8, 73], [63, 10.2, 61], [59, 10.9, 57], [52, 10.8, 52], [50, 11.7, 50], [52, 9.4, 51], [56, 9.7, 54], [84, 7.7, 83], [51, 8.8, 50], [54, 9.4, 53], [56, 8.5, 56], [47, 9.7, 47], [59, 8.3, 59], [39, 9.1, 38], [38, 12.1, 38], [52, 9.8, 51], [53, 10.2, 52], [60, 9.0, 59], [44, 8.4, 42], [62, 9.1, 60], [32, 10.0, 31]]}, "Manuel Martínez": {"mes": [[180, 7.2, 174], [152, 7.7, 150], [211, 6.0, 209], [163, 6.0, 153], [197, 6.6, 196], [130, 8.3, 129], [100, 8.2, 98]], "sem": [[4, 4.8, 4], [46, 5.8, 44], [52, 6.5, 51], [46, 8.2, 43], [32, 9.1, 32], [42, 7.3, 42], [52, 8.1, 50], [31, 7.5, 31], [27, 7.6, 27], [57, 5.6, 57], [45, 6.6, 45], [39, 6.2, 38], [41, 5.9, 41], [49, 5.8, 47], [32, 6.7, 31], [57, 5.5, 53], [39, 5.6, 36], [23, 6.9, 22], [59, 5.9, 59], [40, 6.5, 40], [43, 7.2, 43], [47, 7.3, 46], [25, 8.3, 25], [38, 8.7, 38], [30, 7.7, 29], [23, 9.0, 23], [35, 7.5, 35], [20, 8.5, 20], [30, 9.0, 29], [29, 7.7, 28]]}, "Mónica Anaya": {"mes": [[198, 11.7, 188], [223, 12.7, 216], [250, 13.1, 247], [216, 11.6, 214], [198, 10.2, 196], [260, 10.8, 254], [180, 11.4, 178]], "sem": [[3, 30.5, 2], [42, 17.2, 39], [56, 10.3, 53], [45, 10.3, 43], [52, 9.3, 51], [75, 10.4, 73], [71, 13.4, 67], [46, 12.6, 45], [31, 16.5, 31], [86, 11.8, 85], [54, 12.9, 54], [16, 15.0, 15], [68, 15.5, 68], [51, 10.0, 50], [53, 12.4, 53], [54, 12.7, 53], [47, 10.5, 47], [37, 12.1, 36], [52, 13.0, 51], [69, 8.8, 69], [48, 8.8, 48], [29, 10.6, 28], [41, 13.1, 41], [48, 11.0, 46], [68, 9.7, 65], [77, 10.6, 76], [60, 11.9, 59], [38, 9.8, 38], [52, 12.9, 52], [56, 10.2, 55]]}, "Néstor González": {"mes": [[208, 9.8, 199], [242, 9.2, 228], [265, 9.1, 241], [207, 8.6, 189], [211, 8.9, 194], [227, 8.8, 194], [144, 9.3, 111]], "sem": [[9, 11.1, 8], [65, 10.8, 62], [56, 9.4, 52], [44, 8.8, 44], [34, 9.5, 33], [57, 8.7, 55], [73, 10.0, 67], [46, 8.8, 43], [66, 9.3, 63], [62, 9.3, 60], [78, 8.6, 73], [49, 9.3, 43], [53, 9.9, 49], [37, 7.7, 28], [61, 9.2, 55], [49, 8.4, 45], [55, 8.9, 51], [44, 8.1, 40], [45, 8.5, 42], [51, 8.4, 47], [31, 8.4, 26], [68, 9.6, 65], [49, 8.5, 45], [68, 8.3, 61], [48, 8.8, 37], [48, 8.7, 40], [44, 10.1, 32], [33, 9.7, 24], [60, 9.2, 49], [21, 9.7, 17]]}, "Todos": {"mes": [[1260, 7.9, 1212], [1093, 8.8, 1051], [1357, 8.5, 1302], [1116, 8.1, 1059], [1114, 7.7, 1053], [1158, 8.6, 1047], [791, 8.8, 730]], "sem": [[26, 9.9, 24], [338, 8.4, 326], [346, 7.4, 330], [290, 7.7, 280], [273, 7.5, 265], [297, 8.1, 291], [356, 9.0, 342], [218, 9.1, 201], [220, 9.5, 214], [363, 8.3, 353], [301, 8.6, 293], [248, 8.1, 232], [336, 8.8, 325], [202, 8.6, 190], [277, 8.2, 263], [278, 8.2, 260], [308, 7.3, 293], [179, 9.0, 166], [290, 7.9, 277], [285, 7.5, 271], [232, 7.6, 220], [277, 7.8, 261], [219, 8.6, 207], [281, 8.5, 254], [295, 8.2, 256], [256, 9.1, 230], [232, 9.2, 215], [173, 8.5, 159], [310, 8.8, 286], [183, 8.5, 170]]}};
-const trCmp = {"Hugo Tabares": {"propio": [424, 309, 364, 258, 291, 333, 195], "sio": [830, 542, 592, 424, 564, 394, 0], "exa": [0, 0, 0, 3, 5, 193, 208]}, "Laura García": {"propio": [250, 167, 267, 272, 217, 208, 172], "sio": [519, 415, 464, 483, 463, 418, 0], "exa": [0, 0, 0, 6, 2, 135, 155]}, "Manuel Martínez": {"propio": [180, 152, 211, 163, 197, 130, 100], "sio": [87, 152, 57, 33, 111, 36, 0], "exa": [0, 0, 0, 3, 0, 96, 131]}, "Mónica Anaya": {"propio": [198, 223, 250, 216, 198, 260, 180], "sio": [494, 471, 548, 424, 359, 299, 0], "exa": [0, 0, 0, 6, 6, 141, 172]}, "Néstor González": {"propio": [208, 242, 265, 207, 211, 227, 144], "sio": [267, 177, 197, 177, 200, 106, 0], "exa": [0, 0, 0, 1, 0, 99, 162]}};
+const trCmp = {"Hugo Tabares": {"propio": [424, 309, 364, 258, 291, 333, 195], "sio": [830, 542, 592, 424, 564, 394, 275], "exa": [0, 0, 0, 3, 5, 193, 208]}, "Laura García": {"propio": [250, 167, 267, 272, 217, 208, 172], "sio": [519, 415, 464, 483, 463, 418, 325], "exa": [0, 0, 0, 6, 2, 135, 155]}, "Manuel Martínez": {"propio": [180, 152, 211, 163, 197, 130, 100], "sio": [87, 152, 57, 33, 111, 36, 66], "exa": [0, 0, 0, 3, 0, 96, 131]}, "Mónica Anaya": {"propio": [198, 223, 250, 216, 198, 260, 180], "sio": [494, 471, 548, 424, 359, 299, 256], "exa": [0, 0, 0, 6, 6, 141, 172]}, "Néstor González": {"propio": [208, 242, 265, 207, 211, 227, 144], "sio": [267, 177, 197, 177, 200, 106, 139], "exa": [0, 0, 0, 1, 0, 99, 162]}};
 const trQC = {"total": 7889, "sinhora": 283, "neg": 81, "cero": 16, "largo": 55, "validos": 7454};
 
 /* ============ Productividad de transcriptores ============ */
@@ -3734,7 +3780,7 @@ function renderTrans(){
   groupBarChart(document.getElementById('tr-cmp'), trMeses, cmp, '');
   document.getElementById('tr-sub-c').innerHTML =
     trLegend(cmp)+'<div style="width:100%;margin-top:6px;color:var(--muted);font-size:12px">'+
-    'SIO llega hasta junio e incluye departamentos que no son transcripción de imagen. '+
+    'SIO llega hasta julio e incluye departamentos que no son transcripción de imagen. '+
     'Exa arrancó en junio, por eso ene–may está casi vacío.</div>';
 
   /* --- nota de calidad --- */
