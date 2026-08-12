@@ -1662,6 +1662,19 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
   </div>
 
   <div class="card" style="margin-bottom:16px">
+    <div class="card-head">
+      <div>
+        <h3>Comparativa · julio 2025 vs. julio 2026</h3>
+        <p class="csub" id="est-yoy-sub">Mismo mes, año contra año</p>
+      </div>
+      <div class="k-value" id="est-yoy-total" style="font-size:26px">—</div>
+    </div>
+    <div id="est-yoy-chart"></div>
+    <div class="legend" id="est-yoy-legend"></div>
+    <div class="empty" id="est-yoy-nota" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
     <h3>Estudios por departamento · julio 2026</h3>
     <p class="csub">Suma de las 9 unidades · mes completo</p>
     <div style="overflow-x:auto">
@@ -3281,6 +3294,40 @@ function renderEstudiosJulio(){
     `<thead><tr><th>Departamento</th><th>Estudios</th><th>% del total</th></tr></thead><tbody>${tbody}</tbody>`;
 }
 
+/* ===== Estudios · comparativa julio 2025 vs julio 2026 =====
+   Fuente: DATA5 (panel embebido "Estudios por unidad, departamento y total"),
+   único origen con histórico 2025. Sólo cubre las 6 unidades originales de ese
+   panel — no incluye Medicina Preventiva, Ciudad Granja ni Plaza Universidad,
+   que no tienen dato 2025 disponible ahí. Por eso el total 2026 de esta
+   comparativa (5,397) es menor al total real de julio 2026 (8,021 est.). */
+const estYoyRows = [
+  ["López Mateos", 4141, 3560], ["Acueducto", 1083, 1007], ["Clínica de la Mujer", 627, 561],
+  ["Chamizal", 300, 231], ["Guadalupe", 59, 20], ["Las Águilas", 3, 18]
+];
+function renderEstudiosYoy(){
+  const tot25 = estYoyRows.reduce((a,r)=>a+r[1],0);
+  const tot26 = estYoyRows.reduce((a,r)=>a+r[2],0);
+  const dPct = (tot26-tot25)/tot25*100;
+  document.getElementById('est-yoy-total').textContent = (dPct>=0?'+':'')+dPct.toFixed(1)+'%';
+  document.getElementById('est-yoy-sub').textContent =
+    `Mismo mes, año contra año · ${fmt(tot25)} → ${fmt(tot26)} estudios`;
+
+  const series = [
+    {name:'Julio 2025', color:'var(--track)', vals: estYoyRows.map(r=>r[1])},
+    {name:'Julio 2026', color:'var(--c-sede)', vals: estYoyRows.map(r=>r[2])}
+  ];
+  groupBarChart(document.getElementById('est-yoy-chart'), estYoyRows.map(r=>r[0]), series, ' est.');
+  document.getElementById('est-yoy-legend').innerHTML = trLegend(series);
+
+  const movers = estYoyRows.map(([u,a,b])=>[u,a,b,(b-a)/a*100]).filter(r=>r[1]>=50)
+    .sort((a,b)=>Math.abs(b[3])-Math.abs(a[3]));
+  const [mu,,,mp] = movers[0];
+  document.getElementById('est-yoy-nota').innerHTML =
+    `Julio 2026 quedó <b>${dPct.toFixed(1)}%</b> por debajo de julio 2025 (${fmt(tot25)} → ${fmt(tot26)} estudios) en las 6 unidades con histórico disponible. `+
+    `El mayor movimiento es <b>${mu}</b> (${mp>=0?'+':''}${mp.toFixed(1)}%); Guadalupe cae fuerte mientras Las Águilas crece, pero ambas parten de bases muy pequeñas (3–59 estudios/mes). `+
+    `Esta comparativa <b>no incluye Medicina Preventiva, Ciudad Granja ni Plaza Universidad</b> — no hay dato de julio 2025 disponible para esas unidades, por eso su total (${fmt(tot26)}) es menor al total real de julio 2026 (8,021 estudios).`;
+}
+
 /* ===== Análisis · incumplimiento Tomografía (jul + ago 2026 parcial) =====
    Fuente: exports "Tiempo promesa de entrega" filtrados a Tomografía Axial
    Computada, re-enviados con la columna "Radiólogo o motivo" (valor exacto
@@ -4260,6 +4307,7 @@ function renderAll(){
   // Departamentos (evolución)
   renderDeptos();
   renderEstudiosJulio();
+  renderEstudiosYoy();
   renderAnalisis();
 }
 
