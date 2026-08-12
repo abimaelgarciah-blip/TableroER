@@ -2270,6 +2270,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
       <p class="csub">Normal: L-V 7–16h René, 16h-fin y sábado Macías · con cobertura de Venegas en los días señalados</p>
       <div style="overflow-x:auto"><table class="dtab" id="an-rad-tab"></table></div>
       <div class="empty" id="an-rad-nota" style="margin-top:12px"></div>
+      <div style="overflow-x:auto; margin-top:12px"><table class="dtab" id="an-rad-otros-tab"></table></div>
     </div>
   </div>
 
@@ -3249,10 +3250,12 @@ const anTotals = {
 };
 // Universo Tomografía López Mateos (jul+ago), asignado por horario de agenda [B],
 // incluyendo las fechas en que René no asistió (Venegas cubre AM, Macías PM/todo el día).
+// tot = estudios en su ventana de horario (exposición); inc = incumplidos donde el export
+// marca literalmente a ese radiólogo en "Radiólogo o motivo" (no todos los de su ventana).
 const anUlmSched = {
-  rene:    {tot:257, inc:8,  label:'Dr. René · días normales, L-V 7:00–16:00'},
-  venegas: {tot:155, inc:8,  label:'Dr. Venegas · cobertura, 7:00–15:00'},
-  macias:  {tot:184, inc:10, label:'Macías · tardes L-V, sábados y 3 jul (día completo)'}
+  rene:    {tot:257, inc:5, label:'Dr. René · días normales, L-V 7:00–16:00'},
+  venegas: {tot:155, inc:3, label:'Dr. Venegas · cobertura, 7:00–15:00'},
+  macias:  {tot:184, inc:4, label:'Macías · tardes L-V, sábados y 3 jul (día completo)'}
 };
 // Otras unidades (Acueducto) con sus propios radiólogos, fuera del horario ULM.
 const anOtraSede = {tot:31, inc:2};
@@ -3303,17 +3306,28 @@ function renderAnalisis(){
     `Colores: <span style="color:${DOC_COLOR}">▉</span> radiólogo · <span style="color:${MOT_COLOR}">▉</span> motivo de proceso.`;
 
   // Indicador por radiólogo (horario agenda ULM, con cobertura Venegas/Macías en ausencias de René)
+  // Incumplidos = sólo los casos donde "Radiólogo o motivo" marca literalmente a ese médico.
   const S = anUlmSched;
   const radRow = (d)=>`<tr><td>${d.label}</td><td class="d">${fmt(d.tot)}</td><td class="d">${fmt(d.inc)}</td><td class="d">${anPct(d.inc,d.tot).toFixed(1)}%</td></tr>`;
   document.getElementById('an-rad-tab').innerHTML =
     '<thead><tr><th>Radiólogo (por horario)</th><th>Estudios</th><th>Incumplidos</th><th>Tasa</th></tr></thead><tbody>'+
     radRow(S.rene)+radRow(S.venegas)+radRow(S.macias)+'</tbody>';
   document.getElementById('an-rad-nota').innerHTML =
-    `Sólo Tomografía · López Mateos, jul+ago (parcial). Incorpora las ausencias de René reportadas: `+
-    `<b>3 jul</b> (Macías todo el día), <b>7–10, 17, 23–24 y 27–31 jul</b> (Venegas 7:00–15:00, Macías 15:00–fin). `+
-    `El resto de los días L-V sigue el horario normal (René 7:00–16:00, Macías 16:00–fin); sábados siempre Macías. `+
-    `La asignación es por <b>ventana de horario de agenda [B]</b>, no una atribución verificada estudio por estudio — para los ${anIncList.length} incumplidos sí se cuenta con el radiólogo exacto (tabla de abajo). `+
+    `Sólo Tomografía · López Mateos, jul+ago (parcial). "Estudios" es la exposición por ventana de horario, incorporando las ausencias de René reportadas: `+
+    `<b>3 jul</b> (Macías todo el día), <b>7–10, 17, 23–24 y 27–31 jul</b> (Venegas 7:00–15:00, Macías 15:00–fin); el resto de los días L-V sigue el horario normal (René 7:00–16:00, Macías 16:00–fin), sábados siempre Macías. `+
+    `"Incumplidos" ya <b>no</b> se reparte por ventana: cuenta sólo los casos donde el export marca literalmente a Dr. René, Dr. Venegas o Macías en "Radiólogo o motivo". `+
     `Acueducto (${fmt(anOtraSede.tot)} estudios, ${fmt(anOtraSede.inc)} incumplidos) tiene sus propios radiólogos (p. ej. Dr. González) y no aplica este horario de ULM.`;
+
+  // Otros incumplidos (no atribuidos a René/Venegas/Macías): tal cual el motivo/nombre del export.
+  const SCHED_DOCS = ['René','Venegas','Macías'];
+  const otrosCounts = {};
+  anIncList.forEach(r=>{ if(!SCHED_DOCS.includes(r.radm)) otrosCounts[r.radm]=(otrosCounts[r.radm]||0)+1; });
+  const otrosOrder = Object.keys(otrosCounts).sort((a,b)=>otrosCounts[b]-otrosCounts[a]);
+  const otrosTotal = otrosOrder.reduce((a,k)=>a+otrosCounts[k],0);
+  document.getElementById('an-rad-otros-tab').innerHTML =
+    '<thead><tr><th>Otros incumplidos (fuera de René/Venegas/Macías) · '+fmt(otrosTotal)+'</th><th>Casos</th></tr></thead><tbody>'+
+    otrosOrder.map(k=>`<tr><td>${k}</td><td class="d">${fmt(otrosCounts[k])}</td></tr>`).join('')+
+    '</tbody>';
 
   // Lista completa
   document.getElementById('an-lista-tab').innerHTML =
