@@ -136,15 +136,22 @@
 
   /* Interpretación · la lupa hace zoom y el mango se estira */
   .ico-search .lens{transform-box:view-box;transform-origin:11px 11px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
-  .nav-item:hover .ico-search .lens{transform:scale(1.18)}
-  .nav-item:hover .ico-search .handle{transform:translate(1.5px,1.5px)}
+  .ico-search .handle{transform-box:view-box;transform-origin:11px 11px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+  .nav-item:hover .ico-search .lens{transform:scale(1.28)}
+  .nav-item:hover .ico-search .handle{transform:translate(2.5px,2.5px)}
 
   /* Chequeos · la palomita se traza */
   .ico-check .tick{stroke-dasharray:12;stroke-dashoffset:12;transition:stroke-dashoffset .4s ease .05s}
   .nav-item:hover .ico-check .tick{stroke-dashoffset:0}
 
+  /* Análisis · el objetivo hace pulso hacia afuera desde el centro */
+  .ico-target circle{transform-box:view-box;transform-origin:12px 12px;transition:transform .32s cubic-bezier(.34,1.56,.64,1)}
+  .nav-item:hover .ico-target .ring1{transform:scale(1.12)}
+  .nav-item:hover .ico-target .ring2{transform:scale(1.24);transition-delay:.05s}
+  .nav-item:hover .ico-target .dot{transform:scale(1.5);transition-delay:.1s}
+
   @media (prefers-reduced-motion:reduce){
-    .nav-item .ico *,.ico-check .tick,.ico-lines path,.ico-search .lens{transition:none !important;animation:none !important}
+    .nav-item .ico *,.ico-check .tick,.ico-lines path,.ico-search .lens,.ico-search .handle,.ico-target circle{transition:none !important;animation:none !important}
     .nav-item:hover .ico *{transform:none !important;stroke-dashoffset:0 !important}
   }
   .side-foot{
@@ -497,7 +504,7 @@
     </button>
         <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Estudios </button>
     <button class="nav-item" data-view="analisis">
-      <svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="7"/><line class="handle" x1="16" y1="16" x2="21" y2="21"/></svg>
+      <svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring1" cx="12" cy="12" r="8"/><circle class="ring2" cx="12" cy="12" r="4.3"/><circle class="dot" cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
       Análisis
     </button>
     <div class="side-foot">
