@@ -520,45 +520,49 @@
       <section class="view active" id="resumen">
         <div class="page-head">
           <h1>Resumen</h1>
-          <p>Interpretación y transcripción de estudios <span class="badge">Semana 31 · 27 JUL – 2 AGO 2026</span></p>
+          <p>Cumplimiento y chequeos, semana a semana <span class="badge" id="rs-badge">Semana 31</span></p>
+        </div>
+
+        <div class="card-head" style="margin-bottom:12px">
+          <div class="nav-label" style="margin:0">Semana a revisar</div>
+          <select class="unit-select" id="rs-week-select" style="min-width:150px" aria-label="Semana"></select>
         </div>
 
         <div class="grid kpis">
           <div class="card kpi">
-            <div class="k-label">Estudios interpretados</div>
-            <div class="k-value"><span class="dot" style="background:var(--c-interp)"></span>233</div>
-            <div class="k-foot">semana 29</div>
+            <div class="k-label">Indicador de cumplimiento</div>
+            <div class="k-value" id="rs-k-ind">—</div>
+            <div class="k-foot">meta 98% · todas las unidades</div>
           </div>
           <div class="card kpi">
-            <div class="k-label">Transcripciones</div>
-            <div class="k-value"><span class="dot" style="background:var(--c-trans)"></span>1,731</div>
-            <div class="k-foot">semana 29</div>
+            <div class="k-label">Chequeos · objetivo 1</div>
+            <div class="k-value" id="rs-k-o1">—</div>
+            <div class="k-foot">entrega ≤ 4 días · meta ≥ 95%</div>
           </div>
           <div class="card kpi">
-            <div class="k-label">Radiólogos activos</div>
-            <div class="k-value">8</div>
-            <div class="k-foot">con lecturas en la semana</div>
+            <div class="k-label">Chequeos · objetivo 2</div>
+            <div class="k-value" id="rs-k-o2">—</div>
+            <div class="k-foot">≥ 1 día antes · meta ≥ 98%</div>
           </div>
           <div class="card kpi">
-            <div class="k-label">Transcriptores activos</div>
-            <div class="k-value">39</div>
-            <div class="k-foot">con producción en la semana</div>
+            <div class="k-label">Chequeos de la semana</div>
+            <div class="k-value" id="rs-k-n">—</div>
+            <div class="k-foot">estudios procesados</div>
           </div>
         </div>
 
-        <div class="grid two">
-          <div class="card">
-            <h3>Interpretación semanal</h3>
-            <p class="csub">Estudios leídos por semana</p>
-            <div class="line-wrap" id="line-interp"></div>
-            <div class="line-note">Semanas 25–31 (semana 23 fue captura parcial de 3 días, se omite).</div>
-          </div>
-          <div class="card">
-            <h3>Transcripción semanal</h3>
-            <p class="csub">Estudios transcritos por semana</p>
-            <div class="line-wrap" id="line-trans"></div>
-            <div class="line-note">Semanas 24–31.</div>
-          </div>
+        <div class="card" style="margin-bottom:16px">
+          <h3>Indicador semanal</h3>
+          <p class="csub">Cumplimiento real · meta 98% (punteada) · todas las unidades</p>
+          <div id="rs-line-indicador"></div>
+          <div class="line-note" id="rs-line-indicador-note" style="margin-top:12px"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <h3>Chequeos semanal</h3>
+          <p class="csub">Objetivo 1 ≥ 95% · Objetivo 2 ≥ 98%</p>
+          <div id="rs-line-chq"></div>
+          <div class="legend" id="rs-line-chq-leg" style="margin-top:6px"></div>
         </div>
       </section>
 
@@ -2352,14 +2356,6 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 /* ------------------------- DATOS ------------------------- */
 const fmt = n => n.toLocaleString('es-MX');
 
-const trendInterp = [
-  {w:'S25',v:255},{w:'S26',v:218},{w:'S27',v:196},
-  {w:'S28',v:165},{w:'S29',v:233},{w:'S30',v:268},{w:'S31',v:212}
-];
-const trendTrans = [
-  {w:'S24',v:1964},{w:'S25',v:1902},{w:'S26',v:2026},
-  {w:'S27',v:1900},{w:'S28',v:1714},{w:'S29',v:1731},{w:'S30',v:1939},{w:'S31',v:1736}
-];
 
 const indicador = { prometidos:1634, cumplReal:1565, incumpReal:69, target:98 };
 indicador.pct = indicador.cumplReal / indicador.prometidos * 100; // 95.78
@@ -2762,37 +2758,6 @@ function donutChart(elDonut, elLegend, data, shades){
       <span class="lp">${p}%</span>
     </div>`;
   }).join('');
-}
-
-function lineChart(el, data, accent){
-  const W=560, H=220, padL=42, padR=16, padT=18, padB=34;
-  const vals = data.map(d=>d.v);
-  let lo=Math.min(...vals), hi=Math.max(...vals);
-  const span=(hi-lo)||1; lo=lo-span*0.25; hi=hi+span*0.25;
-  const x = i => padL + i*( (W-padL-padR)/(data.length-1) );
-  const y = v => padT + (1-(v-lo)/(hi-lo))*(H-padT-padB);
-  const pts = data.map((d,i)=>[x(i),y(d.v)]);
-  const line = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
-  const area = line+` L ${x(data.length-1).toFixed(1)} ${H-padB} L ${padL} ${H-padB} Z`;
-  // gridlines (3)
-  let grid='';
-  for(let g=0; g<=2; g++){
-    const gv = lo + (hi-lo)*g/2;
-    const gy = y(gv);
-    grid += `<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="var(--border)" stroke-width="1"/>
-      <text x="${padL-8}" y="${gy+3.5}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(Math.round(gv))}</text>`;
-  }
-  const xlab = data.map((d,i)=>`<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${d.w}</text>`).join('');
-  const dots = pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.4" fill="#fff" stroke="${accent}" stroke-width="2"/>
-    <text x="${p[0]}" y="${p[1]-9}" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--ink)">${fmt(data[i].v)}</text>`).join('');
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
-    ${grid}
-    <path d="${area}" fill="${accent}" fill-opacity="0.08" data-fade/>
-    <path d="${line}" fill="none" stroke="${accent}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" data-draw/>
-    <g data-fade>${dots}</g>
-    ${xlab}
-  </svg>`;
-  animateLines(el);
 }
 
 function indLineChart(el, data, accent, target, ref){
@@ -4292,9 +4257,57 @@ function initTrans(){
   renderTrans();
 }
 
+/* ===== Resumen · cumplimiento y chequeos, semana a semana =====
+   Reutiliza las series semanales ya calculadas en Indicador (indTemporal.semana,
+   S2–S31) y Chequeos (chqSerie, S1–S29). Los rangos no coinciden exactamente
+   entre ambas fuentes; las semanas sin dato en alguna de las dos se muestran "—". */
+function rsWeekNum(s){ return parseInt(s.replace('S',''),10); }
+function rsAllWeeks(){
+  return Array.from(new Set([...indTemporal.semana.p, ...chqSerie.semanas]))
+    .sort((a,b)=>rsWeekNum(a)-rsWeekNum(b));
+}
+let rsWeek = indTemporal.semana.p[indTemporal.semana.p.length-1];
+function renderResumen(){
+  const weeks = rsAllWeeks();
+  document.getElementById('rs-badge').textContent = 'Semana '+rsWeek.slice(1);
+
+  const iIdx = indTemporal.semana.p.indexOf(rsWeek);
+  const ind = iIdx>=0 ? indTemporal.semana.u.Todas[iIdx] : null;
+  const kInd = document.getElementById('rs-k-ind');
+  kInd.textContent = ind==null ? '—' : ind.toFixed(1)+'%';
+  kInd.style.color = ind==null ? '' : thColor(ind);
+
+  const cIdx = chqSerie.semanas.indexOf(rsWeek);
+  const o1 = cIdx>=0 ? chqSerie.o1s[cIdx] : null;
+  const o2 = cIdx>=0 ? chqSerie.o2s[cIdx] : null;
+  const n  = cIdx>=0 ? chqSerie.ns[cIdx]  : null;
+  const kO1 = document.getElementById('rs-k-o1'), kO2 = document.getElementById('rs-k-o2');
+  kO1.textContent = o1==null ? '—' : o1.toFixed(1)+'%'; kO1.style.color = o1==null ? '' : chqCol(o1,95);
+  kO2.textContent = o2==null ? '—' : o2.toFixed(1)+'%'; kO2.style.color = o2==null ? '' : chqCol(o2,98);
+  document.getElementById('rs-k-n').textContent = n==null ? '—' : fmt(n);
+
+  const dataInd = indTemporal.semana.p.map((w,i)=>({w, v:indTemporal.semana.u.Todas[i]}));
+  indLineChart(document.getElementById('rs-line-indicador'), dataInd, '#3f6ea5', 98, null);
+  document.getElementById('rs-line-indicador-note').textContent =
+    `Semanas ${indTemporal.semana.p[0]}–${indTemporal.semana.p[indTemporal.semana.p.length-1]} · pasa el cursor sobre un punto para ver el valor exacto.`;
+
+  const chqSeriesData = [
+    {name:'Objetivo 1 · ≤ 4 días', color:'#4e8c70', vals: chqSerie.o1s},
+    {name:'Objetivo 2 · ≥ 1 día antes', color:'#3f6fa6', vals: chqSerie.o2s}
+  ];
+  multiLineChart(document.getElementById('rs-line-chq'), chqSerie.semanas, chqSeriesData, '%');
+  document.getElementById('rs-line-chq-leg').innerHTML = trLegend(chqSeriesData);
+}
+function initResumen(){
+  const sel = document.getElementById('rs-week-select');
+  sel.innerHTML = rsAllWeeks().map(w=>`<option value="${w}">Semana ${w.slice(1)}</option>`).join('');
+  sel.value = rsWeek;
+  sel.addEventListener('change', e=>{ rsWeek = e.target.value; renderResumen(); });
+  renderResumen();
+}
+
 function renderAll(){
-  lineChart(document.getElementById('line-interp'), trendInterp, getComputedStyle(document.documentElement).getPropertyValue('--c-interp').trim());
-  lineChart(document.getElementById('line-trans'),  trendTrans,  getComputedStyle(document.documentElement).getPropertyValue('--c-trans').trim());
+  initResumen();
   initRad();
   renderDist();
   initServicios();
