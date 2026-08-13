@@ -716,6 +716,7 @@
             </div>
           </div>
           <div class="bars" id="bars-dep-rank"></div>
+          <div class="line-note" style="margin-top:10px" id="note-dep-rank"></div>
         </div>
 
         <div class="card">
@@ -2900,22 +2901,33 @@ function scaleColor(p){
 let deptMode='mes';
 let rankMode='mes', rankIdx=deptEvo.meses.length-1;
 function rankLabels(){ return rankMode==='sem'?deptEvo.semanas:deptEvo.meses; }
+const DEP_RANK_CORR = {
+  'Tomografía Axial Computada': { per:'Jul', mode:'mes', v:96.1, nota:'quitando los motivos de calidad' }
+};
 function renderDepRank(){
   const kv = rankMode==='sem'?'sem':'mes', kt = rankMode==='sem'?'semT':'mesT';
+  const per=rankLabels()[rankIdx];
   const rank=deptEvo.orden.map(d=>{
     const v=deptEvo.deptos[d][kv][rankIdx], n=deptEvo.deptos[d][kt][rankIdx];
     return (v==null||!n)?null:{name:d,v,n};
   }).filter(Boolean).sort((a,b)=>b.v-a.v);
   barChart(document.getElementById('bars-dep-rank'), rank, null,
     {max:100, fmt:v=>v.toFixed(1)+'%', colorFn:thColor, target:98,
-     tip:d=>`<b>${d.name}</b> · ${d.v}% cumplimiento · ${fmt(d.n)} estudios`});
+     tip:d=>{
+       const c=DEP_RANK_CORR[d.name];
+       const corr=(c && c.mode===rankMode && c.per===per) ? ` · <b>${c.v}%</b> ${c.nota} (verificado)` : '';
+       return `<b>${d.name}</b> · ${d.v}% cumplimiento · ${fmt(d.n)} estudios${corr}`;
+     }});
   const tot=rank.reduce((a,r)=>a+r.n,0), ok=rank.reduce((a,r)=>a+r.n*r.v/100,0);
-  const per=rankLabels()[rankIdx];
   document.getElementById('sub-dep-rank').textContent =
     `${rankMode==='sem'?'Semana '+per.slice(1):per+' 2026'} · ${rank.length} departamentos · `+
     `${fmt(tot)} estudios · global ${(ok/tot*100).toFixed(1)}% · meta 98%`+
     (per==='S1' ? ' · semana corta (arranca el 1 de enero)' : '')+
     (per==='S27' ? ' · semana parcial (los reportes terminan el 30 de junio)' : '');
+  const corrNotes=Object.entries(DEP_RANK_CORR).filter(([,c])=>c.mode===rankMode && c.per===per);
+  document.getElementById('note-dep-rank').innerHTML = corrNotes.length
+    ? corrNotes.map(([name,c])=>`<b>${name}</b>: ${c.v}% ${c.nota} (verificado aparte; el ${rank.find(r=>r.name===name)?.v ?? '—'}% de la barra es el dato bruto del reporte, sin ese ajuste).`).join(' ')
+    : '';
 }
 function initDepRank(){
   const sel=document.getElementById('rank-per-select');
