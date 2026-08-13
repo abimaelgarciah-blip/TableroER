@@ -665,6 +665,32 @@
             <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con 24 h o más de retraso se cuentan como cumplimiento (seguimientos de calidad) y se excluyen del histograma. Datos del reporte de julio 2026.</div>
           </div>
         </div>
+
+        <div class="card" style="margin-top:16px">
+          <div class="card-head">
+            <div>
+              <h3>Exclusiones del indicador</h3>
+              <p class="csub" id="excl-sub">Estudios marcados "Sí" en la columna Otro · distintos motivos</p>
+            </div>
+          </div>
+          <button type="button" class="inc-toggle" id="excl-toggle" aria-expanded="false" aria-controls="excl-detail">
+            Ver exclusiones <span class="caret">▾</span>
+          </button>
+        </div>
+
+        <div class="inc-detail" id="excl-detail">
+          <div class="card" style="margin-top:16px">
+            <div class="card-head">
+              <div>
+                <h3>Exclusiones del indicador · julio 2026</h3>
+                <p class="csub" id="excl-detail-sub">Estudios marcados "Sí" en la columna Otro del reporte</p>
+              </div>
+              <button type="button" class="inc-close" id="excl-close" aria-label="Ocultar detalle">Ocultar ▴</button>
+            </div>
+            <div style="overflow-x:auto"><table class="dtab" id="tab-exclusiones"></table></div>
+            <div class="line-note" style="margin-top:12px" id="excl-nota"></div>
+          </div>
+        </div>
       </section>
 
 
@@ -4325,6 +4351,8 @@ function renderAll(){
   renderIncMotivos();
   document.getElementById('inc-toggle').onclick=()=>setIncDetail(!incDetailOpen);
   document.getElementById('inc-close').onclick=()=>setIncDetail(false);
+  document.getElementById('excl-toggle').onclick=()=>setExclDetail(!exclDetailOpen);
+  document.getElementById('excl-close').onclick=()=>setExclDetail(false);
   document.querySelectorAll('#ind-seg .seg-b').forEach(b=>
     b.onclick=()=>{ indMode=b.dataset.m;
       document.querySelectorAll('#ind-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
@@ -4487,6 +4515,38 @@ function setIncDetail(open){
     if(p&&p.scrollIntoView) setTimeout(()=>p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}),120);
   }
 }
+/* ===== Exclusiones del indicador · julio 2026 =====
+   Fuente: export "Todas unidades" de julio 2026, columna "Otro" = "Sí" marca el
+   estudio como excluido del indicador; el motivo va en la columna siguiente. */
+const exclusionesJul = [{"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Medición de Presión Arterial", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Prueba de Esfuerzo", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "07 jul", "px": "Nettrour  Sharon Ann", "est": "Eco de Pelvis Transvaginal", "dep": "Ecosonografía", "suc": "Acueducto", "mot": "Calidad"}, {"fecha": "09 jul", "px": "González Godínez Jessica María Luisa", "est": "Eco de Tiroides", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Se ligan imágenes de eco y biopsia en el mismo espacio,"}, {"fecha": "13 jul", "px": "Herrera Vega Ma. Guadalupe", "est": "Eco de Tiroides", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Se realiza biopsia por René, no es valorable y se toma por Gadiel, se reinterpreta estudio poro Gadiel."}, {"fecha": "17 jul", "px": "García Rivera Elizabeth", "est": "Eco de Mama", "dep": "Ecosonografía", "suc": "Clínica de la Mujer", "mot": "Viernes 17/07 se va luz en UCM, se interpreta hasta lunes"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "Eco de Próstata Transrectal", "dep": "Ecosonografía", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "Eco de Abdomen", "dep": "Ecosonografía", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "Eco de Mama", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Espirometría", "dep": "Espirometría", "suc": "Medicina Preventiva", "mot": "Cardio y densi pendiente cita de febrero"}, {"fecha": "31 jul", "px": "Salazar Gómez Marisol", "est": "Mamografía - Bilateral", "dep": "Mamografía", "suc": "Clínica de la Mujer", "mot": "Calidad"}, {"fecha": "13 jul", "px": "Herrera Vega Ma. Guadalupe", "est": "Eco de Tiroides con Biopsia Unilateral", "dep": "Paquetes", "suc": "López Mateos", "mot": "Se realiza biopsia por René, no es valorable y se toma por Gadiel, se reinterpreta estudio poro Gadiel."}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "RM 1.5T - Mama [C]", "dep": "Paquetes", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Columna Lumbar - 4P", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Panorámica de Columna Completa AP", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Panorámica de Columna Completa LAT", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "RX Columna Lumbar - 2P", "dep": "Radiología", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "RX Tórax - 1P", "dep": "Radiología", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "04 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RM 3.0T Digital - Columna - Lumbar", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "06 jul", "px": "Pérez Díaz Martha", "est": "RM 1.5T - Articulación - Tobillo", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "06 jul", "px": "Oyervides Morales Kevin Hiram", "est": "RM 3.0T Digital - Columna - Cervical", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "09 jul", "px": "Agraz Valdivia Rodrigo", "est": "RM 3.0T Digital - Muslo", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Modificación por complemento"}, {"fecha": "23 jul", "px": "Alcántar Roa Yocasta Adriana", "est": "RM 1.5T - Articulación - Rodilla", "dep": "Resonancia Magnética", "suc": "Chamizal", "mot": "Modificaciones por tratante Dr. David"}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "E - RM 1.5T de Mama", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "09 jul", "px": "Rivera Rocha Ruth María", "est": "Evaluación Médico Internista (2 consultas)", "dep": "Servicios Especiales", "suc": "Medicina Preventiva", "mot": "Discrepancia en datos de HC Dr. Oropeza, en espera de aclaración de duda."}, {"fecha": "02 jul", "px": "Pérez González Bertha Angélica", "est": "TAC - Columna Cervical", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Modificación día siguiente por la tarde, posible calidad."}, {"fecha": "31 jul", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Abdomen - Total [C]", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "31 jul", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Columna Lumbar", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}];
+
+let exclDetailOpen=false;
+function renderExclusiones(){
+  document.getElementById('tab-exclusiones').innerHTML =
+    '<thead><tr><th>Fecha</th><th>Paciente</th><th>Estudio</th><th>Departamento</th><th>Sucursal</th><th>Motivo</th></tr></thead><tbody>'+
+    exclusionesJul.map(r=>`<tr><td class="d">${r.fecha}</td><td>${r.px}</td><td>${r.est}</td><td>${r.dep}</td><td>${r.suc}</td><td>${r.mot}</td></tr>`).join('')+
+    '</tbody>';
+  const motCounts={};
+  exclusionesJul.forEach(r=>{ motCounts[r.mot]=(motCounts[r.mot]||0)+1; });
+  const top = Object.entries(motCounts).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('excl-sub').textContent =
+    `${exclusionesJul.length} estudios marcados "Sí" en la columna Otro · distintos motivos`;
+  document.getElementById('excl-nota').innerHTML =
+    `Estos <b>${exclusionesJul.length}</b> estudios salen de la columna "Otro" del reporte de julio 2026 marcada "Sí" (con su motivo en la columna siguiente) — `+
+    `no cuentan ni como cumplidos ni como incumplidos en el indicador. El motivo más frecuente es <b>${top[0]}</b> (${top[1]} casos).`;
+}
+function setExclDetail(open){
+  exclDetailOpen=open;
+  document.getElementById('excl-detail').classList.toggle('open',open);
+  const t=document.getElementById('excl-toggle');
+  if(t) t.setAttribute('aria-expanded',open?'true':'false');
+  if(open){
+    renderExclusiones();
+    const p=document.getElementById('excl-detail');
+    if(p&&p.scrollIntoView) setTimeout(()=>p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}),120);
+  }
+}
+
 function renderIndicador(nombre){
   const u=unidades[nombre]; if(!u) return;
   const et=(nombre==='Todas')?'todas las unidades':nombre;
