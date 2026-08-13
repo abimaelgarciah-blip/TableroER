@@ -149,6 +149,12 @@
   .nav-item:hover .ico-target .ring1{transform:scale(1.12)}
   .nav-item:hover .ico-target .ring2{transform:scale(1.24);transition-delay:.05s}
   .nav-item:hover .ico-target .dot{transform:scale(1.5);transition-delay:.1s}
+  .ico-proj .bulb{transform-box:fill-box;transform-origin:center;transition:transform .32s cubic-bezier(.34,1.56,.64,1)}
+  .ico-proj .ray{transform-box:fill-box;transform-origin:center;transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .28s}
+  .nav-item:hover .ico-proj .bulb{transform:scale(1.12)}
+  .nav-item:hover .ico-proj .r1{transform:translateY(-2px)}
+  .nav-item:hover .ico-proj .r2{transform:translateX(-2px);transition-delay:.04s}
+  .nav-item:hover .ico-proj .r3{transform:translateX(2px);transition-delay:.04s}
 
   @media (prefers-reduced-motion:reduce){
     .nav-item .ico *,.ico-check .tick,.ico-lines path,.ico-search .lens,.ico-search .handle,.ico-target circle{transition:none !important;animation:none !important}
@@ -506,6 +512,10 @@
     <button class="nav-item" data-view="analisis">
       <svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring1" cx="12" cy="12" r="8"/><circle class="ring2" cx="12" cy="12" r="4.3"/><circle class="dot" cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
       Análisis
+    </button>
+    <button class="nav-item" data-view="proyectos">
+      <svg class="ico ico-proj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="bulb" d="M8 10a4 4 0 1 1 8 0c0 2-1.2 2.8-1.8 3.6-.4.5-.6.9-.6 1.4h-3.2c0-.5-.2-.9-.6-1.4C9.2 12.8 8 12 8 10Z"/><path d="M9.5 21h5M10.3 18.2h3.4" stroke-linecap="round"/><line class="ray r1" x1="12" y1="1.6" x2="12" y2="3.3"/><line class="ray r2" x1="3.6" y1="10" x2="5.3" y2="10"/><line class="ray r3" x1="18.7" y1="10" x2="20.4" y2="10"/></svg>
+      Proyectos
     </button>
     <div class="side-foot">
       Fuente: SharePoint · Datos Tablero.<br>
@@ -2374,6 +2384,32 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
     <button class="an-detail-toggle" id="an-detail-toggle"><span class="arrow">▸</span> Ver el detalle de los 28 casos</button>
     <div class="eff-detail" id="an-bioday-detail">
       <div style="overflow-x:auto"><table class="dtab" id="an-bioday-tab"></table></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="proyectos">
+  <div class="page-head">
+    <h1>Proyectos</h1>
+    <p>Iniciativas en desarrollo <span class="badge">En curso</span></p>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Proyecto 1 · Agente especializado en mama</h3>
+      <p class="csub">En desarrollo</p>
+      <p style="margin-top:10px;line-height:1.55">Se obtuvieron interpretaciones de cada BI-RADS (1–6); se está trabajando en el prompt para lanzarlo en UCM.</p>
+    </div>
+    <div class="card">
+      <h3>Proyecto 2 · Entregas digitales de chequeos</h3>
+      <p class="csub">En desarrollo</p>
+      <p style="margin-top:10px;line-height:1.55">Se están insertando las casillas de código en los espacios destinados.</p>
+      <p class="line-note" style="margin-top:10px" id="proy2-img-nota">Imagen de ejemplo pendiente de subir.</p>
+    </div>
+    <div class="card">
+      <h3>Proyecto 3 · Auditoría automática (Angélica)</h3>
+      <p class="csub">En planeación</p>
+      <p style="margin-top:10px;line-height:1.55">Se tiene pensada una herramienta automática para revisión de interpretaciones.</p>
     </div>
   </div>
 </section>
