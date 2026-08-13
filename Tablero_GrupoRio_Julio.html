@@ -1494,7 +1494,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="card" style="margin-bottom:16px">
           <h3>Incidencias por colaborador</h3>
-          <p class="csub" id="incc-sub">Registro de incidencias · ET = Error de Transcripción · R = Retardos</p>
+          <p class="csub" id="incc-sub">Registro de incidencias · enero-junio vs. julio 2026</p>
           <div id="bars-inc-colab"></div>
           <div class="line-note" style="margin-top:10px" id="incc-nota"></div>
         </div>
@@ -3668,28 +3668,28 @@ function renderEfect(){
 
 /* Incidencias por colaborador · Registro de incidencias.xlsx (SharePoint · Documentos/Importante) */
 const incColabData = [
-  {lg:'monicaac',    name:'Mónica Anaya',      et:0, r:3, acta:0},
-  {lg:'manuelev',    name:'Iván Enríquez',     et:1, r:0, acta:0},
-  {lg:'lauragg',     name:'Laura García',      et:0, r:2, acta:1},
-  {lg:'humbertogp1', name:'Humberto González', et:0, r:1, acta:0},
-  {lg:'nestorgm',    name:'Néstor González',   et:1, r:0, acta:0},
-  {lg:'oswaldorm',   name:'Oswaldo Ríos',      et:0, r:2, acta:0},
-  {lg:'gracielacv',  name:'Graciela Cortés',   et:0, r:1, acta:0}
+  {lg:'monicaac',    name:'Mónica Anaya',      eneJun:2, jul:1, acta:0},
+  {lg:'manuelev',    name:'Iván Enríquez',     eneJun:1, jul:0, acta:0},
+  {lg:'lauragg',     name:'Laura García',      eneJun:1, jul:1, acta:1},
+  {lg:'humbertogp1', name:'Humberto González', eneJun:1, jul:1, acta:0},
+  {lg:'nestorgm',    name:'Néstor González',   eneJun:1, jul:0, acta:0},
+  {lg:'oswaldorm',   name:'Oswaldo Ríos',      eneJun:1, jul:1, acta:0},
+  {lg:'gracielacv',  name:'Graciela Cortés',   eneJun:1, jul:0, acta:0}
 ];
 function renderIncColab(){
-  const rows=incColabData.map(r=>({...r, tot:r.et+r.r})).sort((a,b)=>b.tot-a.tot);
+  const rows=incColabData.map(r=>({...r, tot:r.eneJun+r.jul})).sort((a,b)=>b.tot-a.tot);
   const max=Math.max(...rows.map(r=>r.tot),1);
   const el=document.getElementById('bars-inc-colab');
   el.innerHTML = rows.map(r=>{
     const w = r.tot/max*100;
-    const etW = r.tot? r.et/r.tot*w : 0;
-    const rW = r.tot? r.r/r.tot*w : 0;
-    const tip = `<b>${r.name}</b> · Error de transcripción ${r.et} · Retardos ${r.r}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
+    const ejW = r.tot? r.eneJun/r.tot*w : 0;
+    const julW = r.tot? r.jul/r.tot*w : 0;
+    const tip = `<b>${r.name}</b> · Enero-junio ${r.eneJun} · Julio ${r.jul}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
     return `<div class="bar-row" data-tip="${tip}">
       <div class="bar-label">${r.name}</div>
       <div class="bar-track">
-        <div class="bar-fill" data-w="${etW}" style="background:var(--c-serv);position:absolute;left:0"></div>
-        <div class="bar-fill" data-w="${rW}" style="background:var(--c-people);position:absolute;left:${etW}%"></div>
+        <div class="bar-fill" data-w="${ejW}" style="background:var(--c-serv);position:absolute;left:0"></div>
+        <div class="bar-fill" data-w="${julW}" style="background:var(--c-people);position:absolute;left:${ejW}%"></div>
       </div>
       <div class="bar-val">${r.tot}${r.acta?' <span class="pill" style="background:#ba544c;color:#fff;padding:1px 7px;border-radius:9px;font-size:10px;margin-left:3px;vertical-align:1px">Acta</span>':''}</div>
     </div>`;
@@ -3697,12 +3697,12 @@ function renderIncColab(){
   const fills=el.querySelectorAll('.bar-fill');
   if(reduce){ fills.forEach(f=>f.style.width=f.dataset.w+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
-  const totET=rows.reduce((a,r)=>a+r.et,0), totR=rows.reduce((a,r)=>a+r.r,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
+  const totEJ=rows.reduce((a,r)=>a+r.eneJun,0), totJul=rows.reduce((a,r)=>a+r.jul,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
   document.getElementById('incc-nota').innerHTML =
-    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>Error de transcripción (ET) · ${totET}</span>`+
-    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>Retardos (R) · ${totR}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>Enero-junio · ${totEJ}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>Julio · ${totJul}</span>`+
     (totActa?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#ba544c;display:inline-block"></span>Acta administrativa · ${totActa}</span>`:'')+
-    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de sus 2 retardos.</div>`;
+    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de su incidencia de julio.</div>`;
 }
 
 /* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul 2026) */
