@@ -1376,6 +1376,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
               </div>
             </div>
           </div>
+          <div class="line-note" style="margin-top:10px" id="note-rad-alt"></div>
           <div id="line-transcriptor"></div>
           <div class="legend" id="rad-legend" style="margin-top:6px"></div>
           <div class="bars" id="bars-radiologos" style="display:none"></div>
@@ -2585,6 +2586,33 @@ const RAD_COL = {
   'Alberto Valdez':'#8a8a8a','Casandra Ceballos':'#6a86a6','Mayra Gallegos':'#a0685c','Ana Lidia Ochoa':'#7c9a5e',
   'Samanta Mora':'#b0779a','Oswaldo Ríos':'#4a90a4'
 };
+const RAD_ALT_COUNT = {
+  'Iván Enríquez': {
+    mes: {Ene26:{exa:29,ent:454,alt:256}, Feb26:{exa:52,ent:514,alt:309}, Mar26:{exa:20,ent:404,alt:222}, Abr26:{exa:8,ent:267,alt:141}, May26:{exa:44,ent:403,alt:245}, Jun26:{exa:10,ent:444,alt:232}, Jul26:{exa:18,ent:531,alt:283}},
+    sem: {S27:{exa:27,ent:61,alt:57}, S28:{exa:22,ent:87,alt:65}, S29:{exa:29,ent:127,alt:92}, S30:{exa:42,ent:146,alt:115}, S31:{exa:28,ent:97,alt:76}, S32:{exa:25,ent:94,alt:72}, S33:{exa:27,ent:105,alt:79}}
+  },
+  'Néstor González': {
+    mes: {Ene26:{exa:42,ent:397,alt:240}, Feb26:{exa:39,ent:327,alt:202}, Mar26:{exa:61,ent:302,alt:212}, Abr26:{exa:48,ent:279,alt:187}, May26:{exa:53,ent:402,alt:254}, Jun26:{exa:41,ent:359,alt:220}, Jul26:{exa:30,ent:369,alt:214}},
+    sem: {S27:{exa:27,ent:19,alt:36}, S28:{exa:31,ent:71,alt:66}, S29:{exa:38,ent:97,alt:86}, S30:{exa:38,ent:89,alt:82}, S31:{exa:38,ent:68,alt:72}, S32:{exa:16,ent:50,alt:41}, S33:{exa:23,ent:46,alt:46}}
+  }
+};
+function radAltNoteHTML(){
+  if(radMode==='mes'){
+    if(radPers==='Todos') return '';
+    const d = RAD_ALT_COUNT[radPers] && RAD_ALT_COUNT[radPers].mes[radMonth];
+    if(!d) return '';
+    return `<b>Conteo alternativo — ${radPers}:</b> ${d.exa} en Exa + ${Math.floor(d.ent/2)} `+
+      `(mitad de ${d.ent} estudios en "Usuario recibe entregas", redondeado hacia abajo) = <b>${d.alt} estudios</b>. `+
+      `La línea/dato de arriba es el bruto de Exa, sin este ajuste.`;
+  }
+  const per = radWeek;
+  const names = Object.keys(RAD_ALT_COUNT).filter(n=>RAD_ALT_COUNT[n].sem[per]);
+  if(!names.length) return '';
+  return '<b>Conteo alternativo:</b> '+names.map(n=>{
+    const d=RAD_ALT_COUNT[n].sem[per];
+    return `${n} — ${d.exa} en Exa + ${Math.floor(d.ent/2)} (mitad de ${d.ent} entregas) = <b>${d.alt}</b>`;
+  }).join(' · ')+'. Las barras de arriba muestran solo el dato bruto de Exa, sin este ajuste.';
+}
 let radMode='mes', radMonth='Jul26', radWeek='S33', radPers='Todos';
 function radCur(){ return radMode==='mes'
   ? (radData.months.find(m=>m.k===radMonth)||radData.months[radData.months.length-1])
@@ -2600,6 +2628,7 @@ function renderRadLine(){
   document.getElementById('rad-sub').textContent =
     'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO) · ene 2025 – jul 2026 · '+
     (radPers==='Todos' ? 'los 14 transcriptores' : radPers)+' · '+fmt(sum)+' estudios';
+  document.getElementById('note-rad-alt').innerHTML = radAltNoteHTML();
 }
 function renderRad(){
   const c = radCur();
@@ -2610,6 +2639,7 @@ function renderRad(){
   document.getElementById('mod-sub').textContent = 'Distribución de los '+c.tot+' estudios';
   document.getElementById('rad-badge').textContent = c.lab;
   if(radMode==='sem'){ barChart(document.getElementById('bars-radiologos'), c.rad, 'var(--c-interp)'); }
+  document.getElementById('note-rad-alt').innerHTML = radAltNoteHTML();
 }
 function initRad(){
   const psel=document.getElementById('rad-pers'), msel=document.getElementById('rad-month'), wsel=document.getElementById('rad-week');
