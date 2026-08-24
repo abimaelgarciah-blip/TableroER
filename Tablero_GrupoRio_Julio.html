@@ -297,6 +297,11 @@
   /* ---------- Line chart ---------- */
   .line-wrap svg{width:100%;height:auto;display:block}
   .line-note{font-size:11.5px;color:var(--muted);margin-top:10px}
+  /* Línea guía: sigue al cursor y se posiciona en el punto más cercano (mes/semana) */
+  .chart-guide{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 3;opacity:0;pointer-events:none;transition:opacity .1s}
+  .chart-guide.on{opacity:.7}
+  .chart-hover{fill:transparent;cursor:crosshair}
+  svg circle.pt-hi{r:6px;stroke-width:2.5px;transition:r .1s ease}
 
   /* ---------- Gauge (indicador) ---------- */
   .gauge-row{display:flex;align-items:baseline;gap:12px;margin-bottom:2px}
@@ -2792,6 +2797,47 @@ function animateLines(el){
   });
   el.querySelectorAll('[data-fade]').forEach(n=>n.classList.add('draw-fade'));
 }
+/* Línea guía de lectura rápida: sigue el cursor en toda el área de la gráfica y se
+   posiciona en el mes/semana más cercano, sin tener que apuntar al punto exacto. */
+function addChartCrosshair(el, cfg){
+  const {W,padL,padR,n,tip}=cfg;
+  if(n<2) return;
+  const svg=el.querySelector('svg'); if(!svg) return;
+  const guide=svg.querySelector('.chart-guide'), rect=svg.querySelector('.chart-hover');
+  if(!guide||!rect) return;
+  const stepX=(W-padL-padR)/(n-1);
+  let lastI=-1;
+  function moveTo(clientX,clientY){
+    const pt=svg.createSVGPoint(); pt.x=clientX; pt.y=clientY;
+    const ctm=svg.getScreenCTM(); if(!ctm) return;
+    const loc=pt.matrixTransform(ctm.inverse());
+    let i=Math.round((loc.x-padL)/stepX);
+    i=Math.max(0,Math.min(n-1,i));
+    const gx=padL+i*stepX;
+    guide.setAttribute('x1',gx); guide.setAttribute('x2',gx); guide.classList.add('on');
+    if(i!==lastI){
+      lastI=i;
+      svg.querySelectorAll('.pt-hi').forEach(c=>c.classList.remove('pt-hi'));
+      svg.querySelectorAll(`circle[data-i="${i}"]`).forEach(c=>c.classList.add('pt-hi'));
+    }
+    const html=tip(i);
+    if(html){
+      tipEl.innerHTML=html; tipEl.classList.add('on');
+      const padTip=14, r=tipEl.getBoundingClientRect();
+      let x=clientX+padTip, y=clientY+padTip;
+      if(x+r.width>innerWidth-8) x=clientX-r.width-padTip;
+      if(y+r.height>innerHeight-8) y=clientY-r.height-padTip;
+      tipEl.style.left=x+'px'; tipEl.style.top=y+'px';
+    } else { tipEl.classList.remove('on'); }
+  }
+  rect.addEventListener('mousemove', e=>moveTo(e.clientX,e.clientY));
+  rect.addEventListener('mouseleave', ()=>{
+    guide.classList.remove('on');
+    svg.querySelectorAll('.pt-hi').forEach(c=>c.classList.remove('pt-hi'));
+    tipEl.classList.remove('on');
+    lastI=-1;
+  });
+}
 
 function barChart(el, data, accent, opts={}){
   const max = opts.max || Math.max(...data.map(d=>d.v));
@@ -2868,7 +2914,7 @@ function indLineChart(el, data, accent, target, ref){
   const nn=data.map((d,i)=>[i,d.v]).filter(p=>p[1]!=null);
   // area + line (breaks on nulls)
   let line='',started=false,pts=[];
-  data.forEach((d,i)=>{ if(d.v==null){started=false;return;} const px=x(i),py=y(d.v); pts.push([px,py,d.v,d.w]); line+=(started?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)+' '; started=true; });
+  data.forEach((d,i)=>{ if(d.v==null){started=false;return;} const px=x(i),py=y(d.v); pts.push([px,py,d.v,d.w,i]); line+=(started?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)+' '; started=true; });
   let area='';
   if(nn.length>=2){ area='M'+x(nn[0][0]).toFixed(1)+' '+y(nn[0][1]).toFixed(1)+' ';
     for(let k=1;k<nn.length;k++) area+='L'+x(nn[k][0]).toFixed(1)+' '+y(nn[k][1]).toFixed(1)+' ';
@@ -2892,10 +2938,18 @@ function indLineChart(el, data, accent, target, ref){
   const step=Math.ceil(n/13);
   const xlab=data.map((d,i)=>(i%step===0||i===n-1)?`<text x="${x(i)}" y="${H-12}" text-anchor="middle" font-size="10.5" fill="var(--muted)">${d.w}</text>`:'').join('');
   const showVals=n<=14, rr=n>18?2.4:3.4;
-  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${rr}" fill="#fff" stroke="${accent}" stroke-width="2" data-tip="<b>${p[3]}</b> · ${p[2].toFixed(1)}%"/>`+
+  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${rr}" fill="#fff" stroke="${accent}" stroke-width="2" data-i="${p[4]}" data-tip="<b>${p[3]}</b> · ${p[2].toFixed(1)}%"/>`+
     (showVals?`<text x="${p[0]}" y="${p[1]-9}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)">${p[2].toFixed(1)}</text>`:'')).join('');
-  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${refLine?`<path d="${refLine}" fill="none" stroke="#8b93a1" stroke-width="1.8" stroke-dasharray="5 3" stroke-linecap="round"/>${refDots}`:''}${refLabel}${area?`<path d="${area}" fill="${accent}" fill-opacity="0.10" data-fade/>`:''}${obj}${trend}<path d="${line}" fill="none" stroke="${accent}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" data-draw/><g data-fade>${dots}</g>${xlab}</svg>`;
+  const guide=`<line class="chart-guide" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}"/><rect class="chart-hover" x="${padL}" y="${padT}" width="${Math.max(0,W-padL-padR)}" height="${Math.max(0,H-padT-padB)}"/>`;
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${refLine?`<path d="${refLine}" fill="none" stroke="#8b93a1" stroke-width="1.8" stroke-dasharray="5 3" stroke-linecap="round"/>${refDots}`:''}${refLabel}${area?`<path d="${area}" fill="${accent}" fill-opacity="0.10" data-fade/>`:''}${obj}${trend}<path d="${line}" fill="none" stroke="${accent}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" data-draw/><g data-fade>${dots}</g>${xlab}${guide}</svg>`;
   animateLines(el);
+  addChartCrosshair(el, {W, padL, padR, n, tip: i=>{
+    const d=data[i]; if(!d) return '';
+    const parts=[];
+    if(d.v!=null) parts.push(`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${accent};margin-right:5px"></span>${d.v.toFixed(1)}%`);
+    if(ref && ref[i]!=null) parts.push(`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#8b93a1;margin-right:5px"></span>2025: ${ref[i].toFixed(1)}%`);
+    return parts.length ? `<b>${d.w}</b><br>`+parts.join('<br>') : '';
+  }});
 }
 
 function gaugeChart(el, value, target, color){
@@ -3276,7 +3330,7 @@ function multiLineChart(el, labels, series, suf){
   series.forEach(s=>{
     let d='',started=false,pts=[];
     s.vals.forEach((v,i)=>{ if(v==null){started=false;return;}
-      const px=x(i),py=y(v); pts.push([px,py,v,labels[i]]);
+      const px=x(i),py=y(v); pts.push([px,py,v,labels[i],i]);
       d+=(started?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)+' '; started=true; });
     if(single && pts.length>=2){
       let a='M'+pts[0][0].toFixed(1)+' '+pts[0][1].toFixed(1)+' ';
@@ -3285,11 +3339,19 @@ function multiLineChart(el, labels, series, suf){
       body+=`<path d="${a}" fill="${s.color}" fill-opacity="0.10" data-fade/>`;
     }
     body+=`<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${single?2.4:1.9}" stroke-linejoin="round" stroke-linecap="round" data-draw/>`;
-    body+='<g data-fade>'+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${rr}" fill="#fff" stroke="${s.color}" stroke-width="2" data-tip="<b>${s.name} · ${p[3]}</b> · ${p[2].toFixed(1)}${suf}"/>`+
+    body+='<g data-fade>'+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="${rr}" fill="#fff" stroke="${s.color}" stroke-width="2" data-i="${p[4]}" data-tip="<b>${s.name} · ${p[3]}</b> · ${p[2].toFixed(1)}${suf}"/>`+
       (single&&n<=14?`<text x="${p[0]}" y="${p[1]-9}" text-anchor="middle" font-size="10" font-weight="600" fill="var(--ink)">${p[2].toFixed(1)}</text>`:'')).join('')+'</g>';
   });
-  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${body}${xlab}</svg>`;
+  const guide=`<line class="chart-guide" x1="${padL}" y1="${padT}" x2="${padL}" y2="${H-padB}"/><rect class="chart-hover" x="${padL}" y="${padT}" width="${Math.max(0,W-padL-padR)}" height="${Math.max(0,H-padT-padB)}"/>`;
+  el.innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${body}${xlab}${guide}</svg>`;
   animateLines(el);
+  addChartCrosshair(el, {W, padL, padR, n, tip: i=>{
+    const rows=series.map(s=>{ const v=s.vals[i]; return v==null?null:{name:s.name,color:s.color,v}; })
+      .filter(Boolean).sort((a,b)=>b.v-a.v);
+    if(!rows.length) return '';
+    const lines=rows.map(r=>`<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${r.color};margin-right:5px"></span>${r.name}: <b>${r.v.toFixed(1)}${suf}</b>`);
+    return `<b>${labels[i]}</b><br>`+lines.join('<br>');
+  }});
 }
 
 function groupBarChart(el, cats, series, suf){
