@@ -3753,7 +3753,7 @@ const effRows = [
   {n:'Mayra Gallegos',    lg:'mayrage',    e:0, d:55.5,  f:'Chequeos', cut:7}
 ];
 const effTipos = [
-  {name:'Error ortográfico',v:4},{name:'Error en interpretación',v:4},
+  {name:'Error ortográfico',v:4},{name:'Error en interpretación',v:5},
   {name:'Error de RM 1,5 / 3,0',v:2},{name:'Error de médico intérprete',v:1},
   {name:'Error en etiqueta',v:1},{name:'Omite dato de mCi',v:1},
   {name:'Datos incorrectos en orden',v:1},{name:'Omite disco en estudio',v:1},
@@ -3761,7 +3761,7 @@ const effTipos = [
   {name:'Pasa estudio sin interpretación',v:1},{name:'Pone Birads en lugar de Tirads',v:1},
   {name:'No especifica sobrepeso por musculatura',v:1}
 ];
-const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:5},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:2}];
+const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:5},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:3}];
 const EFF_FLOOR = 99.5;
 
 function effList(el, rows){
@@ -3800,14 +3800,18 @@ function renderEfect(){
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
   document.getElementById('eff-nota').innerHTML =
     '<b>Fuente.</b> Hoja «Hoja2» de <i>Inconsistencias internas.xlsx</i> '+
-    '(SharePoint · Documentos/Importante, corte 13 ago). Trae <b>20 incidencias en 2026</b> — se sumaron las 2 de '+
+    '(SharePoint · Documentos/Importante, corte 24 ago). Trae <b>21 incidencias confirmadas en 2026</b> — se sumaron las 2 de '+
     '<b>Alberto Valdez</b> (8 y 20 abr). La efectividad se calcula sobre '+
     '<b>enero–julio</b>: a cada denominador ene–jun se le sumó julio. Para los <b>7 transcriptores SIO</b>, julio viene de '+
     'Productividad de Transcripción (Datos Tablero, del 1 al 31 jul). Para el <b>grupo de Entregas</b> '+
     '(Samanta +2 343, Oswaldo +981, Heli 0), julio viene de la columna «Usuario Recibe Entregas» del export '+
     '<i>Tiempo promesa de entrega</i> (julio completo). Así, los 4 errores de julio — Iván Enríquez (1 jul), Estefanía Martínez '+
-    '(24 jul) y los dos de Oswaldo Ríos (27 jul) — ya pesan en la efectividad. Solo quedan fuera las <b>2 incidencias de agosto</b> '+
-    '(Hugo Tabares y Samanta Mora), que ya cuentan en «Tipo de error» y «Errores por mes» y entrarán al cerrar agosto. '+
+    '(24 jul) y los dos de Oswaldo Ríos (27 jul) — ya pesan en la efectividad. Quedan fuera las <b>3 incidencias confirmadas de '+
+    'agosto</b> (Hugo Tabares 7 ago, Samanta Mora 7 ago y Laura García 18 ago), que ya cuentan en «Tipo de error» y «Errores por '+
+    'mes» y entrarán a la efectividad al cerrar agosto (falta la producción SIO de agosto de Estefanía Martínez y Graciela Cortés '+
+    'para completar el denominador de los 7 transcriptores). Hay además una <b>cuarta fila de agosto</b> (Samanta Mora, 24 ago, '+
+    '«Pasa estudio con error en empresa») que en el archivo aún no trae marca de «Procesar»; se dejó fuera de todos los conteos '+
+    '(Tipo, Mes y detalle) hasta que se confirme. '+
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, que van contra Usuario Recibe '+
     'Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción. '+
     'Para <b>Alberto Valdez, Casandra Ceballos y Mayra Gallegos</b> (equipo transcriptor de Chequeos médicos), el denominador es '+
@@ -3931,7 +3935,8 @@ const effDetalle = {
   ],
   'lauragg':[
     {f:'21 abr 2026', px:'Delgadillo Hinojosa Ramiro',      t:'Omite dato de mCi',      m:'abr'},
-    {f:'10 jun 2026', px:'Guemez Castillo Marisela',        t:'Error en interpretación', m:'jun'}
+    {f:'10 jun 2026', px:'Guemez Castillo Marisela',        t:'Error en interpretación', m:'jun'},
+    {f:'18 ago 2026', px:'Martínez Landeros Jesús',         t:'Error en interpretación', m:'ago'}
   ],
   'monicaac':[
     {f:'02 abr 2026', px:'Guerra González Najib Raúl',      t:'Error de médico intérprete', m:'abr'}
