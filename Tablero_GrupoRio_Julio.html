@@ -672,10 +672,10 @@
               <div class="line-note" id="incd-nota-heat" style="margin-top:10px"></div>
             </div>
             <div style="margin-top:16px">
-              <h4 class="mini-h">Motivos de incumplimiento · julio 2026</h4>
+              <h4 class="mini-h">Motivos de incumplimiento · agosto 2026</h4>
               <div class="line-note" id="inc-motivos-nota" style="margin-bottom:10px"></div>
               <div style="overflow-x:auto"><table class="dtab" id="tab-inc-motivos"></table></div>
-              <div class="line-note" style="margin-top:10px">Lista tal cual está registrada en la bitácora de calidad (columna Motivo, sin modificar el texto). La etiqueta <span class="pill rad" style="padding:1px 8px">Radiólogos</span> marca los casos que describen carga de trabajo por falta de radiólogos (doctor ocupado en otro estudio, casos complejos, en espera de aprobación de otro radiólogo), aunque esa frase no aparece como opción en el formato de origen.</div>
+              <div class="line-note" style="margin-top:10px">Lista tal cual está registrada en la bitácora de calidad "Rojos" (columna Motivo, sin modificar el texto), filtrada por la unidad seleccionada arriba.</div>
             </div>
             <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con un motivo justificado en el reporte (mantenimiento, calidad, modificación médica, etc.) se cuentan como cumplimiento y se excluyen del histograma. Datos del reporte de agosto 2026.</div>
           </div>
@@ -4547,7 +4547,6 @@ function renderAll(){
   // Indicador por unidad (junio) + tendencia temporal
   buildUnitBar();
   renderIndicador('Todas');
-  renderIncMotivos();
   document.getElementById('inc-toggle').onclick=()=>setIncDetail(!incDetailOpen);
   document.getElementById('inc-close').onclick=()=>setIncDetail(false);
   document.getElementById('excl-toggle').onclick=()=>setExclDetail(!exclDetailOpen);
@@ -4587,66 +4586,24 @@ function incByDeptoUnit(unit){
   });
   return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({name,v}));
 }
-/* Motivos de incumplimiento · muestra cualitativa "Rojos" · julio 2026 (48 estudios, texto tal cual registrado) */
-const incRojosJul = [
-  {px:'Centeno Márquez Alicia', est:'RM 3.0T Digital - Articulación - Rodilla', mot:'Modificación de párrafo', rad:false},
-  {px:'Prado Ruiz Lilia Karla', est:'Eco de Pelvis', mot:'Calidad', rad:false},
-  {px:'Rondero Márquez María Cristina', est:'Densitometría de Cadera y Columna Lumbar', mot:'Peso incorrecto', rad:false},
-  {px:'Oyervides Morales Kevin Hiram', est:'Oyervides Morales Kevin Hiram', mot:'Calidad', rad:false},
-  {px:'Nettrour Sharon Ann', est:'Eco de Pelvis Transvaginal', mot:'Calidad', rad:false},
-  {px:'Robles Robles Xavier Alonso', est:'RX Dedo(s) - 1P (1, 2, 3 P)', mot:'Técnico no envía imágenes de Rx UAC 17:00', rad:false},
-  {px:'Robles Robles Xavier Alonso', est:'RX Dedo(s) - 1P (1, 2, 3 P)', mot:'Técnico no envía imágenes de Rx UAC 17:00', rad:false},
-  {px:'Uriarte Araujo Armando', est:'Eco de Hígado y Vías Biliares con Elastografía', mot:'Cambian concepto', rad:false},
-  {px:'Salazar Galindo Luz Gabriela', est:'RM 3.0T Digital - Pelvis Femenina (Endometriosis)', mot:'Aseguradora', rad:false},
-  {px:'Montes Toscano Demetrio', est:'Eco de Tiroides con Biopsia Unilateral', mot:'En espera de interpretación', rad:true},
-  {px:'Robles Godinez Claudia Dolores', est:'Densitometría de Cadera y Columna Lumbar', mot:'Ligado en SIOW pero no se refleja en SIOWEB', rad:false},
-  {px:'Colmenares Hernández Leidy Yohanna', est:'Eco de Tiroides', mot:'Se firma estudio sin tabla Tirads', rad:false},
-  {px:'Pérez Hernández María de Guadalupe', est:'Densitometría de 3 Regiones (excepto Cuerpo entero)', mot:'Sin luz', rad:false},
-  {px:'González Godínez Jessica María Luisa', est:'Eco de Tiroides con Biopsia Unilateral', mot:'Imágenes no se pueden ligar en Exa', rad:false},
-  {px:'Guzmán Padilla Karla Paola', est:'Eco de Mama', mot:'Falla de Luz', rad:false},
-  {px:'García Rivera Elizabeth', est:'Eco de Mama', mot:'Falla de Luz', rad:false},
-  {px:'Pantoja García Ramón', est:'RM 3.0T Digital - Cráneo con Angio Simple', mot:'Firma cortada - se liberó para corregirlo', rad:false},
-  {px:'Zepeda Flores Gerardo', est:'TAC - 2R - Tórax y Abdomen [C]', mot:'Pendiente por interpretar, se asigna trabajo del sábado', rad:true},
-  {px:'Contreras Aguirre Guadalupe Olivia', est:'Eco de Tiroides', mot:'Atraso en estudio, biopsia + fusión no se ligó en exa', rad:false},
-  {px:'Godínez Andrade Rosa', est:'Eco de Abdomen', mot:'Dr. David en capación + en otro estudio', rad:true},
-  {px:'Román Galaviz Jaime Eduardo', est:'RX Rodillas Comparativas - 2P', mot:'Realiza Dra. Iñiguez, en espera de aprobación por otro radiólogo', rad:true},
-  {px:'Díaz Díaz Anabel', est:'Agudeza Visual', mot:'No se entregó por falta de tabla y formato de cotización', rad:false},
-  {px:'Tamayo Rodríguez Irving Alonso', est:'RM 1.5T - Articulación - Rodilla', mot:'Sin firma Dr. Iván - Transcriptor no pasa s siow', rad:false},
-  {px:'Martínez Basich Ma. Mercedes', est:'RM 3.0T Digital - Columna - Cervical y Cráneo', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
-  {px:'Corona Jiménez José Francisco', est:'RM 3.0T Digital - Cráneo con Angio Simple', mot:'Dra, Monse se atrasa por casos complejos', rad:true},
-  {px:'García Jiménez Ángel', est:'TAC - Oídos', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
-  {px:'Becerra Espinoza Salvador', est:'TAC - Angio de Arterias Renales [C]', mot:'Dra. Monse se atrasa por estudios complejos', rad:true},
-  {px:'Lemus Basulto Regina Sabine', est:'RX Panorámica de Miembros Inferiores (Escanometría)', mot:'Se tardó en llegar a Exa, disparo de rx hace que no se liguen en exa', rad:false},
-  {px:'Ortega Rosales Carmen del Refugio', est:'RX Columna Cervical - 2P', mot:'Doctor realizando eco', rad:true},
-  {px:'García Morales Lucía', est:'Densitometría de Cadera y Columna Lumbar', mot:'Se solicitó modificación de medida', rad:false},
-  {px:'Rodríguez Rodríguez Hada Celeste', est:'RX Tobillo - 2P', mot:'Estabamos en junta', rad:false},
-  {px:'Ochoa Gutiérrez Miryam', est:'Evaluación Médico Internista (2 consultas)', mot:'Atraso por prolongar tiempos de entrega, evento Sulvarán', rad:false},
-  {px:'Lizárraga Osuna María Teresa', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
-  {px:'Esqueda Landinos Eugenio', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
-  {px:'Santos Casillas Jesús', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
-  {px:'Santos Romero Carolina', est:'Evaluación Médico Internista (2 consultas)', mot:'Evento Sulvarán', rad:false},
-  {px:'Buenrostro Barbosa Ma Guadalupe', est:'Holter 24 horas', mot:'Error en la interpretación no tiene datos del medico', rad:false},
-  {px:'Avelar Enríquez César', est:'Holter 24 horas', mot:'Médico no anexa su firma en la interpretación', rad:false},
-  {px:'Fernández Meza Michelle Alejandra', est:'RM 3.0T Digital - Cráneo y Cervical', mot:'Carga de trabajo o posibles casos complejos', rad:true},
-  {px:'Flores Casillas Sergio Axel', est:'RM 1.5T - Columna - Dorsal', mot:'UCH da de baja tarde', rad:false},
-  {px:'Rodríguez Lara Amparo', est:'TAC - Tórax (Pulmonar o Mediastino) [C]', mot:'Atraso en TAC Dr. González', rad:true},
-  {px:'Jiménez Hernández Gloria Margarita', est:'RX Rodilla - 2P', mot:'Doctor realizando otro estudio', rad:true},
-  {px:'Bobadilla Fernández Luna Valentina', est:'RX Pelvis', mot:'Doctor haciendo otro estudio, da prioridad a TAC', rad:true},
-  {px:'Burgueño Millán Raquel Abigail', est:'Evaluación Oftalmológica', mot:'Dra. Itzel no transcribe estudio', rad:false},
-  {px:'Ramírez Pérez Lilia', est:'Eco de Cuello (No Tiroideo)', mot:'Atraso por promesa 9am varios estudios día anterior', rad:false},
-  {px:'Padilla Espinosa de los Monteros Guadalupe Jeanette', est:'RX Columna Lumbar - 4P', mot:'Atraso Dra. Íñiguez', rad:true},
-  {px:'Cabrera Arana de Solís Elvia Dolores', est:'Eco de Ganglio con Biopsia Unilateral', mot:'Habilitada casilla de no requiere interpretación', rad:false},
-  {px:'Zárate Sanabia Maria Rosenda', est:'Densitometría de Cadera y Columna Lumbar', mot:'Estudio no ligado en Exa - No está el registro tampoco', rad:false}
-];
-function renderIncMotivos(){
+/* Motivos de incumplimiento · muestra cualitativa "Rojos" cruzada con Sucursal (Cita vs IdCita del reporte general de agosto) · agosto 2026, por unidad */
+const incMotivosAgo = {"Medicina Preventiva": [{"px": "Ochoa Gutiérrez Miryam", "est": "Evaluación Médico Internista (2 consultas)", "mot": "Atraso por prolongar tiempos de entrega, evento Sulvarán"}, {"px": "Garzón Díaz María Mónica", "est": "Electrocardiograma", "mot": "Doctor no envía interpretación a tiempo"}, {"px": "Flores Montoya Jorge", "est": "Evaluación Médico Internista (2 consultas)", "mot": "4 chequeos no cumplidos por interpretación tarde Dr. Oropeza"}], "López Mateos": [{"px": "Vizcarra Álvarez Silvia", "est": "TAC - 3R - Cráneo, Cuello y Tórax [C]", "mot": "doctor en biopsia"}, {"px": "Priego Arenas María del Rosario", "est": "Mamografía - Bilateral", "mot": "Se eliminan imágenes de masto erróneas, se vuelve a enviar interpretación con imágenes correctas."}, {"px": "Ruiz Tamborrell Anabel", "est": "RX Muñeca - 2P", "mot": "Placas mal rotuladas, radiólogo pide eliminar y corregir"}, {"px": "Ventura Hernández Sthefano", "est": "RX - Muñeca - 4P", "mot": "En otro estudio y firma a hora de entrega"}, {"px": "Montes Jiménez Camila Suemy", "est": "Eco de Hígado y Vías Biliares", "mot": "doctor en Estudio Doppler 2 extremidades"}, {"px": "Mendoza Beltrán Mario Manuel", "est": "RM 3.0T Digital - Oncológica - Valoración Funcional", "mot": "Dr.Iván vuelve a firmar, se pegó el estudio a tiempo porque no se ligó por falla eléctrica"}, {"px": "Cagide Y López María Consuelo", "est": "TAC - Angio de Aorta Torácica [C]", "mot": "Se regresa estudio por parte de calidad"}, {"px": "García Torres Sergio Adrián", "est": "Espirometría con Broncodilatador", "mot": "No se envía interpretación, se le envían trazos y se vuelve a mandar mensaje para confirmar si nos enviara la interpretación, no se recibe respuesta"}, {"px": "García Lopéz Mario Eduardo", "est": "Diagnóstico Ojo Seco  Agudeza Visual", "mot": "Dra. Mónica se queda adentro del estudio y se retira, el estudio no se guardó"}, {"px": "De Ávila Huerta Rafael Arturo", "est": "RX Columna Lumbar - 6P", "mot": "Atraso Dra. Íñiguez cubre UAC"}, {"px": "De Ávila Huerta Rafael Arturo", "est": "RX Columna Lumbar - 6P", "mot": "Interpretado tarde por agenda de doctores"}, {"px": "Cardoso Calderón Francisco", "est": "RX Pie - 1P  RX Tobillo - 2P  RX Calcáneo - 1P", "mot": "Médicos ya se habían retirado, Dr. Gadiel de vacaciones, esperamos llegada del Dr. Erick"}, {"px": "Villasano Zúñiga Joaquín", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Dr. Macías se le juntan varios estudios"}, {"px": "Ochoa Tirado José Jiovani", "est": "RX Tórax - 1P", "mot": "Se interpreta tarde por la hora de llegada del Dr. Macias"}, {"px": "Salazar Osegueda Lucía", "est": "TAC - Abdomen - Total [C]", "mot": "Cambio de empresa, una empresa en orden y otro en interpretación"}, {"px": "Morales Hernández Manuel", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Se regresa estudio por calidad, Dr. René agrega más información a la interpretación"}, {"px": "Korsich Gustavo Adrián", "est": "E - RM 3.0T Digital - Próstata Multiparamétrica [C]", "mot": "Reingreso de calidad"}, {"px": "Ventura Hernández Sthefano", "est": "Rx - Muñeca 4P", "mot": "Solicitud de paciente para modificación - Calidad"}, {"px": "Ochoa Bustamante Rosa María", "est": "Eco de Mama  y  Mamografía - Bilateral con Tomosíntesis", "mot": "Se elimina interpretación para corregir fecha de nacimiento de la paciente"}, {"px": "Ochoa Bustamante Rosa María", "est": "Eco de Mama", "mot": "Cambio de fecha de nacimiento, interpretación vs orden"}, {"px": "Sánchez Corona Laura Janeth", "est": "Espirometría con Broncodilatador", "mot": "Doctora envía e interpreta tarde, dice que se apagó su dispositivo para poder pegar la interpretación"}, {"px": "Mercado Valdez Ana Dolores", "est": "Espirometría con Broncodilatador", "mot": "Doctora envía e interpreta tarde, dice que se apagó su dispositivo para poder pegar la interpretación"}, {"px": "López Sánchez Griselda Emilia", "est": "Gammagrama Renal con Filtración Dinámico - Estático", "mot": "Se elimina interpretación y se escanea con firma del Dr. Zaragoza ya que la paciente lo solicitó"}, {"px": "Martinez Murillo Camila Arizbeth", "est": "RM 3.0T Digital - Columna - Lumbar con Panorámica Sagital de Columna Completa", "mot": "Reingreso de Calidad"}], "Acueducto": [{"px": "León Mendoza Eleuterio", "est": "Eco de Próstata vía Abdominal", "mot": "Estudio no llega a tiempo a Exa"}, {"px": "Mata Acosta Regina", "est": "RM 3.0T Digital - Cráneo con Foco en Hipófisis", "mot": "Reingreso de calidad"}, {"px": "Loustaunau Urquides Marco Antonio", "est": "Eco de Próstata vía Abdominal", "mot": "Atraso Dra. Íñiguez cubre UAC"}, {"px": "Garibaldi Covarrubias María Isabel", "est": "E - RM 3.0T Digital - Hígado Multiparamétrica [C]", "mot": "Firmado 10 min tarde"}, {"px": "Romero Peña Ana Cecilia", "est": "RX Panorámica de Columna Completa LAT", "mot": "Realizando otro estudio"}, {"px": "Gómez Martínez Martha", "est": "RX Columna Lumbar - 4P", "mot": "Atraso Dra. Roció - cubre a Dra. Sofi"}, {"px": "González Rubio Beckmann María Carolina", "est": "RX Columna Lumbar - 1P", "mot": "Modificación Dra. Rocío"}, {"px": "Cuevas Hidalgo Servio Enrique", "est": "RX Panorámica de Miembros Inferiores (Escanometría)", "mot": "Dr. Erick realizando otro estudio"}, {"px": "Dibildox Villalobos Leticia Ivette", "est": "Eco Doppler de Carótidas, TAC Angio Carótidas", "mot": "Se liberan estudios para modificar por hallazgo Dra. Monse"}, {"px": "Bernal Ramiro Karen Mariel", "est": "RX Panorámica de Miembros Inferiores (Escanometría)", "mot": "Reingreso por calidad"}, {"px": "Mariscal Morfín Ana María", "est": "Eco de Partes Pequeñas", "mot": "Reingreso por modificación Dr. Erick"}, {"px": "González Chávez Luis Enrique", "est": "Varios", "mot": "Atraso, pacientes en chequeos solicitan 2 medicos, atraso en interpretación UAC"}], "Clínica de la Mujer": [{"px": "Gómez Hernández Sandra Margarita", "est": "Mamografía - Bilateral", "mot": "La doctora interpreta el estudio del año 2025 en lugar del actual"}, {"px": "Ramírez Enríquez Alma Gabriela", "est": "Mamografía - Bilateral", "mot": "Firmado 2 minutos después de FP"}, {"px": "Cano González Luz Amanda", "est": "Eco de Mama, Mamografía", "mot": "Se agrega palabra a interpretación"}, {"px": "Rodríguez Lara Claudia", "est": "Densitometría de Cadera y Columna Lumbar", "mot": "Densi UCM no se pudo ligar en exa, se entregó 2 minutos tarde"}, {"px": "Michel Rizo Carmen Estefania", "est": "Eco de Mama", "mot": "Atraso Dra. Lulú estudios del jueves"}], "Guadalupe": [{"px": "García Araiza María Eva", "est": "Eco de Hígado y Vías Biliares", "mot": "Dra. Rocío se traslada a UMP y no realiza la interpretación a tiempo"}]};
+function renderIncMotivos(nombre){
   const el=document.getElementById('tab-inc-motivos'); if(!el) return;
+  const rows = nombre==='Todas' ? Object.values(incMotivosAgo).flat() : (incMotivosAgo[nombre]||[]);
+  const et = nombre==='Todas' ? 'todas las unidades' : nombre;
+  if(!rows.length){
+    el.innerHTML = '';
+    document.getElementById('inc-motivos-nota').innerHTML =
+      `Sin casos de la muestra cualitativa "rojos" cruzados a <b>${et}</b> en agosto 2026.`;
+    return;
+  }
   el.innerHTML = '<thead><tr><th>Paciente</th><th>Estudio</th><th>Motivo</th></tr></thead><tbody>'+
-    incRojosJul.map(r=>`<tr><td>${r.px}</td><td>${r.est}</td><td>${r.mot}${r.rad?' <span class="pill rad">Radiólogos</span>':''}</td></tr>`).join('')+
+    rows.map(r=>`<tr><td>${r.px}</td><td>${r.est}</td><td>${r.mot}</td></tr>`).join('')+
     '</tbody>';
-  const tot=incRojosJul.length, rad=incRojosJul.filter(r=>r.rad).length;
+  const tot=rows.length;
   document.getElementById('inc-motivos-nota').innerHTML =
-    `Muestra cualitativa de <b>${tot} estudios "rojos"</b> (incumplidos) de julio 2026, con su motivo registrado en la bitácora de calidad (no cubre el total de incumplidos del mes). `+
-    `De ellos, <b>${rad} (${Math.round(rad/tot*100)}%)</b> corresponden a <b>carga de trabajo por falta de radiólogos</b> — el motivo principal del mes, aunque no viene como opción explícita en el formato de origen.`;
+    `Muestra cualitativa de <b>${tot} estudio${tot===1?'':'s'} "rojo${tot===1?'':'s'}"</b> (incumplido${tot===1?'':'s'}) de <b>${et}</b> en agosto 2026, cruzados por Cita contra el reporte general de agosto (columna Sucursal) — no cubre el total de incumplidos del mes, solo los casos con motivo registrado en la bitácora de calidad que coinciden con una cita promesa de agosto.`;
 }
 function renderIncDetail(nombre){
   const u=unidades[nombre]; if(!u) return;
@@ -4702,6 +4659,7 @@ function renderIncDetail(nombre){
   document.getElementById('inc-detail-unit').textContent=et;
   document.getElementById('inc-detail-sub').textContent=
     `${fmt(u.incumpl)} incumplido${u.incumpl===1?'':'s'} de ${fmt(u.prometidos)} estudios · agosto 2026`;
+  renderIncMotivos(nombre);
 }
 function setIncDetail(open){
   incDetailOpen=open;
