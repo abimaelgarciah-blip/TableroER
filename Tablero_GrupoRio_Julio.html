@@ -1018,7 +1018,14 @@ function wireHover(svg,P,W,Ht,xOf,n,tipAt){
 }
 const $=s=&gt;document.querySelector(s);
 const tip=$(&quot;#tip&quot;);
-function showTip(h,x,y){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=(x+14)+&quot;px&quot;;tip.style.top=(y+14)+&quot;px&quot;;}
+function showTip(h,x,y){
+  tip.innerHTML=h;tip.style.opacity=1;
+  const tw=tip.offsetWidth,th=tip.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+  let left=x+14,top=y+14;
+  if(left+tw&gt;vw-4) left=Math.max(4,x-tw-14);
+  if(top+th&gt;vh-4) top=Math.max(4,y-th-14);
+  tip.style.left=left+&quot;px&quot;;tip.style.top=top+&quot;px&quot;;
+}
 function niceStep(max,target){target=target||6;const raw=max/target;const mag=Math.pow(10,Math.floor(Math.log10(raw||1)));const n=raw/mag;let s=n&lt;1.5?1:n&lt;3?2:n&lt;7?5:10;return (s*mag)||1;}
 function hideTip(){tip.style.opacity=0;}
 const COL={Ultrasonido:'#0e9bab',Radiología:'#5c62b0',Tomografía:'#c98a2b'};
@@ -2019,7 +2026,14 @@ function wireHover(svg,P,W,Ht,xOf,n,tipAt){
 }
 const $=s=&gt;document.querySelector(s);
 const tip=$(&quot;#tip&quot;);
-function showTip(h,x,y){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=(x+14)+&quot;px&quot;;tip.style.top=(y+14)+&quot;px&quot;;}
+function showTip(h,x,y){
+  tip.innerHTML=h;tip.style.opacity=1;
+  const tw=tip.offsetWidth,th=tip.offsetHeight,vw=window.innerWidth,vh=window.innerHeight;
+  let left=x+14,top=y+14;
+  if(left+tw&gt;vw-4) left=Math.max(4,x-tw-14);
+  if(top+th&gt;vh-4) top=Math.max(4,y-th-14);
+  tip.style.left=left+&quot;px&quot;;tip.style.top=top+&quot;px&quot;;
+}
 function niceStep(max,target){target=target||6;const raw=max/target;const mag=Math.pow(10,Math.floor(Math.log10(raw||1)));const n=raw/mag;let s=n&lt;1.5?1:n&lt;3?2:n&lt;7?5:10;return (s*mag)||1;}
 function hideTip(){tip.style.opacity=0;}
 const COL={Ultrasonido:'#0e9bab',Radiología:'#5c62b0',Tomografía:'#c98a2b'};
