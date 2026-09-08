@@ -684,12 +684,12 @@
         <div class="card" style="margin-top:16px">
           <div class="card-head">
             <div>
-              <h3>Exclusiones del indicador</h3>
-              <p class="csub" id="excl-sub">Estudios marcados "Sí" en la columna Otro · distintos motivos</p>
+              <h3>Estudios con Motivo justificado</h3>
+              <p class="csub" id="excl-sub">Estudios con la columna Motivo llena · cuentan como cumplimiento</p>
             </div>
           </div>
           <button type="button" class="inc-toggle" id="excl-toggle" aria-expanded="false" aria-controls="excl-detail">
-            Ver exclusiones <span class="caret">▾</span>
+            Ver detalle <span class="caret">▾</span>
           </button>
         </div>
 
@@ -697,8 +697,8 @@
           <div class="card" style="margin-top:16px">
             <div class="card-head">
               <div>
-                <h3>Exclusiones del indicador · julio 2026</h3>
-                <p class="csub" id="excl-detail-sub">Estudios marcados "Sí" en la columna Otro del reporte</p>
+                <h3>Estudios con Motivo justificado · agosto 2026</h3>
+                <p class="csub" id="excl-detail-sub">Estudios con la columna Motivo llena en el reporte de agosto</p>
               </div>
               <button type="button" class="inc-close" id="excl-close" aria-label="Ocultar detalle">Ocultar ▴</button>
             </div>
@@ -1511,7 +1511,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="card" style="margin-bottom:16px">
           <h3>Incidencias por colaborador</h3>
-          <p class="csub" id="incc-sub">Registro de incidencias · enero-junio vs. julio 2026</p>
+          <p class="csub" id="incc-sub">Registro de incidencias · enero-junio vs. julio vs. agosto 2026</p>
           <div id="bars-inc-colab"></div>
           <div class="line-note" style="margin-top:10px" id="incc-nota"></div>
         </div>
@@ -3800,7 +3800,7 @@ function renderEfect(){
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
   document.getElementById('eff-nota').innerHTML =
     '<b>Fuente.</b> Hoja «Hoja2» de <i>Inconsistencias internas.xlsx</i> '+
-    '(SharePoint · Documentos/Importante, corte 24 ago). Trae <b>21 incidencias confirmadas en 2026</b> — se sumaron las 2 de '+
+    '(SharePoint · Documentos/Importante, corte 08 sep). Trae <b>21 incidencias confirmadas en 2026</b> — se sumaron las 2 de '+
     '<b>Alberto Valdez</b> (8 y 20 abr). La efectividad se calcula sobre '+
     '<b>enero–julio</b>: a cada denominador ene–jun se le sumó julio. Para los <b>7 transcriptores SIO</b>, julio viene de '+
     'Productividad de Transcripción (Datos Tablero, del 1 al 31 jul). Para el <b>grupo de Entregas</b> '+
@@ -3809,9 +3809,9 @@ function renderEfect(){
     '(24 jul) y los dos de Oswaldo Ríos (27 jul) — ya pesan en la efectividad. Quedan fuera las <b>3 incidencias confirmadas de '+
     'agosto</b> (Hugo Tabares 7 ago, Samanta Mora 7 ago y Laura García 18 ago), que ya cuentan en «Tipo de error» y «Errores por '+
     'mes» y entrarán a la efectividad al cerrar agosto (falta la producción SIO de agosto de Estefanía Martínez y Graciela Cortés '+
-    'para completar el denominador de los 7 transcriptores). Hay además una <b>cuarta fila de agosto</b> (Samanta Mora, 24 ago, '+
-    '«Pasa estudio con error en empresa») que en el archivo aún no trae marca de «Procesar»; se dejó fuera de todos los conteos '+
-    '(Tipo, Mes y detalle) hasta que se confirme. '+
+    'para completar el denominador de los 7 transcriptores). Hay además <b>2 filas sin confirmar</b> — Samanta Mora (24 ago, '+
+    '«Pasa estudio con error en empresa») y Oswaldo Ríos (08 sep, «Pasa estudio con médico incorrecto») — que en el archivo aún '+
+    'no traen marca de «Procesar»; se dejaron fuera de todos los conteos (Tipo, Mes y detalle) hasta que se confirmen. '+
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, que van contra Usuario Recibe '+
     'Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción. '+
     'Para <b>Alberto Valdez, Casandra Ceballos y Mayra Gallegos</b> (equipo transcriptor de Chequeos médicos), el denominador es '+
@@ -3822,28 +3822,32 @@ function renderEfect(){
 
 /* Incidencias por colaborador · Registro de incidencias.xlsx (SharePoint · Documentos/Importante) */
 const incColabData = [
-  {lg:'monicaac',    name:'Mónica Anaya',      eneJun:2, jul:1, acta:0},
-  {lg:'manuelev',    name:'Iván Enríquez',     eneJun:1, jul:0, acta:0},
-  {lg:'lauragg',     name:'Laura García',      eneJun:1, jul:1, acta:1},
-  {lg:'humbertogp1', name:'Humberto González', eneJun:1, jul:1, acta:0},
-  {lg:'nestorgm',    name:'Néstor González',   eneJun:1, jul:0, acta:0},
-  {lg:'oswaldorm',   name:'Oswaldo Ríos',      eneJun:1, jul:1, acta:0},
-  {lg:'gracielacv',  name:'Graciela Cortés',   eneJun:1, jul:0, acta:0}
+  {lg:'monicaac',    name:'Mónica Anaya',        eneJun:2, jul:1, ago:1, agoMot:'Retardos',         acta:0},
+  {lg:'manuelev',    name:'Iván Enríquez',       eneJun:1, jul:0, ago:0, agoMot:'',                 acta:0},
+  {lg:'lauragg',     name:'Laura García',        eneJun:1, jul:1, ago:1, agoMot:'Retardos',         acta:1},
+  {lg:'humbertogp1', name:'Humberto González',   eneJun:1, jul:1, ago:1, agoMot:'Retardos',         acta:0},
+  {lg:'nestorgm',    name:'Néstor González',     eneJun:1, jul:0, ago:0, agoMot:'',                 acta:0},
+  {lg:'oswaldorm',   name:'Oswaldo Ríos',        eneJun:1, jul:1, ago:1, agoMot:'Retardos',         acta:0},
+  {lg:'gracielacv',  name:'Graciela Cortés',     eneJun:1, jul:0, ago:1, agoMot:'Retardos',         acta:0},
+  {lg:'sandrama',    name:'Estefanía Martínez',  eneJun:0, jul:0, ago:1, agoMot:'Retardos',         acta:0},
+  {lg:'anaor',       name:'Ana Ochoa',           eneJun:0, jul:0, ago:1, agoMot:'Error ensobretado',acta:0}
 ];
 function renderIncColab(){
-  const rows=incColabData.map(r=>({...r, tot:r.eneJun+r.jul})).sort((a,b)=>b.tot-a.tot);
+  const rows=incColabData.map(r=>({...r, tot:r.eneJun+r.jul+r.ago})).sort((a,b)=>b.tot-a.tot);
   const max=Math.max(...rows.map(r=>r.tot),1);
   const el=document.getElementById('bars-inc-colab');
   el.innerHTML = rows.map(r=>{
     const w = r.tot/max*100;
     const ejW = r.tot? r.eneJun/r.tot*w : 0;
     const julW = r.tot? r.jul/r.tot*w : 0;
-    const tip = `<b>${r.name}</b> · Enero-junio ${r.eneJun} · Julio ${r.jul}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
+    const agoW = r.tot? r.ago/r.tot*w : 0;
+    const tip = `<b>${r.name}</b> · Enero-junio ${r.eneJun} · Julio ${r.jul} · Agosto ${r.ago}${r.ago&&r.agoMot?` (${r.agoMot})`:''}`+(r.acta?` · Acta administrativa ${r.acta}`:'');
     return `<div class="bar-row" data-tip="${tip}">
       <div class="bar-label">${r.name}</div>
       <div class="bar-track">
         <div class="bar-fill" data-w="${ejW}" style="background:var(--c-serv);position:absolute;left:0"></div>
         <div class="bar-fill" data-w="${julW}" style="background:var(--c-people);position:absolute;left:${ejW}%"></div>
+        <div class="bar-fill" data-w="${agoW}" style="background:var(--c-sede);position:absolute;left:${ejW+julW}%"></div>
       </div>
       <div class="bar-val">${r.tot}${r.acta?' <span class="pill" style="background:#ba544c;color:#fff;padding:1px 7px;border-radius:9px;font-size:10px;margin-left:3px;vertical-align:1px">Acta</span>':''}</div>
     </div>`;
@@ -3851,12 +3855,13 @@ function renderIncColab(){
   const fills=el.querySelectorAll('.bar-fill');
   if(reduce){ fills.forEach(f=>f.style.width=f.dataset.w+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
-  const totEJ=rows.reduce((a,r)=>a+r.eneJun,0), totJul=rows.reduce((a,r)=>a+r.jul,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
+  const totEJ=rows.reduce((a,r)=>a+r.eneJun,0), totJul=rows.reduce((a,r)=>a+r.jul,0), totAgo=rows.reduce((a,r)=>a+r.ago,0), totActa=rows.reduce((a,r)=>a+r.acta,0);
   document.getElementById('incc-nota').innerHTML =
     `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>Enero-junio · ${totEJ}</span>`+
     `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>Julio · ${totJul}</span>`+
+    `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-sede);display:inline-block"></span>Agosto · ${totAgo}</span>`+
     (totActa?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#ba544c;display:inline-block"></span>Acta administrativa · ${totActa}</span>`:'')+
-    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de su incidencia de julio.</div>`;
+    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de su incidencia de julio. En agosto se suman 2 colaboradores nuevos a este registro — Estefanía Martínez y Ana Ochoa —, ambos por primera vez; el motivo de cada incidencia de agosto se muestra en el detalle al pasar el cursor.</div>`;
 }
 
 /* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul 2026) */
@@ -4672,25 +4677,26 @@ function setIncDetail(open){
     if(p&&p.scrollIntoView) setTimeout(()=>p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}),120);
   }
 }
-/* ===== Exclusiones del indicador · julio 2026 =====
-   Fuente: export "Todas unidades" de julio 2026, columna "Otro" = "Sí" marca el
-   estudio como excluido del indicador; el motivo va en la columna siguiente. */
-const exclusionesJul = [{"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Medición de Presión Arterial", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Prueba de Esfuerzo", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "Medicina Preventiva", "mot": "Cardio pendiente cita de febrero"}, {"fecha": "07 jul", "px": "Nettrour  Sharon Ann", "est": "Eco de Pelvis Transvaginal", "dep": "Ecosonografía", "suc": "Acueducto", "mot": "Calidad"}, {"fecha": "09 jul", "px": "González Godínez Jessica María Luisa", "est": "Eco de Tiroides", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Se ligan imágenes de eco y biopsia en el mismo espacio,"}, {"fecha": "13 jul", "px": "Herrera Vega Ma. Guadalupe", "est": "Eco de Tiroides", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Se realiza biopsia por René, no es valorable y se toma por Gadiel, se reinterpreta estudio poro Gadiel."}, {"fecha": "17 jul", "px": "García Rivera Elizabeth", "est": "Eco de Mama", "dep": "Ecosonografía", "suc": "Clínica de la Mujer", "mot": "Viernes 17/07 se va luz en UCM, se interpreta hasta lunes"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "Eco de Próstata Transrectal", "dep": "Ecosonografía", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "Eco de Abdomen", "dep": "Ecosonografía", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "Eco de Mama", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "16 jul", "px": "González López Guadalupe del Carmen", "est": "Espirometría", "dep": "Espirometría", "suc": "Medicina Preventiva", "mot": "Cardio y densi pendiente cita de febrero"}, {"fecha": "31 jul", "px": "Salazar Gómez Marisol", "est": "Mamografía - Bilateral", "dep": "Mamografía", "suc": "Clínica de la Mujer", "mot": "Calidad"}, {"fecha": "13 jul", "px": "Herrera Vega Ma. Guadalupe", "est": "Eco de Tiroides con Biopsia Unilateral", "dep": "Paquetes", "suc": "López Mateos", "mot": "Se realiza biopsia por René, no es valorable y se toma por Gadiel, se reinterpreta estudio poro Gadiel."}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "RM 1.5T - Mama [C]", "dep": "Paquetes", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Columna Lumbar - 4P", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Panorámica de Columna Completa AP", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "03 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RX Panorámica de Columna Completa LAT", "dep": "Radiología", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "RX Columna Lumbar - 2P", "dep": "Radiología", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "17 jul", "px": "Lara Gómez Enrique Everardo", "est": "RX Tórax - 1P", "dep": "Radiología", "suc": "Medicina Preventiva", "mot": "Error en nombre, se regresan estudios para corregir en coordinación"}, {"fecha": "04 jul", "px": "Gaspar Cerón Haddad Jovani", "est": "RM 3.0T Digital - Columna - Lumbar", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Facturación"}, {"fecha": "06 jul", "px": "Pérez Díaz Martha", "est": "RM 1.5T - Articulación - Tobillo", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "06 jul", "px": "Oyervides Morales Kevin Hiram", "est": "RM 3.0T Digital - Columna - Cervical", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "09 jul", "px": "Agraz Valdivia Rodrigo", "est": "RM 3.0T Digital - Muslo", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Modificación por complemento"}, {"fecha": "23 jul", "px": "Alcántar Roa Yocasta Adriana", "est": "RM 1.5T - Articulación - Rodilla", "dep": "Resonancia Magnética", "suc": "Chamizal", "mot": "Modificaciones por tratante Dr. David"}, {"fecha": "24 jul", "px": "Rama González Bertha Sonia", "est": "E - RM 1.5T de Mama", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "09 jul", "px": "Rivera Rocha Ruth María", "est": "Evaluación Médico Internista (2 consultas)", "dep": "Servicios Especiales", "suc": "Medicina Preventiva", "mot": "Discrepancia en datos de HC Dr. Oropeza, en espera de aclaración de duda."}, {"fecha": "02 jul", "px": "Pérez González Bertha Angélica", "est": "TAC - Columna Cervical", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Modificación día siguiente por la tarde, posible calidad."}, {"fecha": "31 jul", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Abdomen - Total [C]", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "31 jul", "px": "Alvarado Guzmán Rosa María", "est": "TAC - Columna Lumbar", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}];
+/* ===== Estudios con Motivo justificado · agosto 2026 =====
+   Fuente: reporte general de agosto 2026, columna "Motivo" no vacía en un estudio con
+   A—F negativo: se cuentan como cumplimiento (no incumplido) en el indicador, unidades y
+   departamentos, pero no como un estudio a tiempo cualquiera — quedan marcados aquí. */
+const exclusionesAgo = [{"fecha": "10 ago", "px": "Räbel  Frederique", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Chávez Navarro Diego", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Ramírez Gutiérrez María Guadalupe Xóchitl", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Sánchez Serratos Leticia", "est": "Ecocardiograma Doppler Color", "dep": "Cardiología", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Barba Fernández María", "est": "Ecocardiograma Doppler con Dobutamina", "dep": "Cardiología", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "11 ago", "px": "Díaz Sada Antonio Andrés", "est": "Electrocardiograma", "dep": "Cardiología", "suc": "López Mateos", "mot": "Solicitud de envío de trazos en interpretación"}, {"fecha": "13 ago", "px": "Cano González Luz Amanda", "est": "Eco de Mama", "dep": "Ecosonografía", "suc": "Clínica de la Mujer", "mot": "Modificación Dra.Leti"}, {"fecha": "21 ago", "px": "Dibildox Villalobos Leticia Ivette", "est": "Eco Doppler de Carótidas", "dep": "Ecosonografía", "suc": "Acueducto", "mot": "Modificación Dra. Monse"}, {"fecha": "22 ago", "px": "Mariscal Morfín Ana María", "est": "Eco de Partes Pequeñas", "dep": "Ecosonografía", "suc": "Acueducto", "mot": "Modificación de Imágenes Dr. Erick"}, {"fecha": "22 ago", "px": "Reynoso Aguilera Israel", "est": "Eco de Próstata vía Abdominal", "dep": "Ecosonografía", "suc": "López Mateos", "mot": "Cita del 2024"}, {"fecha": "10 ago", "px": "Pérez Díaz Martha Patricia", "est": "Electromiografía - 2 extremidades", "dep": "Electromiografía Y Potenciales Evocados", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "13 ago", "px": "Cano González Luz Amanda", "est": "Mamografía - Bilateral", "dep": "Mamografía", "suc": "Clínica de la Mujer", "mot": "Modificación Dra.Leti"}, {"fecha": "29 ago", "px": "López Sánchez Griselda Emilia", "est": "Gammagrama Renal con Filtración Dinámico - Estático", "dep": "Medicina Nuclear", "suc": "López Mateos", "mot": "Reingreso por solicitud paciente y agregar firma"}, {"fecha": "08 ago", "px": "Ventura Hernández Sthefano", "est": "RX Muñeca - 4P", "dep": "Radiología", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "17 ago", "px": "González Rubio Beckmann María Carolina", "est": "RX Columna Lumbar - 1P", "dep": "Radiología", "suc": "Acueducto", "mot": "Calidad"}, {"fecha": "21 ago", "px": "Bernal Ramiro Karen Mariel", "est": "RX Panorámica de Miembros Inferiores (Escanometría)", "dep": "Radiología", "suc": "Acueducto", "mot": "Calidad"}, {"fecha": "10 ago", "px": "Salcedo Ortega Brallan", "est": "RM 1.5T - Articulación - Rodilla", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Castañón Rodríguez J. Cruz", "est": "E - RM 3.0T Digital - Próstata Multiparamétrica [C]", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Ventura Hernández Sthefano", "est": "RM 3.0T Digital - Articulación - Muñeca o Mano", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Ramírez Mercado Ramona", "est": "RM 1.5T - Columna - Lumbar", "dep": "Resonancia Magnética", "suc": "Chamizal", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Salcido Chavira Alexis Adrián", "est": "RM 3.0T Digital - 2 Regiones", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Mantenimiento eléctrico"}, {"fecha": "12 ago", "px": "Aragón Solórzano Selene", "est": "E - RM 3.0T Digital de Mama", "dep": "Resonancia Magnética", "suc": "López Mateos", "mot": "Doctora solicita second look y actualiza interpretación"}, {"fecha": "15 ago", "px": "Mata Acosta Regina", "est": "RM 3.0T Digital - Cráneo con Foco en Hipófisis", "dep": "Resonancia Magnética", "suc": "Acueducto", "mot": "Calidad"}, {"fecha": "10 ago", "px": "Coronado Pelayo Pedro", "est": "Agudeza Visual", "dep": "Salud Visual", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "10 ago", "px": "Coronado Pelayo Pedro", "est": "Diagnóstico Ojo Seco", "dep": "Salud Visual", "suc": "López Mateos", "mot": "Mantenimiento eléctrico"}, {"fecha": "05 ago", "px": "Morales Hernández Manuel", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "12 ago", "px": "Cagide Y López María Consuelo", "est": "TAC - Angio de Aorta Torácica [C]", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Calidad"}, {"fecha": "21 ago", "px": "Dibildox Villalobos Leticia Ivette", "est": "TAC - Angio de Carótidas [C]", "dep": "Tomografía Axial Computada", "suc": "Acueducto", "mot": "Modificación Dra. Monse"}, {"fecha": "24 ago", "px": "Salazar Osegueda Lucía", "est": "TAC - Abdomen - Total [C]", "dep": "Tomografía Axial Computada", "suc": "López Mateos", "mot": "Solicitud de cambio de empresa"}];
 
 let exclDetailOpen=false;
 function renderExclusiones(){
   document.getElementById('tab-exclusiones').innerHTML =
     '<thead><tr><th>Fecha</th><th>Paciente</th><th>Estudio</th><th>Departamento</th><th>Sucursal</th><th>Motivo</th></tr></thead><tbody>'+
-    exclusionesJul.map(r=>`<tr><td class="d">${r.fecha}</td><td>${r.px}</td><td>${r.est}</td><td>${r.dep}</td><td>${r.suc}</td><td>${r.mot}</td></tr>`).join('')+
+    exclusionesAgo.map(r=>`<tr><td class="d">${r.fecha}</td><td>${r.px}</td><td>${r.est}</td><td>${r.dep}</td><td>${r.suc}</td><td>${r.mot}</td></tr>`).join('')+
     '</tbody>';
   const motCounts={};
-  exclusionesJul.forEach(r=>{ motCounts[r.mot]=(motCounts[r.mot]||0)+1; });
+  exclusionesAgo.forEach(r=>{ motCounts[r.mot]=(motCounts[r.mot]||0)+1; });
   const top = Object.entries(motCounts).sort((a,b)=>b[1]-a[1])[0];
   document.getElementById('excl-sub').textContent =
-    `${exclusionesJul.length} estudios marcados "Sí" en la columna Otro · distintos motivos`;
+    `${exclusionesAgo.length} estudios con Motivo justificado · agosto 2026`;
   document.getElementById('excl-nota').innerHTML =
-    `Estos <b>${exclusionesJul.length}</b> estudios salen de la columna "Otro" del reporte de julio 2026 marcada "Sí" (con su motivo en la columna siguiente) — `+
-    `no cuentan ni como cumplidos ni como incumplidos en el indicador. El motivo más frecuente es <b>${top[0]}</b> (${top[1]} casos).`;
+    `Estos <b>${exclusionesAgo.length}</b> estudios traen la columna "Motivo" llena en el reporte de agosto 2026 y su A—F es negativo (llegaron tarde) — `+
+    `por eso <b>cuentan como cumplimiento</b> del indicador, unidades y departamentos en vez de incumplimiento (regla vigente desde agosto). El motivo más frecuente es <b>${top[0]}</b> (${top[1]} casos).`;
 }
 function setExclDetail(open){
   exclDetailOpen=open;
