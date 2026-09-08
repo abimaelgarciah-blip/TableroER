@@ -838,6 +838,9 @@
   .sw{width:14px;height:12px;border-radius:3px;display:inline-block} .sw.line{height:0;border-top:3px solid;width:16px;border-radius:0}
   .tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;padding:8px 10px;border-radius:8px;opacity:0;transition:opacity .08s;z-index:50;max-width:250px;line-height:1.5;box-shadow:0 6px 20px rgba(15,36,56,.25)}
   .tip b{color:#8fe3ec}
+  .hover-rect{fill:transparent;cursor:crosshair}
+  .chart-guide{stroke:#00000028;stroke-width:1px;pointer-events:none;opacity:0}
+  svg circle.pt-hi{r:6px;stroke-width:2.5px;transition:r .1s ease}
   .takeaway{margin-top:16px;padding:14px 16px;border-left:3px solid var(--danger);background:#fdf1f3;border-radius:0 10px 10px 0;font-size:14px}
   .takeaway b{font-weight:700}
   footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;font-family:var(--mono)}
@@ -995,6 +998,24 @@
 &lt;script&gt;
 const SVGNS=&quot;http://www.w3.org/2000/svg&quot;;
 const el=(t,a={})=&gt;{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+/* Banda de hover ancha: evita tener que apuntar al círculo exacto — cualquier punto del
+   área de la gráfica resalta el valor más cercano en X (marcador + línea guía + tooltip). */
+function wireHover(svg,P,W,Ht,xOf,n,tipAt){
+  if(n&lt;1) return;
+  const guide=el('line',{class:'chart-guide',x1:P.l,x2:P.l,y1:P.t,y2:Ht-P.b});
+  svg.appendChild(guide);
+  const rect=el('rect',{class:'hover-rect',x:P.l,y:P.t,width:Math.max(0,W-P.l-P.r),height:Math.max(0,Ht-P.t-P.b)});
+  svg.appendChild(rect);
+  const nearestI=mx=&gt;{let bi=0,bd=Infinity;for(let i=0;i&lt;n;i++){const d=Math.abs(xOf(i)-mx);if(d&lt;bd){bd=d;bi=i;}}return bi;};
+  rect.addEventListener('mousemove',e=&gt;{
+    const box=svg.getBoundingClientRect(),mx=(e.clientX-box.left)*(W/box.width);
+    const i=nearestI(mx),gx=xOf(i);
+    guide.setAttribute('x1',gx);guide.setAttribute('x2',gx);guide.style.opacity=1;
+    svg.querySelectorAll('circle[data-i]').forEach(c=&gt;c.classList.toggle('pt-hi',+c.dataset.i===i));
+    showTip(tipAt(i),e.clientX,e.clientY);
+  });
+  rect.addEventListener('mouseleave',()=&gt;{hideTip();guide.style.opacity=0;svg.querySelectorAll('circle[data-i]').forEach(c=&gt;c.classList.remove('pt-hi'));});
+}
 const $=s=&gt;document.querySelector(s);
 const tip=$(&quot;#tip&quot;);
 function showTip(h,x,y){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=(x+14)+&quot;px&quot;;tip.style.top=(y+14)+&quot;px&quot;;}
@@ -1058,22 +1079,30 @@ function drawClash(){
   [['Radiología',D.rx],['Tomografía',D.tc]].forEach(([dep,arr])=&gt;{
     const pts=HR.map((h,i)=&gt;[x(i)+bw/2,y(arr[i])]);
     svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:COL[dep],'stroke-width':2.8,'stroke-linejoin':'round'}));
-    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3.2,fill:COL[dep]});
+    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3.2,fill:COL[dep],'data-i':i});
       c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${HR[i]}:00&lt;/b&gt; · ${dep}&lt;br&gt;vencen: &lt;b&gt;${arr[i].toFixed(dec)}&lt;/b&gt;${U}`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
   });
   {const arr=D.ecoEnt;const pts=HR.map((h,i)=&gt;[x(i)+bw/2,y(arr[i])]);
     svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:COL.Ultrasonido,'stroke-width':2.6,'stroke-dasharray':'7 4','stroke-linejoin':'round'}));
-    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3,fill:'#fff',stroke:COL.Ultrasonido,'stroke-width':1.8});
+    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3,fill:'#fff',stroke:COL.Ultrasonido,'stroke-width':1.8,'data-i':i});
       c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${HR[i]}:00&lt;/b&gt; · Ecos entrega&lt;br&gt;vencen: &lt;b&gt;${arr[i].toFixed(dec)}&lt;/b&gt;${U}`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
   }
   // ---- líneas de referencia fijas (Rx ULM / Rx UAC / TAC UAC) ----
   refsOn.forEach(key=&gt;{const r=REFDEF[key],arr=refArr(key);const pts=HR.map((h,i)=&gt;[x(i)+bw/2,y(arr[i])]);
     svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:r.col,'stroke-width':2.4,'stroke-dasharray':'2 3','stroke-linejoin':'round','stroke-opacity':.95}));
-    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:2.8,fill:r.col});
+    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:2.8,fill:r.col,'data-i':i});
       c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${HR[i]}:00&lt;/b&gt; · ${r.lbl}&lt;br&gt;prometidas: &lt;b&gt;${arr[i].toFixed(dec)}&lt;/b&gt;${U}`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
   });
   const la=el('text',{class:'axlbl',x:-(P.t+ih/2),y:14,transform:'rotate(-90)','text-anchor':'middle'});la.textContent='estudios '+(perday?'/día operativo':'/semana');svg.appendChild(la);
   svg.appendChild(el('line',{class:'axis',x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih}));
+  wireHover(svg,P,W,Ht,i=&gt;x(i)+bw/2,HR.length,i=&gt;{
+    let s=`&lt;b&gt;${HR[i]}:00&lt;/b&gt;&lt;br&gt;ecos: &lt;b&gt;${D.eco[i].toFixed(dec)}&lt;/b&gt;${U}`;
+    s+=`&lt;br&gt;Radiología vencen: &lt;b&gt;${D.rx[i].toFixed(dec)}&lt;/b&gt;${U}`;
+    s+=`&lt;br&gt;Tomografía vencen: &lt;b&gt;${D.tc[i].toFixed(dec)}&lt;/b&gt;${U}`;
+    s+=`&lt;br&gt;Ecos entrega vencen: &lt;b&gt;${D.ecoEnt[i].toFixed(dec)}&lt;/b&gt;${U}`;
+    refsOn.forEach(k=&gt;{s+=`&lt;br&gt;${REFDEF[k].lbl}: &lt;b&gt;${refArr(k)[i].toFixed(dec)}&lt;/b&gt;${U}`;});
+    return s;
+  });
   $(&quot;#clashChart&quot;).innerHTML='';$(&quot;#clashChart&quot;).appendChild(svg);
   $(&quot;#clashLgd&quot;).innerHTML=`&lt;span&gt;&lt;i class=&quot;sw&quot; style=&quot;background:${COL.Ultrasonido};opacity:.5&quot;&gt;&lt;/i&gt;Ecos agendados / realización (barras)&lt;/span&gt;`+
     `&lt;span&gt;&lt;i class=&quot;sw line&quot; style=&quot;border-top-style:dashed;border-color:${COL.Ultrasonido}&quot;&gt;&lt;/i&gt;Ecos entrega · Agenda +2h/4h (punteada)&lt;/span&gt;`+
@@ -1235,9 +1264,15 @@ function drawUni(){
       if(lf) svg.appendChild(el('line',{x1:x(0),y1:y(lf.y0),x2:x(fitEnd),y2:y(lf.y1),stroke:col,'stroke-width':1.4,'stroke-dasharray':'6 4','stroke-opacity':.5}));}
     const pts=arr.map((v,i)=&gt;[x(i),y(v)]);
     svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:col,'stroke-width':d==='Total'?2.8:1.9,'stroke-linejoin':'round','stroke-opacity':d==='Total'?1:.92}));
-    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:d==='Total'?2.6:2,fill:col});
+    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:d==='Total'?2.6:2,fill:col,'data-i':i});
       const lbl=gran==='m'?xs[i]+((lo+i)===DATA5.partialIdx&amp;&amp;DATA5.partial?' (parcial)':''):('Sem '+xs[i].slice(6)+' · '+DATA5.weekStart[xs[i]]);
       c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${lbl}&lt;/b&gt;&lt;br&gt;${d}: ${arr[i]} estudios`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
+  });
+  wireHover(svg,P,W,Ht,x,n,i=&gt;{
+    const lbl=gran==='m'?xs[i]+((lo+i)===DATA5.partialIdx&amp;&amp;DATA5.partial?' (parcial)':''):('Sem '+xs[i].slice(6)+' · '+DATA5.weekStart[xs[i]]);
+    let s=`&lt;b&gt;${lbl}&lt;/b&gt;`;
+    active.forEach(d=&gt;{s+=`&lt;br&gt;${d}: ${getArr(d)[i]} estudios`;});
+    return s;
   });
   $(&quot;#uniChart&quot;).innerHTML='';$(&quot;#uniChart&quot;).appendChild(svg);
   $(&quot;#uniLgd&quot;).innerHTML=`&lt;span style=&quot;color:var(--muted)&quot;&gt;Línea sólida = estudios por ${gran==='m'?'mes':'semana'} · punteada = tendencia${gran==='m'&amp;&amp;DATA5.partial?' (incluye julio 2026 completo)':''}.&lt;/span&gt;`;
@@ -1284,11 +1319,14 @@ function drawInc(){
     const t=el('text',{class:'tick',x:x(i)+bw/2,y:Ht-P.b+18,'text-anchor':'middle'});t.textContent=h;svg.appendChild(t);});
   const pts=HR.map((h,i)=&gt;[x(i)+bw/2,yR(I.latePct[i])]);
   svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:'var(--danger)','stroke-width':2.8,'stroke-linejoin':'round'}));
-  pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3.6,fill:'var(--danger)'});
+  pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:3.6,fill:'var(--danger)','data-i':i});
     c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${HR[i]}:00&lt;/b&gt;&lt;br&gt;incumplimiento: &lt;b&gt;${I.latePct[i].toFixed(1)}%&lt;/b&gt;`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
   for(let g=0;g&lt;=maxR+1e-9;g+=sR){const yy=yR(g);const t=el('text',{class:'tick',x:W-P.r+8,y:yy+4,'text-anchor':'start',fill:'var(--danger)'});t.textContent=g+'%';svg.appendChild(t);}
   const la=el('text',{class:'axlbl',x:-(P.t+ih/2),y:14,transform:'rotate(-90)','text-anchor':'middle'});la.textContent='TAC+Rx agendados /sem';svg.appendChild(la);
   svg.appendChild(el('line',{class:'axis',x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih}));
+  wireHover(svg,P,W,Ht,i=&gt;x(i)+bw/2,HR.length,i=&gt;
+    `&lt;b&gt;${HR[i]}:00&lt;/b&gt;&lt;br&gt;TAC+Rx: ${I.volPerWeek[i].toFixed(1)}/sem&lt;br&gt;tarde: ${I.lateN[i]} de ${I.totN[i]}&lt;br&gt;incumplimiento: &lt;b&gt;${I.latePct[i].toFixed(1)}%&lt;/b&gt;`
+  );
   $(&quot;#incChart&quot;).innerHTML='';$(&quot;#incChart&quot;).appendChild(svg);
   $(&quot;#incLgd&quot;).innerHTML=`&lt;span&gt;&lt;i class=&quot;sw&quot; style=&quot;background:#5c62b0;opacity:.4&quot;&gt;&lt;/i&gt;Volumen TAC+Rx agendado (barras)&lt;/span&gt;&lt;span&gt;&lt;i class=&quot;sw line&quot; style=&quot;border-color:var(--danger)&quot;&gt;&lt;/i&gt;% entregado tarde (línea)&lt;/span&gt;`;
   const s=I.stat;
