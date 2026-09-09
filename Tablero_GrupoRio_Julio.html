@@ -1313,12 +1313,13 @@ function drawUni(){
     const momUp=momPct!=null&amp;&amp;momPct&gt;=3,momDown=momPct!=null&amp;&amp;momPct&lt;=-3;
     const momPartial=gran==='m'&amp;&amp;DATA5.partial&amp;&amp;(lo+nD-1)===DATA5.partialIdx;
     const momUnit=gran==='m'?'mes':'semana';
-    const momHtml=momPct==null?'':`&lt;p class=&quot;d&quot; style=&quot;margin-top:4px&quot;&gt;vs ${momUnit} anterior: &lt;b style=&quot;color:${momUp?'var(--ok)':momDown?'var(--danger)':'inherit'}&quot;&gt;${momPct&gt;=0?'+':''}${momPct.toFixed(0)}%&lt;/b&gt; (${prevV.toFixed(0)}→${curV.toFixed(0)})${momPartial?' &lt;i&gt;parcial&lt;/i&gt;':''}&lt;/p&gt;`;
+    const momArrow=momUp?'▲':momDown?'▼':'≈';
+    const momHtml=momPct==null?'':`&lt;p class=&quot;d&quot; style=&quot;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)&quot;&gt;vs ${momUnit} anterior &lt;span style=&quot;color:var(--faint)&quot;&gt;(último dato)&lt;/span&gt;: &lt;b style=&quot;color:${momUp?'var(--ok)':momDown?'var(--danger)':'inherit'}&quot;&gt;${momArrow} ${momPct&gt;=0?'+':''}${momPct.toFixed(0)}%&lt;/b&gt; (${prevV.toFixed(0)}→${curV.toFixed(0)})${momPartial?' &lt;i&gt;parcial&lt;/i&gt;':''}&lt;/p&gt;`;
     return `&lt;div class=&quot;card&quot;&gt;&lt;span style=&quot;position:absolute;left:0;top:0;bottom:0;width:3px;background:${col}&quot;&gt;&lt;/span&gt;
       &lt;p class=&quot;k&quot;&gt;${d}&lt;/p&gt;&lt;div class=&quot;v&quot; style=&quot;color:${col}&quot;&gt;${t.pct&gt;=0?'+':''}${t.pct.toFixed(0)}%&lt;/div&gt;
-      &lt;p class=&quot;d&quot;&gt;${t.b&gt;=0?'+':''}${t.b.toFixed(1)}/${gran==='m'?'mes':'sem'} · ${t.y0.toFixed(0)}→${t.y1.toFixed(0)}&lt;/p&gt;
-      ${momHtml}
-      &lt;span class=&quot;tag ${up?'up':down?'down':''}&quot;&gt;${up?'▲ crece':down?'▼ baja':'≈ estable'}&lt;/span&gt;&lt;/div&gt;`;}).join('');
+      &lt;span class=&quot;tag ${up?'up':down?'down':''}&quot;&gt;${up?'▲ crece':down?'▼ baja':'≈ estable'} en el periodo&lt;/span&gt;
+      &lt;p class=&quot;d&quot; style=&quot;margin-top:8px&quot;&gt;${t.b&gt;=0?'+':''}${t.b.toFixed(1)}/${gran==='m'?'mes':'sem'} · ${t.y0.toFixed(0)}→${t.y1.toFixed(0)} · tendencia del rango&lt;/p&gt;
+      ${momHtml}&lt;/div&gt;`;}).join('');
   // takeaway
   const RLBL={all:'jul 2024 – jul 2026',2024:'2024 (jul–dic)','2025':'2025','2026':'2026 (ene–jul)','6m':'últimos 6 '+(gran==='m'?'meses':'~6 meses')};
   const tot=trendOf('Total');
@@ -2322,12 +2323,13 @@ function drawUni(){
     const momUp=momPct!=null&amp;&amp;momPct&gt;=3,momDown=momPct!=null&amp;&amp;momPct&lt;=-3;
     const momPartial=gran==='m'&amp;&amp;DATA5.partial&amp;&amp;(lo+nD-1)===DATA5.partialIdx;
     const momUnit=gran==='m'?'mes':'semana';
-    const momHtml=momPct==null?'':`&lt;p class=&quot;d&quot; style=&quot;margin-top:4px&quot;&gt;vs ${momUnit} anterior: &lt;b style=&quot;color:${momUp?'var(--ok)':momDown?'var(--danger)':'inherit'}&quot;&gt;${momPct&gt;=0?'+':''}${momPct.toFixed(0)}%&lt;/b&gt; (${prevV.toFixed(0)}→${curV.toFixed(0)})${momPartial?' &lt;i&gt;parcial&lt;/i&gt;':''}&lt;/p&gt;`;
+    const momArrow=momUp?'▲':momDown?'▼':'≈';
+    const momHtml=momPct==null?'':`&lt;p class=&quot;d&quot; style=&quot;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)&quot;&gt;vs ${momUnit} anterior &lt;span style=&quot;color:var(--faint)&quot;&gt;(último dato)&lt;/span&gt;: &lt;b style=&quot;color:${momUp?'var(--ok)':momDown?'var(--danger)':'inherit'}&quot;&gt;${momArrow} ${momPct&gt;=0?'+':''}${momPct.toFixed(0)}%&lt;/b&gt; (${prevV.toFixed(0)}→${curV.toFixed(0)})${momPartial?' &lt;i&gt;parcial&lt;/i&gt;':''}&lt;/p&gt;`;
     return `&lt;div class=&quot;card&quot;&gt;&lt;span style=&quot;position:absolute;left:0;top:0;bottom:0;width:3px;background:${col}&quot;&gt;&lt;/span&gt;
       &lt;p class=&quot;k&quot;&gt;${d}&lt;/p&gt;&lt;div class=&quot;v&quot; style=&quot;color:${col}&quot;&gt;${t.pct&gt;=0?'+':''}${t.pct.toFixed(0)}%&lt;/div&gt;
-      &lt;p class=&quot;d&quot;&gt;${t.b&gt;=0?'+':''}${t.b.toFixed(1)}/${gran==='m'?'mes':'sem'} · ${t.y0.toFixed(0)}→${t.y1.toFixed(0)}&lt;/p&gt;
-      ${momHtml}
-      &lt;span class=&quot;tag ${up?'up':down?'down':''}&quot;&gt;${up?'▲ crece':down?'▼ baja':'≈ estable'}&lt;/span&gt;&lt;/div&gt;`;}).join('');
+      &lt;span class=&quot;tag ${up?'up':down?'down':''}&quot;&gt;${up?'▲ crece':down?'▼ baja':'≈ estable'} en el periodo&lt;/span&gt;
+      &lt;p class=&quot;d&quot; style=&quot;margin-top:8px&quot;&gt;${t.b&gt;=0?'+':''}${t.b.toFixed(1)}/${gran==='m'?'mes':'sem'} · ${t.y0.toFixed(0)}→${t.y1.toFixed(0)} · tendencia del rango&lt;/p&gt;
+      ${momHtml}&lt;/div&gt;`;}).join('');
   // takeaway
   const RLBL={all:'jul 2024 – jul 2026',2024:'2024 (jul–dic)','2025':'2025','2026':'2026 (ene–jul)','6m':'últimos 6 '+(gran==='m'?'meses':'~6 meses')};
   const tot=trendOf('Total');
