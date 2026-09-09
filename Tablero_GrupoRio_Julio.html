@@ -1621,12 +1621,6 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         </div>
 
         <div class="card">
-          <h3>Transcriptores con mayor producción</h3>
-          <p class="csub">Top 15 de la semana · el resto agrupado en “Otros”</p>
-          <div class="bars" id="bars-transcriptores"></div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
           <div class="card-head">
             <div>
               <h3>Estudios entregados por usuario</h3>
@@ -2843,14 +2837,6 @@ const servicios = [
   {name:'Electromiografía y P.E.',v:7},
   {name:'Servicio Dental',v:6}
 ];
-const transcriptores = [
-  {name:'davidoo',v:150},{name:'josesa',v:99},{name:'reneag',v:94},
-  {name:'gadielvp',v:85},{name:'christopherml',v:74},{name:'gracielacv',v:72},
-  {name:'davidgf',v:71},{name:'humbertogp1',v:69},{name:'luissm',v:68},
-  {name:'diegoda',v:63},{name:'lauragg',v:63},{name:'monicaac',v:62},
-  {name:'Otros',v:766}
-];
-
 const chequeosInternistas = [
   {name:'Toriz',v:82},{name:'Santoyo',v:72},{name:'Castellón',v:40},
   {name:'Blanca',v:17},{name:'Oropeza',v:11},{name:'Carolina',v:1}
@@ -4697,7 +4683,6 @@ function renderAll(){
   initRad();
   renderDist();
   initServicios();
-  barChart(document.getElementById('bars-transcriptores'), transcriptores, 'var(--c-people)');
   initTrans();
   renderEfect();
   renderIncColab();
