@@ -773,6 +773,12 @@
           <div id="proc-cmp-chart"></div>
           <div class="legend" id="proc-cmp-legend"></div>
           <div class="line-note" style="margin-top:12px" id="proc-cmp-nota"></div>
+
+          <p class="csub" style="margin-top:20px">Tiempo de espera en PACS (Alta [G] → listo para interpretar) por unidad · agosto 2026</p>
+          <div style="margin:6px 0 14px" id="pacs-unit-bar"></div>
+          <div id="pacs-wait-chart"></div>
+          <div class="legend" id="pacs-wait-legend"></div>
+          <div class="line-note" style="margin-top:12px" id="pacs-wait-nota"></div>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Volumen de estudios por unidad, departamento y total</div>
@@ -3178,6 +3184,8 @@ function renderDeptos(){
   document.getElementById('proc-cmp-nota').innerHTML =
     `De julio a agosto, <b>${up[0]}</b> es el que más se alarga (${up[1]}h → ${up[2]}h, ${up[3]>=0?'+':''}${up[3].toFixed(0)}%) y `+
     `<b>${down[0]}</b> el que más mejora (${down[1]}h → ${down[2]}h, ${down[3].toFixed(0)}%). El resto se mueve poco mes a mes.`;
+
+  initPacsWait();
 }
 
 function deptMatrix(mode){
@@ -3259,6 +3267,79 @@ function renderProcDentro(el, data){
   const segsEl=el.querySelectorAll('.sbar-seg');
   if(reduce){ segsEl.forEach(s=>s.style.width=s.dataset.w+'%'); }
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ segsEl.forEach(s=>s.style.width=s.dataset.w+'%'); })); }
+}
+
+/* ===== Tiempo de espera en PACS (Alta [G] → Study Unread On) por unidad =====
+   Fuente: log PACS "Tiempo disponibilidad para interpretar" (agosto 2026) +
+   reporte general de agosto, cruzados por los primeros 8-9 dígitos de
+   Study Accession # contra IdCita (3,616 de 4,630 estudios, 78%). Mismas
+   exclusiones que el resto de esta tarjeta (Medicina Preventiva, protocolos,
+   Cardiología solo Electrocardiograma) + filtro de calidad -1h a 24h
+   (descarta 90 renglones con reloj desfasado). Minutos, en vez de horas,
+   porque el trámite es mucho más corto que las otras etapas. Solo se
+   muestran combinaciones unidad+departamento con al menos 5 estudios. */
+const PACS_DEPT_ORDER = ['Ecosonografía','Radiología','Resonancia Magnética','Tomografía Axial Computada','Densitometría','Mamografía','Cardiología'];
+const PACS_UNITS = ['López Mateos','Acueducto','Clínica de la Mujer','Chamizal','Medicina Preventiva','Guadalupe'];
+const PACS_BY_UNIT = {
+  'López Mateos': {'Ecosonografía':{n:462,mean:9.9,median:3.9},'Radiología':{n:461,mean:11.6,median:8.2},'Resonancia Magnética':{n:394,mean:59.8,median:13.3},'Tomografía Axial Computada':{n:282,mean:24.1,median:13.7},'Densitometría':{n:90,mean:35.4,median:18.6},'Mamografía':{n:144,mean:-11.5,median:-10.5},'Cardiología':{n:12,mean:116.4,median:3.9}},
+  'Acueducto': {'Ecosonografía':{n:158,mean:12.0,median:3.6},'Radiología':{n:331,mean:20.1,median:10.6},'Resonancia Magnética':{n:254,mean:51.1,median:13.5},'Tomografía Axial Computada':{n:95,mean:32.2,median:13.8},'Mamografía':{n:1,mean:374.3,median:374.3}},
+  'Clínica de la Mujer': {'Ecosonografía':{n:243,mean:14.9,median:4.9},'Radiología':{n:8,mean:14.1,median:3.0},'Densitometría':{n:81,mean:25.1,median:13.2},'Mamografía':{n:156,mean:-6.3,median:-7.2}},
+  'Chamizal': {'Ecosonografía':{n:56,mean:-0.4,median:1.6},'Resonancia Magnética':{n:217,mean:52.3,median:9.7}},
+  'Medicina Preventiva': {'Ecosonografía':{n:4,mean:19.5,median:22.3},'Radiología':{n:26,mean:32.9,median:7.6},'Resonancia Magnética':{n:2,mean:59.3,median:59.3},'Cardiología':{n:11,mean:43.7,median:43.8}},
+  'Guadalupe': {'Ecosonografía':{n:38,mean:-1.7,median:0.4}}
+};
+const PACS_GLOBAL = {
+  'Ecosonografía':{n:961,mean:10.5,median:3.7}, 'Radiología':{n:826,mean:15.7,median:9.2},
+  'Resonancia Magnética':{n:867,mean:55.4,median:12.6}, 'Tomografía Axial Computada':{n:377,mean:26.1,median:13.8},
+  'Densitometría':{n:171,mean:30.5,median:15.9}, 'Mamografía':{n:301,mean:-7.5,median:-8.7},
+  'Cardiología':{n:23,mean:81.7,median:33.4}
+};
+const PACS_MIN_N = 5;
+let pacsUnit = PACS_UNITS[0];
+
+function initPacsWait(){
+  document.getElementById('pacs-unit-bar').innerHTML =
+    '<select class="unit-select" id="pacs-unit-select" aria-label="Unidad">'+
+    PACS_UNITS.map(u=>`<option value="${u}">${u} · ${fmt(Object.values(PACS_BY_UNIT[u]).reduce((a,d)=>a+d.n,0))} estudios</option>`).join('')+
+    '</select>';
+  document.getElementById('pacs-unit-select').addEventListener('change', e=>{ pacsUnit=e.target.value; renderPacsWait(); });
+  renderPacsWait();
+}
+
+function renderPacsWait(){
+  const byDept = PACS_BY_UNIT[pacsUnit] || {};
+  const cats = PACS_DEPT_ORDER.filter(d=>byDept[d] && byDept[d].n>=PACS_MIN_N);
+  const series = [
+    {name:'Media ('+pacsUnit+')', color:'var(--c-interp)', vals: cats.map(d=>byDept[d].mean)},
+    {name:'Mediana ('+pacsUnit+')', color:'var(--c-serv)', vals: cats.map(d=>byDept[d].median)},
+    {name:'Media de todos los registros', color:'var(--muted)', vals: cats.map(d=>PACS_GLOBAL[d].mean)}
+  ];
+  if(!cats.length){
+    document.getElementById('pacs-wait-chart').innerHTML = '';
+    document.getElementById('pacs-wait-legend').innerHTML = '';
+    document.getElementById('pacs-wait-nota').innerHTML = `<b>${pacsUnit}</b> no tiene suficientes estudios cruzados (mínimo ${PACS_MIN_N} por departamento) para mostrar esta vista.`;
+    return;
+  }
+  groupBarChart(document.getElementById('pacs-wait-chart'), cats, series, ' min');
+  document.getElementById('pacs-wait-legend').innerHTML = trLegend(series);
+
+  const rows = cats.map(d=>({name:d, ...byDept[d], gMean:PACS_GLOBAL[d].mean, gMedian:PACS_GLOBAL[d].median}));
+  const totalN = Object.values(byDept).reduce((a,d)=>a+d.n,0);
+  const negNote = rows.some(r=>r.median<0)
+    ? ` Los valores negativos (ej. Mamografía) no son un error: la imagen llega a PACS antes de que se registre la Fecha Alta [G] administrativa — es un orden de proceso distinto, no una espera real.`
+    : '';
+  const rowTxt = r=>`<b>${r.name}</b> (${r.mean} min, mediana ${r.median} min, vs. ${r.gMean} min de media global)`;
+  let cmpTxt;
+  if(rows.length<2){
+    cmpTxt = `Único departamento con muestra suficiente: ${rowTxt(rows[0])}.`;
+  } else {
+    const slower = rows.slice().sort((a,b)=>b.mean-a.mean)[0];
+    const posRows = rows.filter(r=>r.mean>=0);
+    const faster = (posRows.length?posRows:rows).slice().sort((a,b)=>a.mean-b.mean)[0];
+    cmpTxt = `El departamento con mayor espera promedio es ${rowTxt(slower)} y con menor espera ${rowTxt(faster)}.`;
+  }
+  document.getElementById('pacs-wait-nota').innerHTML =
+    `<b>${pacsUnit}</b> · ${fmt(totalN)} estudios cruzados en agosto. ${cmpTxt}`+negNote;
 }
 
 let incMode='mes', incUnit='Todas', incPer='ALL', incDep='ALL';
