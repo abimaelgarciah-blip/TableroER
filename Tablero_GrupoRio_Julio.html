@@ -2503,17 +2503,143 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
       <h3>Proyecto 1 · Agente especializado en mama</h3>
       <p class="csub">En desarrollo</p>
       <p style="margin-top:10px;line-height:1.55">Se obtuvieron interpretaciones de cada BI-RADS (1–6); se está trabajando en el prompt para lanzarlo en UCM.</p>
+      <details style="margin-top:12px">
+        <summary style="cursor:pointer;font-size:13px;font-weight:600;color:var(--c-people)">Ver ejemplo de salida del asistente</summary>
+        <div class="line-note" style="margin-top:12px;line-height:1.65">
+          <p style="font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:0 0 2px">Asistente Mama v1</p>
+          <p style="font-size:11.5px;font-style:italic;color:var(--muted);margin:0 0 12px">Razonamiento completado en 1 paso</p>
+          <p style="font-weight:700;color:var(--ink);margin:0 0 12px">REVISIÓN DE INFORME — BI-RADS 2</p>
+          <p style="margin:0 0 10px">✅ Lateralidad: sin inconsistencias. La mastectomía izquierda, el estudio de la mama derecha y los hallazgos cutáneos de la axila derecha mantienen una lateralidad concordante en resultados y conclusiones.</p>
+          <p style="margin:0 0 10px">✅ Medidas: sin inconsistencias. Los dos hallazgos axilares miden 6 mm y 7 mm; no se aportan medidas discordantes en otras secciones.</p>
+          <p style="margin:0 0 10px">✅ Conteo de nódulos: sin inconsistencias. Se describen dos imágenes nodulares en la región axilar derecha y ambas quedan recogidas conjuntamente en la conclusión.</p>
+          <p style="margin:0 0 10px">✅ Relación hallazgos–BI-RADS: sin inconsistencias. Los probables quistes de inclusión epidermoide son circunscritos, están en contacto con la piel y permanecen sin cambios respecto a enero de 2025. No se describen hallazgos sospechosos. La categoría BI-RADS 2 y el seguimiento anual resultan concordantes con el texto.</p>
+          <p style="margin:0 0 10px">⚠️ 1. Ortografía y terminología (severidad: baja)<br>Ubicación: Métodos y materiales<br>Cita: "todos los ultrasonidos de mama son realizados interpretados por radiólogos certificados"<br>Problema: falta una conjunción entre "realizados" e "interpretados".<br>Sugerencia: revisar la redacción para indicar que los estudios son realizados e interpretados por radiólogos certificados.</p>
+          <p style="margin:0 0 10px">⚠️ 2. Ortografía y terminología (severidad: baja)<br>Ubicación: Resultados de mastografía<br>Cita: "antecedente quirurgico conocido" y "ganglios de caracteristicas conservadas"<br>Problema: faltan tildes.<br>Sugerencia: revisar quirúrgico y características.</p>
+          <p style="margin:0 0 10px">⚠️ 3. Ortografía y terminología (severidad: baja)<br>Ubicación: Complemento sonográfico, hemitórax izquierdo<br>Cita: "sin evidencia lesiones focales asociadas antecedente mastectomía"<br>Problema: faltan preposiciones y artículos, lo que reduce la claridad de la frase.<br>Sugerencia: revisar la construcción como "sin evidencia de lesiones focales asociadas al antecedente de mastectomía".</p>
+          <p style="margin:0 0 10px">⚠️ 4. Ortografía y terminología (severidad: baja)<br>Ubicación: Complemento sonográfico, mama derecha<br>Cita: "por areas alternantes"<br>Problema: falta la tilde en "áreas".<br>Sugerencia: escribir por áreas alternantes.</p>
+          <p style="margin:0 0 10px">⚠️ 5. Ortografía y terminología (severidad: baja)<br>Ubicación: Conclusiones<br>Cita: "categoría BI RADS 2"<br>Problema: la grafía estandarizada del sistema incluye guion.<br>Sugerencia: homologar como BI-RADS 2 en todo el informe.</p>
+          <p style="margin:0 0 12px">✅ Categoría general: sin inconsistencias. El antecedente de mastectomía izquierda, la ausencia de hallazgos sospechosos en la mama derecha, los hallazgos cutáneos axilares benignos y la recomendación de control a 12 meses son internamente congruentes.</p>
+          <p style="font-weight:600;color:var(--ink);margin:0 0 8px">RESUMEN: 5 hallazgos (0 alta, 0 media, 5 baja). 5 de 6 categorías sin observaciones.</p>
+          <p style="margin:0">Principales mejoras: se identificaron únicamente detalles de ortografía, sintaxis y estandarización terminológica. No se detectaron discrepancias que modifiquen la categoría BI-RADS, la lateralidad, el número de hallazgos ni la conducta recomendada.</p>
+        </div>
+      </details>
     </div>
     <div class="card">
       <h3>Proyecto 2 · Entregas digitales de chequeos</h3>
       <p class="csub">En desarrollo</p>
       <p style="margin-top:10px;line-height:1.55">Se están insertando las casillas de código en los espacios destinados.</p>
-      <p class="line-note" style="margin-top:10px" id="proy2-img-nota">Imagen de ejemplo pendiente de subir.</p>
+      <p class="line-note" style="margin-top:10px" id="proy2-img-nota">Vista previa estática del frontend (demo, sin datos reales).</p>
+      <div style="margin-top:12px;border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <iframe title="RIO HealthScape · Preview estático v0.1.1" srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+  &lt;title&gt;RIO HealthScape Preview v0.1.1 | Servicios de Medicina Preventiva&lt;/title&gt;
+  &lt;style&gt;
+    :root {
+      --rio-blue:#0370B8; --rio-light-blue:#1FB4E9; --rio-lavender:#96A5D3;
+      --rio-red:#E52627; --rio-orange:#F39200; --rio-teal:#00A19A;
+      --rio-deep-blue:#005188; --rio-green-soft:#A1C861;
+      --theme-primary:#005188; --theme-secondary:#0370B8; --theme-accent:#1FB4E9; --theme-background:#F2F8FC;
+      --status-expected:#00A19A; --status-watch:#F39200; --status-relevant:#005188; --status-priority:#E52627;
+      --text-main:#172033; --text-muted:#5E6B7A; --border-soft:#DDE8F0;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:&quot;Avenir Next&quot;,Avenir,&quot;Segoe UI&quot;,Arial,sans-serif;background:var(--theme-background);color:var(--text-main)}
+    .app{min-height:100vh;background:radial-gradient(circle at top right,rgba(31,180,233,.16),transparent 34%),linear-gradient(180deg,#fff 0%,var(--theme-background) 100%)}
+    .header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 32px;background:#fff;border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:20}
+    .brand-name{font-size:15px;font-weight:800;color:var(--theme-primary)} .brand-parent{font-size:12px;color:var(--text-muted)}
+    .patient-bar{display:flex;align-items:center;gap:16px;padding:10px 16px;border:1px solid var(--border-soft);border-radius:16px;background:#fff}
+    .patient-name{font-weight:800}.patient-meta{font-size:12px;color:var(--text-muted)}
+    .badge{display:inline-flex;padding:6px 10px;border-radius:999px;color:#fff;font-size:11px;font-weight:800;background:var(--theme-primary)}
+    .btn{border:1px solid var(--border-soft);background:#fff;border-radius:12px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer}.btn:hover{border-color:var(--theme-primary);color:var(--theme-primary)}.btn.active{background:var(--theme-primary);border-color:var(--theme-primary);color:#fff}.mode-pill{display:none;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;background:rgba(0,81,136,.08);color:var(--theme-primary);font-size:12px;font-weight:900;white-space:nowrap}.mode-pill.active{display:inline-flex}.mode-pill:before{content:&quot;&quot;;width:8px;height:8px;border-radius:999px;background:var(--theme-primary)}
+    .main{display:grid;grid-template-columns:1fr 320px;gap:24px;padding:24px 32px 32px}.main.presentation{grid-template-columns:1fr}.main.presentation .doctor{display:none}
+    .canvas{display:flex;flex-direction:column;gap:20px;min-width:0}.section{background:rgba(255,255,255,.94);border:1px solid var(--border-soft);border-radius:24px;padding:24px;box-shadow:0 18px 50px rgba(0,81,136,.07)}
+    .hero{min-height:360px;display:grid;grid-template-columns:1.35fr .65fr;overflow:hidden;padding:0}.hero-content{padding:40px;display:flex;flex-direction:column;justify-content:center;gap:18px}
+    .eyebrow{font-size:12px;font-weight:900;color:var(--theme-secondary);text-transform:uppercase;letter-spacing:.12em}.title{margin:0;font-size:clamp(32px,4vw,52px);line-height:1.04;letter-spacing:-.04em}.title span{color:var(--theme-primary)}
+    .copy{margin:0;font-size:17px;line-height:1.55;color:var(--text-muted);max-width:780px}
+    .meta-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.meta-card{border:1px solid var(--border-soft);border-radius:16px;padding:14px;background:#fff}.meta-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}.meta-value{font-size:15px;font-weight:800}
+    .hero-visual{background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0)),linear-gradient(160deg,var(--theme-primary),var(--theme-secondary));color:#fff;padding:32px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.visual-label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900}.visual-title{font-size:26px;line-height:1.15;font-weight:900}.visual-note{font-size:13px;line-height:1.45;opacity:.92;margin-top:12px}
+    .journey{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:18px}.step{border:1px solid var(--border-soft);border-radius:16px;padding:16px;background:#fff;min-height:112px;display:flex;flex-direction:column;justify-content:space-between}.step.current{border-color:var(--theme-primary);box-shadow:inset 0 0 0 1px var(--theme-primary)}.step.completed{border-color:rgba(0,161,154,.28)}.step-num{width:28px;height:28px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:900;background:var(--theme-primary)}.step-label{margin-top:14px;font-weight:800;font-size:14px}.step-status{font-size:11px;color:var(--text-muted);margin-top:6px}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:20px}.finding-group{border:1px solid var(--border-soft);background:#fff;border-radius:20px;padding:18px;min-height:210px}.finding-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.finding-title{font-size:15px;font-weight:900;display:flex;gap:8px;align-items:center}.dot{width:10px;height:10px;border-radius:999px;display:inline-block}.expected{background:var(--status-expected)}.watch{background:var(--status-watch)}.relevant{background:var(--status-relevant)}.priority{background:var(--status-priority)}.counter{font-size:12px;font-weight:900;border-radius:999px;padding:5px 9px;background:#F2F7FA}.finding-card{border-radius:14px;border:1px solid #E7EFF5;padding:12px;background:#FAFDFE;margin-bottom:10px}.finding-card-title{font-size:13px;font-weight:900;margin-bottom:4px}.finding-card-copy{font-size:12px;color:var(--text-muted);line-height:1.42;margin:0}
+    .doctor{display:flex;flex-direction:column;gap:16px}.panel{background:#fff;border:1px solid var(--border-soft);border-radius:20px;padding:18px;box-shadow:0 12px 36px rgba(0,81,136,.06)}.panel-title{font-size:13px;font-weight:900;color:var(--theme-primary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}.panel-copy{font-size:13px;color:var(--text-muted);line-height:1.5;margin:0}
+    .focus{position:fixed;inset:0;background:rgba(255,255,255,.96);z-index:50;display:none;align-items:center;justify-content:center;padding:32px;text-align:center}.focus.active{display:flex}.focus-box{max-width:560px;border:1px solid var(--border-soft);border-radius:28px;background:#fff;padding:36px;box-shadow:0 24px 70px rgba(0,81,136,.14)}.focus h2{margin:0 0 12px;color:var(--theme-primary);font-size:28px}.focus p{margin:0 0 22px;color:var(--text-muted);line-height:1.55}
+    .privacy .sensitive{filter:blur(6px);user-select:none}
+    @media(max-width:980px){.header{flex-direction:column;align-items:stretch}.main{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr}.doctor{display:none}}
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id=&quot;app&quot; class=&quot;app&quot;&gt;
+    &lt;header class=&quot;header&quot;&gt;
+      &lt;div&gt;&lt;div class=&quot;brand-name&quot;&gt;Servicios de Medicina Preventiva&lt;/div&gt;&lt;div class=&quot;brand-parent&quot;&gt;Grupo RIO&lt;/div&gt;&lt;/div&gt;
+      &lt;div class=&quot;patient-bar&quot;&gt;&lt;div&gt;&lt;div class=&quot;patient-name sensitive&quot;&gt;Paciente Demo&lt;/div&gt;&lt;div class=&quot;patient-meta&quot;&gt;52 años · Hombre · 50 años en adelante&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;badge&quot;&gt;Revisión General&lt;/div&gt;&lt;/div&gt;
+      &lt;div&gt;&lt;button class=&quot;btn&quot; onclick=&quot;togglePrivacy()&quot;&gt;Privacidad&lt;/button&gt; &lt;button id=&quot;presentationBtn&quot; class=&quot;btn&quot; onclick=&quot;togglePresentation()&quot;&gt;Modo presentación&lt;/button&gt;&lt;span id=&quot;presentationPill&quot; class=&quot;mode-pill&quot;&gt;Modo presentación activo&lt;/span&gt; &lt;button class=&quot;btn&quot; onclick=&quot;toggleFocus()&quot;&gt;Foco humano&lt;/button&gt;&lt;/div&gt;
+    &lt;/header&gt;
+    &lt;main id=&quot;main&quot; class=&quot;main&quot;&gt;
+      &lt;section class=&quot;canvas&quot;&gt;
+        &lt;section class=&quot;section hero&quot;&gt;
+          &lt;div class=&quot;hero-content&quot;&gt;
+            &lt;div class=&quot;eyebrow&quot;&gt;Servicios de Medicina Preventiva&lt;/div&gt;
+            &lt;h1 class=&quot;title&quot;&gt;&lt;span&gt;Revisión General&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;sensitive&quot;&gt;Paciente Demo&lt;/span&gt;&lt;/h1&gt;
+            &lt;p class=&quot;copy&quot;&gt;Esta revisión integra laboratorio, imagen, evaluaciones médicas y body scan por resonancia magnética 3.0T. Tu médico te guiará en la interpretación de los hallazgos y en los próximos pasos recomendados.&lt;/p&gt;
+            &lt;div class=&quot;meta-grid&quot;&gt;
+              &lt;div class=&quot;meta-card&quot;&gt;&lt;div class=&quot;meta-label&quot;&gt;Fecha del chequeo&lt;/div&gt;&lt;div class=&quot;meta-value&quot;&gt;28/04/2026&lt;/div&gt;&lt;/div&gt;
+              &lt;div class=&quot;meta-card&quot;&gt;&lt;div class=&quot;meta-label&quot;&gt;Médico responsable&lt;/div&gt;&lt;div class=&quot;meta-value&quot;&gt;[MÉDICO]&lt;/div&gt;&lt;/div&gt;
+              &lt;div class=&quot;meta-card&quot;&gt;&lt;div class=&quot;meta-label&quot;&gt;Tipo de revisión&lt;/div&gt;&lt;div class=&quot;meta-value&quot;&gt;Revisión General&lt;/div&gt;&lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&quot;hero-visual&quot;&gt;&lt;div class=&quot;visual-label&quot;&gt;Revisión integral con body scan RM 3.0T&lt;/div&gt;&lt;div&gt;&lt;div class=&quot;visual-title&quot;&gt;Resultados explicados con claridad, contexto y acompañamiento médico.&lt;/div&gt;&lt;div class=&quot;visual-note&quot;&gt;La información mostrada en esta vista requiere interpretación médica y no sustituye la consulta.&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;/section&gt;
+        &lt;section class=&quot;section&quot;&gt;
+          &lt;div class=&quot;eyebrow&quot;&gt;Recorrido de la revisión&lt;/div&gt;&lt;h2 class=&quot;title&quot; style=&quot;font-size:32px&quot;&gt;Lo que revisamos hoy&lt;/h2&gt;
+          &lt;p class=&quot;copy&quot;&gt;Estos son los estudios y evaluaciones que forman parte de tu revisión.&lt;/p&gt;
+          &lt;div class=&quot;journey&quot;&gt;
+            &lt;article class=&quot;step completed&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;1&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Consulta inicial&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Completado&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;step completed&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;2&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Laboratorio&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Completado&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;step completed&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;3&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Imagen y gabinete&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Completado&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;step completed&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;4&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Evaluaciones médicas&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Completado&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;step completed&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;5&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Body scan RM 3.0T&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Completado&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;step current&quot;&gt;&lt;div&gt;&lt;span class=&quot;step-num&quot;&gt;6&lt;/span&gt;&lt;div class=&quot;step-label&quot;&gt;Entrega de resultados&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;step-status&quot;&gt;Paso actual&lt;/div&gt;&lt;/article&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+        &lt;section class=&quot;section&quot;&gt;
+          &lt;div class=&quot;eyebrow&quot;&gt;Resumen general&lt;/div&gt;&lt;h2 class=&quot;title&quot; style=&quot;font-size:32px&quot;&gt;Resumen de hallazgos&lt;/h2&gt;
+          &lt;p class=&quot;copy&quot;&gt;Esta vista organiza tus resultados en categorías para facilitar la explicación médica.&lt;/p&gt;
+          &lt;div class=&quot;summary-grid&quot;&gt;
+            &lt;article class=&quot;finding-group&quot;&gt;&lt;div class=&quot;finding-head&quot;&gt;&lt;div class=&quot;finding-title&quot;&gt;&lt;span class=&quot;dot expected&quot;&gt;&lt;/span&gt;Dentro del rango esperado&lt;/div&gt;&lt;span class=&quot;counter&quot;&gt;8&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;finding-card&quot;&gt;&lt;div class=&quot;finding-card-title&quot;&gt;Función renal conservada&lt;/div&gt;&lt;p class=&quot;finding-card-copy&quot;&gt;Resultados dentro del rango esperado para el contexto clínico.&lt;/p&gt;&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;finding-group&quot;&gt;&lt;div class=&quot;finding-head&quot;&gt;&lt;div class=&quot;finding-title&quot;&gt;&lt;span class=&quot;dot watch&quot;&gt;&lt;/span&gt;Conviene vigilar&lt;/div&gt;&lt;span class=&quot;counter&quot;&gt;4&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;finding-card&quot;&gt;&lt;div class=&quot;finding-card-title&quot;&gt;Perfil metabólico&lt;/div&gt;&lt;p class=&quot;finding-card-copy&quot;&gt;Algunos valores requieren seguimiento y explicación médica.&lt;/p&gt;&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;finding-group&quot;&gt;&lt;div class=&quot;finding-head&quot;&gt;&lt;div class=&quot;finding-title&quot;&gt;&lt;span class=&quot;dot relevant&quot;&gt;&lt;/span&gt;Hallazgos relevantes&lt;/div&gt;&lt;span class=&quot;counter&quot;&gt;2&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;finding-card&quot;&gt;&lt;div class=&quot;finding-card-title&quot;&gt;Imagen y gabinete&lt;/div&gt;&lt;p class=&quot;finding-card-copy&quot;&gt;Hallazgos que deben revisarse junto con el reporte médico.&lt;/p&gt;&lt;/div&gt;&lt;/article&gt;
+            &lt;article class=&quot;finding-group&quot;&gt;&lt;div class=&quot;finding-head&quot;&gt;&lt;div class=&quot;finding-title&quot;&gt;&lt;span class=&quot;dot priority&quot;&gt;&lt;/span&gt;Seguimiento prioritario&lt;/div&gt;&lt;span class=&quot;counter&quot;&gt;1&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;finding-card&quot;&gt;&lt;div class=&quot;finding-card-title&quot;&gt;Plan de seguimiento&lt;/div&gt;&lt;p class=&quot;finding-card-copy&quot;&gt;Punto que requiere acción definida por el médico.&lt;/p&gt;&lt;/div&gt;&lt;/article&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/section&gt;
+      &lt;aside class=&quot;doctor&quot;&gt;&lt;div class=&quot;panel&quot;&gt;&lt;div class=&quot;panel-title&quot;&gt;Panel del médico&lt;/div&gt;&lt;p class=&quot;panel-copy&quot;&gt;Panel interno. Puede ocultarse en modo presentación.&lt;/p&gt;&lt;/div&gt;&lt;div class=&quot;panel&quot;&gt;&lt;div class=&quot;panel-title&quot;&gt;Guion sugerido&lt;/div&gt;&lt;p class=&quot;panel-copy&quot;&gt;“Vamos a revisar primero la fotografía general y después entramos al detalle.”&lt;/p&gt;&lt;/div&gt;&lt;/aside&gt;
+    &lt;/main&gt;
+    &lt;div id=&quot;focus&quot; class=&quot;focus&quot;&gt;&lt;div class=&quot;focus-box&quot;&gt;&lt;h2&gt;Foco humano&lt;/h2&gt;&lt;p&gt;La pantalla se pausa temporalmente para priorizar la conversación con tu médico.&lt;/p&gt;&lt;button class=&quot;btn&quot; onclick=&quot;toggleFocus()&quot;&gt;Regresar a la revisión&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;script&gt;
+    function togglePrivacy(){document.getElementById(&quot;app&quot;).classList.toggle(&quot;privacy&quot;)}
+    function togglePresentation(){
+  const target = document.getElementById('main');
+  const active = target.classList.toggle('presentation');
+  const btn = document.getElementById('presentationBtn');
+  const pill = document.getElementById('presentationPill');
+  if(btn){btn.classList.toggle('active', active);btn.innerText = active ? 'Salir presentación' : 'Modo presentación';}
+  if(pill){pill.classList.toggle('active', active);}
+}
+    function toggleFocus(){document.getElementById(&quot;focus&quot;).classList.toggle(&quot;active&quot;)}
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+" style="width:100%;border:0;display:block;height:900px;background:#fff"></iframe>
+      </div>
     </div>
     <div class="card">
       <h3>Proyecto 3 · Auditoría automática (Angélica)</h3>
       <p class="csub">En planeación</p>
       <p style="margin-top:10px;line-height:1.55">Se tiene pensada una herramienta automática para revisión de interpretaciones.</p>
+      <p style="margin-top:10px"><a href="https://claude.ai/public/artifacts/3c733d95-6ecf-48f2-b24c-7c17e21567db" target="_blank" rel="noopener" style="color:var(--c-people);font-weight:600;font-size:13.5px">Ver demostración →</a></p>
     </div>
   </div>
 </section>
