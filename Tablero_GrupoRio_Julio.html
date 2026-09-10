@@ -1476,7 +1476,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             <div class="legend" id="dist-legend"></div>
           </div>
           <div id="dist-chart"></div>
-          <p class="line-note" style="margin-top:10px"><b>Transcriptores</b> = Medicina Nuclear + Densitometría + Resonancia + Tomografía de las cuentas de transcripción. <b>Intervención</b> = los demás estudios de transcripción. <b>Doctores</b> = todo lo que interpretan las cuentas de doctores. 2025 de referencia; 2026 del SIO (Productividad de Transcripción), salvo <b>junio y julio</b>, donde Transcriptores usa el <b>total de Exa</b> (lo efectivamente leído: 793 y 973), la fuente más fidedigna para la lectura de imagen.</p>
+          <p class="line-note" style="margin-top:10px"><b>Transcripciones</b> = Medicina Nuclear + Densitometría de las cuentas de transcripción. <b>Intervención</b> = el resto de departamentos (incluye Resonancia y Tomografía) de esas mismas cuentas. <b>Radiólogos</b> = todo lo que interpretan directo las cuentas que no son de transcripción. 2025 de referencia; 2026 del SIO (Productividad de Transcripción), salvo <b>junio y julio</b>, donde Transcripciones usa el <b>total de Exa</b> (lo efectivamente leído: 793 y 973), la fuente más fidedigna para la lectura de imagen. <b>Agosto</b> ya usa la regla ajustada (Resonancia y Tomografía pasan a Intervención, antes contaban como Transcripciones), así que no es directamente comparable con los meses anteriores en el desglose Transcripciones/Intervención — el total combinado sí es consistente.</p>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
@@ -2837,9 +2837,9 @@ function initRad(){
 /* Interpretación y transcripción · % del total · 2025 (referencia) + 2026 (SIO) */
 const distData = {
   '2025':[{m:'Ene',t:20,i:28,d:52},{m:'Feb',t:25,i:27,d:48},{m:'Mar',t:22,i:30,d:48},{m:'Abr',t:14,i:40,d:46},{m:'May',t:19,i:30,d:51},{m:'Jun',t:21,i:30,d:49},{m:'Jul',t:26,i:28,d:46},{m:'Ago',t:21,i:30,d:49},{m:'Sep',t:18,i:36,d:46},{m:'Oct',t:19,i:33,d:48},{m:'Nov',t:18.5,i:36.5,d:45},{m:'Dic',t:22,i:30,d:48}],
-  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56}]
+  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56},{m:'Ago',t:3.9,i:34.2,d:61.8}]
 };
-const DIST_SRC=[['t','Transcriptores','var(--c-trans)'],['i','Intervención','var(--c-serv)'],['d','Doctores','var(--c-interp)']];
+const DIST_SRC=[['t','Transcripciones','var(--c-trans)'],['i','Intervención','var(--c-serv)'],['d','Radiólogos','var(--c-interp)']];
 const DIST_COL=Object.fromEntries(DIST_SRC.map(s=>[s[0],s[2]]));
 function drawStacked(hostId, legendId, groups){
   const fmtv=v=>Number.isInteger(v)?v:v.toFixed(1);
@@ -2850,7 +2850,7 @@ function drawStacked(hostId, legendId, groups){
     groups[grp].forEach(mo=>{
       const col=document.createElement('div'); col.className='dist-col';
       const bar=document.createElement('div'); bar.className='dist-bar';
-      bar.setAttribute('data-tip',`<b>${mo.m} · ${grp}</b> · Transcriptores ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Doctores ${fmtv(mo.d)}%`);
+      bar.setAttribute('data-tip',`<b>${mo.m} · ${grp}</b> · Transcripciones ${fmtv(mo.t)}% · Intervención ${fmtv(mo.i)}% · Radiólogos ${fmtv(mo.d)}%`);
       ['d','i','t'].forEach(k=>{
         const s=document.createElement('div'); s.className='dist-seg'+(mo[k]<6?' small':'');
         s.style.background=DIST_COL[k]; s.dataset.h=mo[k]; s.style.height='0%'; s.textContent=fmtv(mo[k]);
