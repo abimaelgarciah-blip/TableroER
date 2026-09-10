@@ -1607,6 +1607,32 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
+              <h3>Transcripción vs. Intervención vs. Radiólogos</h3>
+              <p class="csub">Agosto 2026 · SIO, Productividad de Transcripción, por cuenta</p>
+            </div>
+          </div>
+          <div class="grid kpis" style="margin-bottom:16px">
+            <div class="card kpi"><div class="k-label">Transcripciones</div><div class="k-value" id="tri-kpi-t">–</div><div class="k-foot" id="tri-kpi-t-foot">Medicina Nuclear + Densitometría</div></div>
+            <div class="card kpi"><div class="k-label">Intervención</div><div class="k-value" id="tri-kpi-i">–</div><div class="k-foot" id="tri-kpi-i-foot">resto de departamentos, cuentas de transcripción</div></div>
+            <div class="card kpi"><div class="k-label">Radiólogos</div><div class="k-value" id="tri-kpi-r">–</div><div class="k-foot" id="tri-kpi-r-foot">cuentas que interpretan directo, sin transcriptor</div></div>
+            <div class="card kpi"><div class="k-label">Total</div><div class="k-value" id="tri-kpi-tot">–</div><div class="k-foot">estudios en SIO · agosto</div></div>
+          </div>
+          <div class="sbar-legend">
+            <span class="it"><span class="sw" style="background:var(--c-trans)"></span>Transcripciones</span>
+            <span class="it"><span class="sw" style="background:var(--c-serv)"></span>Intervención</span>
+            <span class="it"><span class="sw" style="background:var(--c-interp)"></span>Radiólogos</span>
+          </div>
+          <div class="sbar-track" id="tri-bar" style="margin-top:10px"></div>
+          <div class="line-note" style="margin-top:14px" id="tri-nota"></div>
+
+          <p class="csub" style="margin-top:20px">Por departamento</p>
+          <div style="overflow-x:auto"><table class="dtab" id="tri-dept-tab"></table></div>
+          <div class="line-note" style="margin-top:12px" id="tri-dept-nota"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-head">
+            <div>
               <h3>Por tipo de servicio</h3>
               <p class="csub" id="srv-sub">Estudios transcritos por servicio a lo largo del año</p>
             </div>
@@ -4107,6 +4133,68 @@ function renderServicios(){
     'S28 a S34 vienen de los reportes semanales, que es la única fuente que las cubre. '+
     '<b>S1</b> arranca el 1 de enero y <b>S27</b> corta el 30 de junio, así que ambas quedan cortas.';
 }
+/* ===== Transcripción vs. Intervención vs. Radiólogos (SIO, agosto 2026) =====
+   Fuente: Productividad de Transcripción, SIO, agosto 2026 (40 cuentas x 18
+   departamentos). Cuentas de transcripción (confirmadas con el usuario):
+   hugotm, lauragg, monicaac, nestorgm, manuelev (incluye manuelevuac),
+   sandrama, gracielacv, albertova, casandracr, mayrage, abimaelgh, anaor,
+   humbertogp1, oswaldorm, samantamp. Regla: de esas cuentas, Medicina
+   Nuclear + Densitometría cuentan como "Transcripciones"; el resto de sus
+   departamentos (incluye RM y TAC) como "Intervención". Todo lo hecho por
+   cuentas fuera de esa lista (interpretan directo, sin transcriptor) cuenta
+   como "Radiólogos". */
+const triByDept = [
+  {dept:'Ecosonografía', t:0, i:198, r:1315},
+  {dept:'Radiología', t:0, i:72, r:1177},
+  {dept:'Resonancia Magnética', t:0, i:62, r:886},
+  {dept:'Servicios Especiales', t:0, i:628, r:251},
+  {dept:'Cardiología', t:0, i:483, r:293},
+  {dept:'Tomografía Axial Computada', t:0, i:118, r:380},
+  {dept:'Salud Visual', t:0, i:472, r:0},
+  {dept:'Mamografía', t:0, i:220, r:167},
+  {dept:'Densitometría', t:125, i:0, r:195},
+  {dept:'Espirometría', t:0, i:32, r:199},
+  {dept:'Medicina Nuclear', t:186, i:0, r:1},
+  {dept:'Bioimpedanciología', t:0, i:121, r:0},
+  {dept:'EEG y Mapeo Cerebral', t:0, i:104, r:0},
+  {dept:'Servicio Dental', t:0, i:75, r:0},
+  {dept:'Paquetes', t:0, i:63, r:8},
+  {dept:'Electromiografía y Potenciales Evocados', t:0, i:30, r:0},
+  {dept:'Chequeos Médicos', t:0, i:16, r:0},
+  {dept:'Maquila', t:0, i:2, r:0}
+];
+function renderTri(){
+  const T = triByDept.reduce((a,r)=>a+r.t,0), I = triByDept.reduce((a,r)=>a+r.i,0), R = triByDept.reduce((a,r)=>a+r.r,0);
+  const TOT = T+I+R;
+  const pct = v => TOT ? +(v/TOT*100).toFixed(1) : 0;
+  document.getElementById('tri-kpi-t').textContent = fmt(T);
+  document.getElementById('tri-kpi-t-foot').textContent = pct(T)+'% del total · Medicina Nuclear + Densitometría';
+  document.getElementById('tri-kpi-i').textContent = fmt(I);
+  document.getElementById('tri-kpi-i-foot').textContent = pct(I)+'% del total · resto de departamentos, cuentas de transcripción';
+  document.getElementById('tri-kpi-r').textContent = fmt(R);
+  document.getElementById('tri-kpi-r-foot').textContent = pct(R)+'% del total · cuentas que interpretan directo';
+  document.getElementById('tri-kpi-tot').textContent = fmt(TOT);
+
+  const segs = [['t',T,'var(--c-trans)','Transcripciones'],['i',I,'var(--c-serv)','Intervención'],['r',R,'var(--c-interp)','Radiólogos']];
+  document.getElementById('tri-bar').innerHTML = segs.map(([k,v,c,nm])=>
+    `<div class="sbar-seg" data-w="${pct(v)}" style="background:${c}" data-tip="<b>${nm}</b> · ${fmt(v)} estudios · ${pct(v)}%"></div>`).join('');
+  const segEls = document.querySelectorAll('#tri-bar .sbar-seg');
+  if(reduce){ segEls.forEach(s=>s.style.width=s.dataset.w+'%'); }
+  else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ segEls.forEach(s=>s.style.width=s.dataset.w+'%'); })); }
+
+  document.getElementById('tri-nota').innerHTML =
+    `De ${fmt(TOT)} estudios en SIO durante agosto, <b>${pct(R)}%</b> los interpretó directo el radiólogo (sin pasar por transcripción), <b>${pct(I)}%</b> los llevó un transcriptor como intervención (todo excepto Medicina Nuclear/Densitometría) y solo <b>${pct(T)}%</b> son transcripciones puras de Medicina Nuclear y Densitometría. `+
+    `Radiología, Ecosonografía y Resonancia Magnética son mayoría "Radiólogos" (el médico interpreta directo); Cardiología, Servicios Especiales, Mamografía y Salud Visual son mayoría "Intervención" (pasan por transcriptor).`;
+
+  const rows = triByDept.slice().sort((a,b)=>(b.t+b.i+b.r)-(a.t+a.i+a.r));
+  document.getElementById('tri-dept-tab').innerHTML =
+    '<thead><tr><th>Departamento</th><th>Total</th><th>Transcripciones</th><th>Intervención</th><th>Radiólogos</th></tr></thead><tbody>'+
+    rows.map(r=>{ const tot=r.t+r.i+r.r; return `<tr><td>${r.dept}</td><td class="d">${fmt(tot)}</td><td class="d">${r.t?fmt(r.t):'—'}</td><td class="d">${r.i?fmt(r.i):'—'}</td><td class="d">${r.r?fmt(r.r):'—'}</td></tr>`; }).join('')+
+    '</tbody>';
+  document.getElementById('tri-dept-nota').innerHTML =
+    `Solo Medicina Nuclear y Densitometría tienen estudios en la columna "Transcripciones"; el resto de departamentos que pasan por transcriptor caen en "Intervención".`;
+}
+
 function renderSrvDist(){
   const kv = srvMode==='sem'?'semT':'mesT', labels=srvLabels();
   const i = srvdIdx==null ? labels.length-1 : srvdIdx;
@@ -4537,6 +4625,7 @@ function renderAll(){
   initResumen();
   initRad();
   renderDist();
+  renderTri();
   initServicios();
   initTrans();
   renderEfect();
