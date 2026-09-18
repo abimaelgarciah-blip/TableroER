@@ -1529,6 +1529,18 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         </div>
 
         <div class="card" style="margin-bottom:16px">
+          <div class="card-head">
+            <div>
+              <h3>Tiempo transcrito por día</h3>
+              <p class="csub">Semana 37 · 7–12 sep 2026 · suma de duraciones (Fin − Inicio) de cada estudio, por transcriptor</p>
+            </div>
+          </div>
+          <div id="tr-day-line"></div>
+          <div class="legend" id="tr-day-legend" style="margin-top:6px"></div>
+          <div class="line-note" style="margin-top:12px" id="tr-day-nota"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
           <h3>Cantidad según la fuente</h3>
           <p class="csub" id="tr-sub-c">Conteo propio · sistema SIO · sistema Exa</p>
           <div id="tr-cmp"></div>
@@ -4656,6 +4668,34 @@ function initTrans(){
       trMode=b.dataset.m; renderTrans();
     }));
   renderTrans();
+  renderTrDay();
+}
+
+/* ===== Tiempo transcrito por día · Semana 37 (7-12 sep 2026) =====
+   Fuente: bitácora personal de cada transcriptor (Registro_personal_transcriptor_Sem_37.ods),
+   una hoja por persona con renglones Cita/Empresa/Paciente/Estudio/Inicio/Fin. Cada hoja marca
+   el cambio de día con un formato distinto (fila "DD de sept 2026", fecha en columna aparte, o
+   sin marca — inferido por el reinicio de horario a la mañana). El valor es la suma de
+   (Fin − Inicio) de cada estudio, no el turno completo (no cuenta tiempos muertos entre
+   estudios). El transcriptor de esta semana aparece como "Iván Enríquez"; el roster de
+   Productividad de transcriptores (arriba) todavía tiene a "Manuel Martínez" en ese lugar —
+   probablemente la misma persona con otro nombre, pero no se fusionaron los datos por no
+   tener certeza. */
+const TR_DAY_LABELS = ['Lun 7','Mar 8','Mié 9','Jue 10','Vie 11','Sáb 12'];
+const TR_DAY_S37 = {"Hugo Tabares": [1.42, 1.33, 1.0, 1.18, 0.78, null], "Laura García": [2.52, 1.35, 1.07, 1.78, 1.43, 1.08], "Iván Enríquez": [1.85, 1.45, 0.52, 1.22, 0.82, 1.3], "Néstor González": [1.33, 2.52, 3.22, 0.27, 3.48, null], "Mónica Anaya": [2.82, 2.42, 2.5, 3.05, 1.03, 2.13]};
+const TR_DAY_COL = {'Hugo Tabares':'#3f6fa6','Laura García':'#4e8c70','Iván Enríquez':'#c2921f',
+                     'Mónica Anaya':'#8a6a9c','Néstor González':'#5c7d97'};
+function renderTrDay(){
+  const series = Object.keys(TR_DAY_S37).map(p=>({name:p, color:TR_DAY_COL[p]||'var(--muted)', vals:TR_DAY_S37[p]}));
+  multiLineChart(document.getElementById('tr-day-line'), TR_DAY_LABELS, series, ' h');
+  document.getElementById('tr-day-legend').innerHTML = trLegend(series);
+  const totals = Object.entries(TR_DAY_S37).map(([p,vals])=>[p, vals.reduce((a,v)=>a+(v||0),0)]);
+  const top = totals.slice().sort((a,b)=>b[1]-a[1])[0];
+  const low = totals.slice().sort((a,b)=>a[1]-b[1])[0];
+  document.getElementById('tr-day-nota').innerHTML =
+    `En la semana, <b>${top[0]}</b> acumula más tiempo transcrito (${top[1].toFixed(1)} h) y <b>${low[0]}</b> el menos (${low[1].toFixed(1)} h). `+
+    `Hugo Tabares y Néstor González no tienen renglones el sábado 12 (posible descanso o día no registrado en la bitácora). `+
+    `El valor es la suma de la duración de cada estudio, no el turno completo — no incluye huecos entre estudios.`;
 }
 
 /* ===== Resumen · cumplimiento y chequeos, semana a semana =====
