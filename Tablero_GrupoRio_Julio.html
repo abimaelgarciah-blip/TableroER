@@ -656,52 +656,14 @@
           <div class="card" style="margin-top:16px">
             <div class="card-head">
               <div>
-                <h3>Detalle de incumplimiento · <span id="inc-detail-unit">todas las unidades</span></h3>
-                <p class="csub" id="inc-detail-sub">Estudios no entregados a tiempo</p>
+                <h3>Cumplimiento por unidad</h3>
+                <p class="csub" id="inc-detail-sub">Haz clic en una barra para ver el detalle</p>
               </div>
               <button type="button" class="inc-close" id="inc-close" aria-label="Ocultar detalle">Ocultar ▴</button>
             </div>
-            <div class="grid kpis" style="margin-bottom:16px">
-              <div class="card kpi"><div class="k-label">Total incumplidos</div><div class="k-value" style="color:#ba544c" id="incd-kpi-total">–</div><div class="k-foot">no entregados a tiempo</div></div>
-              <div class="card kpi"><div class="k-label">Retraso mediano</div><div class="k-value" id="incd-kpi-med">–</div><div class="k-foot">la mayoría, por minutos</div></div>
-              <div class="card kpi"><div class="k-label">Seguimientos ≥ 24 h</div><div class="k-value" id="incd-kpi-ge24">–</div><div class="k-foot">cuentan como cumplimiento</div></div>
-              <div class="card kpi"><div class="k-label">No recibidos</div><div class="k-value" id="incd-kpi-norec">–</div><div class="k-foot">sin registro de entrega</div></div>
-            </div>
-            <div class="grid two">
-              <div>
-                <h4 class="mini-h">Por rango de horas de retraso</h4>
-                <div class="bars" id="bars-horas"></div>
-                <div class="line-note" style="margin-top:10px" id="nota-horas"></div>
-              </div>
-              <div>
-                <h4 class="mini-h">Por departamento</h4>
-                <div id="inc-por-depto"></div>
-              </div>
-            </div>
-            <div class="grid two" style="margin-top:16px">
-              <div>
-                <h4 class="mini-h">Por día de la semana</h4>
-                <div class="bars" id="incd-por-dia"></div>
-                <div class="line-note" style="margin-top:10px" id="incd-nota-dia"></div>
-              </div>
-              <div>
-                <h4 class="mini-h">Top 5 estudios entregados tarde</h4>
-                <div class="bars wide" id="incd-top-estudios"></div>
-              </div>
-            </div>
-            <div style="margin-top:16px">
-              <h4 class="mini-h">Mapa de calor · día × hora prometida</h4>
-              <div class="heat-scroll"><div id="incd-heat"></div></div>
-              <div class="heat-leg" id="incd-heat-leg"></div>
-              <div class="line-note" id="incd-nota-heat" style="margin-top:10px"></div>
-            </div>
-            <div style="margin-top:16px">
-              <h4 class="mini-h">Motivos de incumplimiento · agosto 2026</h4>
-              <div class="line-note" id="inc-motivos-nota" style="margin-bottom:10px"></div>
-              <div style="overflow-x:auto"><table class="dtab" id="tab-inc-motivos"></table></div>
-              <div class="line-note" style="margin-top:10px">Lista tal cual está registrada en la bitácora de calidad "Rojos" (columna Motivo, sin modificar el texto), filtrada por la unidad seleccionada arriba.</div>
-            </div>
-            <div class="line-note" style="margin-top:12px">El indicador (real) es cumplimiento / estudios prometidos; los estudios con un motivo justificado en el reporte (mantenimiento, calidad, modificación médica, etc.) se cuentan como cumplimiento y se excluyen del histograma. Datos del reporte de agosto 2026.</div>
+            <div class="line-note" id="inc-breadcrumb" style="margin-bottom:10px"></div>
+            <div class="bars wide" id="inc-drill-bars"></div>
+            <div class="line-note" style="margin-top:10px" id="inc-drill-nota"></div>
           </div>
         </div>
 
@@ -2037,6 +1999,7 @@ const indicadorMensual = [
   {name:'May',v:96.7},{name:'Jun',v:96.1}
 ];
 
+const unidadesMV = {"Todas": {"Bioimpedanciología": {"mat": {"t": 5, "c": 5, "pct": 100.0}, "vesp": {"t": 132, "c": 132, "pct": 100.0}}, "Cardiología": {"mat": {"t": 104, "c": 104, "pct": 100.0}, "vesp": {"t": 705, "c": 699, "pct": 99.1}}, "Densitometría": {"mat": {"t": 187, "c": 179, "pct": 95.7}, "vesp": {"t": 161, "c": 156, "pct": 96.9}}, "Ecosonografía": {"mat": {"t": 733, "c": 725, "pct": 98.9}, "vesp": {"t": 708, "c": 707, "pct": 99.9}}, "EEG y Mapeo Cerebral": {"mat": {"t": 3, "c": 3, "pct": 100.0}, "vesp": {"t": 80, "c": 80, "pct": 100.0}}, "Electromiografía y P.E.": {"mat": {"t": 17, "c": 17, "pct": 100.0}, "vesp": {"t": 16, "c": 16, "pct": 100.0}}, "Espirometría": {"mat": {"t": 16, "c": 16, "pct": 100.0}, "vesp": {"t": 241, "c": 240, "pct": 99.6}}, "Mamografía": {"mat": {"t": 221, "c": 219, "pct": 99.1}, "vesp": {"t": 168, "c": 166, "pct": 98.8}}, "Medicina Nuclear": {"mat": {"t": 175, "c": 172, "pct": 98.3}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Paquetes": {"mat": {"t": 54, "c": 54, "pct": 100.0}, "vesp": {"t": 10, "c": 10, "pct": 100.0}}, "Radiología": {"mat": {"t": 484, "c": 467, "pct": 96.5}, "vesp": {"t": 687, "c": 683, "pct": 99.4}}, "Resonancia Magnética": {"mat": {"t": 574, "c": 563, "pct": 98.1}, "vesp": {"t": 360, "c": 352, "pct": 97.8}}, "Salud Visual": {"mat": {"t": 190, "c": 189, "pct": 99.5}, "vesp": {"t": 226, "c": 226, "pct": 100.0}}, "Servicio Dental": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 77, "c": 77, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 224, "c": 220, "pct": 98.2}, "vesp": {"t": 722, "c": 714, "pct": 98.9}}, "Tomografía Axial C.": {"mat": {"t": 346, "c": 343, "pct": 99.1}, "vesp": {"t": 207, "c": 202, "pct": 97.6}}}, "López Mateos": {"Bioimpedanciología": {"mat": {"t": 5, "c": 5, "pct": 100.0}, "vesp": {"t": 12, "c": 12, "pct": 100.0}}, "Cardiología": {"mat": {"t": 90, "c": 90, "pct": 100.0}, "vesp": {"t": 118, "c": 117, "pct": 99.2}}, "Densitometría": {"mat": {"t": 124, "c": 124, "pct": 100.0}, "vesp": {"t": 58, "c": 57, "pct": 98.3}}, "Ecosonografía": {"mat": {"t": 416, "c": 411, "pct": 98.8}, "vesp": {"t": 58, "c": 58, "pct": 100.0}}, "EEG y Mapeo Cerebral": {"mat": {"t": 3, "c": 3, "pct": 100.0}, "vesp": {"t": 79, "c": 79, "pct": 100.0}}, "Electromiografía y P.E.": {"mat": {"t": 17, "c": 17, "pct": 100.0}, "vesp": {"t": 16, "c": 16, "pct": 100.0}}, "Espirometría": {"mat": {"t": 13, "c": 13, "pct": 100.0}, "vesp": {"t": 26, "c": 25, "pct": 96.2}}, "Mamografía": {"mat": {"t": 131, "c": 130, "pct": 99.2}, "vesp": {"t": 6, "c": 6, "pct": 100.0}}, "Medicina Nuclear": {"mat": {"t": 175, "c": 172, "pct": 98.3}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Paquetes": {"mat": {"t": 54, "c": 54, "pct": 100.0}, "vesp": {"t": 8, "c": 8, "pct": 100.0}}, "Radiología": {"mat": {"t": 364, "c": 355, "pct": 97.5}, "vesp": {"t": 217, "c": 214, "pct": 98.6}}, "Resonancia Magnética": {"mat": {"t": 357, "c": 351, "pct": 98.3}, "vesp": {"t": 179, "c": 175, "pct": 97.8}}, "Salud Visual": {"mat": {"t": 190, "c": 189, "pct": 99.5}, "vesp": {"t": 221, "c": 221, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 20, "c": 20, "pct": 100.0}, "vesp": {"t": 39, "c": 39, "pct": 100.0}}, "Tomografía Axial C.": {"mat": {"t": 282, "c": 279, "pct": 98.9}, "vesp": {"t": 148, "c": 143, "pct": 96.6}}}, "Medicina Preventiva": {"Bioimpedanciología": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 120, "c": 120, "pct": 100.0}}, "Cardiología": {"mat": {"t": 13, "c": 13, "pct": 100.0}, "vesp": {"t": 585, "c": 580, "pct": 99.1}}, "Densitometría": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 56, "c": 56, "pct": 100.0}}, "Ecosonografía": {"mat": {"t": 4, "c": 4, "pct": 100.0}, "vesp": {"t": 464, "c": 464, "pct": 100.0}}, "Espirometría": {"mat": {"t": 2, "c": 2, "pct": 100.0}, "vesp": {"t": 215, "c": 215, "pct": 100.0}}, "Mamografía": {"mat": {"t": 2, "c": 2, "pct": 100.0}, "vesp": {"t": 61, "c": 61, "pct": 100.0}}, "Radiología": {"mat": {"t": 6, "c": 6, "pct": 100.0}, "vesp": {"t": 410, "c": 410, "pct": 100.0}}, "Resonancia Magnética": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 5, "c": 5, "pct": 100.0}}, "Salud Visual": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Servicio Dental": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 77, "c": 77, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 188, "c": 184, "pct": 97.9}, "vesp": {"t": 671, "c": 663, "pct": 98.8}}}, "Acueducto": {"Cardiología": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 0, "c": 0, "pct": null}}, "Densitometría": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 3, "c": 2, "pct": 66.7}}, "Ecosonografía": {"mat": {"t": 102, "c": 102, "pct": 100.0}, "vesp": {"t": 42, "c": 42, "pct": 100.0}}, "EEG y Mapeo Cerebral": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Espirometría": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 0, "c": 0, "pct": null}}, "Mamografía": {"mat": {"t": 3, "c": 2, "pct": 66.7}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Radiología": {"mat": {"t": 112, "c": 104, "pct": 92.9}, "vesp": {"t": 58, "c": 58, "pct": 100.0}}, "Resonancia Magnética": {"mat": {"t": 105, "c": 101, "pct": 96.2}, "vesp": {"t": 100, "c": 96, "pct": 96.0}}, "Salud Visual": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 2, "c": 2, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Tomografía Axial C.": {"mat": {"t": 63, "c": 63, "pct": 100.0}, "vesp": {"t": 58, "c": 58, "pct": 100.0}}}, "Clínica de la Mujer": {"Densitometría": {"mat": {"t": 61, "c": 53, "pct": 86.9}, "vesp": {"t": 43, "c": 40, "pct": 93.0}}, "Ecosonografía": {"mat": {"t": 130, "c": 130, "pct": 100.0}, "vesp": {"t": 135, "c": 134, "pct": 99.3}}, "Mamografía": {"mat": {"t": 85, "c": 85, "pct": 100.0}, "vesp": {"t": 99, "c": 97, "pct": 98.0}}, "Paquetes": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Radiología": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 0, "c": 0, "pct": null}}, "Salud Visual": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 2, "c": 2, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 15, "c": 15, "pct": 100.0}, "vesp": {"t": 11, "c": 11, "pct": 100.0}}, "Tomografía Axial C.": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}}, "Chamizal": {"Ecosonografía": {"mat": {"t": 47, "c": 46, "pct": 97.9}, "vesp": {"t": 3, "c": 3, "pct": 100.0}}, "Resonancia Magnética": {"mat": {"t": 110, "c": 109, "pct": 99.1}, "vesp": {"t": 75, "c": 75, "pct": 100.0}}, "Servicios Especiales": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 0, "c": 0, "pct": null}}}, "Guadalupe": {"Densitometría": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Ecosonografía": {"mat": {"t": 34, "c": 32, "pct": 94.1}, "vesp": {"t": 6, "c": 6, "pct": 100.0}}, "Mamografía": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Radiología": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Resonancia Magnética": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}}, "Las Águilas": {"Cardiología": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 2, "c": 2, "pct": 100.0}}, "Densitometría": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 0, "c": 0, "pct": null}}, "Paquetes": {"mat": {"t": 0, "c": 0, "pct": null}, "vesp": {"t": 1, "c": 1, "pct": 100.0}}, "Radiología": {"mat": {"t": 1, "c": 1, "pct": 100.0}, "vesp": {"t": 1, "c": 0, "pct": 0.0}}}};
 const unidades = {"Todas": {"prometidos": 7834, "cumpl": 7737, "incumpl": 97, "indicador": 98.8, "notrec": 7, "excl24": 9, "neg": 99, "deptos": [["Bioimpedanciología", 137, 100.0], ["EEG y Mapeo Cerebral", 83, 100.0], ["Electromiografía y P.E.", 33, 100.0], ["Paquetes", 64, 100.0], ["Servicio Dental", 77, 100.0], ["Salud Visual", 416, 99.8], ["Espirometría", 257, 99.6], ["Ecosonografía", 1441, 99.4], ["Cardiología", 809, 99.3], ["Mamografía", 389, 99.0], ["Servicios Especiales", 946, 98.7], ["Tomografía Axial C.", 553, 98.6], ["Medicina Nuclear", 176, 98.3], ["Radiología", 1171, 98.2], ["Resonancia Magnética", 934, 98.0], ["Densitometría", 348, 96.3]], "horas": [["−1 h", 54], ["−2 h", 5], ["−3 h", 7], ["−4 h", 1], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 23]]}, "López Mateos": {"prometidos": 3427, "cumpl": 3384, "incumpl": 43, "indicador": 98.7, "notrec": 0, "excl24": 6, "neg": 49, "deptos": [["Bioimpedanciología", 17, 100.0], ["EEG y Mapeo Cerebral", 82, 100.0], ["Electromiografía y P.E.", 33, 100.0], ["Paquetes", 62, 100.0], ["Servicios Especiales", 59, 100.0], ["Salud Visual", 411, 99.8], ["Cardiología", 208, 99.5], ["Densitometría", 182, 99.5], ["Mamografía", 137, 99.3], ["Ecosonografía", 474, 98.9], ["Medicina Nuclear", 176, 98.3], ["Resonancia Magnética", 536, 98.1], ["Tomografía Axial C.", 430, 98.1], ["Radiología", 581, 97.9], ["Espirometría", 39, 97.4]], "horas": [["−1 h", 27], ["−2 h", 4], ["−3 h", 5], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 7]]}, "Medicina Preventiva": {"prometidos": 2881, "cumpl": 2864, "incumpl": 17, "indicador": 99.4, "notrec": 5, "excl24": 0, "neg": 12, "deptos": [["Bioimpedanciología", 120, 100.0], ["Densitometría", 56, 100.0], ["Ecosonografía", 468, 100.0], ["Espirometría", 217, 100.0], ["Mamografía", 63, 100.0], ["Radiología", 416, 100.0], ["Resonancia Magnética", 6, 100.0], ["Salud Visual", 1, 100.0], ["Servicio Dental", 77, 100.0], ["Cardiología", 598, 99.2], ["Servicios Especiales", 859, 98.6]], "horas": [["−1 h", 3], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 9]]}, "Acueducto": {"prometidos": 654, "cumpl": 636, "incumpl": 18, "indicador": 97.2, "notrec": 2, "excl24": 3, "neg": 19, "deptos": [["Cardiología", 1, 100.0], ["EEG y Mapeo Cerebral", 1, 100.0], ["Ecosonografía", 144, 100.0], ["Espirometría", 1, 100.0], ["Salud Visual", 2, 100.0], ["Servicios Especiales", 1, 100.0], ["Tomografía Axial C.", 121, 100.0], ["Resonancia Magnética", 205, 96.1], ["Radiología", 170, 95.3], ["Densitometría", 4, 75.0], ["Mamografía", 4, 75.0]], "horas": [["−1 h", 13], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 3]]}, "Clínica de la Mujer": {"prometidos": 585, "cumpl": 571, "incumpl": 14, "indicador": 97.6, "notrec": 0, "excl24": 0, "neg": 14, "deptos": [["Paquetes", 1, 100.0], ["Radiología", 1, 100.0], ["Salud Visual", 2, 100.0], ["Servicios Especiales", 26, 100.0], ["Tomografía Axial C.", 2, 100.0], ["Ecosonografía", 265, 99.6], ["Mamografía", 184, 98.9], ["Densitometría", 104, 89.4]], "horas": [["−1 h", 7], ["−2 h", 1], ["−3 h", 2], ["−4 h", 1], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 3]]}, "Chamizal": {"prometidos": 236, "cumpl": 234, "incumpl": 2, "indicador": 99.2, "notrec": 0, "excl24": 0, "neg": 2, "deptos": [["Servicios Especiales", 1, 100.0], ["Resonancia Magnética", 185, 99.5], ["Ecosonografía", 50, 98.0]], "horas": [["−1 h", 1], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 1]]}, "Guadalupe": {"prometidos": 45, "cumpl": 43, "incumpl": 2, "indicador": 95.6, "notrec": 0, "excl24": 0, "neg": 2, "deptos": [["Densitometría", 1, 100.0], ["Mamografía", 1, 100.0], ["Radiología", 1, 100.0], ["Resonancia Magnética", 2, 100.0], ["Ecosonografía", 40, 95.0]], "horas": [["−1 h", 2], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 0]]}, "Las Águilas": {"prometidos": 6, "cumpl": 5, "incumpl": 1, "indicador": 83.3, "notrec": 0, "excl24": 0, "neg": 1, "deptos": [["Cardiología", 2, 100.0], ["Densitometría", 1, 100.0], ["Paquetes", 1, 100.0], ["Radiología", 2, 50.0]], "horas": [["−1 h", 1], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 0]]}, "Ciudad Granja": {"prometidos": 0, "cumpl": 0, "incumpl": 0, "indicador": 0.0, "notrec": 0, "excl24": 0, "neg": 0, "deptos": [], "horas": [["−1 h", 0], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 0]]}, "Plaza Universidad": {"prometidos": 0, "cumpl": 0, "incumpl": 0, "indicador": 0.0, "notrec": 0, "excl24": 0, "neg": 0, "deptos": [], "horas": [["−1 h", 0], ["−2 h", 0], ["−3 h", 0], ["−4 h", 0], ["−5 h", 0], ["−6 h", 0], ["−7 h o más", 0]]}};
 
 const incumpl = {"total":1443,"porMes":[["Ene",142],["Feb",391],["Mar",230],["Abr",129],["May",244],["Jun",307]],"porDia":[["Lun",323],["Mar",263],["Mié",226],["Jue",188],["Vie",218],["Sáb",204],["Dom",21]],"horas":[9,10,11,12,13,14,15,16,17,18,19,20,23],"heat":{"0,9":30,"0,10":36,"0,11":31,"0,12":30,"0,13":24,"0,14":22,"0,15":29,"0,16":43,"0,17":15,"0,18":14,"0,19":14,"0,20":35,"1,9":20,"1,10":34,"1,11":24,"1,12":21,"1,13":18,"1,14":31,"1,15":18,"1,16":24,"1,17":16,"1,18":9,"1,19":17,"1,20":31,"2,9":5,"2,10":14,"2,11":20,"2,12":19,"2,13":29,"2,14":23,"2,15":24,"2,16":17,"2,17":11,"2,18":11,"2,19":5,"2,20":47,"2,23":1,"3,9":6,"3,10":19,"3,11":23,"3,12":12,"3,13":11,"3,14":19,"3,15":20,"3,16":13,"3,17":16,"3,18":8,"3,19":12,"3,20":29,"4,9":16,"4,10":22,"4,11":12,"4,12":22,"4,13":18,"4,14":29,"4,15":20,"4,16":19,"4,17":14,"4,18":7,"4,19":18,"4,20":21,"5,9":19,"5,10":22,"5,11":21,"5,12":30,"5,13":25,"5,14":29,"5,15":36,"5,16":13,"5,17":8,"5,20":1,"6,10":15,"6,11":4,"6,12":2},"topEstudios":[["Densitometría de Cadera y Columna Lumbar",141],["Evaluación Corporal y Nutricional",71],["Eco de Mama",61],["RX Tórax - 1P",53],["Mamografía - Bilateral",48]],"negativos":1422,"noRecibidos":21,"ge24":194,"retrasoMedio":32.9,"retrasoMediana":0.8,"retrasoMax":1863.7,"porUnidad":[["López Mateos",726],["Acueducto",315],["Medicina Preventiva",172],["Clínica de la Mujer",143],["Chamizal",61],["Guadalupe",15],["Las Águilas",6],["Ciudad Granja",2],["Plaza Universidad",2],["nan",1]],"topDeptos":[["Radiología",358],["Resonancia Magnética",294],["Densitometría",148],["Ecosonografía",144],["Tomografía Axial C.",139],["Servicios Especiales",129]],"dias":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"]};
@@ -4164,92 +4127,76 @@ function buildUnitBar(){
   document.getElementById('unit-select').addEventListener('change',e=>renderIndicador(e.target.value));
 }
 
-let incDetailOpen=false, incCurUnit='Todas';
-function incByDeptoUnit(unit){
-  const uI = unit==='Todas' ? -1 : incRecs.unidades.indexOf(unit);
-  const cnt={};
-  incRecs.recs.forEach(r=>{
-    if(r[0]!==7) return;            // agosto
-    if(uI>=0 && r[2]!==uI) return;  // unidad
-    const d=incRecs.deptos[r[3]];
-    cnt[d]=(cnt[d]||0)+1;
+let incDetailOpen=false, incLevel=1, incSelUnit=null, incSelDept=null;
+const INC_UNIT_COLORS = {
+  'López Mateos':'#3f6fa6','Medicina Preventiva':'#4c8c6f','Acueducto':'#c2921f',
+  'Clínica de la Mujer':'#b5524a','Chamizal':'#8a6a9c','Guadalupe':'#5f8a8b','Las Águilas':'#ab7a45'
+};
+const INC_UNITS_ORDEN = ['López Mateos','Medicina Preventiva','Acueducto','Clínica de la Mujer','Chamizal','Guadalupe','Las Águilas'];
+function incWireBars(el, names, onClick){
+  el.querySelectorAll('.bar-row').forEach((row,i)=>{
+    row.style.cursor='pointer';
+    row.onclick=()=>onClick(names[i]);
   });
-  return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).map(([name,v])=>({name,v}));
 }
-/* Motivos de incumplimiento · muestra cualitativa "Rojos" cruzada con Sucursal (Cita vs IdCita del reporte general de agosto) · agosto 2026, por unidad */
-const incMotivosAgo = {"Medicina Preventiva": [{"px": "Ochoa Gutiérrez Miryam", "est": "Evaluación Médico Internista (2 consultas)", "mot": "Atraso por prolongar tiempos de entrega, evento Sulvarán"}, {"px": "Garzón Díaz María Mónica", "est": "Electrocardiograma", "mot": "Doctor no envía interpretación a tiempo"}, {"px": "Flores Montoya Jorge", "est": "Evaluación Médico Internista (2 consultas)", "mot": "4 chequeos no cumplidos por interpretación tarde Dr. Oropeza"}], "López Mateos": [{"px": "Vizcarra Álvarez Silvia", "est": "TAC - 3R - Cráneo, Cuello y Tórax [C]", "mot": "doctor en biopsia"}, {"px": "Priego Arenas María del Rosario", "est": "Mamografía - Bilateral", "mot": "Se eliminan imágenes de masto erróneas, se vuelve a enviar interpretación con imágenes correctas."}, {"px": "Ruiz Tamborrell Anabel", "est": "RX Muñeca - 2P", "mot": "Placas mal rotuladas, radiólogo pide eliminar y corregir"}, {"px": "Ventura Hernández Sthefano", "est": "RX - Muñeca - 4P", "mot": "En otro estudio y firma a hora de entrega"}, {"px": "Montes Jiménez Camila Suemy", "est": "Eco de Hígado y Vías Biliares", "mot": "doctor en Estudio Doppler 2 extremidades"}, {"px": "Mendoza Beltrán Mario Manuel", "est": "RM 3.0T Digital - Oncológica - Valoración Funcional", "mot": "Dr.Iván vuelve a firmar, se pegó el estudio a tiempo porque no se ligó por falla eléctrica"}, {"px": "Cagide Y López María Consuelo", "est": "TAC - Angio de Aorta Torácica [C]", "mot": "Se regresa estudio por parte de calidad"}, {"px": "García Torres Sergio Adrián", "est": "Espirometría con Broncodilatador", "mot": "No se envía interpretación, se le envían trazos y se vuelve a mandar mensaje para confirmar si nos enviara la interpretación, no se recibe respuesta"}, {"px": "García Lopéz Mario Eduardo", "est": "Diagnóstico Ojo Seco  Agudeza Visual", "mot": "Dra. Mónica se queda adentro del estudio y se retira, el estudio no se guardó"}, {"px": "De Ávila Huerta Rafael Arturo", "est": "RX Columna Lumbar - 6P", "mot": "Atraso Dra. Íñiguez cubre UAC"}, {"px": "De Ávila Huerta Rafael Arturo", "est": "RX Columna Lumbar - 6P", "mot": "Interpretado tarde por agenda de doctores"}, {"px": "Cardoso Calderón Francisco", "est": "RX Pie - 1P  RX Tobillo - 2P  RX Calcáneo - 1P", "mot": "Médicos ya se habían retirado, Dr. Gadiel de vacaciones, esperamos llegada del Dr. Erick"}, {"px": "Villasano Zúñiga Joaquín", "est": "TAC - 2R - Tórax y Abdomen [C]", "mot": "Dr. Macías se le juntan varios estudios"}, {"px": "Ochoa Tirado José Jiovani", "est": "RX Tórax - 1P", "mot": "Se interpreta tarde por la hora de llegada del Dr. Macias"}, {"px": "Salazar Osegueda Lucía", "est": "TAC - Abdomen - Total [C]", "mot": "Cambio de empresa, una empresa en orden y otro en interpretación"}, {"px": "Morales Hernández Manuel", "est": "TAC - Tórax (Pulmonar o Mediastino) [C]", "mot": "Se regresa estudio por calidad, Dr. René agrega más información a la interpretación"}, {"px": "Korsich Gustavo Adrián", "est": "E - RM 3.0T Digital - Próstata Multiparamétrica [C]", "mot": "Reingreso de calidad"}, {"px": "Ventura Hernández Sthefano", "est": "Rx - Muñeca 4P", "mot": "Solicitud de paciente para modificación - Calidad"}, {"px": "Ochoa Bustamante Rosa María", "est": "Eco de Mama  y  Mamografía - Bilateral con Tomosíntesis", "mot": "Se elimina interpretación para corregir fecha de nacimiento de la paciente"}, {"px": "Ochoa Bustamante Rosa María", "est": "Eco de Mama", "mot": "Cambio de fecha de nacimiento, interpretación vs orden"}, {"px": "Sánchez Corona Laura Janeth", "est": "Espirometría con Broncodilatador", "mot": "Doctora envía e interpreta tarde, dice que se apagó su dispositivo para poder pegar la interpretación"}, {"px": "Mercado Valdez Ana Dolores", "est": "Espirometría con Broncodilatador", "mot": "Doctora envía e interpreta tarde, dice que se apagó su dispositivo para poder pegar la interpretación"}, {"px": "López Sánchez Griselda Emilia", "est": "Gammagrama Renal con Filtración Dinámico - Estático", "mot": "Se elimina interpretación y se escanea con firma del Dr. Zaragoza ya que la paciente lo solicitó"}, {"px": "Martinez Murillo Camila Arizbeth", "est": "RM 3.0T Digital - Columna - Lumbar con Panorámica Sagital de Columna Completa", "mot": "Reingreso de Calidad"}], "Acueducto": [{"px": "León Mendoza Eleuterio", "est": "Eco de Próstata vía Abdominal", "mot": "Estudio no llega a tiempo a Exa"}, {"px": "Mata Acosta Regina", "est": "RM 3.0T Digital - Cráneo con Foco en Hipófisis", "mot": "Reingreso de calidad"}, {"px": "Loustaunau Urquides Marco Antonio", "est": "Eco de Próstata vía Abdominal", "mot": "Atraso Dra. Íñiguez cubre UAC"}, {"px": "Garibaldi Covarrubias María Isabel", "est": "E - RM 3.0T Digital - Hígado Multiparamétrica [C]", "mot": "Firmado 10 min tarde"}, {"px": "Romero Peña Ana Cecilia", "est": "RX Panorámica de Columna Completa LAT", "mot": "Realizando otro estudio"}, {"px": "Gómez Martínez Martha", "est": "RX Columna Lumbar - 4P", "mot": "Atraso Dra. Roció - cubre a Dra. Sofi"}, {"px": "González Rubio Beckmann María Carolina", "est": "RX Columna Lumbar - 1P", "mot": "Modificación Dra. Rocío"}, {"px": "Cuevas Hidalgo Servio Enrique", "est": "RX Panorámica de Miembros Inferiores (Escanometría)", "mot": "Dr. Erick realizando otro estudio"}, {"px": "Dibildox Villalobos Leticia Ivette", "est": "Eco Doppler de Carótidas, TAC Angio Carótidas", "mot": "Se liberan estudios para modificar por hallazgo Dra. Monse"}, {"px": "Bernal Ramiro Karen Mariel", "est": "RX Panorámica de Miembros Inferiores (Escanometría)", "mot": "Reingreso por calidad"}, {"px": "Mariscal Morfín Ana María", "est": "Eco de Partes Pequeñas", "mot": "Reingreso por modificación Dr. Erick"}, {"px": "González Chávez Luis Enrique", "est": "Varios", "mot": "Atraso, pacientes en chequeos solicitan 2 medicos, atraso en interpretación UAC"}], "Clínica de la Mujer": [{"px": "Gómez Hernández Sandra Margarita", "est": "Mamografía - Bilateral", "mot": "La doctora interpreta el estudio del año 2025 en lugar del actual"}, {"px": "Ramírez Enríquez Alma Gabriela", "est": "Mamografía - Bilateral", "mot": "Firmado 2 minutos después de FP"}, {"px": "Cano González Luz Amanda", "est": "Eco de Mama, Mamografía", "mot": "Se agrega palabra a interpretación"}, {"px": "Rodríguez Lara Claudia", "est": "Densitometría de Cadera y Columna Lumbar", "mot": "Densi UCM no se pudo ligar en exa, se entregó 2 minutos tarde"}, {"px": "Michel Rizo Carmen Estefania", "est": "Eco de Mama", "mot": "Atraso Dra. Lulú estudios del jueves"}], "Guadalupe": [{"px": "García Araiza María Eva", "est": "Eco de Hígado y Vías Biliares", "mot": "Dra. Rocío se traslada a UMP y no realiza la interpretación a tiempo"}]};
-function renderIncMotivos(nombre){
-  const el=document.getElementById('tab-inc-motivos'); if(!el) return;
-  const rows = nombre==='Todas' ? Object.values(incMotivosAgo).flat() : (incMotivosAgo[nombre]||[]);
-  const et = nombre==='Todas' ? 'todas las unidades' : nombre;
-  if(!rows.length){
-    el.innerHTML = '';
-    document.getElementById('inc-motivos-nota').innerHTML =
-      `Sin casos de la muestra cualitativa "rojos" cruzados a <b>${et}</b> en agosto 2026.`;
-    return;
-  }
-  el.innerHTML = '<thead><tr><th>Paciente</th><th>Estudio</th><th>Motivo</th></tr></thead><tbody>'+
-    rows.map(r=>`<tr><td>${r.px}</td><td>${r.est}</td><td>${r.mot}</td></tr>`).join('')+
-    '</tbody>';
-  const tot=rows.length;
-  document.getElementById('inc-motivos-nota').innerHTML =
-    `Muestra cualitativa de <b>${tot} estudio${tot===1?'':'s'} "rojo${tot===1?'':'s'}"</b> (incumplido${tot===1?'':'s'}) de <b>${et}</b> en agosto 2026, cruzados por Cita contra el reporte general de agosto (columna Sucursal) — no cubre el total de incumplidos del mes, solo los casos con motivo registrado en la bitácora de calidad que coinciden con una cita promesa de agosto.`;
-}
-function renderIncDetail(nombre){
-  const u=unidades[nombre]; if(!u) return;
-  incCurUnit=nombre;
-  const et=(nombre==='Todas')?'todas las unidades':nombre;
-  const uI = nombre==='Todas' ? -1 : incRecs.unidades.indexOf(nombre);
-  const rs = incRecs.recs.filter(r=> r[0]===7 && (uI<0 || r[2]===uI));  // incumplimientos de agosto de la unidad
-  const agg = incAgg(rs);
-  // --- KPIs ---
-  document.getElementById('incd-kpi-total').textContent=fmt(u.incumpl);
-  document.getElementById('incd-kpi-med').textContent=(rs.length?agg.mediana:0)+' h';
-  document.getElementById('incd-kpi-ge24').textContent=fmt(u.excl24);
-  document.getElementById('incd-kpi-norec').textContent=fmt(u.notrec);
-  // --- por rango de horas ---
-  const horasEl=document.getElementById('bars-horas');
-  if(u.neg===0){
-    horasEl.innerHTML='<div class="empty">Sin estudios con retraso por horas en esta unidad'+
-      (u.notrec?` (${u.notrec} no recibido${u.notrec===1?'':'s'}, sin hora A-F)`:'')+'.</div>';
+function renderIncDrill(){
+  const crumbs=[];
+  crumbs.push(incLevel===1 ? '<b>Unidades</b>' : '<a href="#" data-lvl="1">Unidades</a>');
+  if(incLevel>=2) crumbs.push(incLevel===2 ? `<b>${incSelUnit}</b>` : `<a href="#" data-lvl="2">${incSelUnit}</a>`);
+  if(incLevel>=3) crumbs.push(`<b>${incSelDept}</b>`);
+  document.getElementById('inc-breadcrumb').innerHTML = crumbs.join(' › ');
+  document.querySelectorAll('#inc-breadcrumb a').forEach(a=>a.onclick=(e)=>{
+    e.preventDefault();
+    incLevel=+a.dataset.lvl;
+    if(incLevel===1){ incSelUnit=null; incSelDept=null; }
+    if(incLevel===2){ incSelDept=null; }
+    renderIncDrill();
+  });
+
+  const el=document.getElementById('inc-drill-bars'), notaEl=document.getElementById('inc-drill-nota');
+
+  if(incLevel===1){
+    const names = INC_UNITS_ORDEN.filter(u=>unidades[u] && unidades[u].prometidos>0);
+    const data = names.map(u=>({name:u, v:unidades[u].indicador, n:unidades[u].prometidos, inc:unidades[u].incumpl}));
+    barChart(el, data, '#4c8c6f', {
+      max:100, fmt:v=>v.toFixed(1)+'%',
+      colorFn:(v,d)=>INC_UNIT_COLORS[d.name]||'#4c8c6f',
+      tip:d=>`<b>${d.name}</b> · ${d.v.toFixed(1)}% cumplimiento · ${fmt(d.n-d.inc)}/${fmt(d.n)} a tiempo`
+    });
+    document.getElementById('inc-detail-sub').textContent = 'Cumplimiento por unidad · haz clic en una barra para ver sus modalidades';
+    notaEl.innerHTML = 'Cada color es una unidad distinta. Haz clic en una barra para ver el detalle por modalidad.';
+    incWireBars(el, names, (name)=>{ incSelUnit=name; incLevel=2; renderIncDrill(); });
+  } else if(incLevel===2){
+    const u=unidades[incSelUnit];
+    const color=INC_UNIT_COLORS[incSelUnit]||'#4c8c6f';
+    const names=u.deptos.map(([name])=>name);
+    const data=u.deptos.map(([name,n,pct])=>({name,v:pct,n}));
+    barChart(el, data, color, {
+      max:100, fmt:v=>v.toFixed(1)+'%',
+      tip:d=>`<b>${d.name}</b> · ${d.v.toFixed(1)}% cumplimiento · ${fmt(d.n)} estudios`
+    });
+    document.getElementById('inc-detail-sub').textContent = `Cumplimiento por modalidad · ${incSelUnit}`;
+    notaEl.innerHTML = 'Haz clic en una modalidad para ver el detalle por horario (matutino 7–15h / vespertino 15h–cierre).';
+    incWireBars(el, names, (name)=>{ incSelDept=name; incLevel=3; renderIncDrill(); });
   } else {
-    vbarChart(horasEl, u.horas.map(r=>({name:r[0],v:r[1]})), '#c96f63');
+    const mv=(unidadesMV[incSelUnit]||{})[incSelDept];
+    const color=INC_UNIT_COLORS[incSelUnit]||'#4c8c6f';
+    if(!mv || (!mv.mat.t && !mv.vesp.t)){
+      el.innerHTML='<div class="empty">Sin datos de horario para esta modalidad.</div>';
+      notaEl.textContent='';
+    } else {
+      const data=[
+        {name:'Matutino (7–15h)', v: mv.mat.pct==null?0:mv.mat.pct, n: mv.mat.t},
+        {name:'Vespertino (15h–cierre)', v: mv.vesp.pct==null?0:mv.vesp.pct, n: mv.vesp.t}
+      ];
+      barChart(el, data, color, {
+        max:100, fmt:v=>v.toFixed(1)+'%',
+        tip:d=>`<b>${d.name}</b> · ${d.v.toFixed(1)}% cumplimiento · ${fmt(d.n)} estudios`
+      });
+      document.getElementById('inc-detail-sub').textContent = `${incSelDept} · ${incSelUnit}`;
+      notaEl.innerHTML = 'Matutino = Fecha Promesa antes de las 15:00; vespertino = 15:00 en adelante.';
+    }
   }
-  const dentro=u.neg-u.excl24;
-  document.getElementById('nota-horas').innerHTML=
-    `${dentro} con retraso sin motivo registrado + ${u.notrec} no recibido${u.notrec===1?'':'s'} = <b>${u.incumpl}</b> incumplido${u.incumpl===1?'':'s'}.${u.excl24?` Los ${u.excl24} con un motivo justificado en el reporte (mantenimiento, calidad, modificación médica, etc.) se cuentan como cumplimiento.`:''} El histograma muestra solo los retrasos sin motivo justificado.`;
-  // --- por departamento ---
-  const dep=incByDeptoUnit(nombre), depEl=document.getElementById('inc-por-depto');
-  if(dep.length){ barChart(depEl, dep, '#c96f63'); }
-  else { depEl.innerHTML='<div class="empty">Sin incumplimiento registrado en esta unidad en agosto.</div>'; }
-  // --- por día de la semana ---
-  const diaEl=document.getElementById('incd-por-dia');
-  if(rs.length){
-    vbarChart(diaEl, agg.porDia.map((v,i)=>({name:incRecs.dias[i],v})), '#c96f63');
-    let wi=0; agg.porDia.forEach((v,i)=>{ if(v>agg.porDia[wi]) wi=i; });
-    const pct=agg.total?Math.round(agg.porDia[wi]/agg.total*100):0;
-    document.getElementById('incd-nota-dia').innerHTML=`El día con más incumplimiento es <b>${incRecs.dias[wi]}</b> (${fmt(agg.porDia[wi])}, ${pct}%).`;
-  } else {
-    diaEl.innerHTML='<div class="empty">Sin datos.</div>';
-    document.getElementById('incd-nota-dia').textContent='';
-  }
-  // --- top 5 estudios ---
-  const topEl=document.getElementById('incd-top-estudios');
-  if(agg.top.length){ barChart(topEl, agg.top.map(t=>({name:t[0],v:t[1]})), '#c96f63'); }
-  else { topEl.innerHTML='<div class="empty">Sin datos.</div>'; }
-  // --- mapa de calor día × hora ---
-  heatmap('incd-heat','incd-heat-leg', agg.heat, incRecs.horas, incRecs.dias);
-  const heatNota=document.getElementById('incd-nota-heat');
-  if(rs.length){
-    let bk=null,bv=-1; for(const k in agg.heat){ if(agg.heat[k]>bv){bv=agg.heat[k];bk=k;} }
-    if(bk){ const [dd,hh]=bk.split(','); heatNota.innerHTML=`Mayor concentración: <b>${incRecs.dias[+dd]} ${hh}:00</b> (${bv} tarde). Hora de la fecha prometida.`; }
-    else heatNota.textContent='';
-  } else heatNota.textContent='';
-  // --- encabezado ---
-  document.getElementById('inc-detail-unit').textContent=et;
-  document.getElementById('inc-detail-sub').textContent=
-    `${fmt(u.incumpl)} incumplido${u.incumpl===1?'':'s'} de ${fmt(u.prometidos)} estudios · agosto 2026`;
-  renderIncMotivos(nombre);
 }
 function setIncDetail(open){
   incDetailOpen=open;
@@ -4257,7 +4204,7 @@ function setIncDetail(open){
   const t=document.getElementById('inc-toggle');
   if(t) t.setAttribute('aria-expanded',open?'true':'false');
   if(open){
-    renderIncDetail(incCurUnit);
+    renderIncDrill();
     const p=document.getElementById('inc-detail');
     if(p&&p.scrollIntoView) setTimeout(()=>p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'}),120);
   }
@@ -4308,7 +4255,8 @@ function renderIndicador(nombre){
   if(arcs[1]){ arcs[1].style.cursor='pointer'; arcs[1].onclick=()=>setIncDetail(true); }
   const legItems=document.querySelectorAll('#legend-cumpl .li');
   if(legItems[1]){ legItems[1].classList.add('clickable'); legItems[1].onclick=()=>setIncDetail(true); }
-  renderIncDetail(nombre);
+  incLevel=1; incSelUnit=null; incSelDept=null;
+  renderIncDrill();
   document.getElementById('inc-detail').classList.toggle('open', incDetailOpen);
   const sel=document.getElementById('unit-select'); if(sel) sel.value=nombre;
   renderIndicadorTemporal(nombre);
