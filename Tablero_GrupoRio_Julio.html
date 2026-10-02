@@ -2243,7 +2243,7 @@ const radPersSeries = {
   'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,0,13],
   'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,0,3],
   'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,16],
-  'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108,0]
+  'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108,4]
 };
 const RAD_NAMES = Object.keys(radPersSeries);
 const RAD_COL = {
@@ -2260,6 +2260,14 @@ const RAD_ALT_COUNT = {
   'Néstor González': {
     mes: {Ene26:{exa:42,ent:397,alt:240}, Feb26:{exa:39,ent:327,alt:202}, Mar26:{exa:61,ent:302,alt:212}, Abr26:{exa:48,ent:279,alt:187}, May26:{exa:53,ent:402,alt:254}, Jun26:{exa:41,ent:359,alt:220}, Jul26:{exa:30,ent:369,alt:214}},
     sem: {S27:{exa:27,ent:19,alt:36}, S28:{exa:31,ent:71,alt:66}, S29:{exa:38,ent:97,alt:86}, S30:{exa:38,ent:89,alt:82}, S31:{exa:38,ent:68,alt:72}, S32:{exa:16,ent:50,alt:41}, S33:{exa:23,ent:46,alt:46}, S34:{exa:34,ent:95,alt:81}}
+  },
+  'Samanta Mora': {
+    mes: {Sep26:{src:'SIO',exa:13,ent:766,alt:396}},
+    sem: {S37:{exa:0,ent:161,alt:80}, S38:{exa:0,ent:156,alt:78}, S39:{exa:0,ent:112,alt:56}}
+  },
+  'Oswaldo Ríos': {
+    mes: {Sep26:{src:'SIO',exa:3,ent:448,alt:227}},
+    sem: {S37:{exa:0,ent:62,alt:31}, S38:{exa:0,ent:22,alt:11}, S39:{exa:0,ent:104,alt:52}}
   }
 };
 function radAltNoteHTML(){
@@ -2267,16 +2275,18 @@ function radAltNoteHTML(){
     if(radPers==='Todos') return '';
     const d = RAD_ALT_COUNT[radPers] && RAD_ALT_COUNT[radPers].mes[radMonth];
     if(!d) return '';
-    return `<b>Conteo alternativo — ${radPers}:</b> ${d.exa} en Exa + ${Math.floor(d.ent/2)} `+
+    const src = d.src || 'Exa';
+    return `<b>Conteo alternativo — ${radPers}:</b> ${d.exa} en ${src} + ${Math.floor(d.ent/2)} `+
       `(mitad de ${d.ent} estudios en "Usuario recibe entregas", redondeado hacia abajo) = <b>${d.alt} estudios</b>. `+
-      `La línea/dato de arriba es el bruto de Exa, sin este ajuste.`;
+      `La línea/dato de arriba es el bruto de ${src}, sin este ajuste.`;
   }
   const per = radWeek;
   const names = Object.keys(RAD_ALT_COUNT).filter(n=>RAD_ALT_COUNT[n].sem[per]);
   if(!names.length) return '';
   return '<b>Conteo alternativo:</b> '+names.map(n=>{
     const d=RAD_ALT_COUNT[n].sem[per];
-    return `${n} — ${d.exa} en Exa + ${Math.floor(d.ent/2)} (mitad de ${d.ent} entregas) = <b>${d.alt}</b>`;
+    const src = d.src || 'Exa';
+    return `${n} — ${d.exa} en ${src} + ${Math.floor(d.ent/2)} (mitad de ${d.ent} entregas) = <b>${d.alt}</b>`;
   }).join(' · ')+'. Las barras de arriba muestran solo el dato bruto de Exa, sin este ajuste.';
 }
 let radMode='mes', radMonth='Sep26', radWeek='S39', radPers='Todos';
