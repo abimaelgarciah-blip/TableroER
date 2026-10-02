@@ -1613,7 +1613,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div class="card-head">
             <div>
               <h3>Transcripción vs. Intervención vs. Radiólogos</h3>
-              <p class="csub">Agosto 2026 · SIO, Productividad de Transcripción, por cuenta</p>
+              <p class="csub">Septiembre 2026 · SIO, Productividad de Transcripción, por cuenta</p>
             </div>
           </div>
           <div class="grid kpis" style="margin-bottom:16px">
@@ -2174,7 +2174,10 @@ const radData = {
       mod:[{name:'Densitometría',v:212},{name:'Resonancia',v:172},{name:'Medicina Nuclear',v:172},{name:'Tomografía',v:148}], sede:[]},
     {k:'Jul26', lab:'Julio 2026 · RM+Densi+MN+TAC', tot:430,
       rad:[{name:'Estefanía Martínez',v:128},{name:'Hugo Tabares',v:72},{name:'Laura García',v:70},{name:'Mónica Anaya',v:52},{name:'Graciela Cortés',v:41},{name:'Néstor González',v:30},{name:'Iván Enríquez',v:18},{name:'Samanta Mora',v:9},{name:'Oswaldo Ríos',v:6},{name:'Humberto González',v:4}],
-      mod:[{name:'Densitometría',v:147},{name:'Medicina Nuclear',v:131},{name:'Tomografía',v:106},{name:'Resonancia',v:46}], sede:[]}
+      mod:[{name:'Densitometría',v:147},{name:'Medicina Nuclear',v:131},{name:'Tomografía',v:106},{name:'Resonancia',v:46}], sede:[]},
+    {k:'Sep26', lab:'Septiembre 2026 · RM+Densi+MN+TAC', tot:482,
+      rad:[{name:'Hugo Tabares',v:91},{name:'Estefanía Martínez',v:89},{name:'Néstor González',v:75},{name:'Laura García',v:74},{name:'Mónica Anaya',v:74},{name:'Graciela Cortés',v:21},{name:'Iván Enríquez',v:20},{name:'Abimael García',v:16},{name:'Samanta Mora',v:13},{name:'Humberto González',v:6},{name:'Oswaldo Ríos',v:3}],
+      mod:[{name:'Medicina Nuclear',v:155},{name:'Densitometría',v:138},{name:'Tomografía',v:135},{name:'Resonancia',v:54}], sede:[]}
   ],
     weeks: [
     {k:'S27', lab:'Semana 27 · 29 jun – 5 jul', tot:188,
@@ -2212,27 +2215,35 @@ const radData = {
     {k:'S37', lab:'Semana 37 · 7 – 13 sep', tot:211,
       rad:[{name:'Enríquez Velázquez, Manuel',v:42},{name:'Anaya Constante, Mónica',v:41},{name:'Tabares Martínez, Hugo',v:36},{name:'García Godínez, Laura',v:35},{name:'Martínez Andrade, Sandra',v:29},{name:'González Medina, Néstor',v:25},{name:'García Hernández, Abimael',v:3}],
       mod:[{name:'Resonancia (MR)',v:184},{name:'Tomografía (CT)',v:27}],
-      sede:[{name:'Unidad López Mateos',v:136},{name:'Chamizal',v:42},{name:'Acueducto',v:33}]}
+      sede:[{name:'Unidad López Mateos',v:136},{name:'Chamizal',v:42},{name:'Acueducto',v:33}]},
+    {k:'S38', lab:'Semana 38 · 14 – 20 sep', tot:174,
+      rad:[{name:'González Medina, Néstor',v:36},{name:'Tabares Martínez, Hugo',v:34},{name:'García Godínez, Laura',v:28},{name:'Enríquez Velázquez, Manuel',v:27},{name:'Anaya Constante, Mónica',v:25},{name:'Martínez Andrade, Sandra',v:17},{name:'Cortés Vázquez, Graciela',v:4},{name:'García Hernández, Abimael',v:3}],
+      mod:[{name:'Resonancia (MR)',v:141},{name:'Tomografía (CT)',v:33}],
+      sede:[{name:'Unidad López Mateos',v:136},{name:'Chamizal',v:38}]},
+    {k:'S39', lab:'Semana 39 · 21 – 27 sep', tot:215,
+      rad:[{name:'Enríquez Velázquez, Manuel',v:40},{name:'Tabares Martínez, Hugo',v:40},{name:'Anaya Constante, Mónica',v:39},{name:'Martínez Andrade, Sandra',v:32},{name:'García Godínez, Laura',v:31},{name:'González Medina, Néstor',v:30},{name:'García Hernández, Abimael',v:3}],
+      mod:[{name:'Resonancia (MR)',v:174},{name:'Tomografía (CT)',v:41}],
+      sede:[{name:'Unidad López Mateos',v:149},{name:'Chamizal',v:41},{name:'Acueducto',v:25}]}
   ]
 };
-const radMonthLabels = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26','Jul 26','Ago 26'];
+const radMonthLabels = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26','Jul 26','Ago 26','Sep 26'];
 const radPersSeries = {
-  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,183],
-  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,171],
-  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,104],
-  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,0],
-  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,125],
-  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,159],
-  'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4,5],
-  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,2],
-  'Alberto Valdez': [15,1,2,1,2,36,26,7,2,0,0,3,0,1,0,0,0,0,0,0],
-  'Casandra Ceballos': [419,409,451,629,235,59,54,20,7,3,1,0,0,0,0,0,3,0,0,0],
-  'Mayra Gallegos': [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
-  'Ana Lidia Ochoa': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0],
-  'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,0],
-  'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,0],
-  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8],
-  'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108]
+  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,183,91],
+  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,171,74],
+  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,104,75],
+  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,0,89],
+  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,125,20],
+  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,159,74],
+  'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4,5,6],
+  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,2,21],
+  'Alberto Valdez': [15,1,2,1,2,36,26,7,2,0,0,3,0,1,0,0,0,0,0,0,0],
+  'Casandra Ceballos': [419,409,451,629,235,59,54,20,7,3,1,0,0,0,0,0,3,0,0,0,0],
+  'Mayra Gallegos': [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0],
+  'Ana Lidia Ochoa': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0],
+  'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,0,13],
+  'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,0,3],
+  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,16],
+  'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108,0]
 };
 const RAD_NAMES = Object.keys(radPersSeries);
 const RAD_COL = {
@@ -2268,7 +2279,7 @@ function radAltNoteHTML(){
     return `${n} — ${d.exa} en Exa + ${Math.floor(d.ent/2)} (mitad de ${d.ent} entregas) = <b>${d.alt}</b>`;
   }).join(' · ')+'. Las barras de arriba muestran solo el dato bruto de Exa, sin este ajuste.';
 }
-let radMode='mes', radMonth='Jul26', radWeek='S37', radPers='Todos';
+let radMode='mes', radMonth='Sep26', radWeek='S39', radPers='Todos';
 function radCur(){ return radMode==='mes'
   ? (radData.months.find(m=>m.k===radMonth)||radData.months[radData.months.length-1])
   : (radData.weeks.find(w=>w.k===radWeek)||radData.weeks[radData.weeks.length-1]); }
@@ -2281,7 +2292,7 @@ function renderRadLine(){
   const sum = (radPers==='Todos' ? RAD_NAMES.reduce((a,n)=>a+radPersSeries[n].reduce((x,y)=>x+y,0),0)
                                   : radPersSeries[radPers].reduce((a,b)=>a+b,0));
   document.getElementById('rad-sub').textContent =
-    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO) · ene 2025 – ago 2026 · '+
+    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO) · ene 2025 – sep 2026 · '+
     (radPers==='Todos' ? 'los 16 transcriptores' : radPers)+' · '+fmt(sum)+' estudios';
   document.getElementById('note-rad-alt').innerHTML = radAltNoteHTML();
 }
@@ -3578,14 +3589,14 @@ function renderServicios(){
   const tot=series.reduce((a,s)=>a+s.vals.reduce((x,v)=>x+(v||0),0),0);
   document.getElementById('srv-sub').textContent =
     (srvSel==='Todos'?'Los 8 servicios de mayor volumen, el resto agrupado':srvSel)+
-    ' · vista '+(srvMode==='sem'?'semanal (S1–S34)':'mensual (ene–jun)')+' · '+fmt(tot)+' estudios';
+    ' · vista '+(srvMode==='sem'?'semanal (S1–S39)':'mensual (ene–jun)')+' · '+fmt(tot)+' estudios';
   document.getElementById('srv-nota').innerHTML =
     'Semanas S1–S27 derivadas de los reportes mensuales (semana ISO de <b>Fecha Promesa [A]</b>); '+
-    'S28 a S34 vienen de los reportes semanales, que es la única fuente que las cubre. '+
+    'S28 a S39 vienen de los reportes semanales, que es la única fuente que las cubre. '+
     '<b>S1</b> arranca el 1 de enero y <b>S27</b> corta el 30 de junio, así que ambas quedan cortas.';
 }
-/* ===== Transcripción vs. Intervención vs. Radiólogos (SIO, agosto 2026) =====
-   Fuente: Productividad de Transcripción, SIO, agosto 2026 (40 cuentas x 18
+/* ===== Transcripción vs. Intervención vs. Radiólogos (SIO, septiembre 2026) =====
+   Fuente: Productividad de Transcripción, SIO, septiembre 2026 (40 cuentas x 17
    departamentos). Cuentas de transcripción (confirmadas con el usuario):
    hugotm, lauragg, monicaac, nestorgm, manuelev (incluye manuelevuac),
    sandrama, gracielacv, albertova, casandracr, mayrage, abimaelgh, anaor,
@@ -3595,24 +3606,23 @@ function renderServicios(){
    cuentas fuera de esa lista (interpretan directo, sin transcriptor) cuenta
    como "Radiólogos". */
 const triByDept = [
-  {dept:'Ecosonografía', t:0, i:198, r:1315},
-  {dept:'Radiología', t:0, i:72, r:1177},
-  {dept:'Resonancia Magnética', t:0, i:62, r:886},
-  {dept:'Servicios Especiales', t:0, i:628, r:251},
-  {dept:'Cardiología', t:0, i:483, r:293},
-  {dept:'Tomografía Axial Computada', t:0, i:118, r:380},
-  {dept:'Salud Visual', t:0, i:472, r:0},
-  {dept:'Mamografía', t:0, i:220, r:167},
-  {dept:'Densitometría', t:125, i:0, r:195},
-  {dept:'Espirometría', t:0, i:32, r:199},
-  {dept:'Medicina Nuclear', t:186, i:0, r:1},
-  {dept:'Bioimpedanciología', t:0, i:121, r:0},
-  {dept:'EEG y Mapeo Cerebral', t:0, i:104, r:0},
-  {dept:'Servicio Dental', t:0, i:75, r:0},
-  {dept:'Paquetes', t:0, i:63, r:8},
-  {dept:'Electromiografía y Potenciales Evocados', t:0, i:30, r:0},
-  {dept:'Chequeos Médicos', t:0, i:16, r:0},
-  {dept:'Maquila', t:0, i:2, r:0}
+  {dept:'Bioimpedanciología', t:0, i:130, r:0},
+  {dept:'Cardiología', t:0, i:499, r:263},
+  {dept:'Chequeos Médicos', t:0, i:8, r:0},
+  {dept:'Densitometría', t:138, i:0, r:212},
+  {dept:'EEG y Mapeo Cerebral', t:0, i:83, r:0},
+  {dept:'Ecosonografía', t:0, i:215, r:1253},
+  {dept:'Electromiografía y Potenciales Evocados', t:0, i:33, r:0},
+  {dept:'Espirometría', t:0, i:17, r:223},
+  {dept:'Mamografía', t:0, i:185, r:207},
+  {dept:'Medicina Nuclear', t:155, i:0, r:26},
+  {dept:'Paquetes', t:0, i:50, r:9},
+  {dept:'Radiología', t:0, i:62, r:1102},
+  {dept:'Resonancia Magnética', t:0, i:54, r:880},
+  {dept:'Salud Visual', t:0, i:415, r:0},
+  {dept:'Servicio Dental', t:0, i:80, r:0},
+  {dept:'Servicios Especiales', t:0, i:687, r:263},
+  {dept:'Tomografía Axial Computada', t:0, i:135, r:416}
 ];
 function renderTri(){
   const T = triByDept.reduce((a,r)=>a+r.t,0), I = triByDept.reduce((a,r)=>a+r.i,0), R = triByDept.reduce((a,r)=>a+r.r,0);
@@ -3634,8 +3644,8 @@ function renderTri(){
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ segEls.forEach(s=>s.style.width=s.dataset.w+'%'); })); }
 
   document.getElementById('tri-nota').innerHTML =
-    `De ${fmt(TOT)} estudios en SIO durante agosto, <b>${pct(R)}%</b> los interpretó directo el radiólogo (sin pasar por transcripción), <b>${pct(I)}%</b> los llevó un transcriptor como intervención (todo excepto Medicina Nuclear/Densitometría) y solo <b>${pct(T)}%</b> son transcripciones puras de Medicina Nuclear y Densitometría. `+
-    `Radiología, Ecosonografía y Resonancia Magnética son mayoría "Radiólogos" (el médico interpreta directo); Cardiología, Servicios Especiales, Mamografía y Salud Visual son mayoría "Intervención" (pasan por transcriptor).`;
+    `De ${fmt(TOT)} estudios en SIO durante septiembre, <b>${pct(R)}%</b> los interpretó directo el radiólogo (sin pasar por transcripción), <b>${pct(I)}%</b> los llevó un transcriptor como intervención (todo excepto Medicina Nuclear/Densitometría) y solo <b>${pct(T)}%</b> son transcripciones puras de Medicina Nuclear y Densitometría. `+
+    `Radiología, Ecosonografía, Resonancia Magnética y Mamografía son mayoría "Radiólogos" (el médico interpreta directo); Cardiología, Servicios Especiales y Salud Visual son mayoría "Intervención" (pasan por transcriptor).`;
 
   const rows = triByDept.slice().sort((a,b)=>(b.t+b.i+b.r)-(a.t+a.i+a.r));
   document.getElementById('tri-dept-tab').innerHTML =
