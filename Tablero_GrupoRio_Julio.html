@@ -509,6 +509,9 @@
       Chequeos médicos
     </button>
         <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Estudios y Deptos </button>
+        <button class="nav-item" data-view="proceso"><svg class="ico ico-departamentos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="b1" x1="4" y1="20" x2="4" y2="14"/><line class="b2" x1="10" y1="20" x2="10" y2="9"/><line class="b3" x1="16" y1="20" x2="16" y2="5"/><line class="b4" x1="20" y1="20" x2="20" y2="11"/></svg> Tiempos del proceso </button>
+        <button class="nav-item" data-view="promesa"><svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring2" cx="12" cy="12" r="9"/><circle class="ring1" cx="12" cy="12" r="5.5"/><circle class="dot" cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> Promesa de estudios </button>
+        <button class="nav-item" data-view="vs2025"><svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="6"/><line class="handle" x1="20" y1="20" x2="15.5" y2="15.5"/></svg> 2026 vs 2025 </button>
     <button class="nav-item" data-view="proyectos">
       <svg class="ico ico-proj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="bulb" d="M8 10a4 4 0 1 1 8 0c0 2-1.2 2.8-1.8 3.6-.4.5-.6.9-.6 1.4h-3.2c0-.5-.2-.9-.6-1.4C9.2 12.8 8 12 8 10Z"/><path d="M9.5 21h5M10.3 18.2h3.4" stroke-linecap="round"/><line class="ray r1" x1="12" y1="1.6" x2="12" y2="3.3"/><line class="ray r2" x1="3.6" y1="10" x2="5.3" y2="10"/><line class="ray r3" x1="18.7" y1="10" x2="20.4" y2="10"/></svg>
       Proyectos
@@ -699,7 +702,7 @@
       <section class="view" id="estudios">
         <div class="page-head">
           <h1>Estudios y Departamentos</h1>
-          <p>Volumen, cumplimiento y tiempos de proceso por unidad y departamento <span class="badge">Ene–Sep 2026</span></p>
+          <p>Volumen y cumplimiento por unidad y departamento <span class="badge">Ene–Sep 2026</span></p>
         </div>
 
         <div class="card">
@@ -718,75 +721,6 @@
           <div class="line-note" id="note-dep-mtx" style="margin-top:12px"></div>
         </div>
 
-        <div class="card" style="margin-top:16px">
-          <h3>Tiempos del proceso por departamento</h3>
-          <p class="csub">Media de horas por etapa, por unidad · septiembre 2026 · estudios filtrados (ver nota)</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Alta [G] → Study Unread On</span>
-            <span class="it"><span class="sw" style="background:#3f6fa6"></span>Study Unread On → Transcrito [C]</span>
-            <span class="it"><span class="sw" style="background:#c2921f"></span>Transcrito [C] → Firma [D]</span>
-            <span class="it"><span class="sw" style="background:#4e8c70"></span>Firma [D] → Recibe [F]</span>
-            <span class="it"><span style="width:2px;height:12px;background:#1f1f1e;display:inline-block"></span>Objetivo por departamento</span>
-          </div>
-          <div style="margin:10px 0 14px" id="proc4-unit-bar"></div>
-          <div class="bars" id="proc4-bars"></div>
-          <div class="line-note" style="margin-top:14px" id="proc4-nota"></div>
-
-          <p class="csub" style="margin-top:20px">% de estudios con Fecha Promesa [A] → Alta [G] dentro del objetivo · agosto 2026</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#e3e3df"></span>Fuera del objetivo</span>
-          </div>
-          <div class="bars" id="proc-dentro-bars"></div>
-          <div class="line-note" style="margin-top:14px" id="proc-dentro-nota"></div>
-
-          <p class="csub" style="margin-top:20px">% dentro del objetivo · agosto vs. julio 2026</p>
-          <div id="proc-dentro-cmp-chart"></div>
-          <div class="legend" id="proc-dentro-cmp-legend"></div>
-          <div class="line-note" style="margin-top:12px" id="proc-dentro-cmp-nota"></div>
-
-          <p class="csub" style="margin-top:20px">Resonancia Magnética por bloque de promesa (según tipo de estudio)</p>
-          <div class="bars" id="proc-dentro-rm-bars"></div>
-          <div class="line-note" style="margin-top:14px" id="proc-dentro-rm-nota"></div>
-
-          <p class="csub" style="margin-top:20px">RM por bloque · agosto vs. julio 2026</p>
-          <div id="proc-dentro-rm-cmp-chart"></div>
-          <div class="legend" id="proc-dentro-rm-cmp-legend"></div>
-          <div class="line-note" style="margin-top:12px" id="proc-dentro-rm-cmp-nota"></div>
-
-        </div>
-
-        
-
-        <div class="card" style="margin-bottom:16px">
-    <div class="card-head">
-      <div>
-        <h3>Comparación vs 2025</h3>
-        <p class="csub" id="est-yoy-all-sub">Todas las unidades</p>
-      </div>
-      <div class="k-value" id="est-yoy-all-total" style="font-size:26px">—</div>
-    </div>
-    <div class="empty" id="est-yoy-all-nota" style="margin-top:12px"></div>
-
-    <p class="csub" style="margin-top:18px" id="est-yoy-sub">Detalle por unidad · septiembre 2025 vs. septiembre 2026</p>
-    <div id="est-yoy-chart"></div>
-    <div class="legend" id="est-yoy-legend"></div>
-    <div class="empty" id="est-yoy-nota" style="margin-top:12px"></div>
-
-    <p class="csub" style="margin-top:18px">Unidades sin volumen relevante en 2026</p>
-    <div class="bars" id="est-yoy-nodata"></div>
-    <div class="empty" id="est-yoy-nodata-nota" style="margin-top:12px"></div>
-  </div>
-
-  <div class="card" style="margin-bottom:16px">
-    <h3>Estudios por departamento · septiembre 2026</h3>
-    <p class="csub">Suma de las 9 unidades · mes completo · variación vs. septiembre 2025, todas las unidades</p>
-    <div style="overflow-x:auto">
-      <table class="dtab" id="est-jul-dept-tab"></table>
-    </div>
-  </div>
-
-  
         <div class="nav-label" style="margin:30px 0 10px">Volumen de estudios por unidad, departamento y total</div>
         <div class="est-wrap draw-fade">
     <iframe class="est-frame" title="Estudios Grupo Río" srcdoc="&lt;!DOCTYPE html&gt;
@@ -1436,6 +1370,112 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
   </div>
       </section>
 
+      <!-- ================== TIEMPOS DEL PROCESO ================== -->
+      <section class="view" id="proceso">
+        <div class="page-head">
+          <h1>Tiempos del proceso</h1>
+          <p>Horas por etapa, de Alta [G] a Recibe [F], por unidad y departamento <span class="badge">Septiembre 2026</span></p>
+        </div>
+
+        <div class="card">
+          <h3>Tiempos del proceso por departamento</h3>
+          <p class="csub">Media de horas por etapa, por unidad · septiembre 2026 · estudios filtrados (ver nota)</p>
+          <div class="sbar-legend">
+            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Alta [G] → Study Unread On</span>
+            <span class="it"><span class="sw" style="background:#3f6fa6"></span>Study Unread On → Transcrito [C]</span>
+            <span class="it"><span class="sw" style="background:#c2921f"></span>Transcrito [C] → Firma [D]</span>
+            <span class="it"><span class="sw" style="background:#4e8c70"></span>Firma [D] → Recibe [F]</span>
+            <span class="it"><span style="width:2px;height:12px;background:#1f1f1e;display:inline-block"></span>Objetivo por departamento</span>
+          </div>
+          <div style="margin:10px 0 14px" id="proc4-unit-bar"></div>
+          <div class="bars" id="proc4-bars"></div>
+          <div class="line-note" style="margin-top:14px" id="proc4-nota"></div>
+        </div>
+      </section>
+
+      <!-- ================== PROMESA DE ESTUDIOS ================== -->
+      <section class="view" id="promesa">
+        <div class="page-head">
+          <h1>Promesa de estudios</h1>
+          <p>Cumplimiento de Fecha Promesa [A] → Fecha Alta [G], por departamento, unidad y turno <span class="badge">Septiembre 2026</span></p>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3 id="prom-dept-title">Departamento</h3>
+              <p class="csub" id="prom-dept-sub"></p>
+            </div>
+            <div class="k-value" id="prom-dept-pct" style="font-size:26px">—</div>
+          </div>
+          <div style="margin:10px 0 14px" id="prom-dept-bar"></div>
+
+          <p class="csub" style="margin-top:18px">Horas transcurridas (Promesa [A] → Alta [G])</p>
+          <div class="sbar-legend">
+            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
+            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
+            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
+          </div>
+          <div id="prom-pareto-chart"></div>
+          <div class="line-note" style="margin-top:12px" id="prom-pareto-nota"></div>
+
+          <div id="prom-rm-block" style="display:none;margin-top:20px">
+            <p class="csub">Resonancia Magnética por bloque de promesa (según tipo de estudio)</p>
+            <div class="bars" id="prom-rm-bars"></div>
+            <div class="line-note" style="margin-top:14px" id="prom-rm-nota"></div>
+          </div>
+
+          <p class="csub" style="margin-top:20px" id="prom-unit-sub">Cumplimiento por unidad</p>
+          <div class="bars" id="prom-unit-bars"></div>
+          <div class="line-note" style="margin-top:14px" id="prom-unit-nota"></div>
+
+          <div id="prom-turno-block" style="display:none;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+            <div class="card-head">
+              <p class="csub" id="prom-turno-sub" style="margin:0">Turno</p>
+              <button class="seg-b" id="prom-turno-close" style="padding:4px 10px">← Volver a unidades</button>
+            </div>
+            <div class="bars" id="prom-turno-bars"></div>
+            <div class="line-note" style="margin-top:10px" id="prom-turno-nota"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================== 2026 VS 2025 ================== -->
+      <section class="view" id="vs2025">
+        <div class="page-head">
+          <h1>2026 vs 2025</h1>
+          <p>Volumen de estudios, septiembre 2026 contra septiembre 2025 <span class="badge">Septiembre</span></p>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-head">
+            <div>
+              <h3>Comparación vs 2025</h3>
+              <p class="csub" id="est-yoy-all-sub">Todas las unidades</p>
+            </div>
+            <div class="k-value" id="est-yoy-all-total" style="font-size:26px">—</div>
+          </div>
+          <div class="empty" id="est-yoy-all-nota" style="margin-top:12px"></div>
+
+          <p class="csub" style="margin-top:18px" id="est-yoy-sub">Detalle por unidad · septiembre 2025 vs. septiembre 2026</p>
+          <div id="est-yoy-chart"></div>
+          <div class="legend" id="est-yoy-legend"></div>
+          <div class="empty" id="est-yoy-nota" style="margin-top:12px"></div>
+
+          <p class="csub" style="margin-top:18px">Unidades sin volumen relevante en 2026</p>
+          <div class="bars" id="est-yoy-nodata"></div>
+          <div class="empty" id="est-yoy-nodata-nota" style="margin-top:12px"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <h3>Estudios por departamento · septiembre 2026</h3>
+          <p class="csub">Suma de las 9 unidades · mes completo · variación vs. septiembre 2025, todas las unidades</p>
+          <div style="overflow-x:auto">
+            <table class="dtab" id="est-jul-dept-tab"></table>
+          </div>
+        </div>
+      </section>
+
       <!-- ================== INTERPRETACIÓN ================== -->
       <section class="view" id="interpretacion">
         <div class="page-head">
@@ -2008,6 +2048,18 @@ const deptEvo = {"semanas": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9
 
 const PROC_DEPT_ORDER = ["Cardiología","Resonancia Magnética","Tomografía Axial C.","Densitometría","Radiología","Ecosonografía","Mamografía"];
 const PROC_TARGET = {"Cardiología":4,"Densitometría":3,"Ecosonografía":2,"Mamografía":3,"Radiología":2,"Resonancia Magnética":4,"Tomografía Axial C.":3};
+/* ===== Promesa de estudios: Fecha Promesa [A] -> Fecha Alta [G] (septiembre 2026) =====
+   Fuente: reporte general de septiembre 2026, mismas exclusiones que "Tiempos del
+   proceso": se excluyen Medicina Preventiva y estudios con "protocolo" en el nombre;
+   en Cardiología solo se cuenta Electrocardiograma. Objetivo por departamento:
+   Densitometría 3h, Ecosonografía 2h, Mamografía 3h, Radiología 2h, Tomografía 3h,
+   Cardiología 4h; Resonancia Magnética según su bloque de promesa (ver rmBlocks:
+   4h columna/hombro/cadera/sacroilíaca/tobillo/codo/rodilla, 24h el resto incl.
+   próstata/cráneo/mama/abdomen-pelvis/etc., 48h body scan/valoración funcional/
+   tractografía/cardioresonancia). pareto.bins agrupa en horas enteras (ceil), con
+   la última bin como "+h" (todo lo que exceda target+4h). unidades[suc].turnos usa
+   Matutino 7-14:59h / Vespertino 15h-cierre según hora de Fecha Promesa [A]. */
+const PROMESA_DATA = {"Cardiología":{"n":147,"cumple":73,"pct":49.7,"target":4,"pareto":{"total":147,"bins":[{"label":"1 h","within":2,"outside":0,"cumPct":1.4},{"label":"2 h","within":11,"outside":0,"cumPct":8.8},{"label":"3 h","within":21,"outside":0,"cumPct":23.1},{"label":"4 h","within":39,"outside":0,"cumPct":49.7},{"label":"5 h","within":0,"outside":16,"cumPct":60.5},{"label":"6 h","within":0,"outside":10,"cumPct":67.3},{"label":"7 h","within":0,"outside":3,"cumPct":69.4},{"label":"8 h","within":0,"outside":3,"cumPct":71.4},{"label":"9+ h","within":0,"outside":42,"cumPct":100.0}]},"unidades":{"López Mateos":{"n":145,"cumple":72,"turnos":{"Matutino":{"n":87,"cumple":58,"pct":66.7},"Vespertino":{"n":58,"cumple":14,"pct":24.1}},"pct":49.7},"Las Águilas":{"n":1,"cumple":0,"turnos":{"Matutino":{"n":0,"cumple":0,"pct":null},"Vespertino":{"n":1,"cumple":0,"pct":0.0}},"pct":0.0},"Acueducto":{"n":1,"cumple":1,"turnos":{"Matutino":{"n":1,"cumple":1,"pct":100.0},"Vespertino":{"n":0,"cumple":0,"pct":null}},"pct":100.0}}},"Resonancia Magnética":{"n":927,"cumple":436,"pct":47.0,"target":4,"pareto":{"total":927,"bins":[{"label":"1 h","within":4,"outside":0,"cumPct":0.4},{"label":"2 h","within":6,"outside":0,"cumPct":1.1},{"label":"3 h","within":82,"outside":0,"cumPct":9.9},{"label":"4 h","within":143,"outside":0,"cumPct":25.4},{"label":"5 h","within":11,"outside":35,"cumPct":30.3},{"label":"6 h","within":2,"outside":2,"cumPct":30.7},{"label":"7 h","within":2,"outside":1,"cumPct":31.1},{"label":"8 h","within":2,"outside":1,"cumPct":31.4},{"label":"9+ h","within":184,"outside":452,"cumPct":100.0}]},"unidades":{"Acueducto":{"n":205,"cumple":58,"turnos":{"Matutino":{"n":105,"cumple":19,"pct":18.1},"Vespertino":{"n":100,"cumple":39,"pct":39.0}},"pct":28.3},"Chamizal":{"n":185,"cumple":132,"turnos":{"Matutino":{"n":110,"cumple":59,"pct":53.6},"Vespertino":{"n":75,"cumple":73,"pct":97.3}},"pct":71.4},"López Mateos":{"n":535,"cumple":245,"turnos":{"Matutino":{"n":357,"cumple":132,"pct":37.0},"Vespertino":{"n":178,"cumple":113,"pct":63.5}},"pct":45.8},"Guadalupe":{"n":2,"cumple":1,"turnos":{"Matutino":{"n":1,"cumple":1,"pct":100.0},"Vespertino":{"n":1,"cumple":0,"pct":0.0}},"pct":50.0}},"rmBlocks":{"4":{"n":502,"cumple":199,"pct":39.6},"24":{"n":419,"cumple":235,"pct":56.1},"48":{"n":6,"cumple":2,"pct":33.3}}},"Tomografía Axial C.":{"n":553,"cumple":336,"pct":60.8,"target":3,"pareto":{"total":553,"bins":[{"label":"1 h","within":38,"outside":0,"cumPct":6.9},{"label":"2 h","within":198,"outside":0,"cumPct":42.7},{"label":"3 h","within":100,"outside":0,"cumPct":60.8},{"label":"4 h","within":0,"outside":71,"cumPct":73.6},{"label":"5 h","within":0,"outside":12,"cumPct":75.8},{"label":"6 h","within":0,"outside":3,"cumPct":76.3},{"label":"7 h","within":0,"outside":4,"cumPct":77.0},{"label":"8+ h","within":0,"outside":127,"cumPct":100.0}]},"unidades":{"López Mateos":{"n":430,"cumple":311,"turnos":{"Matutino":{"n":282,"cumple":188,"pct":66.7},"Vespertino":{"n":148,"cumple":123,"pct":83.1}},"pct":72.3},"Acueducto":{"n":121,"cumple":23,"turnos":{"Matutino":{"n":63,"cumple":9,"pct":14.3},"Vespertino":{"n":58,"cumple":14,"pct":24.1}},"pct":19.0},"Clínica de la Mujer":{"n":2,"cumple":2,"turnos":{"Matutino":{"n":1,"cumple":1,"pct":100.0},"Vespertino":{"n":1,"cumple":1,"pct":100.0}},"pct":100.0}}},"Densitometría":{"n":292,"cumple":266,"pct":91.1,"target":3,"pareto":{"total":292,"bins":[{"label":"1 h","within":57,"outside":0,"cumPct":19.5},{"label":"2 h","within":93,"outside":0,"cumPct":51.4},{"label":"3 h","within":116,"outside":0,"cumPct":91.1},{"label":"4 h","within":0,"outside":4,"cumPct":92.5},{"label":"5 h","within":0,"outside":3,"cumPct":93.5},{"label":"6 h","within":0,"outside":1,"cumPct":93.8},{"label":"7 h","within":0,"outside":0,"cumPct":93.8},{"label":"8+ h","within":0,"outside":18,"cumPct":100.0}]},"unidades":{"Clínica de la Mujer":{"n":104,"cumple":97,"turnos":{"Matutino":{"n":61,"cumple":56,"pct":91.8},"Vespertino":{"n":43,"cumple":41,"pct":95.3}},"pct":93.3},"López Mateos":{"n":182,"cumple":163,"turnos":{"Matutino":{"n":124,"cumple":108,"pct":87.1},"Vespertino":{"n":58,"cumple":55,"pct":94.8}},"pct":89.6},"Guadalupe":{"n":1,"cumple":1,"turnos":{"Matutino":{"n":0,"cumple":0,"pct":null},"Vespertino":{"n":1,"cumple":1,"pct":100.0}},"pct":100.0},"Acueducto":{"n":4,"cumple":4,"turnos":{"Matutino":{"n":1,"cumple":1,"pct":100.0},"Vespertino":{"n":3,"cumple":3,"pct":100.0}},"pct":100.0},"Las Águilas":{"n":1,"cumple":1,"turnos":{"Matutino":{"n":1,"cumple":1,"pct":100.0},"Vespertino":{"n":0,"cumple":0,"pct":null}},"pct":100.0}}},"Radiología":{"n":755,"cumple":591,"pct":78.3,"target":2,"pareto":{"total":755,"bins":[{"label":"1 h","within":366,"outside":0,"cumPct":48.5},{"label":"2 h","within":225,"outside":0,"cumPct":78.3},{"label":"3 h","within":0,"outside":45,"cumPct":84.2},{"label":"4 h","within":0,"outside":4,"cumPct":84.8},{"label":"5 h","within":0,"outside":4,"cumPct":85.3},{"label":"6 h","within":0,"outside":5,"cumPct":86.0},{"label":"7+ h","within":0,"outside":106,"cumPct":100.0}]},"unidades":{"López Mateos":{"n":581,"cumple":450,"turnos":{"Matutino":{"n":364,"cumple":297,"pct":81.6},"Vespertino":{"n":217,"cumple":153,"pct":70.5}},"pct":77.5},"Acueducto":{"n":170,"cumple":140,"turnos":{"Matutino":{"n":112,"cumple":85,"pct":75.9},"Vespertino":{"n":58,"cumple":55,"pct":94.8}},"pct":82.4},"Las Águilas":{"n":2,"cumple":1,"turnos":{"Matutino":{"n":1,"cumple":0,"pct":0.0},"Vespertino":{"n":1,"cumple":1,"pct":100.0}},"pct":50.0},"Guadalupe":{"n":1,"cumple":0,"turnos":{"Matutino":{"n":0,"cumple":0,"pct":null},"Vespertino":{"n":1,"cumple":0,"pct":0.0}},"pct":0.0},"Clínica de la Mujer":{"n":1,"cumple":0,"turnos":{"Matutino":{"n":1,"cumple":0,"pct":0.0},"Vespertino":{"n":0,"cumple":0,"pct":null}},"pct":0.0}}},"Ecosonografía":{"n":962,"cumple":623,"pct":64.8,"target":2,"pareto":{"total":962,"bins":[{"label":"1 h","within":176,"outside":0,"cumPct":18.3},{"label":"2 h","within":447,"outside":0,"cumPct":64.8},{"label":"3 h","within":0,"outside":125,"cumPct":77.8},{"label":"4 h","within":0,"outside":41,"cumPct":82.0},{"label":"5 h","within":0,"outside":2,"cumPct":82.2},{"label":"6 h","within":0,"outside":0,"cumPct":82.2},{"label":"7+ h","within":0,"outside":171,"cumPct":100.0}]},"unidades":{"López Mateos":{"n":474,"cumple":326,"turnos":{"Matutino":{"n":416,"cumple":304,"pct":73.1},"Vespertino":{"n":58,"cumple":22,"pct":37.9}},"pct":68.8},"Clínica de la Mujer":{"n":263,"cumple":140,"turnos":{"Matutino":{"n":128,"cumple":92,"pct":71.9},"Vespertino":{"n":135,"cumple":48,"pct":35.6}},"pct":53.2},"Chamizal":{"n":50,"cumple":35,"turnos":{"Matutino":{"n":47,"cumple":35,"pct":74.5},"Vespertino":{"n":3,"cumple":0,"pct":0.0}},"pct":70.0},"Guadalupe":{"n":40,"cumple":31,"turnos":{"Matutino":{"n":34,"cumple":26,"pct":76.5},"Vespertino":{"n":6,"cumple":5,"pct":83.3}},"pct":77.5},"Acueducto":{"n":135,"cumple":91,"turnos":{"Matutino":{"n":95,"cumple":67,"pct":70.5},"Vespertino":{"n":40,"cumple":24,"pct":60.0}},"pct":67.4}}},"Mamografía":{"n":326,"cumple":276,"pct":84.7,"target":3,"pareto":{"total":326,"bins":[{"label":"1 h","within":64,"outside":0,"cumPct":19.6},{"label":"2 h","within":157,"outside":0,"cumPct":67.8},{"label":"3 h","within":55,"outside":0,"cumPct":84.7},{"label":"4 h","within":0,"outside":10,"cumPct":87.7},{"label":"5 h","within":0,"outside":0,"cumPct":87.7},{"label":"6 h","within":0,"outside":0,"cumPct":87.7},{"label":"7 h","within":0,"outside":0,"cumPct":87.7},{"label":"8+ h","within":0,"outside":40,"cumPct":100.0}]},"unidades":{"López Mateos":{"n":137,"cumple":125,"turnos":{"Matutino":{"n":131,"cumple":121,"pct":92.4},"Vespertino":{"n":6,"cumple":4,"pct":66.7}},"pct":91.2},"Clínica de la Mujer":{"n":184,"cumple":147,"turnos":{"Matutino":{"n":85,"cumple":70,"pct":82.4},"Vespertino":{"n":99,"cumple":77,"pct":77.8}},"pct":79.9},"Guadalupe":{"n":1,"cumple":1,"turnos":{"Matutino":{"n":0,"cumple":0,"pct":null},"Vespertino":{"n":1,"cumple":1,"pct":100.0}},"pct":100.0},"Acueducto":{"n":4,"cumple":3,"turnos":{"Matutino":{"n":3,"cumple":2,"pct":66.7},"Vespertino":{"n":1,"cumple":1,"pct":100.0}},"pct":75.0}}}};
 
 /* ===== Tiempos del proceso por departamento, por unidad (4 etapas) =====
    Fuente: Turnaround Time (TAT) de septiembre 2026 + reporte general de
@@ -2070,10 +2122,6 @@ function renderProc4(){
     cmpTxt+cardioNote+' '+
     `El punto negro marca el objetivo de Fecha Promesa [A] → Alta [G] de cada departamento (no es un objetivo de estas 4 etapas, es la referencia de promesa original).`;
 }
-const procDentro = [{"name":"Cardiología","n":144,"n_within":39,"pct":27.1},{"name":"Resonancia Magnética","n":937,"n_within":309,"pct":33.0},{"name":"Tomografía Axial C.","n":449,"n_within":315,"pct":70.2},{"name":"Radiología","n":831,"n_within":585,"pct":70.4},{"name":"Ecosonografía","n":1066,"n_within":755,"pct":70.8},{"name":"Mamografía","n":324,"n_within":277,"pct":85.5},{"name":"Densitometría","n":264,"n_within":240,"pct":90.9}];
-const procDentroRM = [{"name":"Bloque 4 h (columna, hombro, cadera, sacroilíaca, tobillo, codo, rodilla)","hours":4,"n":486,"n_within":90,"pct":18.5},{"name":"Bloque 24 h (próstata, abdomen/pelvis, mama, cráneo, cuello, etc.)","hours":24,"n":446,"n_within":218,"pct":48.9},{"name":"Bloque 48 h (body scan, oncológica, funcionales/tractografía)","hours":48,"n":5,"n_within":1,"pct":20.0}];
-const procDentroJul = [{"name":"Cardiología","n":160,"n_within":38,"pct":23.8},{"name":"Resonancia Magnética","n":1048,"n_within":360,"pct":34.4},{"name":"Tomografía Axial C.","n":569,"n_within":348,"pct":61.2},{"name":"Radiología","n":849,"n_within":587,"pct":69.1},{"name":"Ecosonografía","n":972,"n_within":690,"pct":71.0},{"name":"Mamografía","n":326,"n_within":288,"pct":88.3},{"name":"Densitometría","n":296,"n_within":266,"pct":89.9}];
-const procDentroRMJul = [{"name":"Bloque 4 h","hours":4,"n":582,"n_within":89,"pct":15.3},{"name":"Bloque 24 h","hours":24,"n":464,"n_within":270,"pct":58.2},{"name":"Bloque 48 h","hours":48,"n":2,"n_within":1,"pct":50.0}];
 
 const indTemporal = {"mes": {"p": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep"], "u": {"Medicina Preventiva": [99.9, 97.6, 98.9, 99.9, 99.6, 97.2, 99.4, 99.5, 99.4], "Todas": [97.9, 94.0, 97.3, 98.5, 96.7, 96.1, 97.3, 98.1, 98.8], "López Mateos": [97.7, 92.9, 97.2, 97.6, 96.2, 96.6, 96.5, 98.4, 98.7], "Clínica de la Mujer": [98.9, 91.6, 97.2, 98.3, 96.2, 95.5, 97.5, 97.0, 97.6], "Guadalupe": [95.5, 84.4, 97.7, 96.9, 66.7, 80.0, 90.0, 91.1, 95.6], "Las Águilas": [87.5, 100.0, 93.8, 100.0, 85.7, 78.6, 100.0, 85.7, 83.3], "Acueducto": [96.3, 90.8, 91.8, 95.5, 93.1, 92.7, 94.3, 93.8, 97.2], "Ciudad Granja": [100.0, 33.3, 100.0, null, null, null, 100.0, null, null], "Chamizal": [97.4, 95.4, 95.3, 98.1, 96.6, 95.2, 98.2, 98.2, 99.2], "Plaza Universidad": [null, 100.0, 66.7, null, null, null, 100.0, null, null]}}, "semana": {"p": ["S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33", "S34", "S35", "S36", "S37", "S38", "S39"], "u": {"Guadalupe": [90.5, 94.7, 100.0, 100.0, 87.5, 100.0, 55.6, 100.0, 100.0, 100.0, 92.9, 100.0, 100.0, 100.0, 100.0, 100.0, null, 80.0, null, null, null, null, 80.0, 75.0, null, null, null, null, 100.0, 80.0, 91.7, 88.9, 100.0, 100.0, 90.0, 92.3, 100.0, 92.3], "Ciudad Granja": [null, null, 100.0, null, null, 33.3, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null], "Clínica de la Mujer": [99.2, 100.0, 99.2, 96.3, 95.6, 97.2, 85.1, 89.8, 96.6, 97.9, 97.1, 97.5, 94.6, 97.9, 96.9, 100.0, 97.8, 98.2, 93.4, 95.9, 96.1, 98.7, 93.0, 93.4, 96.2, 98.1, 97.2, 96.8, 98.7, 94.9, 95.7, 99.1, 97.0, 98.0, 96.1, 95.3, 97.0, 98.4], "Medicina Preventiva": [100.0, 100.0, 100.0, 99.7, 99.4, 99.4, 96.4, 95.2, 99.4, 99.3, 99.1, 98.0, 99.4, 100.0, 100.0, 100.0, 99.4, 99.6, 99.8, 99.7, 100.0, 99.7, 95.3, 96.1, 97.8, 99.7, 99.4, 99.0, 98.9, 98.8, 99.2, 99.8, 99.8, 99.2, 99.7, 98.8, 100.0, 99.9], "Plaza Universidad": [null, null, null, null, null, 100.0, null, null, 66.7, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, 100.0, null, null, null, null, null, null, null, null], "Todas": [98.6, 97.9, 98.4, 96.9, 97.0, 96.7, 91.9, 90.0, 97.1, 97.7, 96.8, 97.1, 98.1, 97.4, 99.2, 98.9, 98.2, 97.0, 97.3, 95.7, 96.6, 96.8, 94.2, 96.5, 96.3, 98.2, 96.7, 95.8, 97.7, 97.1, 97.1, 98.3, 97.8, 98.6, 97.8, 98.0, 99.1, 99.1], "López Mateos": [98.4, 97.6, 98.4, 96.7, 96.3, 95.7, 89.8, 88.3, 97.5, 96.7, 96.1, 97.8, 98.0, 95.9, 98.7, 98.2, 97.4, 95.9, 97.2, 94.7, 96.7, 96.7, 94.4, 98.0, 97.2, 97.3, 96.0, 94.1, 96.7, 97.6, 97.2, 97.6, 98.4, 98.7, 97.7, 98.7, 99.0, 99.4], "Las Águilas": [66.7, null, null, null, 100.0, null, 100.0, null, null, null, 100.0, 100.0, 75.0, 100.0, null, 100.0, null, 100.0, null, null, null, 100.0, null, 66.7, 33.3, 100.0, null, 100.0, 100.0, 100.0, 75.0, null, 100.0, null, 75.0, 100.0, null, null], "Chamizal": [100.0, 98.2, 98.2, 93.0, 98.3, 96.6, 97.3, 87.2, 96.6, 96.0, 93.1, 95.1, 97.6, 97.3, 98.5, 99.0, 96.4, 94.5, 96.7, 98.8, 97.0, 96.7, 94.9, 98.6, 90.0, 95.5, 96.3, 100.0, 97.7, 96.6, 96.8, 96.5, 100.0, 98.4, 100.0, 98.2, 100.0, 98.3], "Acueducto": [98.8, 96.1, 96.5, 94.4, 93.8, 94.2, 92.2, 81.3, 89.2, 96.2, 90.1, 87.9, 93.8, 93.4, 98.8, 95.4, 96.1, 94.7, 93.7, 91.8, 91.8, 89.1, 91.4, 95.6, 92.0, 96.2, 89.2, 94.9, 96.8, 92.8, 91.5, 96.5, 90.1, 97.2, 95.8, 96.7, 96.3, 95.9]}}};
 /* Indicador General 2025 · referencia mensual, todas las unidades */
@@ -2668,54 +2716,6 @@ function renderDeptos(){
       document.querySelectorAll('#dep-seg .seg-b').forEach(x=>x.classList.toggle('active',x===b));
       deptMatrix(deptMode); });
   deptMatrix(deptMode);
-  initProc4();
-
-  renderProcDentro(document.getElementById('proc-dentro-bars'), procDentro);
-  const worst = procDentro.slice().sort((a,b)=>a.pct-b.pct)[0];
-  const best = procDentro.slice().sort((a,b)=>b.pct-a.pct)[0];
-  document.getElementById('proc-dentro-nota').innerHTML =
-    `% de los estudios de cada departamento cuyo tiempo Fecha Promesa [A] → Alta [G] cae dentro del objetivo (Densitometría 3h, Ecosonografía 2h, Mamografía 3h, Radiología 2h, Tomografía 3h; Cardiología 4h; Resonancia según su bloque de promesa, ver abajo). `+
-    `Se excluyen de todos los departamentos los estudios de <b>Medicina Preventiva</b> (chequeos ejecutivos, con otra dinámica de agenda) y los <b>protocolos de investigación</b> (paciente identificado con iniciales en mayúsculas + folio, ej. "RFG 10112020", en vez de nombre completo). En <b>Cardiología</b> solo se cuenta <b>Electrocardiograma</b> — se excluyen Holter, Prueba de esfuerzo, valoraciones y ecocardiograma, que tienen tiempos de proceso distintos. `+
-    `<b>${worst.name}</b> es el que menos cumple (${worst.pct}%, ${fmt(worst.n_within)} de ${fmt(worst.n)}); <b>${best.name}</b> el que más (${best.pct}%). Esta es una vista más estricta que la anterior: mide contra la promesa desde el inicio, no solo el tiempo de proceso interno una vez dado de alta.`;
-
-  {
-    const cSeries = [
-      {name:'Julio 2026', color:'var(--track)', vals: PROC_DEPT_ORDER.map(n=>{ const j=procDentroJul.find(x=>x.name===n); return j?j.pct:0; })},
-      {name:'Agosto 2026', color:'var(--c-sede)', vals: PROC_DEPT_ORDER.map(n=>{ const a=procDentro.find(x=>x.name===n); return a?a.pct:0; })}
-    ];
-    groupBarChart(document.getElementById('proc-dentro-cmp-chart'), PROC_DEPT_ORDER, cSeries, '%');
-    document.getElementById('proc-dentro-cmp-legend').innerHTML = trLegend(cSeries);
-    const deltas = procDentro.map(r=>{
-      const j = procDentroJul.find(x=>x.name===r.name);
-      return [r.name, j.pct, r.pct, r.pct-j.pct];
-    });
-    const up = deltas.slice().sort((a,b)=>b[3]-a[3])[0];
-    const down = deltas.slice().sort((a,b)=>a[3]-b[3])[0];
-    document.getElementById('proc-dentro-cmp-nota').innerHTML =
-      `De julio a agosto, <b>${up[0]}</b> es el que más mejora (${up[1]}% → ${up[2]}%, ${up[3]>=0?'+':''}${up[3].toFixed(1)} pp) y `+
-      `<b>${down[0]}</b> el que más empeora (${down[1]}% → ${down[2]}%, ${down[3].toFixed(1)} pp).`;
-  }
-
-  renderProcDentro(document.getElementById('proc-dentro-rm-bars'), procDentroRM);
-  const rmWorst = procDentroRM.slice().sort((a,b)=>a.pct-b.pct)[0];
-  document.getElementById('proc-dentro-rm-nota').innerHTML =
-    `RM promete distinto según el tipo de estudio: <b>4 h</b> para columna (cervical/dorsal/lumbar), hombros, caderas, sacroilíacas, tobillos, codos y rodillas; <b>24 h</b> para próstata multiparamétrica, oídos, artroresonancias de mano/muñeca, angioresonancias, recto oncológico, cartilograma, abdomen y pelvis, colangioresonancia, volumetría de cerebro, espectroscopia, glúteos, cuello, pelvis, órbitas, mama, cráneo (y demás RM complicadas) y endometriosis; <b>48 h</b> (hasta 72 h en casos especiales) para body scan, valoración oncológica y estudios funcionales o de tractografía de cráneo. `+
-    `El bloque de <b>${rmWorst.hours} h</b> es el que menos cumple (${rmWorst.pct}%, ${fmt(rmWorst.n_within)} de ${fmt(rmWorst.n)}) — la clasificación por bloque se hizo por nombre de estudio, así que puede haber algún caso mal etiquetado.`;
-
-  {
-    const cSeries = [
-      {name:'Julio 2026', color:'var(--track)', vals: procDentroRMJul.map(r=>r.pct)},
-      {name:'Agosto 2026', color:'var(--c-sede)', vals: procDentroRM.map(r=>r.pct)}
-    ];
-    groupBarChart(document.getElementById('proc-dentro-rm-cmp-chart'), procDentroRM.map(r=>r.hours+' h'), cSeries, '%');
-    document.getElementById('proc-dentro-rm-cmp-legend').innerHTML = trLegend(cSeries);
-    const deltas = procDentroRM.map((r,i)=>[r.hours+' h', procDentroRMJul[i].pct, r.pct, r.pct-procDentroRMJul[i].pct]);
-    const up = deltas.slice().sort((a,b)=>b[3]-a[3])[0];
-    const down = deltas.slice().sort((a,b)=>a[3]-b[3])[0];
-    document.getElementById('proc-dentro-rm-cmp-nota').innerHTML =
-      `El bloque de <b>${up[0]}</b> mejora más (${up[1]}% → ${up[2]}%, ${up[3]>=0?'+':''}${up[3].toFixed(1)} pp); el de <b>${down[0]}</b> empeora más (${down[1]}% → ${down[2]}%, ${down[3].toFixed(1)} pp). El bloque de 48h tiene muy pocos casos (2 en julio, 5 en agosto), así que su % es poco estable mes a mes.`;
-  }
-
 }
 
 function deptMatrix(mode){
@@ -2750,7 +2750,8 @@ function deptMatrix(mode){
     '≤90% <span class="sc">'+[90,92.5,95,97.5,100].map(s=>`<i style="background:${scaleColor(s)}"></i>`).join('')+'</span> 100% · Δ = cambio vs. periodo anterior';
   const up=movers.filter(m=>m[1]>0).sort((a,b)=>b[1]-a[1])[0];
   const dn=movers.filter(m=>m[1]<0).sort((a,b)=>a[1]-b[1])[0];
-  const lbl=mode==='sem'?'última semana (S34 vs. S33)':'último mes (Ago vs. Jul)';
+  const lastP=periods[periods.length-1], prevP=periods[periods.length-2];
+  const lbl=(mode==='sem'?'última semana':'último mes')+` (${lastP} vs. ${prevP})`;
   let note=`Cambio en la ${lbl}. `;
   if(dn) note+=`Mayor retroceso: <b>${dn[0]}</b> (${dn[1].toFixed(1)} pts). `;
   if(up) note+=`Mayor avance: <b>${up[0]}</b> (+${up[1].toFixed(1)} pts).`;
@@ -3031,6 +3032,129 @@ function groupBarChart(el, cats, series, suf){
 
 function trLegend(items){
   return items.map(it=>`<div class="li"><span class="sw" style="background:${it.color}"></span><span class="ln">${it.name}</span></div>`).join('');
+}
+
+function paretoChart(el, pareto){
+  const bins = pareto.bins;
+  const W=700,H=280,padL=44,padR=40,padT=20,padB= (bins.length>9?62:44);
+  const n=bins.length;
+  const totals = bins.map(b=>b.within+b.outside);
+  const hi = Math.max(...totals,1);
+  const bw=(W-padL-padR)/n, gw=Math.min(bw*0.62,46);
+  const x=i=>padL+i*bw+(bw-gw)/2;
+  const y=v=>padT+(1-v/hi)*(H-padT-padB);
+  let grid='';
+  for(let g=0;g<=2;g++){ const gv=hi*g/2, gy=y(gv);
+    grid+=`<line x1="${padL}" y1="${gy}" x2="${W-padR}" y2="${gy}" stroke="var(--border)" stroke-width="1"/>`+
+          `<text x="${padL-8}" y="${gy+3.5}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(Math.round(gv))}</text>`;
+  }
+  let bars='';
+  bins.forEach((b,i)=>{
+    const tot=b.within+b.outside;
+    const x0=x(i);
+    const tip=`<b>${b.label}</b> · ${fmt(tot)} estudios · ${fmt(b.within)} dentro, ${fmt(b.outside)} fuera · ${b.cumPct}% acumulado`;
+    if(b.within>0){ const yW=y(b.within), hW=(H-padB)-yW;
+      bars+=`<rect x="${x0.toFixed(1)}" y="${yW.toFixed(1)}" width="${gw.toFixed(1)}" height="${hW.toFixed(1)}" rx="2" fill="#4c8c6f" data-tip="${tip}"/>`; }
+    if(b.outside>0){ const yTot=y(tot), yW2=y(b.within), hO=yW2-yTot;
+      bars+=`<rect x="${x0.toFixed(1)}" y="${yTot.toFixed(1)}" width="${gw.toFixed(1)}" height="${hO.toFixed(1)}" rx="2" fill="#ba544c" data-tip="${tip}"/>`; }
+  });
+  const yR=v=>padT+(1-v/100)*(H-padT-padB);
+  let line='', dots='';
+  bins.forEach((b,i)=>{
+    const px=x(i)+gw/2, py=yR(b.cumPct);
+    line += (i===0?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)+' ';
+    dots += `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="3" fill="#fff" stroke="#4BAFD6" stroke-width="2" data-tip="<b>${b.label}</b> · ${b.cumPct}% acumulado"/>`;
+  });
+  const rightAxis=[0,50,100].map(v=>`<text x="${W-padR+6}" y="${(yR(v)+3.5).toFixed(1)}" font-size="10" fill="var(--muted)">${v}%</text>`).join('');
+  const rotate = n>9;
+  const xlab = bins.map((b,i)=>{
+    const cx=(x(i)+gw/2).toFixed(1), ly=(rotate? H-padB+22 : H-padB+16).toFixed(1);
+    return `<text x="${cx}" y="${ly}" text-anchor="${rotate?'end':'middle'}" font-size="10" fill="var(--muted)" transform="${rotate?`rotate(-40 ${cx} ${ly})`:''}">${b.label}</text>`;
+  }).join('');
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${bars}<path d="${line}" fill="none" stroke="#4BAFD6" stroke-width="2.2" stroke-linejoin="round"/>${dots}${rightAxis}${xlab}</svg>`;
+}
+
+let promDept='Cardiología', promSelUnit=null;
+function initPromesaDeptSelect(){
+  const bar=document.getElementById('prom-dept-bar');
+  bar.innerHTML='<select class="unit-select" id="prom-dept-select" aria-label="Departamento">'+
+    PROC_DEPT_ORDER.filter(d=>PROMESA_DATA[d]).map(d=>{
+      const info=PROMESA_DATA[d];
+      return `<option value="${d}">${d} · ${fmt(info.n)} estudios</option>`;
+    }).join('')+'</select>';
+  document.getElementById('prom-dept-select').value=promDept;
+  document.getElementById('prom-dept-select').addEventListener('change', e=>{
+    promDept=e.target.value; promSelUnit=null; renderPromesaDept();
+  });
+  document.getElementById('prom-turno-close').onclick=()=>{ promSelUnit=null; renderPromesaUnidades(); };
+}
+function renderPromesa(){
+  initPromesaDeptSelect();
+  renderPromesaDept();
+}
+function renderPromesaDept(){
+  const info = PROMESA_DATA[promDept];
+  document.getElementById('prom-dept-title').textContent = promDept;
+  const targetTxt = promDept==='Resonancia Magnética' ? 'según bloque de promesa (4h / 24h / 48h)' : `objetivo ≤ ${info.target}h`;
+  document.getElementById('prom-dept-sub').textContent = `${fmt(info.n)} estudios · ${targetTxt}`;
+  const pctEl=document.getElementById('prom-dept-pct');
+  pctEl.textContent = info.pct.toFixed(1)+'%';
+  pctEl.style.color = info.pct>=85?'#4c8c6f':(info.pct>=65?'#c2921f':'#ba544c');
+
+  paretoChart(document.getElementById('prom-pareto-chart'), info.pareto);
+  document.getElementById('prom-pareto-nota').innerHTML =
+    `<b>${fmt(info.cumple)}</b> de ${fmt(info.n)} estudios (${info.pct.toFixed(1)}%) dentro del objetivo. `+
+    `Se excluyen Medicina Preventiva y estudios con "protocolo" en el nombre`+
+    (promDept==='Cardiología' ? '; solo se cuenta Electrocardiograma.' : '.');
+
+  const rmBlock=document.getElementById('prom-rm-block');
+  if(promDept==='Resonancia Magnética' && info.rmBlocks){
+    rmBlock.style.display='';
+    const labels={4:'Bloque 4 h',24:'Bloque 24 h',48:'Bloque 48 h'};
+    const rows=[4,24,48].filter(b=>info.rmBlocks[b] && info.rmBlocks[b].n>0).map(b=>{
+      const r=info.rmBlocks[b];
+      return {name:labels[b], n:r.n, n_within:r.cumple, pct:r.pct};
+    });
+    renderProcDentro(document.getElementById('prom-rm-bars'), rows);
+    const worst=rows.slice().sort((a,b)=>a.pct-b.pct)[0];
+    document.getElementById('prom-rm-nota').innerHTML =
+      `RM promete distinto según el tipo de estudio: <b>4 h</b> para columna (cervical/dorsal/lumbar), hombros, caderas, sacroilíacas, tobillos, codos y rodillas; <b>24 h</b> para próstata multiparamétrica, oídos, artroresonancias, angioresonancias, recto oncológico, cartilograma, abdomen y pelvis, colangioresonancia, volumetría de cerebro, espectroscopia, cuello, pelvis, órbitas, mama, cráneo (y demás RM complicadas) y endometriosis; <b>48 h</b> para body scan, valoración funcional, tractografía y cardioresonancia. `+
+      `El bloque de <b>${worst.name.replace('Bloque ','')}</b> es el que menos cumple (${worst.pct}%). La clasificación por bloque se hizo por nombre de estudio, así que puede haber algún caso mal etiquetado.`;
+  } else {
+    rmBlock.style.display='none';
+  }
+
+  promSelUnit=null;
+  renderPromesaUnidades();
+}
+function renderPromesaUnidades(){
+  const info = PROMESA_DATA[promDept];
+  const unitNames = Object.keys(info.unidades).sort((a,b)=>info.unidades[b].n-info.unidades[a].n);
+  document.getElementById('prom-unit-sub').textContent = 'Cumplimiento por unidad · clic en una unidad para ver matutino / vespertino';
+  const turnoBlock=document.getElementById('prom-turno-block');
+
+  if(promSelUnit && info.unidades[promSelUnit]){
+    const u=info.unidades[promSelUnit];
+    document.getElementById('prom-turno-sub').innerHTML = `<b>${promDept}</b> · ${promSelUnit} — Matutino (7:00–14:59) / Vespertino (15:00–cierre), según Fecha Promesa [A]`;
+    const rows=['Matutino','Vespertino'].filter(t=>u.turnos[t] && u.turnos[t].n>0).map(t=>{
+      const td=u.turnos[t];
+      return {name:t, n:td.n, n_within:td.cumple, pct:td.pct};
+    });
+    renderProcDentro(document.getElementById('prom-turno-bars'), rows);
+    document.getElementById('prom-turno-nota').innerHTML =
+      rows.map(r=>`<b>${r.name}</b>: ${r.n_within}/${r.n} cumplen (${r.pct}%)`).join(' · ');
+    turnoBlock.style.display='';
+  } else {
+    turnoBlock.style.display='none';
+  }
+
+  const rows = unitNames.map(u=>({name:u, n:info.unidades[u].n, n_within:info.unidades[u].cumple, pct:info.unidades[u].pct}));
+  renderProcDentro(document.getElementById('prom-unit-bars'), rows);
+  incWireBars(document.getElementById('prom-unit-bars'), unitNames, name=>{ promSelUnit=name; renderPromesaUnidades(); });
+  const worst=rows.slice().sort((a,b)=>a.pct-b.pct)[0];
+  const best=rows.slice().sort((a,b)=>b.pct-a.pct)[0];
+  document.getElementById('prom-unit-nota').innerHTML =
+    `<b>${worst.name}</b> es la unidad que menos cumple (${worst.pct}%, ${fmt(worst.n_within)} de ${fmt(worst.n)}); <b>${best.name}</b> la que más (${best.pct}%).`;
 }
 
 /* ===== Estudios · septiembre 2026, mes completo (por departamento) =====
@@ -4093,6 +4217,8 @@ function renderAll(){
   document.getElementById('ind-ref-chip').onclick=()=>{ indShowRef=!indShowRef; renderIndicadorTemporal(); };
   // Departamentos (evolución)
   renderDeptos();
+  initProc4();
+  renderPromesa();
   renderEstudiosJulio();
   renderEstudiosYoy();
   renderAnalisis();
