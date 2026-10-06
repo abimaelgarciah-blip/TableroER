@@ -546,17 +546,17 @@
           <div class="card kpi">
             <div class="k-label">Chequeos · objetivo 1</div>
             <div class="k-value" id="rs-k-o1">—</div>
-            <div class="k-foot">entrega ≤ 4 días · meta ≥ 95%</div>
+            <div class="k-foot" id="rs-k-o1-foot">entrega ≤ 4 días · meta ≥ 95%</div>
           </div>
           <div class="card kpi">
             <div class="k-label">Chequeos · objetivo 2</div>
             <div class="k-value" id="rs-k-o2">—</div>
-            <div class="k-foot">≥ 1 día antes · meta ≥ 98%</div>
+            <div class="k-foot" id="rs-k-o2-foot">≥ 1 día antes · meta ≥ 98%</div>
           </div>
           <div class="card kpi">
             <div class="k-label">Chequeos de la semana</div>
             <div class="k-value" id="rs-k-n">—</div>
-            <div class="k-foot">estudios procesados</div>
+            <div class="k-foot" id="rs-k-n-foot">estudios procesados</div>
           </div>
         </div>
 
@@ -4210,7 +4210,15 @@ function renderResumen(){
   kInd.textContent = ind==null ? '—' : ind.toFixed(1)+'%';
   kInd.style.color = ind==null ? '' : thColor(ind);
 
-  const cIdx = chqSerie.semanas.indexOf(rsWeek);
+  // Chequeos suele ir 1 semana atrás de imagen: si la semana elegida aún no
+  // tiene chequeos, se muestran los de la semana anterior con una nota.
+  let chqWeek = rsWeek, chqFallback = false;
+  if(!chqData[chqWeek]){
+    const wn = parseInt(rsWeek.slice(1), 10);
+    const prev = 'S'+(wn-1);
+    if(!isNaN(wn) && chqData[prev]){ chqWeek = prev; chqFallback = true; }
+  }
+  const cIdx = chqSerie.semanas.indexOf(chqWeek);
   const o1 = cIdx>=0 ? chqSerie.o1s[cIdx] : null;
   const o2 = cIdx>=0 ? chqSerie.o2s[cIdx] : null;
   const n  = cIdx>=0 ? chqSerie.ns[cIdx]  : null;
@@ -4218,6 +4226,10 @@ function renderResumen(){
   kO1.textContent = o1==null ? '—' : o1.toFixed(1)+'%'; kO1.style.color = o1==null ? '' : chqCol(o1,95);
   kO2.textContent = o2==null ? '—' : o2.toFixed(1)+'%'; kO2.style.color = o2==null ? '' : chqCol(o2,98);
   document.getElementById('rs-k-n').textContent = n==null ? '—' : fmt(n);
+  const chqFallbackTxt = chqFallback ? ` · semana ${chqWeek.slice(1)} (chequeos va 1 sem. atrás)` : '';
+  document.getElementById('rs-k-o1-foot').textContent = 'entrega ≤ 4 días · meta ≥ 95%'+chqFallbackTxt;
+  document.getElementById('rs-k-o2-foot').textContent = '≥ 1 día antes · meta ≥ 98%'+chqFallbackTxt;
+  document.getElementById('rs-k-n-foot').textContent = chqFallback ? `estudios procesados · semana ${chqWeek.slice(1)}` : 'estudios procesados';
 
   const dataInd = indTemporal.semana.p.map((w,i)=>({w, v:indTemporal.semana.u.Todas[i]}));
   indLineChart(document.getElementById('rs-line-indicador'), dataInd, '#3f6ea5', 98, null);
@@ -4232,15 +4244,17 @@ function renderResumen(){
   document.getElementById('rs-line-chq-leg').innerHTML = trLegend(chqSeriesData);
 
   const distEl = document.getElementById('rs-chq-dias'), distNote = document.getElementById('rs-chq-dias-note');
-  const Dw = chqData[rsWeek];
+  const Dw = chqData[chqWeek];
   if(Dw){
     vbarChart(distEl, Dw.dist, '#4c8c6f');
     const d4=(Dw.dist[3]||{v:0}).v, d5=(Dw.dist[4]||{v:0}).v;
     distNote.innerHTML =
-      `Días hábiles de realización a terminado · <b>${fmt(Dw.n)}</b> estudios de la semana ${rsWeek.slice(1)} · verde ≤ 3 · ámbar 4 (límite) · rojo 5+. `+
+      `Días hábiles de realización a terminado · <b>${fmt(Dw.n)}</b> estudios de la semana ${chqWeek.slice(1)}`+
+      (chqFallback ? ` <span style="color:var(--muted)">(chequeos va 1 semana atrás de imagen)</span>` : '')+
+      ` · verde ≤ 3 · ámbar 4 (límite) · rojo 5+. `+
       `<b>${fmt(d4)}</b> (${Dw.n?Math.round(d4/Dw.n*100):0}%) se entregan justo al 4º día; <b>${fmt(d5)}</b> pasan de 4 días.`;
   } else {
-    distEl.innerHTML = '<div class="empty">Sin datos de chequeos para esta semana.</div>';
+    distEl.innerHTML = '<div class="empty">Sin datos de chequeos aún para esta semana ni la anterior.</div>';
     distNote.textContent = '';
   }
 }
