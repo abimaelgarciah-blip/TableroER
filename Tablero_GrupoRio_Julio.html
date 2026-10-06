@@ -572,6 +572,10 @@
           <p class="csub">Objetivo 1 ≥ 95% · Objetivo 2 ≥ 98%</p>
           <div id="rs-line-chq"></div>
           <div class="legend" id="rs-line-chq-leg" style="margin-top:6px"></div>
+
+          <p class="csub" style="margin-top:20px">Entregas por número de días · semana seleccionada</p>
+          <div class="bars" id="rs-chq-dias"></div>
+          <div class="line-note" id="rs-chq-dias-note" style="margin-top:10px"></div>
         </div>
 
         <details style="margin-top:16px">
@@ -4226,6 +4230,19 @@ function renderResumen(){
   ];
   multiLineChart(document.getElementById('rs-line-chq'), chqSerie.semanas, chqSeriesData, '%');
   document.getElementById('rs-line-chq-leg').innerHTML = trLegend(chqSeriesData);
+
+  const distEl = document.getElementById('rs-chq-dias'), distNote = document.getElementById('rs-chq-dias-note');
+  const Dw = chqData[rsWeek];
+  if(Dw){
+    vbarChart(distEl, Dw.dist, '#4c8c6f');
+    const d4=(Dw.dist[3]||{v:0}).v, d5=(Dw.dist[4]||{v:0}).v;
+    distNote.innerHTML =
+      `Días hábiles de realización a terminado · <b>${fmt(Dw.n)}</b> estudios de la semana ${rsWeek.slice(1)} · verde ≤ 3 · ámbar 4 (límite) · rojo 5+. `+
+      `<b>${fmt(d4)}</b> (${Dw.n?Math.round(d4/Dw.n*100):0}%) se entregan justo al 4º día; <b>${fmt(d5)}</b> pasan de 4 días.`;
+  } else {
+    distEl.innerHTML = '<div class="empty">Sin datos de chequeos para esta semana.</div>';
+    distNote.textContent = '';
+  }
 }
 function initResumen(){
   const sel = document.getElementById('rs-week-select');
