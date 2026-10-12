@@ -1704,7 +1704,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div class="card-head">
             <div>
               <h3>Efectividad por colaborador</h3>
-              <p class="csub">Enero – septiembre 2026 (grupo SIO a julio) · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
+              <p class="csub">Enero – septiembre 2026 (Graciela Cortés a julio) · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
             </div>
             <div class="k-value" id="eff-global" style="font-size:26px">—</div>
           </div>
@@ -3330,13 +3330,13 @@ function renderAnalisis(){
 
 /* ===== Efectividad (incidencias internas · ene–jun 2026) ===== */
 const effRows = [
-  {n:'Hugo Tabares',      lg:'hugotm',     e:3, d:3621, f:'SIO', cut:7},
-  {n:'Laura García',      lg:'lauragg',    e:2, d:3087, f:'SIO', cut:7},
-  {n:'Mónica Anaya',      lg:'monicaac',   e:1, d:2851, f:'SIO', cut:7},
-  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1263, f:'SIO', cut:7},
-  {n:'Iván Enríquez',     lg:'manuelev',   e:2, d:542,  f:'SIO', cut:7},
-  {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1143, f:'SIO', cut:7},
-  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3332, f:'SIO', cut:7},
+  {n:'Hugo Tabares',      lg:'hugotm',     e:4, d:4222, f:'SIO', cut:9},
+  {n:'Laura García',      lg:'lauragg',    e:6, d:3802, f:'SIO', cut:9},
+  {n:'Mónica Anaya',      lg:'monicaac',   e:2, d:3429, f:'SIO', cut:9},
+  {n:'Néstor González',   lg:'nestorgm',   e:1, d:1711, f:'SIO', cut:9},
+  {n:'Iván Enríquez',     lg:'manuelev',   e:3, d:893,  f:'SIO', cut:9},
+  {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1217, f:'SIO', cut:9},
+  {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3332, f:'Chequeos', cut:7},
   {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:2, d:17073, f:'Entregas', cut:9},
   {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:4, d:8452,  f:'Entregas', cut:9},
   {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas', cut:9},
@@ -3398,20 +3398,28 @@ function renderEfect(){
     '(SharePoint · Documentos/Importante; antes identificado como «Inconsistencias internas.xlsx», nombre corregido). Trae '+
     '<b>28 incidencias confirmadas en 2026</b> («Procesar» = Sí) — se sumaron las 2 de <b>Alberto Valdez</b> (8 y 20 abr). '+
     'El <b>grupo de Entregas</b> (Samanta, Oswaldo, Heli) y el equipo de <b>Chequeos médicos</b> (Alberto/Beto, Casandra, Mayra) '+
-    'ya cierran sobre <b>enero–septiembre</b>: a los denominadores de julio se les sumó agosto y septiembre completos, vía '+
+    'ya cerraban sobre <b>enero–septiembre</b>: a los denominadores de julio se les sumó agosto y septiembre completos, vía '+
     '«Usuario Recibe Entregas» del export <i>Tiempo promesa de entrega</i> (Samanta +2,180 ago / +2,221 sep, Oswaldo +979 ago / '+
     '+905 sep, Heli sin actividad) y la columna «Transcriptor» de Chequeos médicos (Beto +68 ago / +45 sep, Casandra +71 ago / '+
     '+50 sep, Mayra +58 ago / +48 sep). Quedaron confirmadas y ya pesan en la efectividad: <b>Samanta Mora</b> (24 ago, «Pasa '+
     'estudio con error en empresa») y <b>Oswaldo Ríos</b> (08, 21 y 23 sep). '+
-    'El <b>grupo SIO</b> (Hugo Tabares, Laura García, Mónica Anaya, Néstor González, Iván Enríquez, Estefanía Martínez, Graciela '+
-    'Cortés) sigue con denominador de <b>enero–julio</b> — falta el export de Productividad de Transcripción SIO de agosto y '+
-    'septiembre. Sus incidencias confirmadas de agosto y septiembre (Hugo 7 ago; Laura 9 ago, 18 ago, 23 sep ×2; Mónica 11 sep; '+
-    'Iván 14 sep) ya cuentan en «Tipo de error» y «Errores por mes» y en el detalle por colaborador (marcadas «posterior al '+
-    'cierre»), pero no entran todavía en su % de efectividad individual — entrarán cuando llegue ese archivo. '+
+    'El <b>grupo SIO</b> (Hugo Tabares, Laura García, Mónica Anaya, Néstor González, Iván Enríquez, Estefanía Martínez) ya '+
+    'cierra también sobre <b>enero–septiembre</b>: a los denominadores de julio se les sumó agosto y septiembre con el export '+
+    'propio de Productividad de Transcripción de cada cuenta (estudios transcritos) — Hugo +310 ago / +291 sep, Laura +348 ago / '+
+    '+367 sep, Mónica +285 ago / +293 sep, Néstor +237 ago / +211 sep, Iván +142 ago / +209 sep. '+
+    '<b>Estefanía Martínez</b> es un caso especial: su archivo solo trae interpretaciones de SIO del 22 de septiembre al 8 de '+
+    'octubre (nada de agosto, ni del 1 al 21 de septiembre), así que a su denominador solo se le sumaron esas <b>+74</b> '+
+    'interpretaciones de septiembre (agosto queda en +0 por falta de registro). Quedaron confirmadas y ya pesan en la '+
+    'efectividad: <b>Hugo Tabares</b> (07 ago), <b>Laura García</b> (09 ago, 18 ago, 23 sep ×2), <b>Mónica Anaya</b> (11 sep) '+
+    'e <b>Iván Enríquez</b> (14 sep) — todas ya contaban en «Tipo de error» y «Errores por mes» desde antes, marcadas '+
+    '«posterior al cierre», y ahora también entran en el % individual de cada uno. '+
+    '<b>Graciela Cortés</b> se reclasificó de SIO a <b>Chequeos médicos</b> (su incidencia es de chequeos, no de transcripción '+
+    'SIO) y sigue con denominador de <b>enero–julio</b> — falta la columna «Transcriptor» de Chequeos médicos de agosto y '+
+    'septiembre para cerrarla junto con Alberto/Casandra/Mayra. '+
     'Queda <b>1 fila sin confirmar</b> — Mayra Gallegos (06 oct, «Se guarda estudio con otro internista») — fuera de todos los '+
     'conteos hasta que se marque «Procesar». '+
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, que van contra Usuario Recibe '+
-    'Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción. '+
+    'Entregas, y Alberto, Casandra, Mayra y Graciela, que van contra chequeos transcritos. '+
     'Para <b>Alberto Valdez, Casandra Ceballos y Mayra Gallegos</b> el denominador es la suma de chequeos transcritos de enero a '+
     'septiembre según la columna «Transcriptor» de Chequeos médicos (Beto/Casandra/Mayra: 696/672.5/161.5). Los chequeos con '+
     'atribución conjunta (p. ej. «Beto/Cas») no se contaron en ningún denominador individual, así que su total real podría ser '+
@@ -3615,7 +3623,7 @@ function renderEffDetail(lg){
        <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
-     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Registro de incidencias.xlsx</i> · «Hoja2». Denominador ${periodo} (${r.f==='Entregas'?'agosto y septiembre completos, «Usuario Recibe Entregas» del export Tiempo promesa':r.f==='SIO'?'julio completo, Productividad de Transcripción (agosto y septiembre pendientes)':'agosto y septiembre completos, columna «Transcriptor» de Chequeos médicos'}).</div>`;
+     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Registro de incidencias.xlsx</i> · «Hoja2». Denominador ${periodo} (${r.f==='Entregas'?'«Usuario Recibe Entregas» del export Tiempo promesa':r.f==='SIO'?'Productividad de Transcripción':'columna «Transcriptor» de Chequeos médicos'}${cut>=9?', agosto y septiembre completos':', agosto y septiembre pendientes'}).</div>`;
   document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
 }
 function setEffDetail(lg){
