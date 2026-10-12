@@ -509,8 +509,6 @@
       Chequeos médicos
     </button>
         <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Estudios y Deptos </button>
-        <button class="nav-item" data-view="proceso"><svg class="ico ico-departamentos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="b1" x1="4" y1="20" x2="4" y2="14"/><line class="b2" x1="10" y1="20" x2="10" y2="9"/><line class="b3" x1="16" y1="20" x2="16" y2="5"/><line class="b4" x1="20" y1="20" x2="20" y2="11"/></svg> Tiempos del proceso </button>
-        <button class="nav-item" data-view="promesa"><svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring2" cx="12" cy="12" r="9"/><circle class="ring1" cx="12" cy="12" r="5.5"/><circle class="dot" cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> Promesa de estudios </button>
         <button class="nav-item" data-view="vs2025"><svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="6"/><line class="handle" x1="20" y1="20" x2="15.5" y2="15.5"/></svg> 2026 vs 2025 </button>
     <button class="nav-item" data-view="proyectos">
       <svg class="ico ico-proj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="bulb" d="M8 10a4 4 0 1 1 8 0c0 2-1.2 2.8-1.8 3.6-.4.5-.6.9-.6 1.4h-3.2c0-.5-.2-.9-.6-1.4C9.2 12.8 8 12 8 10Z"/><path d="M9.5 21h5M10.3 18.2h3.4" stroke-linecap="round"/><line class="ray r1" x1="12" y1="1.6" x2="12" y2="3.3"/><line class="ray r2" x1="3.6" y1="10" x2="5.3" y2="10"/><line class="ray r3" x1="18.7" y1="10" x2="20.4" y2="10"/></svg>
@@ -707,22 +705,6 @@
         <div class="page-head">
           <h1>Estudios y Departamentos</h1>
           <p>Volumen y cumplimiento por unidad y departamento <span class="badge">Ene–Sep 2026</span></p>
-        </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <h3>Evolución del cumplimiento</h3>
-              <p class="csub" id="sub-dep-mtx">Comparativa mensual · color por nivel · Δ = cambio vs. periodo anterior</p>
-            </div>
-            <div class="seg" id="dep-seg">
-              <button class="seg-b" data-m="sem">Semanal</button>
-              <button class="seg-b active" data-m="mes">Mensual</button>
-            </div>
-          </div>
-          <div class="mtx-scroll"><div id="dep-mtx"></div></div>
-          <div class="mtx-leg" id="dep-mtx-leg"></div>
-          <div class="line-note" id="note-dep-mtx" style="margin-top:12px"></div>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Volumen de estudios por unidad, departamento y total</div>
@@ -1372,15 +1354,24 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 &lt;/html&gt;
 "></iframe>
   </div>
-      </section>
 
-      <!-- ================== TIEMPOS DEL PROCESO ================== -->
-      <section class="view" id="proceso">
-        <div class="page-head">
-          <h1>Tiempos del proceso</h1>
-          <p>Horas por etapa, de Alta [G] a Recibe [F], por unidad y departamento <span class="badge">Septiembre 2026</span></p>
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <h3>Evolución del cumplimiento</h3>
+              <p class="csub" id="sub-dep-mtx">Comparativa mensual · color por nivel · Δ = cambio vs. periodo anterior</p>
+            </div>
+            <div class="seg" id="dep-seg">
+              <button class="seg-b" data-m="sem">Semanal</button>
+              <button class="seg-b active" data-m="mes">Mensual</button>
+            </div>
+          </div>
+          <div class="mtx-scroll"><div id="dep-mtx"></div></div>
+          <div class="mtx-leg" id="dep-mtx-leg"></div>
+          <div class="line-note" id="note-dep-mtx" style="margin-top:12px"></div>
         </div>
 
+        <div class="nav-label" style="margin:30px 0 10px">Tiempos del proceso</div>
         <div class="card">
           <h3>Tiempos del proceso por departamento</h3>
           <p class="csub">Media de horas por etapa, por unidad · septiembre 2026 · estudios filtrados (ver nota)</p>
@@ -1395,15 +1386,8 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div class="bars" id="proc4-bars"></div>
           <div class="line-note" style="margin-top:14px" id="proc4-nota"></div>
         </div>
-      </section>
 
-      <!-- ================== PROMESA DE ESTUDIOS ================== -->
-      <section class="view" id="promesa">
-        <div class="page-head">
-          <h1>Promesa de estudios</h1>
-          <p>Cumplimiento de Fecha Promesa [A] → Fecha Alta [G], por departamento, unidad y turno <span class="badge">Septiembre 2026</span></p>
-        </div>
-
+        <div class="nav-label" style="margin:30px 0 10px">Promesa de estudios</div>
         <div class="card">
           <div class="card-head">
             <div>
