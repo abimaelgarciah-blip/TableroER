@@ -1697,14 +1697,14 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
       <section class="view" id="efectividad">
         <div class="page-head">
           <h1>Efectividad</h1>
-          <p>Efectividad vs incidencias internas <span class="badge">Enero – agosto 2026</span></p>
+          <p>Efectividad vs incidencias internas <span class="badge">Enero – septiembre 2026</span></p>
         </div>
 
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
               <h3>Efectividad por colaborador</h3>
-              <p class="csub">Enero – agosto 2026 · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
+              <p class="csub">Enero – septiembre 2026 (grupo SIO a julio) · 1 − errores / estudios · escala recortada 99.5 – 100% · <span id="eff-den"></span></p>
             </div>
             <div class="k-value" id="eff-global" style="font-size:26px">—</div>
           </div>
@@ -1715,12 +1715,12 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="grid two" style="margin-bottom:16px">
           <div class="card">
             <h3>Tipo de error</h3>
-            <p class="csub">Los 20 registros de 2026 (ene – 7 ago)</p>
+            <p class="csub">Los 28 registros confirmados de 2026 (ene–sep)</p>
             <div class="bars" id="eff-tipos"></div>
           </div>
           <div class="card">
             <h3>Errores por mes</h3>
-            <p class="csub">Registro de incidencias internas · agosto al día 7</p>
+            <p class="csub">Registro de incidencias internas · confirmados a septiembre</p>
             <div id="eff-mes"></div>
           </div>
         </div>
@@ -3337,23 +3337,26 @@ const effRows = [
   {n:'Iván Enríquez',     lg:'manuelev',   e:2, d:542,  f:'SIO', cut:7},
   {n:'Estefanía Martínez',lg:'sandrama',   e:2, d:1143, f:'SIO', cut:7},
   {n:'Graciela Cortés',   lg:'gracielacv', e:1, d:3332, f:'SIO', cut:7},
-  {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:1, d:14852, f:'Entregas', cut:8},
-  {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:3, d:7547,  f:'Entregas', cut:8},
-  {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas', cut:8},
-  {n:'Alberto Valdez',    lg:'albertova',  e:2, d:583,   f:'Chequeos', cut:7},
-  {n:'Casandra Ceballos', lg:'casandracr', e:0, d:551.5, f:'Chequeos', cut:7},
-  {n:'Mayra Gallegos',    lg:'mayrage',    e:0, d:55.5,  f:'Chequeos', cut:7}
+  {n:'Samanta Mora',      lg:'Mora Ponce Samanta Noemi',    e:2, d:17073, f:'Entregas', cut:9},
+  {n:'Oswaldo Ríos',      lg:'Rios Meza Oswaldo Josue',     e:4, d:8452,  f:'Entregas', cut:9},
+  {n:'Heli Janette',      lg:'Perez Rodriguez Heli Janette',e:1, d:3905,  f:'Entregas', cut:9},
+  {n:'Alberto Valdez',    lg:'albertova',  e:2, d:696,    f:'Chequeos', cut:9},
+  {n:'Casandra Ceballos', lg:'casandracr', e:0, d:672.5,  f:'Chequeos', cut:9},
+  {n:'Mayra Gallegos',    lg:'mayrage',    e:0, d:161.5,  f:'Chequeos', cut:9}
 ];
 const effTipos = [
   {name:'Error ortográfico',v:4},{name:'Error en interpretación',v:5},
-  {name:'Error de RM 1,5 / 3,0',v:2},{name:'Error de médico intérprete',v:1},
+  {name:'Error de RM 1,5 / 3,0',v:3},{name:'Error de médico intérprete',v:1},
   {name:'Error en etiqueta',v:1},{name:'Omite dato de mCi',v:1},
   {name:'Datos incorrectos en orden',v:1},{name:'Omite disco en estudio',v:1},
   {name:'Faltó firma gammagrama',v:1},{name:'Error de transcripción',v:1},
   {name:'Pasa estudio sin interpretación',v:1},{name:'Pone Birads en lugar de Tirads',v:1},
-  {name:'No especifica sobrepeso por musculatura',v:1}
+  {name:'No especifica sobrepeso por musculatura',v:1},{name:'Pasa estudio con médico incorrecto',v:1},
+  {name:'Se añade palabra después de punto final',v:1},{name:'Hoja membretada solo en primera página',v:1},
+  {name:'Firma de otro médico',v:1},{name:'Pasa estudio con error en empresa',v:1},
+  {name:'Se inserta interpretación de otro paciente',v:1}
 ];
-const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:5},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:3}];
+const effMes = [{name:'Ene',v:2},{name:'Feb',v:0},{name:'Mar',v:3},{name:'Abr',v:5},{name:'May',v:1},{name:'Jun',v:3},{name:'Jul',v:4},{name:'Ago',v:5},{name:'Sep',v:5}];
 const EFF_FLOOR = 99.5;
 
 function effList(el, rows){
@@ -3391,26 +3394,28 @@ function renderEfect(){
            {fmt:v=>v, tip:d=>`<b>${d.name}</b> · ${d.v} caso${d.v===1?'':'s'}`});
   vbarChart(document.getElementById('eff-mes'), effMes, 'var(--c-sede)');
   document.getElementById('eff-nota').innerHTML =
-    '<b>Fuente.</b> Hoja «Hoja2» de <i>Inconsistencias internas.xlsx</i> '+
-    '(SharePoint · Documentos/Importante, corte 08 sep). Trae <b>21 incidencias confirmadas en 2026</b> — se sumaron las 2 de '+
-    '<b>Alberto Valdez</b> (8 y 20 abr). Los <b>7 transcriptores SIO</b> y el equipo de <b>Chequeos médicos</b> se calculan sobre '+
-    '<b>enero–julio</b> (a cada denominador ene–jun se le sumó julio completo, vía Productividad de Transcripción y la columna '+
-    '«Transcriptor» de Chequeos médicos respectivamente). El <b>grupo de Entregas</b> (Samanta, Oswaldo, Heli) ya cierra sobre '+
-    '<b>enero–agosto</b>: a julio se le sumó agosto completo desde «Usuario Recibe Entregas» del export <i>Tiempo promesa de '+
-    'entrega</i> (Samanta +2,180, Oswaldo +979, Heli sin actividad en agosto). Así, los 4 errores de julio — Iván Enríquez (1 jul), '+
-    'Estefanía Martínez (24 jul) y los dos de Oswaldo Ríos (27 jul) — y el error de agosto de <b>Samanta Mora</b> (7 ago, ya no '+
-    'aparece con 100% de efectividad) ya pesan en la efectividad. Quedan fuera las <b>2 incidencias de agosto del grupo SIO</b> '+
-    '(Hugo Tabares 7 ago y Laura García 18 ago), que ya cuentan en «Tipo de error» y «Errores por mes» y entrarán a la '+
-    'efectividad al cerrar agosto (falta la producción SIO de agosto de Estefanía Martínez y Graciela Cortés). Hay además '+
-    '<b>2 filas sin confirmar</b> — Samanta Mora (24 ago, «Pasa estudio con error en empresa») y Oswaldo Ríos (08 sep, «Pasa '+
-    'estudio con médico incorrecto») — que en el archivo aún no traen marca de «Procesar»; se dejaron fuera de todos los conteos '+
-    '(Tipo, Mes, detalle y efectividad) hasta que se confirmen. '+
+    '<b>Fuente.</b> Hoja «Hoja2» de <i>Registro de incidencias.xlsx</i> '+
+    '(SharePoint · Documentos/Importante; antes identificado como «Inconsistencias internas.xlsx», nombre corregido). Trae '+
+    '<b>28 incidencias confirmadas en 2026</b> («Procesar» = Sí) — se sumaron las 2 de <b>Alberto Valdez</b> (8 y 20 abr). '+
+    'El <b>grupo de Entregas</b> (Samanta, Oswaldo, Heli) y el equipo de <b>Chequeos médicos</b> (Alberto/Beto, Casandra, Mayra) '+
+    'ya cierran sobre <b>enero–septiembre</b>: a los denominadores de julio se les sumó agosto y septiembre completos, vía '+
+    '«Usuario Recibe Entregas» del export <i>Tiempo promesa de entrega</i> (Samanta +2,180 ago / +2,221 sep, Oswaldo +979 ago / '+
+    '+905 sep, Heli sin actividad) y la columna «Transcriptor» de Chequeos médicos (Beto +68 ago / +45 sep, Casandra +71 ago / '+
+    '+50 sep, Mayra +58 ago / +48 sep). Quedaron confirmadas y ya pesan en la efectividad: <b>Samanta Mora</b> (24 ago, «Pasa '+
+    'estudio con error en empresa») y <b>Oswaldo Ríos</b> (08, 21 y 23 sep). '+
+    'El <b>grupo SIO</b> (Hugo Tabares, Laura García, Mónica Anaya, Néstor González, Iván Enríquez, Estefanía Martínez, Graciela '+
+    'Cortés) sigue con denominador de <b>enero–julio</b> — falta el export de Productividad de Transcripción SIO de agosto y '+
+    'septiembre. Sus incidencias confirmadas de agosto y septiembre (Hugo 7 ago; Laura 9 ago, 18 ago, 23 sep ×2; Mónica 11 sep; '+
+    'Iván 14 sep) ya cuentan en «Tipo de error» y «Errores por mes» y en el detalle por colaborador (marcadas «posterior al '+
+    'cierre»), pero no entran todavía en su % de efectividad individual — entrarán cuando llegue ese archivo. '+
+    'Queda <b>1 fila sin confirmar</b> — Mayra Gallegos (06 oct, «Se guarda estudio con otro internista») — fuera de todos los '+
+    'conteos hasta que se marque «Procesar». '+
     'El denominador es el total de estudios del colaborador en SIO, salvo Samanta, Oswaldo y Heli, que van contra Usuario Recibe '+
     'Entregas. Graciela Cortés aparece en ambas fuentes; se le aplicó SIO porque su incidencia es de transcripción. '+
-    'Para <b>Alberto Valdez, Casandra Ceballos y Mayra Gallegos</b> (equipo transcriptor de Chequeos médicos), el denominador es '+
-    'la suma de chequeos transcritos de enero a julio según la columna «Transcriptor» de Chequeos médicos (Beto/Casandra/Mayra, '+
-    'enero–julio 583/551.5/55.5). Los chequeos con atribución conjunta (p. ej. «Beto/Cas») no se contaron en ningún denominador '+
-    'individual, así que su total real podría ser ligeramente mayor.';
+    'Para <b>Alberto Valdez, Casandra Ceballos y Mayra Gallegos</b> el denominador es la suma de chequeos transcritos de enero a '+
+    'septiembre según la columna «Transcriptor» de Chequeos médicos (Beto/Casandra/Mayra: 696/672.5/161.5). Los chequeos con '+
+    'atribución conjunta (p. ej. «Beto/Cas») no se contaron en ningún denominador individual, así que su total real podría ser '+
+    'ligeramente mayor.';
 }
 
 /* Incidencias por colaborador · Registro de incidencias.xlsx (SharePoint · Documentos/Importante) */
@@ -3536,17 +3541,22 @@ const effDetalle = {
   'lauragg':[
     {f:'21 abr 2026', px:'Delgadillo Hinojosa Ramiro',      t:'Omite dato de mCi',      m:'abr'},
     {f:'10 jun 2026', px:'Guemez Castillo Marisela',        t:'Error en interpretación', m:'jun'},
-    {f:'18 ago 2026', px:'Martínez Landeros Jesús',         t:'Error en interpretación', m:'ago'}
+    {f:'09 ago 2026', px:'Iglesias Vargas Rutilio',         t:'Se inserta interpretación de otro paciente', m:'ago'},
+    {f:'18 ago 2026', px:'Martínez Landeros Jesús',         t:'Error en interpretación', m:'ago'},
+    {f:'23 sep 2026', px:'Estudio de Salud Visual, OCT',    t:'Hoja membretada solo en primera página', m:'sep'},
+    {f:'23 sep 2026', px:'Transcripción de René firmada por Gadiel', t:'Firma de otro médico', m:'sep'}
   ],
   'monicaac':[
-    {f:'02 abr 2026', px:'Guerra González Najib Raúl',      t:'Error de médico intérprete', m:'abr'}
+    {f:'02 abr 2026', px:'Guerra González Najib Raúl',      t:'Error de médico intérprete', m:'abr'},
+    {f:'11 sep 2026', px:'Ramos Villaseñor Brenda Guadalupe', t:'Se añade palabra después de punto final', m:'sep'}
   ],
   'nestorgm':[
     {f:'01 abr 2026', px:'Yanes Quintana Alberto Antonio',  t:'Error en interpretación', m:'abr'}
   ],
   'manuelev':[
     {f:'09 ene 2026', px:'Gascón Carranza Simona Elizabeth', t:'Error ortográfico',     m:'ene'},
-    {f:'01 jul 2026', px:'Ortega Moreno Aurelia',           t:'Error en interpretación', m:'jul'}
+    {f:'01 jul 2026', px:'Ortega Moreno Aurelia',           t:'Error en interpretación', m:'jul'},
+    {f:'14 sep 2026', px:'Villalobos Cobos Sandra Guadalupe', t:'Error de RM 1,5 / 3,0', m:'sep'}
   ],
   'sandrama':[
     {f:'03 jun 2026', px:'Mn 43964',                        t:'Error en interpretación', m:'jun'},
@@ -3556,12 +3566,14 @@ const effDetalle = {
     {f:'29 may 2026', px:'Vargas Gutiérrez Araceli',        t:'Error de RM 1,5 / 3,0', m:'may'}
   ],
   'Mora Ponce Samanta Noemi':[
-    {f:'07 ago 2026', px:'Cervantes Reyes Natalia Guadalupe', t:'Pasa estudio sin interpretación', m:'ago'}
+    {f:'07 ago 2026', px:'Cervantes Reyes Natalia Guadalupe', t:'Pasa estudio sin interpretación', m:'ago'},
+    {f:'24 ago 2026', px:'Salazar Osegueda Lucía',           t:'Pasa estudio con error en empresa', m:'ago'}
   ],
   'Rios Meza Oswaldo Josue':[
     {f:'11 mar 2026', px:'Araujo Silva José Emilio',        t:'Datos incorrectos en orden de servicio', m:'mar'},
     {f:'27 jul 2026', px:'Hernández Toscano Ma del Refugio', t:'Omite disco en estudio', m:'jul'},
-    {f:'27 jul 2026', px:'Valencia Vázquez Oscar Ernesto',  t:'Faltó firma de gammagrama', m:'jul'}
+    {f:'27 jul 2026', px:'Valencia Vázquez Oscar Ernesto',  t:'Faltó firma de gammagrama', m:'jul'},
+    {f:'08 sep 2026', px:'Ramírez Campa Alexa',             t:'Pasa estudio con médico incorrecto', m:'sep'}
   ],
   'Perez Rodriguez Heli Janette':[
     {f:'23 mar 2026', px:'Martínez Martínez Diana Noemi',   t:'Error en etiqueta',      m:'mar'}
@@ -3603,7 +3615,7 @@ function renderEffDetail(lg){
        <button class="inc-close" id="eff-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
-     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Inconsistencias internas.xlsx</i> · «Hoja2». Denominador ${periodo} (${r.f==='Entregas'?'agosto completo, «Usuario Recibe Entregas» del export Tiempo promesa':r.f==='SIO'?'julio completo, Productividad de Transcripción':'julio completo, columna «Transcriptor» de Chequeos médicos'}).</div>`;
+     <div class="line-note" style="margin-top:10px">Fuente incidencias: <i>Registro de incidencias.xlsx</i> · «Hoja2». Denominador ${periodo} (${r.f==='Entregas'?'agosto y septiembre completos, «Usuario Recibe Entregas» del export Tiempo promesa':r.f==='SIO'?'julio completo, Productividad de Transcripción (agosto y septiembre pendientes)':'agosto y septiembre completos, columna «Transcriptor» de Chequeos médicos'}).</div>`;
   document.getElementById('eff-detail-close').onclick = ()=>setEffDetail(null);
 }
 function setEffDetail(lg){
