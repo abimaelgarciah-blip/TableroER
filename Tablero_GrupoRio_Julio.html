@@ -577,6 +577,36 @@
         </div>
 
         <details style="margin-top:16px">
+          <summary class="nav-label" style="cursor:pointer">Ver análisis adicional · Dra. Daniela Ramírez, tiempo de interpretación (Alta [G] → Firma [D], objetivo ≤ 2h)</summary>
+          <div style="margin-top:12px">
+          <div class="grid kpis" style="margin-bottom:16px">
+    <div class="card kpi"><div class="k-label">Estudios con dato</div><div class="k-value" id="dra-kpi-n">–</div><div class="k-foot" id="dra-kpi-n-foot">de 124 registrados por la doctora</div></div>
+    <div class="card kpi"><div class="k-label">Tiempo de interpretación</div><div class="k-value" id="dra-kpi-median">–</div><div class="k-foot">mediana · Alta [G] → Firma [D]</div></div>
+    <div class="card kpi"><div class="k-label">Cumplimiento ≤ 2h</div><div class="k-value" id="dra-kpi-pct">–</div><div class="k-foot">objetivo de interpretación</div></div>
+    <div class="card kpi"><div class="k-label">Por modalidad</div><div class="k-value" id="dra-kpi-dept" style="font-size:16px">–</div><div class="k-foot">mediana, Mamografía vs Ecosonografía</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Distribución del tiempo de interpretación</h3>
+    <p class="csub">Alta [G] → Firma [D], en horas · estudios del 1 al 12 de octubre de 2026</p>
+    <div class="bars" id="dra-dist-chart"></div>
+    <div class="line-note" id="dra-dist-nota" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Estudios fuera de objetivo</h3>
+    <p class="csub">Los de mayor tiempo de interpretación, ordenados de mayor a menor</p>
+    <div style="overflow-x:auto"><table class="dtab" id="dra-tab-worst"></table></div>
+  </div>
+
+  <div class="card">
+    <h3>Notas y metodología</h3>
+    <div class="empty" id="dra-nota" style="margin-top:4px"></div>
+  </div>
+          </div>
+        </details>
+
+        <details style="margin-top:16px">
           <summary class="nav-label" style="cursor:pointer">Ver análisis adicional · Dra. Íñiguez, tiempos de lectura por unidad (agosto 2026)</summary>
           <div style="margin-top:12px">
           <div class="grid kpis" style="margin-bottom:16px">
@@ -3262,6 +3292,55 @@ function renderEstudiosYoy(){
     `Ciudad Granja sí tiene dato de septiembre 2025 (${fmt(estYoyNoData.reduce((a,r)=>a+r[1],0))} estudios) pero no aparece en el reporte de septiembre 2026 — no se registró ningún estudio con esa Sucursal este mes, así que queda fuera de la comparación de la gráfica principal.`;
 }
 
+/* ===== Tiempo de interpretación (Dra. Daniela Ramírez, Alta [G] -> Firma [D]) =====
+   Fuente: log PACS de la Dra. Daniela Ramírez (124 estudios, Mamografía/Ecosonografía,
+   Clínica de la Mujer, estudios realizados del 1 al 12 de octubre de 2026), cruzado por
+   nombre de paciente + modalidad + descripción del estudio contra el export "Tiempo
+   promesa de entrega" del 25 sep al 12 oct 2026 (Mamografía/Ecosonografía, López Mateos
+   y Clínica de la Mujer). Cruzaron 69 de 124 (56%); los otros 55 no aparecen en ese
+   reporte (su Fecha Alta [G] cae fuera de la ventana del archivo). Tiempo de
+   interpretación = Fecha Alta [G] → Fecha Firma [D], objetivo ≤ 2h. */
+const draData = {"n": 69, "nTotal": 124, "median": 1.3, "mean": 3.41, "compliant": 53, "pct": 76.8,
+  "byDept": [{"name": "Mamografía", "n": 30, "median": 0.64, "pct": 86.7}, {"name": "Ecosonografía", "n": 39, "median": 1.64, "pct": 69.2}],
+  "dist": [{"name": "≤30 min", "v": 16, "c": "#4c8c6f"}, {"name": "30–60 min", "v": 12, "c": "#4c8c6f"}, {"name": "1–2h", "v": 25, "c": "#4c8c6f"}, {"name": "2–4h", "v": 9, "c": "#c2921f"}, {"name": "4–8h", "v": 0, "c": "#ba544c"}, {"name": "8h+", "v": 7, "c": "#ba544c"}],
+  "worst": [{"px": "Hernandez Martinez, Maria Esther", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 42.0, "alta": "2026-10-10 13:52", "firma": "2026-10-12 07:49"}, {"px": "Silva Aguilar, Dinora Margarita", "est": "Mamografía - Bilateral con Tomosíntesis", "dep": "Mamografía", "h": 23.7, "alta": "2026-10-08 14:07", "firma": "2026-10-09 13:48"}, {"px": "Silva Aguilar, Dinora Margarita", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 23.4, "alta": "2026-10-08 14:08", "firma": "2026-10-09 13:35"}, {"px": "Schildhauer, Stefanie", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 21.6, "alta": "2026-10-02 14:26", "firma": "2026-10-03 12:02"}, {"px": "Schildhauer, Stefanie", "est": "Mamografía - Bilateral con Tomosíntesis", "dep": "Mamografía", "h": 20.3, "alta": "2026-10-02 14:26", "firma": "2026-10-03 10:44"}, {"px": "Martinez Luna, Ana Maria", "est": "Mamografía - Bilateral", "dep": "Mamografía", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"px": "Martinez Luna, Ana Maria", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"px": "Garcia Gonzalez, Karla Zulemn", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 3.0, "alta": "2026-10-07 08:02", "firma": "2026-10-07 11:04"}]};
+
+function renderDraniela(){
+  document.getElementById('dra-kpi-n').textContent = fmt(draData.n);
+  document.getElementById('dra-kpi-n-foot').textContent = `de ${fmt(draData.nTotal)} registrados por la doctora (${Math.round(draData.n/draData.nTotal*100)}% con cruce)`;
+  document.getElementById('dra-kpi-median').textContent = draData.median.toFixed(1)+' h';
+  document.getElementById('dra-kpi-pct').textContent = draData.pct.toFixed(1)+'%';
+  document.getElementById('dra-kpi-dept').innerHTML = draData.byDept.map(d=>`${d.name.split(' ')[0]} ${d.median.toFixed(2)}h`).join(' · ');
+
+  vbarChart(document.getElementById('dra-dist-chart'), draData.dist, '#4c8c6f');
+  const d8=(draData.dist.find(d=>d.name==='8h+')||{v:0}).v;
+  document.getElementById('dra-dist-nota').innerHTML =
+    `<b>${draData.compliant}</b> de <b>${draData.n}</b> estudios (${draData.pct.toFixed(1)}%) se interpretan en ≤ 2h. `+
+    `Por modalidad, Mamografía tiene mejor tiempo (mediana ${draData.byDept[0].median.toFixed(2)} h, ${draData.byDept[0].pct.toFixed(1)}% ≤2h) que Ecosonografía `+
+    `(mediana ${draData.byDept[1].median.toFixed(2)} h, ${draData.byDept[1].pct.toFixed(1)}% ≤2h). `+
+    `<b>${d8}</b> estudios pasan de 8 horas — todos casos en los que la firma quedó para la mañana del día siguiente.`;
+
+  document.getElementById('dra-tab-worst').innerHTML =
+    '<thead><tr><th>Horas</th><th>Paciente</th><th>Estudio</th><th>Modalidad</th><th>Alta [G]</th><th>Firma [D]</th></tr></thead><tbody>'+
+    draData.worst.map(w=>`<tr><td class="d"><span class="pill red">${w.h}</span></td><td>${w.px}</td><td>${w.est}</td><td>${w.dep}</td><td>${w.alta}</td><td>${w.firma}</td></tr>`).join('')+
+    '</tbody>';
+
+  document.getElementById('dra-nota').innerHTML =
+    '<b>Fuente.</b> Log PACS propio de la Dra. Daniela Ramírez, 124 estudios (Mamografía y Ecosonografía, Clínica de la '+
+    'Mujer) realizados entre el 1 y el 12 de octubre de 2026. Se cruzó por nombre de paciente, modalidad y descripción '+
+    'del estudio contra el export «Tiempo promesa de entrega» del 25 sep al 12 oct 2026 — ese archivo solo trae '+
+    'Mamografía y Ecosonografía de López Mateos y Clínica de la Mujer, de donde se tomaron las columnas <b>Fecha Alta '+
+    '[G]</b> y <b>Fecha Firma [D]</b> (su propio log no las trae con ese nombre). '+
+    `<b>Cruzaron 69 de 124 estudios (56%)</b>; los otros 55 no aparecen en ese reporte — lo más probable es que su `+
+    'Fecha Alta [G] caiga fuera de la ventana del 25 sep–12 oct, o que el estudio general correspondiente aún no se '+
+    'haya generado. El análisis solo cubre los 69 cruzados. '+
+    '1 estudio (Ramirez Diaz, Silvia — Mamografía Bilateral) muestra Firma 28 min antes que Alta; se contó como 0h '+
+    '(cumple el objetivo) por tratarse de una diferencia de registro, no de un tiempo de interpretación real negativo. '+
+    'Los 7 estudios que pasan de 8h corresponden a 4 pacientes cuya firma quedó para la mañana siguiente — mismo '+
+    'patrón en Mamografía y Ecosonografía de cada caso, lo que sugiere una pausa de fin de turno más que un problema '+
+    'puntual de un estudio.';
+}
+
 /* ===== Análisis · cumplimiento de entrega por unidad (Dra. Íñiguez, ago 2026) =====
    Fuente: log de lectura PACS de la Dra. Íñiguez (338 estudios, agosto 2026 completo),
    cruzado contra el export "Tiempo promesa de entrega" de agosto por nombre de
@@ -4326,6 +4405,7 @@ function renderAll(){
   renderPromesa();
   renderEstudiosJulio();
   renderEstudiosYoy();
+  renderDraniela();
   renderAnalisis();
 }
 
