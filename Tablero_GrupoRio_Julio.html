@@ -3293,52 +3293,61 @@ function renderEstudiosYoy(){
 }
 
 /* ===== Tiempo de interpretación (Dra. Daniela Ramírez, Alta [G] -> Firma [D]) =====
-   Fuente: log PACS de la Dra. Daniela Ramírez (124 estudios, Mamografía/Ecosonografía,
-   Clínica de la Mujer, estudios realizados del 1 al 12 de octubre de 2026), cruzado por
-   nombre de paciente + modalidad + descripción del estudio contra el export "Tiempo
-   promesa de entrega" del 25 sep al 12 oct 2026 (Mamografía/Ecosonografía, López Mateos
-   y Clínica de la Mujer). Cruzaron 69 de 124 (56%); los otros 55 no aparecen en ese
-   reporte (su Fecha Alta [G] cae fuera de la ventana del archivo). Tiempo de
+   Fuente: log PACS de la Dra. Daniela Ramírez (124 renglones, Mamografía/Ecosonografía,
+   Clínica de la Mujer, estudios realizados del 1 al 12 de octubre de 2026 por 66
+   pacientes), cruzado por nombre de paciente contra el export "Tiempo promesa de
+   entrega" del 25 sep al 12 oct 2026 (Mamografía/Ecosonografía, López Mateos y Clínica
+   de la Mujer) — el cruce solo se usa para ubicar el IdCita y las fechas; no se guarda
+   ningún nombre. Mamografía + Eco de Mama del mismo paciente son 1 solo reporte (se
+   funden 50 pares, dando 74 reportes). Para elegir el renglón correcto de cada reporte
+   se exige Fecha Firma [D] ≈ Fecha Transcrito [C] (±1 min); si ningún renglón cumple
+   eso, o si el paciente no aparece en el reporte general, se omite. Tiempo de
    interpretación = Fecha Alta [G] → Fecha Firma [D], objetivo ≤ 2h. */
-const draData = {"n": 69, "nTotal": 124, "median": 1.3, "mean": 3.41, "compliant": 53, "pct": 76.8,
-  "byDept": [{"name": "Mamografía", "n": 30, "median": 0.64, "pct": 86.7}, {"name": "Ecosonografía", "n": 39, "median": 1.64, "pct": 69.2}],
-  "dist": [{"name": "≤30 min", "v": 16, "c": "#4c8c6f"}, {"name": "30–60 min", "v": 12, "c": "#4c8c6f"}, {"name": "1–2h", "v": 25, "c": "#4c8c6f"}, {"name": "2–4h", "v": 9, "c": "#c2921f"}, {"name": "4–8h", "v": 0, "c": "#ba544c"}, {"name": "8h+", "v": 7, "c": "#ba544c"}],
-  "worst": [{"px": "Hernandez Martinez, Maria Esther", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 42.0, "alta": "2026-10-10 13:52", "firma": "2026-10-12 07:49"}, {"px": "Silva Aguilar, Dinora Margarita", "est": "Mamografía - Bilateral con Tomosíntesis", "dep": "Mamografía", "h": 23.7, "alta": "2026-10-08 14:07", "firma": "2026-10-09 13:48"}, {"px": "Silva Aguilar, Dinora Margarita", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 23.4, "alta": "2026-10-08 14:08", "firma": "2026-10-09 13:35"}, {"px": "Schildhauer, Stefanie", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 21.6, "alta": "2026-10-02 14:26", "firma": "2026-10-03 12:02"}, {"px": "Schildhauer, Stefanie", "est": "Mamografía - Bilateral con Tomosíntesis", "dep": "Mamografía", "h": 20.3, "alta": "2026-10-02 14:26", "firma": "2026-10-03 10:44"}, {"px": "Martinez Luna, Ana Maria", "est": "Mamografía - Bilateral", "dep": "Mamografía", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"px": "Martinez Luna, Ana Maria", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"px": "Garcia Gonzalez, Karla Zulemn", "est": "Eco de Mama", "dep": "Ecosonografía", "h": 3.0, "alta": "2026-10-07 08:02", "firma": "2026-10-07 11:04"}]};
+const draData = {"n": 41, "nTotal": 74, "median": 0.72, "mean": 2.39, "compliant": 31, "pct": 75.6,
+  "byDept": [{"name": "Mamografía + Eco", "n": 26, "median": 0.64, "pct": 80.8}, {"name": "Ecosonografía (otros)", "n": 12, "median": 1.0, "pct": 58.3}, {"name": "Mamografía sola", "n": 3, "median": 0.27, "pct": 100.0}],
+  "dist": [{"name": "≤30 min", "v": 16, "c": "#4c8c6f"}, {"name": "30–60 min", "v": 8, "c": "#4c8c6f"}, {"name": "1–2h", "v": 7, "c": "#4c8c6f"}, {"name": "2–4h", "v": 7, "c": "#c2921f"}, {"name": "4–8h", "v": 0, "c": "#ba544c"}, {"name": "8h+", "v": 3, "c": "#ba544c"}],
+  "worst": [{"idcita": 71026107, "est": "Mamografía + Eco de Mama", "h": 23.4, "alta": "2026-10-08 14:08", "firma": "2026-10-09 13:35"}, {"idcita": 290926215, "est": "Mamografía + Eco de Mama", "h": 20.3, "alta": "2026-10-02 14:26", "firma": "2026-10-03 10:44"}, {"idcita": 70926343, "est": "Mamografía + Eco de Mama", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"idcita": 100926205, "est": "Eco de Mama", "h": 3.0, "alta": "2026-10-07 08:02", "firma": "2026-10-07 11:04"}, {"idcita": 300926187, "est": "Mamografía + Eco de Mama", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 300926187, "est": "Eco de Pelvis", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 290926076, "est": "Eco de Mama", "h": 2.5, "alta": "2026-10-07 10:38", "firma": "2026-10-07 13:10"}, {"idcita": 80926235, "est": "Eco de Abdomen Total", "h": 2.4, "alta": "2026-10-05 09:28", "firma": "2026-10-05 11:53"}]};
 
 function renderDraniela(){
   document.getElementById('dra-kpi-n').textContent = fmt(draData.n);
-  document.getElementById('dra-kpi-n-foot').textContent = `de ${fmt(draData.nTotal)} registrados por la doctora (${Math.round(draData.n/draData.nTotal*100)}% con cruce)`;
-  document.getElementById('dra-kpi-median').textContent = draData.median.toFixed(1)+' h';
+  document.getElementById('dra-kpi-n-foot').textContent = `de ${fmt(draData.nTotal)} reportes (${Math.round(draData.n/draData.nTotal*100)}% con cruce válido)`;
+  document.getElementById('dra-kpi-median').textContent = draData.median.toFixed(2)+' h';
   document.getElementById('dra-kpi-pct').textContent = draData.pct.toFixed(1)+'%';
-  document.getElementById('dra-kpi-dept').innerHTML = draData.byDept.map(d=>`${d.name.split(' ')[0]} ${d.median.toFixed(2)}h`).join(' · ');
+  document.getElementById('dra-kpi-dept').innerHTML = draData.byDept.map(d=>`${d.name} ${d.median.toFixed(2)}h`).join(' · ');
 
   vbarChart(document.getElementById('dra-dist-chart'), draData.dist, '#4c8c6f');
   const d8=(draData.dist.find(d=>d.name==='8h+')||{v:0}).v;
   document.getElementById('dra-dist-nota').innerHTML =
-    `<b>${draData.compliant}</b> de <b>${draData.n}</b> estudios (${draData.pct.toFixed(1)}%) se interpretan en ≤ 2h. `+
-    `Por modalidad, Mamografía tiene mejor tiempo (mediana ${draData.byDept[0].median.toFixed(2)} h, ${draData.byDept[0].pct.toFixed(1)}% ≤2h) que Ecosonografía `+
-    `(mediana ${draData.byDept[1].median.toFixed(2)} h, ${draData.byDept[1].pct.toFixed(1)}% ≤2h). `+
-    `<b>${d8}</b> estudios pasan de 8 horas — todos casos en los que la firma quedó para la mañana del día siguiente.`;
+    `<b>${draData.compliant}</b> de <b>${draData.n}</b> reportes (${draData.pct.toFixed(1)}%) se interpretan en ≤ 2h. `+
+    `Por tipo, <b>${draData.byDept[0].name}</b> (el combinado, ${draData.byDept[0].n} reportes) tiene mediana ${draData.byDept[0].median.toFixed(2)} h `+
+    `(${draData.byDept[0].pct.toFixed(1)}% ≤2h); <b>${draData.byDept[1].name}</b> (${draData.byDept[1].n} reportes, Eco de Pelvis/Abdomen/etc.) `+
+    `mediana ${draData.byDept[1].median.toFixed(2)} h (${draData.byDept[1].pct.toFixed(1)}% ≤2h); <b>${draData.byDept[2].name}</b> solo ${draData.byDept[2].n} casos. `+
+    `<b>${d8}</b> reportes pasan de 8 horas — todos casos en los que la firma quedó para la mañana del día siguiente.`;
 
   document.getElementById('dra-tab-worst').innerHTML =
-    '<thead><tr><th>Horas</th><th>Paciente</th><th>Estudio</th><th>Modalidad</th><th>Alta [G]</th><th>Firma [D]</th></tr></thead><tbody>'+
-    draData.worst.map(w=>`<tr><td class="d"><span class="pill red">${w.h}</span></td><td>${w.px}</td><td>${w.est}</td><td>${w.dep}</td><td>${w.alta}</td><td>${w.firma}</td></tr>`).join('')+
+    '<thead><tr><th>Horas</th><th>IdCita</th><th>Estudio(s)</th><th>Alta [G]</th><th>Firma [D]</th></tr></thead><tbody>'+
+    draData.worst.map(w=>`<tr><td class="d"><span class="pill red">${w.h}</span></td><td>${w.idcita}</td><td>${w.est}</td><td>${w.alta}</td><td>${w.firma}</td></tr>`).join('')+
     '</tbody>';
 
   document.getElementById('dra-nota').innerHTML =
-    '<b>Fuente.</b> Log PACS propio de la Dra. Daniela Ramírez, 124 estudios (Mamografía y Ecosonografía, Clínica de la '+
-    'Mujer) realizados entre el 1 y el 12 de octubre de 2026. Se cruzó por nombre de paciente, modalidad y descripción '+
-    'del estudio contra el export «Tiempo promesa de entrega» del 25 sep al 12 oct 2026 — ese archivo solo trae '+
-    'Mamografía y Ecosonografía de López Mateos y Clínica de la Mujer, de donde se tomaron las columnas <b>Fecha Alta '+
-    '[G]</b> y <b>Fecha Firma [D]</b> (su propio log no las trae con ese nombre). '+
-    `<b>Cruzaron 69 de 124 estudios (56%)</b>; los otros 55 no aparecen en ese reporte — lo más probable es que su `+
-    'Fecha Alta [G] caiga fuera de la ventana del 25 sep–12 oct, o que el estudio general correspondiente aún no se '+
-    'haya generado. El análisis solo cubre los 69 cruzados. '+
-    '1 estudio (Ramirez Diaz, Silvia — Mamografía Bilateral) muestra Firma 28 min antes que Alta; se contó como 0h '+
-    '(cumple el objetivo) por tratarse de una diferencia de registro, no de un tiempo de interpretación real negativo. '+
-    'Los 7 estudios que pasan de 8h corresponden a 4 pacientes cuya firma quedó para la mañana siguiente — mismo '+
-    'patrón en Mamografía y Ecosonografía de cada caso, lo que sugiere una pausa de fin de turno más que un problema '+
-    'puntual de un estudio.';
+    '<b>Fuente.</b> Log PACS propio de la Dra. Daniela Ramírez, 124 renglones (Mamografía y Ecosonografía, Clínica de '+
+    'la Mujer) de 66 pacientes, realizados entre el 1 y el 12 de octubre de 2026. Se identifica cada caso solo por '+
+    '<b>IdCita</b>, nunca por nombre de paciente. '+
+    'Cuando un mismo paciente tiene Mamografía y Eco de Mama, es <b>1 solo reporte</b> (se interpretan juntos): se '+
+    'funden 50 pares en el log de la doctora, dando <b>74 reportes</b> en total (124 renglones − 50 fusiones). '+
+    'Se cruzó por nombre contra el export «Tiempo promesa de entrega» del 25 sep al 12 oct 2026 — ese archivo solo trae '+
+    'Mamografía y Ecosonografía de López Mateos y Clínica de la Mujer — únicamente para ubicar el <b>IdCita</b> y tomar '+
+    'de ahí las columnas <b>Fecha Alta [G]</b> y <b>Fecha Firma [D]</b> (el log propio no las trae con ese nombre); el '+
+    'nombre no se conserva en ningún resultado. '+
+    'Para decidir qué renglón corresponde al reporte real (sobre todo en los pares Mamografía+Eco, que llegan como 2 '+
+    'renglones con un Alta ligeramente distinto) se exige que <b>Fecha Firma [D] coincida con Fecha Transcrito [C]</b> '+
+    '(±1 minuto, que es la variación normal); el renglón que no cumple esa condición se descarta. '+
+    `<b>Cruzaron y validaron 41 de 74 reportes (${Math.round(41/74*100)}%)</b>: 31 no aparecen en el reporte general en `+
+    'esa ventana de fechas, y 2 (un mismo par Mamografía+Eco) se omitieron porque su Firma no coincidía con su '+
+    'Transcrito — es el caso que antes se veía con la firma antes que la alta. El análisis solo cubre los 41 '+
+    'validados. '+
+    'Los 3 reportes que pasan de 8h corresponden a 3 IdCita distintos cuya firma quedó para la mañana siguiente — '+
+    'patrón de fin de turno, no un problema puntual de un estudio.';
 }
 
 /* ===== Análisis · cumplimiento de entrega por unidad (Dra. Íñiguez, ago 2026) =====
