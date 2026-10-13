@@ -3596,14 +3596,14 @@ function renderEfect(){
 
 /* Incidencias por colaborador · Registro de incidencias.xlsx (SharePoint · Documentos/Importante) */
 const incColabData = [
-  {lg:'monicaac',    name:'Mónica Anaya',        eneAgo:4, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:0},
-  {lg:'manuelev',    name:'Iván Enríquez',       eneAgo:1, eneAgoMot:'',                  sep:1, sepMot:'Falta injustificada', acta:0},
-  {lg:'lauragg',     name:'Laura García',        eneAgo:3, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:1},
-  {lg:'humbertogp1', name:'Humberto González',   eneAgo:3, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:0},
+  {lg:'monicaac',    name:'Mónica Anaya',        eneAgo:4, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:0},
+  {lg:'manuelev',    name:'Iván Enríquez',       eneAgo:1, eneAgoMot:'',                  sep:0, sepMot:'', acta:0},
+  {lg:'lauragg',     name:'Laura García',        eneAgo:3, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:1},
+  {lg:'humbertogp1', name:'Humberto González',   eneAgo:3, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:0},
   {lg:'nestorgm',    name:'Néstor González',     eneAgo:1, eneAgoMot:'',                  sep:0, sepMot:'', acta:0},
-  {lg:'oswaldorm',   name:'Oswaldo Ríos',        eneAgo:3, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:0},
-  {lg:'gracielacv',  name:'Graciela Cortés',     eneAgo:2, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:0},
-  {lg:'sandrama',    name:'Estefanía Martínez',  eneAgo:1, eneAgoMot:'Retardos',          sep:0, sepMot:'', acta:0},
+  {lg:'oswaldorm',   name:'Oswaldo Ríos',        eneAgo:3, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:0},
+  {lg:'gracielacv',  name:'Graciela Cortés',     eneAgo:2, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:0},
+  {lg:'sandrama',    name:'Estefanía Martínez',  eneAgo:1, eneAgoMot:'Retardos',          sep:1, sepMot:'Retardos', acta:0},
   {lg:'anaor',       name:'Ana Ochoa',           eneAgo:1, eneAgoMot:'Error ensobretado', sep:0, sepMot:'', acta:0}
 ];
 function renderIncColab(){
@@ -3632,7 +3632,7 @@ function renderIncColab(){
     `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-serv);display:inline-block"></span>Enero-agosto · ${totEA}</span>`+
     `<span style="display:inline-flex;align-items:center;gap:6px;margin-right:14px"><span style="width:11px;height:11px;border-radius:3px;background:var(--c-people);display:inline-block"></span>Septiembre · ${totSep}</span>`+
     (totActa?`<span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;border-radius:3px;background:#ba544c;display:inline-block"></span>Acta administrativa · ${totActa}</span>`:'')+
-    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Enero-agosto va agrupado como un solo periodo; septiembre se muestra por separado, igual que en el documento fuente. Laura García suma un Acta Administrativa además de sus incidencias de enero-agosto. En septiembre se registra la falta injustificada de Iván Enríquez (23 sep); el motivo de cada incidencia se muestra en el detalle al pasar el cursor.</div>`;
+    `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Enero-agosto va agrupado como un solo periodo; septiembre se muestra por separado, igual que en el documento fuente. Laura García suma un Acta Administrativa además de sus incidencias de enero-agosto. En septiembre hubo 6 retardos (Mónica Anaya, Laura García, Humberto González, Oswaldo Ríos, Graciela Cortés y Estefanía Martínez); el motivo de cada incidencia se muestra en el detalle al pasar el cursor.</div>`;
 }
 
 /* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul–sep 2026) */
