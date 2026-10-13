@@ -584,6 +584,7 @@
     <div class="card kpi"><div class="k-label">Tiempo de interpretación</div><div class="k-value" id="dra-kpi-median">–</div><div class="k-foot">mediana · Alta [G] → Firma [D]</div></div>
     <div class="card kpi"><div class="k-label">Cumplimiento ≤ 2h</div><div class="k-value" id="dra-kpi-pct">–</div><div class="k-foot">objetivo de interpretación</div></div>
     <div class="card kpi"><div class="k-label">Por modalidad</div><div class="k-value" id="dra-kpi-dept" style="font-size:16px">–</div><div class="k-foot">mediana, Mamografía vs Ecosonografía</div></div>
+    <div class="card kpi"><div class="k-label">Entrega puntual</div><div class="k-value" id="dra-kpi-af">–</div><div class="k-foot" id="dra-kpi-af-foot">A–F positivo (recibido antes de lo prometido)</div></div>
   </div>
 
   <div class="card" style="margin-bottom:16px">
@@ -3302,11 +3303,15 @@ function renderEstudiosYoy(){
    funden 50 pares, dando 74 reportes). Para elegir el renglón correcto de cada reporte
    se exige Fecha Firma [D] ≈ Fecha Transcrito [C] (±1 min); si ningún renglón cumple
    eso, o si el paciente no aparece en el reporte general, se omite. Tiempo de
-   interpretación = Fecha Alta [G] → Fecha Firma [D], objetivo ≤ 2h. */
+   interpretación = Fecha Alta [G] → Fecha Firma [D], objetivo ≤ 2h. Entrega puntual =
+   columna «A—F» (Fecha Promesa [A] − Fecha Recibe Entregas [F], texto "HH:MM"/"-HH:MM")
+   del mismo renglón elegido; cumple si A—F es positivo (F ocurrió antes de lo
+   prometido). */
 const draData = {"n": 41, "nTotal": 74, "median": 0.72, "mean": 2.39, "compliant": 31, "pct": 75.6,
   "byDept": [{"name": "Mamografía + Eco", "n": 26, "median": 0.64, "pct": 80.8}, {"name": "Ecosonografía (otros)", "n": 12, "median": 1.0, "pct": 58.3}, {"name": "Mamografía sola", "n": 3, "median": 0.27, "pct": 100.0}],
   "dist": [{"name": "≤30 min", "v": 16, "c": "#4c8c6f"}, {"name": "30–60 min", "v": 8, "c": "#4c8c6f"}, {"name": "1–2h", "v": 7, "c": "#4c8c6f"}, {"name": "2–4h", "v": 7, "c": "#c2921f"}, {"name": "4–8h", "v": 0, "c": "#ba544c"}, {"name": "8h+", "v": 3, "c": "#ba544c"}],
-  "worst": [{"idcita": 71026107, "est": "Mamografía + Eco de Mama", "h": 23.4, "alta": "2026-10-08 14:08", "firma": "2026-10-09 13:35"}, {"idcita": 290926215, "est": "Mamografía + Eco de Mama", "h": 20.3, "alta": "2026-10-02 14:26", "firma": "2026-10-03 10:44"}, {"idcita": 70926343, "est": "Mamografía + Eco de Mama", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"idcita": 100926205, "est": "Eco de Mama", "h": 3.0, "alta": "2026-10-07 08:02", "firma": "2026-10-07 11:04"}, {"idcita": 300926187, "est": "Mamografía + Eco de Mama", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 300926187, "est": "Eco de Pelvis", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 290926076, "est": "Eco de Mama", "h": 2.5, "alta": "2026-10-07 10:38", "firma": "2026-10-07 13:10"}, {"idcita": 80926235, "est": "Eco de Abdomen Total", "h": 2.4, "alta": "2026-10-05 09:28", "firma": "2026-10-05 11:53"}]};
+  "worst": [{"idcita": 71026107, "est": "Mamografía + Eco de Mama", "h": 23.4, "alta": "2026-10-08 14:08", "firma": "2026-10-09 13:35"}, {"idcita": 290926215, "est": "Mamografía + Eco de Mama", "h": 20.3, "alta": "2026-10-02 14:26", "firma": "2026-10-03 10:44"}, {"idcita": 70926343, "est": "Mamografía + Eco de Mama", "h": 15.0, "alta": "2026-10-09 17:34", "firma": "2026-10-10 08:35"}, {"idcita": 100926205, "est": "Eco de Mama", "h": 3.0, "alta": "2026-10-07 08:02", "firma": "2026-10-07 11:04"}, {"idcita": 300926187, "est": "Mamografía + Eco de Mama", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 300926187, "est": "Eco de Pelvis", "h": 2.9, "alta": "2026-10-07 10:57", "firma": "2026-10-07 13:50"}, {"idcita": 290926076, "est": "Eco de Mama", "h": 2.5, "alta": "2026-10-07 10:38", "firma": "2026-10-07 13:10"}, {"idcita": 80926235, "est": "Eco de Abdomen Total", "h": 2.4, "alta": "2026-10-05 09:28", "firma": "2026-10-05 11:53"}],
+  "afCompliant": 35, "afLate": [{"idcita": 210926192, "est": "Mamografía + Eco de Mama", "af": -0.15}, {"idcita": 51026321, "est": "Mamografía + Eco de Mama", "af": -0.13}, {"idcita": 300926187, "est": "Mamografía + Eco de Mama", "af": -0.35}, {"idcita": 300926187, "est": "Eco de Pelvis", "af": -0.35}, {"idcita": 290926076, "est": "Eco de Mama", "af": -0.18}, {"idcita": 100926205, "est": "Eco de Mama", "af": -0.83}]};
 
 function renderDraniela(){
   document.getElementById('dra-kpi-n').textContent = fmt(draData.n);
@@ -3314,6 +3319,9 @@ function renderDraniela(){
   document.getElementById('dra-kpi-median').textContent = draData.median.toFixed(2)+' h';
   document.getElementById('dra-kpi-pct').textContent = draData.pct.toFixed(1)+'%';
   document.getElementById('dra-kpi-dept').innerHTML = draData.byDept.map(d=>`${d.name} ${d.median.toFixed(2)}h`).join(' · ');
+  const afPct = draData.afCompliant/draData.n*100;
+  document.getElementById('dra-kpi-af').textContent = afPct.toFixed(1)+'%';
+  document.getElementById('dra-kpi-af-foot').textContent = `${draData.afCompliant} de ${draData.n} reportes · A–F positivo (recibido antes de lo prometido)`;
 
   vbarChart(document.getElementById('dra-dist-chart'), draData.dist, '#4c8c6f');
   const d8=(draData.dist.find(d=>d.name==='8h+')||{v:0}).v;
@@ -3347,7 +3355,11 @@ function renderDraniela(){
     'Transcrito — es el caso que antes se veía con la firma antes que la alta. El análisis solo cubre los 41 '+
     'validados. '+
     'Los 3 reportes que pasan de 8h corresponden a 3 IdCita distintos cuya firma quedó para la mañana siguiente — '+
-    'patrón de fin de turno, no un problema puntual de un estudio.';
+    'patrón de fin de turno, no un problema puntual de un estudio. '+
+    `<b>Entrega puntual:</b> ${draData.afCompliant} de ${draData.n} reportes (${(draData.afCompliant/draData.n*100).toFixed(1)}%) `+
+    'tienen columna <b>A—F</b> (Fecha Promesa [A] − Fecha Recibe Entregas [F], del mismo renglón ya elegido) positiva, '+
+    'es decir, el estudio se recibió en Entregas antes de la hora prometida. Los '+draData.afLate.length+' que no cumplen '+
+    '(A—F negativo) son '+draData.afLate.map(l=>`IdCita ${l.idcita} (${l.est}, ${l.af}h)`).join(', ')+'.';
 }
 
 /* ===== Análisis · cumplimiento de entrega por unidad (Dra. Íñiguez, ago 2026) =====
