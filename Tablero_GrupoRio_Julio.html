@@ -1441,7 +1441,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-cardio-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1467,7 +1467,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-densito-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1478,7 +1478,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
           <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
           <div class="bars" id="prom2-densito-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (lo que se prometió, Agenda [B] → Promesa [A]), no la entrega real. L-V 7:00–19:00 debe ser ≤3h; 19:01 en adelante debió prometerse antes de medianoche del día siguiente (el documento no da hora fija para este tramo, se usó ese límite como referencia). Sábados 7:00–16:00 ≤3h, resto antes de medianoche del domingo. Domingos 8:00–11:00 ≤3h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo bajó de 292 a 290 estudios.</div>
+          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–19:00 debe ser ≤3h; 19:01 en adelante debió prometerse antes de medianoche del día siguiente (el documento no da hora fija para este tramo, se usó ese límite como referencia). Sábados 7:00–16:00 ≤3h, resto antes de medianoche del domingo. Domingos 8:00–11:00 ≤3h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo bajó de 292 a 290 estudios.</div>
         </div>
 
         <div class="card" style="margin-bottom:16px">
@@ -1489,7 +1489,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-eco-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1504,7 +1504,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           </div>
           <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
           <div class="bars" id="prom2-eco-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (lo prometido, Agenda [B] → Promesa [A]), no la entrega real. <b>Convencional</b>: L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente; sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. En Clínica de la Mujer y Acueducto, de 13:00 a 15:00 debió prometerse para el día siguiente (lunes si es viernes) en vez de las 2h normales. <b>Doppler</b>: L-V 7:00–15:59 ≤4h, resto antes de medianoche del día siguiente; sábados 7:00–11:00 ≤4h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (biopsia y el eco que la acompaña, identificadas porque «A—G horas» llega a 140h o más por el tiempo de patología); con estos filtros el universo bajó de 973 a 914 estudios.</div>
+          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. <b>Convencional</b>: L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente; sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. En Clínica de la Mujer y Acueducto, de 13:00 a 15:00 debió prometerse para el día siguiente (lunes si es viernes) en vez de las 2h normales. <b>Doppler</b>: L-V 7:00–15:59 ≤4h, resto antes de medianoche del día siguiente; sábados 7:00–11:00 ≤4h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (biopsia y el eco que la acompaña, identificadas porque «A—G horas» llega a 140h o más por el tiempo de patología); con estos filtros el universo bajó de 973 a 914 estudios.</div>
         </div>
 
         <div class="card" style="margin-bottom:16px">
@@ -1515,7 +1515,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-mamo-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1526,7 +1526,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
           <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
           <div class="bars" id="prom2-mamo-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (lo prometido, Agenda [B] → Promesa [A]), no la entrega real. L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–13:00 ≤2h, resto antes de medianoche del lunes (cierra domingo). Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (mamografía con eco de mama acompañada de biopsia); con estos filtros el universo bajó de 326 a 319 estudios.</div>
+          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–13:00 ≤2h, resto antes de medianoche del lunes (cierra domingo). Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (mamografía con eco de mama acompañada de biopsia); con estos filtros el universo bajó de 326 a 319 estudios.</div>
         </div>
 
         <div class="card" style="margin-bottom:16px">
@@ -1537,7 +1537,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-rx-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1548,7 +1548,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
           <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
           <div class="bars" id="prom2-rx-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (lo prometido, Agenda [B] → Promesa [A]), no la entrega real. L-V 7:00–19:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. Domingos 8:00–10:59 ≤2h, resto antes de medianoche del día siguiente. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo se mantuvo en 755 estudios (ningún caso de Radiología cayó en estos criterios).</div>
+          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–19:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. Domingos 8:00–10:59 ≤2h, resto antes de medianoche del día siguiente. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo se mantuvo en 755 estudios (ningún caso de Radiología cayó en estos criterios).</div>
         </div>
 
         <div class="card" style="margin-bottom:16px">
@@ -1559,7 +1559,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-rm-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
@@ -1585,7 +1585,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" id="prom2-tac-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas prometidas (A—G: Agenda [B] → Promesa [A])</p>
+          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
           <div class="sbar-legend">
             <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
             <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
