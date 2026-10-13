@@ -1898,7 +1898,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 
         <div class="card" style="margin-bottom:16px">
           <h3>Faltas e incapacidades</h3>
-          <p class="csub" id="falt-sub">Registro de asistencia · julio–agosto 2026 · clic en un colaborador para ver el detalle</p>
+          <p class="csub" id="falt-sub">Registro de asistencia · julio–septiembre 2026 · clic en un colaborador para ver el detalle</p>
           <div id="falt-list"></div>
           <div class="eff-detail" id="falt-detail"></div>
           <div class="line-note" style="margin-top:10px" id="falt-nota"></div>
@@ -3638,7 +3638,7 @@ function renderIncColab(){
     `<div style="margin-top:8px;color:var(--muted)">Fuente: <i>Registro de incidencias.xlsx</i> (SharePoint · Documentos/Importante). Laura García suma un Acta Administrativa además de su incidencia de julio. En agosto se suman 2 colaboradores nuevos a este registro — Estefanía Martínez y Ana Ochoa —, ambos por primera vez; el motivo de cada incidencia de agosto se muestra en el detalle al pasar el cursor.</div>`;
 }
 
-/* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul–ago 2026) */
+/* Faltas e incapacidades · RH Reporte de asistencia · Grupo Río (checador, jul–sep 2026) */
 const faltasData = [
   {emp:'Ana Lidia Ochoa Roman',       tipo:'Falta injustificada', fecha:'01/jul/2026', coment:'Avisó que no se presentó'},
   {emp:'Manuel Ivan Enriquez',        tipo:'Falta injustificada', fecha:'06/jul/2026', coment:'FALTA JUSTIFICADA'},
@@ -3646,7 +3646,9 @@ const faltasData = [
   {emp:'Casandra Ceballos Romero',    tipo:'Falta injustificada', fecha:'17/jul/2026', coment:'Avisó que no se presentaría'},
   {emp:'Graciela F. Cortés Vázquez',  tipo:'Incapacidad',         fecha:'25/jul/2026', coment:'—'},
   {emp:'Alberto Valdez',              tipo:'Falta injustificada', fecha:'06/ago/2026', coment:'Malestar estomacal'},
-  {emp:'Manuel Ivan Enriquez',        tipo:'Falta injustificada', fecha:'13/ago/2026', coment:'Infección de estómago'}
+  {emp:'Manuel Ivan Enriquez',        tipo:'Falta injustificada', fecha:'13/ago/2026', coment:'Infección de estómago'},
+  {emp:'Manuel Ivan Enriquez',        tipo:'Falta injustificada', fecha:'23/sep/2026', coment:'Avisó dolor estomacal fuerte, no se presentó'},
+  {emp:'Casandra Ceballos Romero',    tipo:'Falta injustificada', fecha:'24/sep/2026', coment:'Avisó que no se presentaría por enfermedad'}
 ];
 function faltasByColab(){
   const byColab={};
@@ -3678,9 +3680,9 @@ function renderFaltasList(){
   else { requestAnimationFrame(()=>requestAnimationFrame(()=>{ fills.forEach(f=>f.style.width=f.dataset.w+'%'); })); }
   const nF=faltasData.filter(r=>r.tipo==='Falta injustificada').length, nI=faltasData.filter(r=>r.tipo==='Incapacidad').length;
   document.getElementById('falt-nota').innerHTML =
-    `<b>${nF}</b> falta${nF===1?'':'s'} injustificada${nF===1?'':'s'} y <b>${nI}</b> incapacidad${nI===1?'':'es'} registrada${nI===1?'':'s'} en julio–agosto 2026, de los 15 colaboradores del equipo de Transcripción. `+
-    `Fuente: <i>RH Reporte de asistencia · Grupo Río</i> (checador, 01 jul – 31 ago 2026, tabla «Vacaciones y permisos» de cada colaborador). Se excluyen descansos, vacaciones, permisos y cambios de horario. `+
-    `El comentario de Manuel Ivan Enríquez en julio («FALTA JUSTIFICADA») se muestra tal cual lo registró RH, aunque contradice la etiqueta «Falta injustificada» del tipo de permiso. En agosto solo hubo 2 faltas injustificadas: <b>Alberto Valdez</b> (6 ago, malestar estomacal) e <b>Iván Enríquez</b> (13 ago, infección de estómago).`;
+    `<b>${nF}</b> falta${nF===1?'':'s'} injustificada${nF===1?'':'s'} y <b>${nI}</b> incapacidad${nI===1?'':'es'} registrada${nI===1?'':'s'} en julio–septiembre 2026, de los 15 colaboradores del equipo de Transcripción. `+
+    `Fuente: <i>RH Reporte de asistencia · Grupo Río</i> (checador, 01 jul – 30 sep 2026, tabla «Vacaciones y permisos» de cada colaborador). Se excluyen descansos, vacaciones, permisos y cambios de horario. `+
+    `El comentario de Manuel Ivan Enríquez en julio («FALTA JUSTIFICADA») se muestra tal cual lo registró RH, aunque contradice la etiqueta «Falta injustificada» del tipo de permiso. En agosto hubo 2 faltas injustificadas: <b>Alberto Valdez</b> (6 ago, malestar estomacal) e <b>Iván Enríquez</b> (13 ago, infección de estómago). En septiembre hubo otras 2: <b>Iván Enríquez</b> (23 sep, avisó dolor estomacal fuerte) y <b>Casandra Ceballos</b> (24 sep, avisó que no se presentaría por enfermedad).`;
 }
 function renderFaltDetail(name){
   const recs=faltasData.filter(r=>r.emp===name); if(!recs.length) return;
@@ -3691,7 +3693,7 @@ function renderFaltDetail(name){
   ).join('');
   document.getElementById('falt-detail').innerHTML =
     `<div class="eff-detail-head">
-       <div><b>${name}</b> · ${recs.length} registro${recs.length===1?'':'s'} en julio–agosto 2026</div>
+       <div><b>${name}</b> · ${recs.length} registro${recs.length===1?'':'s'} en julio–septiembre 2026</div>
        <button class="inc-close" id="falt-detail-close" type="button" aria-label="Ocultar detalle">Ocultar ▴</button>
      </div>
      <div class="eff-err-list">${items}</div>
