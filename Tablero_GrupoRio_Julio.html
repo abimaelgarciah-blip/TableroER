@@ -1442,10 +1442,11 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             <div class="k-value" id="promu-pct" style="font-size:26px">—</div>
           </div>
           <div class="seg" id="promu-unit-sel" style="flex-wrap:wrap;margin:12px 0 16px"></div>
-          <p class="csub">Horas por modalidad (mediana): interpretación vs. margen restante hasta la promesa · ▲ marca la moda de horas prometidas</p>
+          <p class="csub">Interpretación (mediana) vs. moda de horas prometidas, solo estudios dentro de objetivo</p>
           <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Interpretación (mediana)</span>
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Margen restante (mediana)</span>
+            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Interpretación (mediana) · con margen</span>
+            <span class="it"><span class="sw" style="background:#ba544c"></span>Interpretación (mediana) · al límite o rebasa la moda</span>
+            <span class="it">▲ moda de horas prometidas</span>
           </div>
           <div id="promu-chart"></div>
           <div class="line-note" style="margin-top:12px" id="promu-nota"></div>
@@ -2090,6 +2091,16 @@ const PROC_TARGET = {"Cardiología":4,"Densitometría":3,"Ecosonografía":2,"Mam
    (horas A—G − horas G—C < 0). */
 const PROMESA_UNIT_DATA = {"López Mateos":[{"dept":"Cardiología","n":207,"cumple":121,"pct":58.5,"moda":4.0,"mediana":17.0,"interp":4.0,"margen":4.0,"pctNeg":0.5},{"dept":"Densitometría","n":180,"cumple":168,"pct":93.3,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":419,"cumple":370,"pct":88.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":1.0},{"dept":"Mamografía","n":134,"cumple":126,"pct":94.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":581,"cumple":484,"pct":83.3,"moda":1.0,"mediana":1.0,"interp":0.0,"margen":1.0,"pctNeg":1.0},{"dept":"Resonancia Magnética","n":532,"cumple":240,"pct":45.1,"moda":4.0,"mediana":17.5,"interp":11.0,"margen":3.0,"pctNeg":2.3},{"dept":"Tomografía Axial Computada","n":396,"cumple":343,"pct":86.6,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":2.0,"pctNeg":1.3}],"Acueducto":[{"dept":"Cardiología","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Densitometría","n":4,"cumple":4,"pct":100.0,"moda":0.0,"mediana":1.5,"interp":1.0,"margen":0.5,"pctNeg":0.0},{"dept":"Ecosonografía","n":141,"cumple":109,"pct":77.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.7},{"dept":"Mamografía","n":4,"cumple":4,"pct":100.0,"moda":1.0,"mediana":1.5,"interp":0.0,"margen":1.5,"pctNeg":0.0},{"dept":"Radiología","n":170,"cumple":144,"pct":84.7,"moda":2.0,"mediana":2.0,"interp":0.5,"margen":1.0,"pctNeg":0.6},{"dept":"Resonancia Magnética","n":204,"cumple":58,"pct":28.4,"moda":4.0,"mediana":23.0,"interp":4.0,"margen":4.0,"pctNeg":2.5},{"dept":"Tomografía Axial Computada","n":116,"cumple":94,"pct":81.0,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":2.0,"pctNeg":1.7}],"Clínica de la Mujer":[{"dept":"Densitometría","n":104,"cumple":97,"pct":93.3,"moda":1.0,"mediana":2.0,"interp":0.0,"margen":1.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":264,"cumple":151,"pct":57.2,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.4},{"dept":"Mamografía","n":180,"cumple":97,"pct":53.9,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.6},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Tomografía Axial Computada","n":2,"cumple":2,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":1.0,"pctNeg":0.0}],"Chamizal":[{"dept":"Ecosonografía","n":50,"cumple":41,"pct":82.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":185,"cumple":132,"pct":71.4,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":3.0,"pctNeg":0.5}],"Guadalupe":[{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":2.0,"margen":0.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":40,"cumple":34,"pct":85.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Mamografía","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":2.0,"margen":1.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":2,"cumple":1,"pct":50.0,"moda":23.0,"mediana":28.5,"interp":18.0,"margen":10.5,"pctNeg":0.0}],"Las Águilas":[{"dept":"Cardiología","n":2,"cumple":0,"pct":0.0,"moda":25.0,"mediana":25.5,"interp":25.0,"margen":0.5,"pctNeg":0.0},{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Radiología","n":2,"cumple":1,"pct":50.0,"moda":1.0,"mediana":34.0,"interp":11.0,"margen":23.0,"pctNeg":0.0}]};
 const PROMU_UNIT_ORDER = ["López Mateos","Acueducto","Clínica de la Mujer","Chamizal","Guadalupe","Las Águilas"];
+/* Moda de horas prometidas vs. mediana de interpretación, SOLO estudios que
+   cumplieron su objetivo de horas prometidas (para no mezclar con casos que
+   rodaron al día siguiente): Cardiología <=7h, Densitometría <=3h,
+   Ecosonografía <=2h, Mamografía <=2h, Radiología <=3h, Tomografía <=4h;
+   Resonancia Magnética separada por bloque de estudio (4h/24h/48h), cada uno
+   filtrado a su propio límite. "moda" = valor más frecuente de A—G horas
+   (Promesa [A] − Alta [G]) en ese grupo; "interp" = mediana de G—C horas
+   (Transcrito [C] − Alta [G], tiempo real de interpretación) en ese mismo
+   grupo filtrado. */
+const PROMESA_UNIT_MODA = {"López Mateos":[{"label":"Cardiología","n":100,"moda":4.0,"interp":1.0},{"label":"Densitometría","n":163,"moda":3.0,"interp":0.0},{"label":"Ecosonografía","n":324,"moda":2.0,"interp":0.0},{"label":"Mamografía","n":118,"moda":2.0,"interp":0.0},{"label":"Radiología","n":486,"moda":1.0,"interp":0.0},{"label":"Resonancia Magnética (4h)","n":81,"moda":4.0,"interp":0.0},{"label":"Resonancia Magnética (24h)","n":158,"moda":24.0,"interp":13.0},{"label":"Resonancia Magnética (48h)","n":1,"moda":24.0,"interp":2.0},{"label":"Tomografía Axial Computada","n":323,"moda":2.0,"interp":1.0}],"Acueducto":[{"label":"Cardiología","n":1,"moda":3.0,"interp":0.0},{"label":"Densitometría","n":4,"moda":0.0,"interp":1.0},{"label":"Ecosonografía","n":89,"moda":2.0,"interp":0.0},{"label":"Mamografía","n":3,"moda":1.0,"interp":0.0},{"label":"Radiología","n":147,"moda":2.0,"interp":0.0},{"label":"Resonancia Magnética (4h)","n":35,"moda":4.0,"interp":1.0},{"label":"Resonancia Magnética (24h)","n":22,"moda":23.0,"interp":16.0},{"label":"Resonancia Magnética (48h)","n":1,"moda":46.0,"interp":44.0},{"label":"Tomografía Axial Computada","n":82,"moda":4.0,"interp":2.0}],"Clínica de la Mujer":[{"label":"Densitometría","n":97,"moda":1.0,"interp":0.0},{"label":"Ecosonografía","n":140,"moda":2.0,"interp":0.0},{"label":"Mamografía","n":97,"moda":2.0,"interp":0.0},{"label":"Radiología","n":1,"moda":3.0,"interp":0.0},{"label":"Tomografía Axial Computada","n":2,"moda":2.0,"interp":1.0}],"Chamizal":[{"label":"Ecosonografía","n":35,"moda":2.0,"interp":0.0},{"label":"Resonancia Magnética (4h)","n":83,"moda":4.0,"interp":1.0},{"label":"Resonancia Magnética (24h)","n":49,"moda":24.0,"interp":2.0}],"Guadalupe":[{"label":"Densitometría","n":1,"moda":2.0,"interp":2.0},{"label":"Ecosonografía","n":31,"moda":2.0,"interp":0.0},{"label":"Mamografía","n":1,"moda":2.0,"interp":0.0},{"label":"Radiología","n":1,"moda":3.0,"interp":2.0},{"label":"Resonancia Magnética (24h)","n":1,"moda":23.0,"interp":13.0}],"Las Águilas":[{"label":"Densitometría","n":1,"moda":3.0,"interp":0.0},{"label":"Radiología","n":1,"moda":1.0,"interp":0.0}]};
 
 /* ===== Tiempos del proceso por departamento, por unidad (4 etapas) =====
    Fuente: Turnaround Time (TAT) de septiembre 2026 + reporte general de
@@ -3118,10 +3129,16 @@ function initPromuUnitSel(){
   });
 }
 
+const PROMU_THRESH_LABEL = {
+  'Cardiología':'≤7h', 'Densitometría':'≤3h', 'Ecosonografía':'≤2h', 'Mamografía':'≤2h',
+  'Radiología':'≤3h', 'Resonancia Magnética (4h)':'≤4h', 'Resonancia Magnética (24h)':'≤24h',
+  'Resonancia Magnética (48h)':'≤48h', 'Tomografía Axial Computada':'≤4h'
+};
+
 function renderPromesaUnit(){
-  const recs = PROMESA_UNIT_DATA[promuUnit] || [];
-  const totalN = recs.reduce((a,r)=>a+r.n,0);
-  const totalCumple = recs.reduce((a,r)=>a+r.cumple,0);
+  const full = PROMESA_UNIT_DATA[promuUnit] || [];
+  const totalN = full.reduce((a,r)=>a+r.n,0);
+  const totalCumple = full.reduce((a,r)=>a+r.cumple,0);
   const pct = totalN ? +(100*totalCumple/totalN).toFixed(1) : 0;
 
   document.getElementById('promu-sub').textContent = `${promuUnit} · ${fmt(totalN)} estudios · septiembre 2026`;
@@ -3129,35 +3146,54 @@ function renderPromesaUnit(){
   pctEl.textContent = pct.toFixed(1)+'%';
   pctEl.style.color = pct>=95?'#4c8c6f':(pct>=85?'#c2921f':'#ba544c');
 
-  const data = recs.map(r=>{
-    const interp = Math.max(0, r.interp ?? 0);
-    const margen = Math.max(0, r.margen ?? 0);
-    return {name:r.dept, n:r.n, v:[interp, margen], total: r.mediana ?? 0};
-  });
-  const colors = ['#8a6a9c','#4c8c6f'];
-  const stages = ['Interpretación (mediana)','Margen restante (mediana)'];
-  const targets = {};
-  recs.forEach(r=>{ if(r.moda!=null) targets[r.dept]=r.moda; });
-
+  const recs = PROMESA_UNIT_MODA[promuUnit] || [];
+  const maxVal = Math.max(...recs.map(r=>Math.max(r.moda||0, r.interp||0)), 0.1);
   const chartEl = document.getElementById('promu-chart');
-  stackedBar(chartEl, data, colors, stages, targets);
 
-  chartEl.querySelectorAll('.bar-row').forEach((row,i)=>{
-    const r = recs[i]; if(!r) return;
-    const negWarn = r.pctNeg>0 ? ` · ⚠ en ${r.pctNeg}% de los casos la interpretación sola ya rebasa la promesa` : '';
-    row.dataset.tip = `<b>${r.dept}</b> · ${fmt(r.n)} estudios · cumplimiento ${r.pct.toFixed(1)}% · mediana prometida ${r.mediana}h · moda prometida ${r.moda}h · interpretación mediana ${r.interp}h${negWarn}`;
-  });
+  chartEl.innerHTML = recs.map(r=>{
+    const moda = r.moda ?? 0, interp = r.interp ?? 0;
+    const interpPct = +(interp/maxVal*100).toFixed(1);
+    const modaPct = +(moda/maxVal*100).toFixed(1);
+    const over = interp > moda;
+    const color = over ? '#ba544c' : '#8a6a9c';
+    const tip = `<b>${r.label}</b> · ${fmt(r.n)} estudios con horas prometidas dentro de objetivo (${PROMU_THRESH_LABEL[r.label]||''}) · moda prometida ${moda}h · interpretación (mediana) ${interp}h`+
+      (over? ' · ⚠ la interpretación típica ya iguala o rebasa la moda prometida' : '');
+    return `<div class="bar-row" style="grid-template-columns:170px 1fr 200px" data-tip="${tip}">
+      <div class="bar-label">${r.label}</div>
+      <div class="sbar-wrap">
+        <div class="sbar-track"><div class="sbar-seg" data-w="${interpPct}" style="background:${color}"></div></div>
+        <div class="sbar-target" data-l="${modaPct}" style="left:0" data-tip="<b>${r.label}</b> · moda prometida: ${moda}h"></div>
+      </div>
+      <div style="font-size:11.5px;line-height:1.6;text-align:right;color:var(--muted)">
+        <div>Moda prometida <b style="color:var(--ink)">${moda}h</b></div>
+        <div>Interpretación (mediana) <b style="color:var(--ink)">${interp}h</b></div>
+      </div>
+    </div>`;
+  }).join('');
 
-  const withN = recs.filter(r=>r.n>=5);
-  const worst = (withN.length?withN:recs).slice().sort((a,b)=>a.pct-b.pct)[0];
-  const tightest = withN.slice().sort((a,b)=>(a.margen??99)-(b.margen??99))[0];
-  let nota = `<b>${fmt(totalN)}</b> estudios en ${promuUnit} (septiembre 2026), ${recs.length} modalidad${recs.length===1?'':'es'}. `;
+  const segsEl = chartEl.querySelectorAll('.sbar-seg');
+  const tgtEl = chartEl.querySelectorAll('.sbar-target');
+  if(reduce){
+    segsEl.forEach(s=>s.style.width=s.dataset.w+'%');
+    tgtEl.forEach(t=>t.style.left=t.dataset.l+'%');
+  } else {
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      segsEl.forEach(s=>s.style.width=s.dataset.w+'%');
+      tgtEl.forEach(t=>t.style.left=t.dataset.l+'%');
+    }));
+  }
+
+  const withN = full.filter(r=>r.n>=5);
+  const worst = (withN.length?withN:full).slice().sort((a,b)=>a.pct-b.pct)[0];
+  const over = recs.filter(r=>(r.interp??0) > (r.moda??0) && r.n>=5);
+  let nota = `<b>${fmt(totalN)}</b> estudios en ${promuUnit} (septiembre 2026), ${full.length} modalidad${full.length===1?'':'es'}. `;
   if(worst) nota += `Menor cumplimiento: <b>${worst.dept}</b> (${worst.pct.toFixed(1)}%). `;
-  if(tightest) nota += `Margen más ajustado tras la interpretación: <b>${tightest.dept}</b> (mediana ${tightest.margen}h de margen restante).`;
+  if(over.length) nota += `La interpretación típica ya iguala o rebasa la moda prometida en: <b>${over.map(r=>r.label).join(', ')}</b>.`;
+  else nota += `En ningún caso (con muestra suficiente) la interpretación típica rebasa la moda prometida.`;
   document.getElementById('promu-nota').innerHTML = nota;
 
   document.getElementById('promu-metodo').innerHTML =
-    `Por modalidad: la barra apilada muestra la mediana de horas de <b>interpretación</b> (Transcrito [C] − Alta [G]) seguida de la mediana de <b>margen restante</b> hasta la promesa (Promesa [A] − Transcrito [C], acotado a 0 cuando ya es negativo). La marca ▲ indica la <b>moda</b> (valor más frecuente) de horas prometidas (Promesa [A] − Alta [G]). El % de cumplimiento (arriba) mide si Fecha Promesa [A] cumplió la regla de su departamento (horario fijo u horas A—G ≤ objetivo, según la ventana — ver notas previas de cada departamento). Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia (identificadas por «A—G horas» ≥140h). Datos de septiembre 2026; combinaciones con pocos estudios (n chica) se muestran igual pero con menos certeza estadística.`;
+    `Por modalidad, solo con los estudios cuyas horas prometidas («A—G horas», Promesa [A] − Alta [G]) cumplieron su objetivo — Cardiología ≤7h, Densitometría ≤3h, Ecosonografía ≤2h, Mamografía ≤2h, Radiología ≤3h, Tomografía ≤4h, Resonancia Magnética separada por bloque (4h/24h/48h, cada uno a su propio límite) — para no mezclar con casos que rodaron al día siguiente. <b>Moda prometida</b> (▲, marca negra): valor más frecuente de horas prometidas en ese grupo. <b>Interpretación (mediana)</b> (barra de color): mediana de horas reales de interpretación (Transcrito [C] − Alta [G]) en ese mismo grupo filtrado. Barra roja = la interpretación típica iguala o rebasa la moda prometida (poco margen o ya al límite); barra morada = hay margen. El % de cumplimiento (arriba) es el global de la unidad, sin este filtro. Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia. Datos de septiembre 2026; combinaciones con pocos estudios (n chica) se muestran igual pero con menos certeza estadística.`;
 }
 
 /* ===== Estudios · septiembre 2026, mes completo (por departamento) =====
