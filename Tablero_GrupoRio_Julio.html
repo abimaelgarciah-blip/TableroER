@@ -1436,171 +1436,20 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
-              <h3>Cardiología</h3>
-              <p class="csub" id="prom2-cardio-sub-title"></p>
+              <h3>Promesa de estudios por unidad</h3>
+              <p class="csub" id="promu-sub">—</p>
             </div>
-            <div class="k-value" id="prom2-cardio-pct" style="font-size:26px">—</div>
+            <div class="k-value" id="promu-pct" style="font-size:26px">—</div>
           </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
+          <div class="seg" id="promu-unit-sel" style="flex-wrap:wrap;margin:12px 0 16px"></div>
+          <p class="csub">Horas por modalidad (mediana): interpretación vs. margen restante hasta la promesa · ▲ marca la moda de horas prometidas</p>
           <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
+            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Interpretación (mediana)</span>
+            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Margen restante (mediana)</span>
           </div>
-          <div id="prom2-cardio-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-cardio-pareto-nota"></div>
-
-          <div style="margin-top:20px">
-            <p class="csub">Por subtipo</p>
-            <div class="bars" id="prom2-cardio-sub-bars"></div>
-          </div>
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-cardio-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide si <b>Fecha Promesa [A]</b> cumplió la regla de su ventana (no la entrega real). Electrocardiograma: L-V 7–8:59 debió prometerse 13:00 mismo día (hora fija); 9–12:59 la columna «A—G horas» debe ser ≤4h; 13–16:59 debió prometerse 20:00 mismo día; 17–20:00 debió prometerse 13:00 del día siguiente. Sábados 7–8:59 debió prometerse 13:00 mismo día; el resto de sábado y domingo debió prometerse el lunes a las 16:00. <b>Otros</b> (Ecocardiograma, Holter, Prueba de Esfuerzo, Evaluación Cardiológica, Medición de Presión Arterial — esta última no estaba en la lista del documento, se agrupó aquí por descarte) debieron prometerse el día siguiente a las 18:00. El cumplimiento de Otros es bajo (34.4%): muchas promesas reales caen 1–3 días después de lo que marca la regla, sobre todo cruzando fin de semana. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo bajó de 211 a 210 estudios.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Densitometría</h3>
-              <p class="csub" id="prom2-densito-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-densito-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-densito-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-densito-pareto-nota"></div>
-
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-densito-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–19:00 debe ser ≤3h; 19:01 en adelante debió prometerse antes de medianoche del día siguiente (el documento no da hora fija para este tramo, se usó ese límite como referencia). Sábados 7:00–16:00 ≤3h, resto antes de medianoche del domingo. Domingos 8:00–11:00 ≤3h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo bajó de 292 a 290 estudios.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Ecosonografía</h3>
-              <p class="csub" id="prom2-eco-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-eco-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-eco-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-eco-pareto-nota"></div>
-
-          <div style="margin-top:20px">
-            <p class="csub">Por subtipo</p>
-            <div class="bars" id="prom2-eco-sub-bars"></div>
-          </div>
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-eco-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. <b>Convencional</b>: L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente; sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. En Clínica de la Mujer y Acueducto, de 13:00 a 15:00 debió prometerse para el día siguiente (lunes si es viernes) en vez de las 2h normales. <b>Doppler</b>: L-V 7:00–15:59 ≤4h, resto antes de medianoche del día siguiente; sábados 7:00–11:00 ≤4h, resto antes de medianoche del lunes. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (biopsia y el eco que la acompaña, identificadas porque «A—G horas» llega a 140h o más por el tiempo de patología); con estos filtros el universo bajó de 973 a 914 estudios.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Mamografía</h3>
-              <p class="csub" id="prom2-mamo-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-mamo-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-mamo-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-mamo-pareto-nota"></div>
-
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-mamo-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–18:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–13:00 ≤2h, resto antes de medianoche del lunes (cierra domingo). Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia (mamografía con eco de mama acompañada de biopsia); con estos filtros el universo bajó de 326 a 319 estudios.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Radiología</h3>
-              <p class="csub" id="prom2-rx-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-rx-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-rx-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-rx-pareto-nota"></div>
-
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-rx-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide la columna «A—G horas» (Fecha Promesa [A] − Fecha Alta [G]: el margen que se prometió desde que el estudio quedó listo), no la entrega real. L-V 7:00–19:00 debe ser ≤2h, resto antes de medianoche del día siguiente. Sábados 7:00–16:00 ≤2h, resto antes de medianoche del día siguiente. Domingos 8:00–10:59 ≤2h, resto antes de medianoche del día siguiente. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo se mantuvo en 755 estudios (ningún caso de Radiología cayó en estos criterios).</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Resonancia Magnética</h3>
-              <p class="csub" id="prom2-rm-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-rm-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-rm-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-rm-pareto-nota"></div>
-
-          <div style="margin-top:20px">
-            <p class="csub">Por subtipo</p>
-            <div class="bars" id="prom2-rm-sub-bars"></div>
-          </div>
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-rm-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide si la <b>Fecha Promesa [A]</b> cumplió el límite de su bloque (no la entrega real). Clasificado por tipo de estudio: <b>4h</b> columna (cervical/dorsal/lumbar), hombro, cadera, sacroilíaca, tobillo, codo, rodilla (sin cartilograma) — columna «A—G horas» ≤4h. <b>24h</b> es el resto — próstata, cráneo, angioresonancias, cartilograma, abdomen y pelvis, colangioresonancia, volumetría, cuello, órbitas, mama, pelvis, hipófisis, etc. — «A—G horas» ≤24h. <b>48h</b> BodyScan, valoración oncológica/funcional, tractografía — «A—G horas» ≤48h entre semana, ≤72h si se agenda viernes o sábado (cruza domingo; muestra chica, 5 casos en el mes). <b>Endometriosis</b> (Pelvis Femenina) debió prometerse al día hábil siguiente a las 15:00 (hora fija) — los 9 casos del mes se prometieron sistemáticamente ~16:00, 1 hora tarde contra esta regla; vale la pena confirmar si el horario real acordado es 16:00 y el documento quedó desactualizado. No se distingue aquí la lista propia de la Dra. Monse (Cráneo Oncológico, Perfusión, Espectroscopía, Esclerosis Múltiple, Cuello) por no haber columna de radiólogo asignado en el reporte — esos casos quedan dentro del bloque 24h o 48h según corresponda por nombre de estudio. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia; con estos filtros el universo bajó de 928 a 923 estudios.</div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Tomografía Axial Computada</h3>
-              <p class="csub" id="prom2-tac-sub-title"></p>
-            </div>
-            <div class="k-value" id="prom2-tac-pct" style="font-size:26px">—</div>
-          </div>
-          <p class="csub" style="margin-top:14px">Horas A—G (Fecha Promesa [A] − Fecha Alta [G])</p>
-          <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#4c8c6f"></span>Dentro del objetivo</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Fuera del objetivo</span>
-            <span class="it"><span class="sw" style="background:#4BAFD6"></span>% acumulado</span>
-          </div>
-          <div id="prom2-tac-pareto"></div>
-          <div class="line-note" style="margin-top:12px" id="prom2-tac-pareto-nota"></div>
-
-          <div style="margin-top:20px">
-            <p class="csub">Por subtipo</p>
-            <div class="bars" id="prom2-tac-sub-bars"></div>
-          </div>
-          <p class="csub" style="margin-top:20px">Cumplimiento por unidad</p>
-          <div class="bars" id="prom2-tac-unit-bars"></div>
-          <div class="empty" style="margin-top:14px">Se mide si <b>Fecha Promesa [A]</b> (o la columna «A—G horas») cumplió la regla de su ventana, no la entrega real. L-V 7:00–17:00 «A—G horas» ≤3h (≤4h en Acueducto), resto debió prometerse antes de medianoche del día siguiente. Sábados López Mateos 7–12:59 ≤3h, Acueducto 7–11:59 ≤4h, resto antes de medianoche del día siguiente. Domingos 8:00–13:00 debió prometerse 11:00 del día siguiente (hora fija). <b>Postproceso</b> (UroTAC, AngioTAC, renal para donador, regiones 3D) toma los mismos horarios con +1h. <b>Dra. Monse</b> (Angio Cerebral, Carótidas, Oídos): «A—G horas» ≤48h si se agenda lunes-jueves, ≤72h viernes a domingo. Se excluyen además Medicina Preventiva, protocolos (iniciales + número en el campo de paciente) y las citas de Eco con Biopsia guiada por TAC (biopsia y el eco que la acompaña, identificadas porque «A—G horas» llega a 140h o más por el tiempo de patología); con estos filtros el universo bajó de 553 a 514 estudios.</div>
+          <div id="promu-chart"></div>
+          <div class="line-note" style="margin-top:12px" id="promu-nota"></div>
+          <div class="empty" style="margin-top:14px" id="promu-metodo"></div>
         </div>
       </section>
 
@@ -2227,44 +2076,20 @@ const deptEvo = {"semanas": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9
 
 const PROC_DEPT_ORDER = ["Cardiología","Resonancia Magnética","Tomografía Axial C.","Densitometría","Radiología","Ecosonografía","Mamografía"];
 const PROC_TARGET = {"Cardiología":4,"Densitometría":3,"Ecosonografía":2,"Mamografía":3,"Radiología":2,"Resonancia Magnética":4,"Tomografía Axial C.":3};
-/* ===== Promesa de estudios: Fecha Promesa [A] -> Fecha Alta [G] (septiembre 2026) =====
-   Fuente: reporte general de septiembre 2026, mismas exclusiones que "Tiempos del
-   proceso": se excluyen Medicina Preventiva y estudios con "protocolo" en el nombre;
-   en Cardiología solo se cuenta Electrocardiograma. Objetivo por departamento:
-   Densitometría 3h, Ecosonografía 2h, Mamografía 3h, Radiología 2h, Cardiología 4h;
-   Resonancia Magnética según su bloque de promesa (ver rmBlocks: 4h columna/hombro/
-   cadera/sacroilíaca/tobillo/codo/rodilla, 24h el resto incl. próstata/cráneo/mama/
-   abdomen-pelvis/etc., 48h body scan/valoración funcional/tractografía/
-   cardioresonancia); Tomografía según su tipo de estudio y, en algunos casos, unidad/día
-   (ver tacTypes: Normal 3h — todo lo no listado abajo —, Postproceso 4h — UroTAC,
-   AngioTAC genérico, renal para donador, regiones anatómicas "(3D)" —, Monse 48h si se
-   agendó lunes a jueves ó 72h si se agendó viernes/sábado/domingo — Angio Cerebral,
-   Angio de Carótidas, Oídos —, según Fecha Agenda [B]; en la unidad Acueducto, Normal y
-   Postproceso suman +1h a su objetivo — 4h y 5h respectivamente — por acuerdo específico
-   de esa unidad). tacTypes ya no trae un "target" único por tipo porque varía por unidad
-   o por día; el objetivo exacto de cada estudio se calculó fila por fila antes de
-   agregar. "A—G horas" (columna del reporte) es directamente el número de horas en que
-   se prometió el resultado para ese estudio (no una medición de atraso); cumple si es ≤
-   el objetivo. En Tomografía además se excluyen los estudios agendados a las 17h (5pm) o
-   después, según Fecha Agenda [B] — el sistema les asigna automáticamente una promesa
-   para el día siguiente (bimodal: de 67 casos excluidos en septiembre, 32 igual se
-   resuelven en ≤3h pero 34 quedan entre 9h y 70h), y comparar eso contra un objetivo
-   mismo-día no es representativo (excludedLate cuenta cuántos se
-   quitaron). pareto.bins agrupa en horas enteras (ceil) usando el objetivo de cada
-   departamento (target), con la última bin como "+h" (todo lo que exceda target+4h) —
-   en RM y Tomografía esa bin mezcla estudios de bloques/tipos más largos que sí cumplen
-   (verde) con los que no. unidades[suc].turnos usa Matutino 7-14:59h / Vespertino
-   15h-cierre según hora de Fecha Promesa [A] (no Agenda [B]). */
-const PROMESA2_DATA = {"Cardiología": {"n": 210,"cumple": 122,"pct": 58.1,"pareto": {"total": 210,"bins": [{"label": "1 h","within": 2,"outside": 0,"cumPct": 1.0},{"label": "2 h","within": 11,"outside": 0,"cumPct": 6.2},{"label": "3 h","within": 18,"outside": 2,"cumPct": 14.8},{"label": "4 h","within": 39,"outside": 0,"cumPct": 33.3},{"label": "5 h","within": 12,"outside": 4,"cumPct": 39.0},{"label": "6 h","within": 3,"outside": 7,"cumPct": 40.5},{"label": "7 h","within": 0,"outside": 3,"cumPct": 40.5},{"label": "8 h","within": 0,"outside": 3,"cumPct": 40.5},{"label": "8+ h","within": 37,"outside": 69,"cumPct": 58.1}]},"unidades": {"López Mateos": {"n": 207,"cumple": 121,"pct": 58.5},"Las Águilas": {"n": 2,"cumple": 0,"pct": 0.0},"Acueducto": {"n": 1,"cumple": 1,"pct": 100.0}},"sub": {"ECG": {"n": 146,"cumple": 100,"pct": 68.5},"Otros": {"n": 64,"cumple": 22,"pct": 34.4}}},"Densitometría": {"n": 290,"cumple": 271,"pct": 93.4,"pareto": {"total": 290,"bins": [{"label": "1 h","within": 57,"outside": 0,"cumPct": 19.7},{"label": "2 h","within": 93,"outside": 0,"cumPct": 51.7},{"label": "3 h","within": 116,"outside": 0,"cumPct": 91.7},{"label": "4 h","within": 0,"outside": 4,"cumPct": 91.7},{"label": "5 h","within": 0,"outside": 3,"cumPct": 91.7},{"label": "6 h","within": 0,"outside": 1,"cumPct": 91.7},{"label": "7 h","within": 0,"outside": 0,"cumPct": 91.7},{"label": "8 h","within": 0,"outside": 0,"cumPct": 91.7},{"label": "8+ h","within": 5,"outside": 11,"cumPct": 93.4}]},"unidades": {"Clínica de la Mujer": {"n": 104,"cumple": 97,"pct": 93.3},"López Mateos": {"n": 180,"cumple": 168,"pct": 93.3},"Guadalupe": {"n": 1,"cumple": 1,"pct": 100.0},"Acueducto": {"n": 4,"cumple": 4,"pct": 100.0},"Las Águilas": {"n": 1,"cumple": 1,"pct": 100.0}},"sub": {}},"Ecosonografía": {"n": 914,"cumple": 705,"pct": 77.1,"pareto": {"total": 914,"bins": [{"label": "1 h","within": 174,"outside": 0,"cumPct": 19.0},{"label": "2 h","within": 445,"outside": 0,"cumPct": 67.7},{"label": "3 h","within": 34,"outside": 94,"cumPct": 71.4},{"label": "4 h","within": 14,"outside": 33,"cumPct": 73.0},{"label": "5 h","within": 0,"outside": 2,"cumPct": 73.0},{"label": "6 h","within": 0,"outside": 0,"cumPct": 73.0},{"label": "7 h","within": 0,"outside": 0,"cumPct": 73.0},{"label": "8 h","within": 0,"outside": 0,"cumPct": 73.0},{"label": "8+ h","within": 38,"outside": 80,"cumPct": 77.1}]},"unidades": {"López Mateos": {"n": 419,"cumple": 370,"pct": 88.3},"Clínica de la Mujer": {"n": 264,"cumple": 151,"pct": 57.2},"Chamizal": {"n": 50,"cumple": 41,"pct": 82.0},"Acueducto": {"n": 141,"cumple": 109,"pct": 77.3},"Guadalupe": {"n": 40,"cumple": 34,"pct": 85.0}},"sub": {"Convencional": {"n": 837,"cumple": 634,"pct": 75.7},"Doppler": {"n": 77,"cumple": 71,"pct": 92.2}}},"Mamografía": {"n": 319,"cumple": 228,"pct": 71.5,"pareto": {"total": 319,"bins": [{"label": "1 h","within": 62,"outside": 0,"cumPct": 19.4},{"label": "2 h","within": 157,"outside": 0,"cumPct": 68.7},{"label": "3 h","within": 0,"outside": 55,"cumPct": 68.7},{"label": "4 h","within": 0,"outside": 10,"cumPct": 68.7},{"label": "5 h","within": 0,"outside": 0,"cumPct": 68.7},{"label": "6 h","within": 0,"outside": 0,"cumPct": 68.7},{"label": "7 h","within": 0,"outside": 0,"cumPct": 68.7},{"label": "8 h","within": 0,"outside": 0,"cumPct": 68.7},{"label": "8+ h","within": 9,"outside": 26,"cumPct": 71.5}]},"unidades": {"López Mateos": {"n": 134,"cumple": 126,"pct": 94.0},"Clínica de la Mujer": {"n": 180,"cumple": 97,"pct": 53.9},"Guadalupe": {"n": 1,"cumple": 1,"pct": 100.0},"Acueducto": {"n": 4,"cumple": 4,"pct": 100.0}},"sub": {}},"Radiología": {"n": 755,"cumple": 629,"pct": 83.3,"pareto": {"total": 755,"bins": [{"label": "1 h","within": 366,"outside": 0,"cumPct": 48.5},{"label": "2 h","within": 225,"outside": 0,"cumPct": 78.3},{"label": "3 h","within": 0,"outside": 45,"cumPct": 78.3},{"label": "4 h","within": 0,"outside": 4,"cumPct": 78.3},{"label": "5 h","within": 0,"outside": 4,"cumPct": 78.3},{"label": "6 h","within": 0,"outside": 5,"cumPct": 78.3},{"label": "7 h","within": 0,"outside": 3,"cumPct": 78.3},{"label": "8 h","within": 0,"outside": 0,"cumPct": 78.3},{"label": "8+ h","within": 38,"outside": 65,"cumPct": 83.3}]},"unidades": {"López Mateos": {"n": 581,"cumple": 484,"pct": 83.3},"Acueducto": {"n": 170,"cumple": 144,"pct": 84.7},"Las Águilas": {"n": 2,"cumple": 1,"pct": 50.0},"Guadalupe": {"n": 1,"cumple": 0,"pct": 0.0},"Clínica de la Mujer": {"n": 1,"cumple": 0,"pct": 0.0}},"sub": {}},"Resonancia Magnética": {"n": 923,"cumple": 431,"pct": 46.7,"pareto": {"total": 923,"bins": [{"label": "1 h","within": 4,"outside": 0,"cumPct": 0.4},{"label": "2 h","within": 6,"outside": 0,"cumPct": 1.1},{"label": "3 h","within": 82,"outside": 0,"cumPct": 10.0},{"label": "4 h","within": 143,"outside": 0,"cumPct": 25.5},{"label": "5 h","within": 11,"outside": 35,"cumPct": 26.7},{"label": "6 h","within": 2,"outside": 2,"cumPct": 26.9},{"label": "7 h","within": 2,"outside": 1,"cumPct": 27.1},{"label": "8 h","within": 2,"outside": 1,"cumPct": 27.3},{"label": "8+ h","within": 179,"outside": 453,"cumPct": 46.7}]},"unidades": {"Acueducto": {"n": 204,"cumple": 58,"pct": 28.4},"Chamizal": {"n": 185,"cumple": 132,"pct": 71.4},"López Mateos": {"n": 532,"cumple": 240,"pct": 45.1},"Guadalupe": {"n": 2,"cumple": 1,"pct": 50.0}},"sub": {"4": {"n": 504,"cumple": 199,"pct": 39.5},"24": {"n": 405,"cumple": 230,"pct": 56.8},"endo": {"n": 9,"cumple": 0,"pct": 0.0},"48": {"n": 5,"cumple": 2,"pct": 40.0}}},"Tomografía Axial Computada": {"n": 514,"cumple": 439,"pct": 85.4,"pareto": {"total": 514,"bins": [{"label": "1 h","within": 38,"outside": 0,"cumPct": 7.4},{"label": "2 h","within": 198,"outside": 0,"cumPct": 45.9},{"label": "3 h","within": 100,"outside": 0,"cumPct": 65.4},{"label": "4 h","within": 61,"outside": 10,"cumPct": 77.2},{"label": "5 h","within": 0,"outside": 12,"cumPct": 77.2},{"label": "6 h","within": 0,"outside": 3,"cumPct": 77.2},{"label": "7 h","within": 1,"outside": 3,"cumPct": 77.4},{"label": "8 h","within": 0,"outside": 0,"cumPct": 77.4},{"label": "8+ h","within": 41,"outside": 47,"cumPct": 85.4}]},"unidades": {"López Mateos": {"n": 396,"cumple": 343,"pct": 86.6},"Acueducto": {"n": 116,"cumple": 94,"pct": 81.0},"Clínica de la Mujer": {"n": 2,"cumple": 2,"pct": 100.0}},"sub": {"Normal": {"n": 469,"cumple": 402,"pct": 85.7},"Postproceso": {"n": 30,"cumple": 27,"pct": 90.0},"Monse": {"n": 15,"cumple": 10,"pct": 66.7}}}};
-const PROMESA2_DEPTS = [
-  {key:"Cardiología", slug:"cardio", subOrder:["ECG", "Otros"], subLabels:{"ECG": "Electrocardiograma", "Otros": "Otros (Eco/Holter/Esfuerzo/Presión)"}},
-  {key:"Densitometría", slug:"densito", subOrder:[], subLabels:{}},
-  {key:"Ecosonografía", slug:"eco", subOrder:["Convencional", "Doppler"], subLabels:{"Convencional": "Convencional", "Doppler": "Doppler"}},
-  {key:"Mamografía", slug:"mamo", subOrder:[], subLabels:{}},
-  {key:"Radiología", slug:"rx", subOrder:[], subLabels:{}},
-  {key:"Resonancia Magnética", slug:"rm", subOrder:["4", "24", "48", "endo"], subLabels:{"4": "Bloque 4h", "24": "Bloque 24h", "48": "Bloque 48h", "endo": "Endometriosis"}},
-  {key:"Tomografía Axial Computada", slug:"tac", subOrder:["Normal", "Postproceso", "Monse"], subLabels:{"Normal": "Normal", "Postproceso": "Postproceso", "Monse": "Dra. Monse"}},
-];
+/* ===== Promesa de estudios por unidad (septiembre 2026) =====
+   Fuente: reporte general de septiembre 2026, mismas exclusiones que el resto de
+   "Promesa de estudios": Medicina Preventiva, Plaza Universidad y Ciudad Granja;
+   protocolos (iniciales + número en el campo de paciente); citas de Eco con Biopsia
+   (ag_horas>=140h). Por cada unidad x modalidad: n/cumple/pct igual que antes (motor
+   de reglas por departamento, Fecha Promesa [A] vs. su regla); moda/mediana de
+   "A—G horas" (Promesa [A] − Alta [G], lo que se prometió desde que el estudio quedó
+   listo); mediana de "G—C horas" (Transcrito [C] − Alta [G], tiempo real de
+   interpretación, columna precomputada del reporte); margen = mediana promesa − mediana
+   interpretación (cuánto tiempo queda, en mediana, entre que se interpreta y vence la
+   promesa); pctNeg = % de estudios donde la interpretación sola ya rebasó la promesa
+   (horas A—G − horas G—C < 0). */
+const PROMESA_UNIT_DATA = {"López Mateos":[{"dept":"Cardiología","n":207,"cumple":121,"pct":58.5,"moda":4.0,"mediana":17.0,"interp":4.0,"margen":4.0,"pctNeg":0.5},{"dept":"Densitometría","n":180,"cumple":168,"pct":93.3,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":419,"cumple":370,"pct":88.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":1.0},{"dept":"Mamografía","n":134,"cumple":126,"pct":94.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":581,"cumple":484,"pct":83.3,"moda":1.0,"mediana":1.0,"interp":0.0,"margen":1.0,"pctNeg":1.0},{"dept":"Resonancia Magnética","n":532,"cumple":240,"pct":45.1,"moda":4.0,"mediana":17.5,"interp":11.0,"margen":3.0,"pctNeg":2.3},{"dept":"Tomografía Axial Computada","n":396,"cumple":343,"pct":86.6,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":2.0,"pctNeg":1.3}],"Acueducto":[{"dept":"Cardiología","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Densitometría","n":4,"cumple":4,"pct":100.0,"moda":0.0,"mediana":1.5,"interp":1.0,"margen":0.5,"pctNeg":0.0},{"dept":"Ecosonografía","n":141,"cumple":109,"pct":77.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.7},{"dept":"Mamografía","n":4,"cumple":4,"pct":100.0,"moda":1.0,"mediana":1.5,"interp":0.0,"margen":1.5,"pctNeg":0.0},{"dept":"Radiología","n":170,"cumple":144,"pct":84.7,"moda":2.0,"mediana":2.0,"interp":0.5,"margen":1.0,"pctNeg":0.6},{"dept":"Resonancia Magnética","n":204,"cumple":58,"pct":28.4,"moda":4.0,"mediana":23.0,"interp":4.0,"margen":4.0,"pctNeg":2.5},{"dept":"Tomografía Axial Computada","n":116,"cumple":94,"pct":81.0,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":2.0,"pctNeg":1.7}],"Clínica de la Mujer":[{"dept":"Densitometría","n":104,"cumple":97,"pct":93.3,"moda":1.0,"mediana":2.0,"interp":0.0,"margen":1.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":264,"cumple":151,"pct":57.2,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.4},{"dept":"Mamografía","n":180,"cumple":97,"pct":53.9,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.6},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Tomografía Axial Computada","n":2,"cumple":2,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":1.0,"pctNeg":0.0}],"Chamizal":[{"dept":"Ecosonografía","n":50,"cumple":41,"pct":82.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":185,"cumple":132,"pct":71.4,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":3.0,"pctNeg":0.5}],"Guadalupe":[{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":2.0,"margen":0.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":40,"cumple":34,"pct":85.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Mamografía","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":2.0,"margen":1.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":2,"cumple":1,"pct":50.0,"moda":23.0,"mediana":28.5,"interp":18.0,"margen":10.5,"pctNeg":0.0}],"Las Águilas":[{"dept":"Cardiología","n":2,"cumple":0,"pct":0.0,"moda":25.0,"mediana":25.5,"interp":25.0,"margen":0.5,"pctNeg":0.0},{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Radiología","n":2,"cumple":1,"pct":50.0,"moda":1.0,"mediana":34.0,"interp":11.0,"margen":23.0,"pctNeg":0.0}]};
+const PROMU_UNIT_ORDER = ["López Mateos","Acueducto","Clínica de la Mujer","Chamizal","Guadalupe","Las Águilas"];
 
 /* ===== Tiempos del proceso por departamento, por unidad (4 etapas) =====
    Fuente: Turnaround Time (TAT) de septiembre 2026 + reporte general de
@@ -3279,34 +3104,60 @@ function paretoChart(el, pareto){
   el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${bars}<path d="${line}" fill="none" stroke="#4BAFD6" stroke-width="2.2" stroke-linejoin="round"/>${dots}${rightAxis}${xlab}</svg>`;
 }
 
-function renderPromesa2(){
-  PROMESA2_DEPTS.forEach(d=>{
-    const info = PROMESA2_DATA[d.key];
-    if(!info) return;
-    document.getElementById(`prom2-${d.slug}-sub-title`).textContent = `${fmt(info.n)} estudios`;
-    const pctEl = document.getElementById(`prom2-${d.slug}-pct`);
-    pctEl.textContent = info.pct.toFixed(1)+'%';
-    pctEl.style.color = info.pct>=95?'#4c8c6f':(info.pct>=85?'#c2921f':'#ba544c');
-
-    paretoChart(document.getElementById(`prom2-${d.slug}-pareto`), info.pareto);
-    document.getElementById(`prom2-${d.slug}-pareto-nota`).innerHTML =
-      `<b>${fmt(info.cumple)}</b> de ${fmt(info.n)} estudios (${info.pct.toFixed(1)}%) con la <b>Fecha Promesa [A]</b> dentro de la regla (horario fijo, o columna «A—G horas» ≤ objetivo, según la ventana — ver nota). Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (identificados por iniciales y número en el campo de paciente, ej. «TGH 1102563 week96») y las citas de Eco con Biopsia (biopsia y el eco que la acompaña, identificadas por «A—G horas» ≥140h).`;
-
-    if(d.subOrder.length){
-      const rows = d.subOrder.filter(k=>info.sub[k] && info.sub[k].n>0).map(k=>{
-        const r = info.sub[k];
-        return {name: d.subLabels[k]||k, n:r.n, n_within:r.cumple, pct:r.pct};
-      });
-      renderProcDentro(document.getElementById(`prom2-${d.slug}-sub-bars`), rows);
-    }
-
-    const unitNames = Object.keys(info.unidades).sort((a,b)=>info.unidades[b].n-info.unidades[a].n);
-    const unitRows = unitNames.map(u=>{
-      const r = info.unidades[u];
-      return {name:u, n:r.n, n_within:r.cumple, pct:r.pct};
-    });
-    renderProcDentro(document.getElementById(`prom2-${d.slug}-unit-bars`), unitRows);
+let promuUnit = 'López Mateos';
+function initPromuUnitSel(){
+  const el = document.getElementById('promu-unit-sel');
+  el.innerHTML = PROMU_UNIT_ORDER.map(u=>{
+    const n = (PROMESA_UNIT_DATA[u]||[]).reduce((a,r)=>a+r.n,0);
+    return `<button class="seg-b${u===promuUnit?' active':''}" data-u="${u}">${u} <span style="opacity:.6">(${fmt(n)})</span></button>`;
+  }).join('');
+  el.querySelectorAll('.seg-b').forEach(b=>b.onclick=()=>{
+    promuUnit = b.dataset.u;
+    el.querySelectorAll('.seg-b').forEach(x=>x.classList.toggle('active', x===b));
+    renderPromesaUnit();
   });
+}
+
+function renderPromesaUnit(){
+  const recs = PROMESA_UNIT_DATA[promuUnit] || [];
+  const totalN = recs.reduce((a,r)=>a+r.n,0);
+  const totalCumple = recs.reduce((a,r)=>a+r.cumple,0);
+  const pct = totalN ? +(100*totalCumple/totalN).toFixed(1) : 0;
+
+  document.getElementById('promu-sub').textContent = `${promuUnit} · ${fmt(totalN)} estudios · septiembre 2026`;
+  const pctEl = document.getElementById('promu-pct');
+  pctEl.textContent = pct.toFixed(1)+'%';
+  pctEl.style.color = pct>=95?'#4c8c6f':(pct>=85?'#c2921f':'#ba544c');
+
+  const data = recs.map(r=>{
+    const interp = Math.max(0, r.interp ?? 0);
+    const margen = Math.max(0, r.margen ?? 0);
+    return {name:r.dept, n:r.n, v:[interp, margen], total: r.mediana ?? 0};
+  });
+  const colors = ['#8a6a9c','#4c8c6f'];
+  const stages = ['Interpretación (mediana)','Margen restante (mediana)'];
+  const targets = {};
+  recs.forEach(r=>{ if(r.moda!=null) targets[r.dept]=r.moda; });
+
+  const chartEl = document.getElementById('promu-chart');
+  stackedBar(chartEl, data, colors, stages, targets);
+
+  chartEl.querySelectorAll('.bar-row').forEach((row,i)=>{
+    const r = recs[i]; if(!r) return;
+    const negWarn = r.pctNeg>0 ? ` · ⚠ en ${r.pctNeg}% de los casos la interpretación sola ya rebasa la promesa` : '';
+    row.dataset.tip = `<b>${r.dept}</b> · ${fmt(r.n)} estudios · cumplimiento ${r.pct.toFixed(1)}% · mediana prometida ${r.mediana}h · moda prometida ${r.moda}h · interpretación mediana ${r.interp}h${negWarn}`;
+  });
+
+  const withN = recs.filter(r=>r.n>=5);
+  const worst = (withN.length?withN:recs).slice().sort((a,b)=>a.pct-b.pct)[0];
+  const tightest = withN.slice().sort((a,b)=>(a.margen??99)-(b.margen??99))[0];
+  let nota = `<b>${fmt(totalN)}</b> estudios en ${promuUnit} (septiembre 2026), ${recs.length} modalidad${recs.length===1?'':'es'}. `;
+  if(worst) nota += `Menor cumplimiento: <b>${worst.dept}</b> (${worst.pct.toFixed(1)}%). `;
+  if(tightest) nota += `Margen más ajustado tras la interpretación: <b>${tightest.dept}</b> (mediana ${tightest.margen}h de margen restante).`;
+  document.getElementById('promu-nota').innerHTML = nota;
+
+  document.getElementById('promu-metodo').innerHTML =
+    `Por modalidad: la barra apilada muestra la mediana de horas de <b>interpretación</b> (Transcrito [C] − Alta [G]) seguida de la mediana de <b>margen restante</b> hasta la promesa (Promesa [A] − Transcrito [C], acotado a 0 cuando ya es negativo). La marca ▲ indica la <b>moda</b> (valor más frecuente) de horas prometidas (Promesa [A] − Alta [G]). El % de cumplimiento (arriba) mide si Fecha Promesa [A] cumplió la regla de su departamento (horario fijo u horas A—G ≤ objetivo, según la ventana — ver notas previas de cada departamento). Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia (identificadas por «A—G horas» ≥140h). Datos de septiembre 2026; combinaciones con pocos estudios (n chica) se muestran igual pero con menos certeza estadística.`;
 }
 
 /* ===== Estudios · septiembre 2026, mes completo (por departamento) =====
@@ -4504,7 +4355,8 @@ function renderAll(){
   // Departamentos (evolución)
   renderDeptos();
   initProc4();
-  renderPromesa2();
+  initPromuUnitSel();
+  renderPromesaUnit();
   renderEstudiosJulio();
   renderEstudiosYoy();
   renderDraniela();
