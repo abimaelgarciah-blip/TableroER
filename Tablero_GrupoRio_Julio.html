@@ -700,6 +700,7 @@
             <div class="line-note" id="inc-breadcrumb" style="margin-bottom:10px"></div>
             <div class="bars wide" id="inc-drill-bars"></div>
             <div class="line-note" style="margin-top:10px" id="inc-drill-nota"></div>
+            <div id="inc-drill-comentarios"></div>
           </div>
         </div>
 
@@ -4368,6 +4369,16 @@ function buildUnitBar(){
 }
 
 let incDetailOpen=false, incLevel=1, incSelUnit=null, incSelDept=null;
+/* ===== Motivos de incumplimiento por unidad/departamento/horario (septiembre 2026) =====
+   Fuente: Rojos_4.csv (bitácora de calidad, columnas Cita/Paciente/Estudio/Motivo) cruzado
+   por IdCita contra el reporte general de septiembre 2026 para obtener departamento,
+   sucursal y el horario (mat = Fecha Promesa antes de las 15:00, vesp = 15:00 en
+   adelante), igual que el resto de este drill-down. El CSV trae registros de mayo a
+   octubre 2026, pero solo se pudieron ubicar unidad/departamento/horario para los que
+   coinciden con un IdCita de septiembre (51 motivos limpios de 163 filas del CSV); el
+   resto no se puede ubicar sin su propio reporte general del mes correspondiente.
+   Filas sin Motivo o con texto corrupto (el IdCita pegado al texto) se descartaron. */
+const INC_MOTIVOS = {"Acueducto":{"Resonancia Magnética":{"mat":[{"idcita":"200826121","motivo":"Realizando otro estudio"},{"idcita":"280826266","motivo":"Atraso Dra. Denise"},{"idcita":"110826361","motivo":"Cayeron servidores de Exa, se pierde interpretación"},{"idcita":"280926214","motivo":"Estudio sin interpretar"},{"idcita":"280926337","motivo":"No hay interpretación"}],"vesp":[{"idcita":"310826178","motivo":"Calidad"},{"idcita":"120926114","motivo":"Firma cortada Dra. Denise, se libera estudio"},{"idcita":"250926014","motivo":"Fallo de Exa"}]},"Radiología":{"mat":[{"idcita":"110926230","motivo":"Se interpreta tarde, doctores en estudios"},{"idcita":"240926147","motivo":"Sin médico que pueda interpretar."}]},"Tomografía Axial C.":{"mat":[{"idcita":"100926292","motivo":"Reingreso de calidad"}]},"Ecosonografía":{"mat":[{"idcita":"220926223","motivo":"Cambiar medico referido"}]}},"López Mateos":{"Tomografía Axial C.":{"mat":[{"idcita":"280826233","motivo":"Modifación de Calidad"},{"idcita":"40926242","motivo":"Paciente de asegurado pide separar interpretaciones"},{"idcita":"40926142","motivo":"Estudio no firmado, se pasa a siow"}],"vesp":[{"idcita":"70926240","motivo":"Estudio firmado tarde"}]},"Resonancia Magnética":{"mat":[{"idcita":"290826103","motivo":"Calidad - se modifican 3 estudios"},{"idcita":"310826305","motivo":"Dra. Karla envía tarde interpretación"},{"idcita":"50926073","motivo":"Modificación por calidad"},{"idcita":"20926256","motivo":"Reingreso de calidad"},{"idcita":"180926160","motivo":"Solicitud de modificación Dr. Olvera"},{"idcita":"220926194","motivo":"Dr. Iván firma tarde"},{"idcita":"220926253","motivo":"Estudio necesita complemento"},{"idcita":"110926211","motivo":"Envío tarde formato"},{"idcita":"180926304","motivo":"Dra. Karla envía tarde interpretación"}],"vesp":[{"idcita":"20926268","motivo":"Dr. David firma tarde el estudio"},{"idcita":"210926262","motivo":"Dra. Montse interpreta tarde el estudio"},{"idcita":"210926262","motivo":"Se inserta interpretación en cita del 2024, se pide moverla a la del 2026"}]},"EEG y Mapeo Cerebral":{"vesp":[{"idcita":"20926245","motivo":"Se elimina interpretación para colocar el escaneado correcto, en orden médica el Dr referido era Rosique Vessi y en interpretación Ruíz Huerta"}]},"Salud Visual":{"mat":[{"idcita":"80926168","motivo":"Se pega estudio incorrecto"}]},"Radiología":{"mat":[{"idcita":"120926104","motivo":"Carga de trabajo domingo"},{"idcita":"120926132","motivo":"Carga de trabajo domingo"},{"idcita":"90926338","motivo":"Carga de trabajo domingo"},{"idcita":"140926375","motivo":"Dra. Rocío demora en interpretar"},{"idcita":"180926093","motivo":"Doctora realizando otro estudio"},{"idcita":"180926093","motivo":"Dra. Rocío demora en interpretar"},{"idcita":"220926308","motivo":"Estudio demora porque px se hace complemento, se demora en resolver que pasaba con el estudio"},{"idcita":"280926013","motivo":"Dra. Rocío demora en interpretar"}],"vesp":[{"idcita":"220926216","motivo":"Se eliminan interpretaciones para corrección de sexo"},{"idcita":"220926216","motivo":"Error en el registro de Sexo en paciente"},{"idcita":"230926236","motivo":"Se interpreta tarde el estudio por la hora de entrada del Dr. Macias"}]},"Ecosonografía":{"mat":[{"idcita":"110926028","motivo":"Dr. Daniel demora en interpretar, se encuentra en estudio"}]},"Medicina Nuclear":{"mat":[{"idcita":"220926205","motivo":"Dr. Zaragoza interpreta tarde"},{"idcita":"230926170","motivo":"Dr. Zaragoza interpreta tarde"},{"idcita":"240926292","motivo":"Dr. Zaragoza interpreta tarde"}]}},"Clínica de la Mujer":{"Densitometría":{"mat":[{"idcita":"310826170","motivo":"No se cargan imágenes completas en Exa, solo cadera"},{"idcita":"70926053","motivo":"Estudio no reconciliado, no se pueden ver las imágenes"},{"idcita":"90926287","motivo":"Imágenes no ligadas a Exa"}]}},"Guadalupe":{"Ecosonografía":{"mat":[{"idcita":"90926180","motivo":"Estudio no se interpretó en tiempo"},{"idcita":"180926130","motivo":"Firmado 1 minuto tarde Dra. Rocío"}]}},"Chamizal":{"Resonancia Magnética":{"mat":[{"idcita":"200926042","motivo":"En tiempo, formato de interpretación incorrecto .ashx"}]}}};
 const INC_UNIT_COLORS = {
   'López Mateos':'#3f6fa6','Medicina Preventiva':'#4c8c6f','Acueducto':'#c2921f',
   'Clínica de la Mujer':'#b5524a','Chamizal':'#8a6a9c','Guadalupe':'#5f8a8b','Las Águilas':'#ab7a45'
@@ -4406,6 +4417,7 @@ function renderIncDrill(){
     document.getElementById('inc-detail-sub').textContent = 'Cumplimiento por unidad · haz clic en una barra para ver sus modalidades';
     notaEl.innerHTML = 'Cada color es una unidad distinta. Haz clic en una barra para ver el detalle por modalidad.';
     incWireBars(el, names, (name)=>{ incSelUnit=name; incLevel=2; renderIncDrill(); });
+    document.getElementById('inc-drill-comentarios').innerHTML = '';
   } else if(incLevel===2){
     const u=unidades[incSelUnit];
     const color=INC_UNIT_COLORS[incSelUnit]||'#4c8c6f';
@@ -4418,6 +4430,7 @@ function renderIncDrill(){
     document.getElementById('inc-detail-sub').textContent = `Cumplimiento por modalidad · ${incSelUnit}`;
     notaEl.innerHTML = 'Haz clic en una modalidad para ver el detalle por horario (matutino 7–15h / vespertino 15h–cierre).';
     incWireBars(el, names, (name)=>{ incSelDept=name; incLevel=3; renderIncDrill(); });
+    document.getElementById('inc-drill-comentarios').innerHTML = '';
   } else {
     const mv=(unidadesMV[incSelUnit]||{})[incSelDept];
     const color=INC_UNIT_COLORS[incSelUnit]||'#4c8c6f';
@@ -4436,6 +4449,21 @@ function renderIncDrill(){
       document.getElementById('inc-detail-sub').textContent = `${incSelDept} · ${incSelUnit}`;
       notaEl.innerHTML = 'Matutino = Fecha Promesa antes de las 15:00; vespertino = 15:00 en adelante.';
     }
+    renderIncComentarios();
+  }
+}
+function renderIncComentarios(){
+  const el = document.getElementById('inc-drill-comentarios');
+  const data = (INC_MOTIVOS[incSelUnit]||{})[incSelDept];
+  const section = (label, arr) => (arr && arr.length)
+    ? `<div style="margin-top:8px"><b>${label}</b><ul style="margin:4px 0 0;padding-left:18px">`+
+        arr.map(m=>`<li>IdCita ${m.idcita} — ${m.motivo}</li>`).join('')+`</ul></div>`
+    : '';
+  const html = data ? section('Matutino', data.mat) + section('Vespertino', data.vesp) : '';
+  if(html){
+    el.innerHTML = `<div class="line-note" style="margin-top:12px">Incumplimientos de septiembre identificados por IdCita, según bitácora de calidad (Rojos):</div>${html}`;
+  } else {
+    el.innerHTML = `<div class="line-note" style="margin-top:12px">Sin motivos de incumplimiento de septiembre registrados en la bitácora de calidad para esta combinación.</div>`;
   }
 }
 function setIncDetail(open){
