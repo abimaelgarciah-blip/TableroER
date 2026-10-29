@@ -26,10 +26,26 @@
     --ok:#4c8c6f; --warn:#c2921f; --bad:#ba544c;  /* umbrales */
     --radius:12px;
     --shadow:0 1px 2px rgba(0,0,0,.03);
+    --empty-bg:#fbfbfa;
+    --focus-ring:rgba(31,31,30,.06);
+    --target-line:rgba(31,31,30,.5);
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#14151a; --sidebar:#1a1b20; --panel:#1d1e24;
+      --border:#2b2c33; --border-strong:#3a3b43; --track:#262730;
+      --ink:#e9e9e7; --ink-2:#b8b8b2; --muted:#83837d;
+      --hover:#24252c; --active:#2a2b33;
+      --shadow:0 1px 2px rgba(0,0,0,.4);
+      --empty-bg:#1a1b20;
+      --focus-ring:rgba(255,255,255,.1);
+      --target-line:rgba(233,233,231,.5);
+    }
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
   body{
+    color-scheme:light dark;
     background:var(--bg);
     color:var(--ink);
     font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -200,6 +216,21 @@
   .kpis{grid-template-columns:repeat(4,1fr);margin-bottom:20px}
   .two{grid-template-columns:1fr 1fr}
   @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+  /* ---------- Sidebar móvil ---------- */
+  .menu-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;
+    border-radius:9px;border:1px solid var(--border-strong);background:var(--panel);cursor:pointer;
+    flex:0 0 auto;margin-bottom:16px;color:var(--ink)}
+  .menu-toggle:hover{background:var(--hover)}
+  .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:55}
+  @media(max-width:860px){
+    .sidebar{position:fixed;left:0;top:0;height:100vh;z-index:60;
+      transform:translateX(-100%);transition:transform .22s ease;box-shadow:2px 0 18px rgba(0,0,0,.14)}
+    .sidebar.open{transform:translateX(0)}
+    .menu-toggle{display:flex}
+    .sidebar-backdrop.show{display:block}
+    .main-inner{padding:20px 16px 48px}
+  }
+  @media (prefers-reduced-motion:reduce){ .sidebar{transition:none} }
   .card{
     background:var(--panel);
     border:1px solid var(--border);
@@ -222,7 +253,7 @@
   .bar-row{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:12px}
   .bar-label{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .bar-track{position:relative;background:var(--track);border-radius:6px;height:14px}
-  .bar-target{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px dashed rgba(31,31,30,.5);z-index:3;pointer-events:none}
+  .bar-target{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px dashed var(--target-line);z-index:3;pointer-events:none}
   .bar-fill{height:100%;border-radius:6px;width:0;transition:width .8s cubic-bezier(.22,1,.36,1)}
   .bar-val{font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right;color:var(--ink);font-weight:600}
   @media(max-width:520px){.bar-row{grid-template-columns:120px 1fr 40px}}
@@ -313,7 +344,7 @@
   .gauge-cap{position:absolute;top:-21px;transform:translateX(-50%);font-size:10.5px;color:var(--ink-2);white-space:nowrap}
   .gauge-scale{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted)}
   /* ---------- Empty state ---------- */
-  .empty{border:1px dashed var(--border-strong);border-radius:10px;padding:22px;color:var(--muted);font-size:12.5px;line-height:1.55;background:#fbfbfa}
+  .empty{border:1px dashed var(--border-strong);border-radius:10px;padding:22px;color:var(--muted);font-size:12.5px;line-height:1.55;background:var(--empty-bg)}
   .empty b{color:var(--ink-2);font-weight:600}
 
   /* ---------- Vertical histogram ---------- */
@@ -376,11 +407,14 @@
   .unit-bar{margin:2px 0 20px}
   .unit-select{font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);
     padding:9px 36px 9px 13px;border-radius:9px;border:1px solid var(--border-strong);
-    background-color:#fff;cursor:pointer;min-width:250px;appearance:none;-webkit-appearance:none;
+    background-color:var(--panel);cursor:pointer;min-width:250px;appearance:none;-webkit-appearance:none;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2357574f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
     background-repeat:no-repeat;background-position:right 11px center}
   .unit-select:hover{border-color:var(--muted)}
-  .unit-select:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(31,31,30,.06)}
+  .unit-select:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--focus-ring)}
+  @media (prefers-color-scheme:dark){
+    .unit-select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23b8b8b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>")}
+  }
 
   /* wide-label bar variant */
   .bars.wide .bar-row{grid-template-columns:224px 1fr 46px}
@@ -414,7 +448,7 @@
   .seg-b{font-family:inherit;font-size:12.5px;padding:6px 15px;border:0;background:transparent;
          color:var(--ink-2);border-radius:7px;cursor:pointer;transition:color .12s}
   .seg-b:hover{color:var(--ink)}
-  .seg-b.active{background:#fff;color:var(--ink);box-shadow:var(--shadow);font-weight:600}
+  .seg-b.active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-weight:600}
 
   /* ---------- Evolution matrix ---------- */
   .mtx-scroll{overflow-x:auto;margin-top:4px}
@@ -523,8 +557,13 @@
     </div>
   </aside>
 
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
   <main class="main">
     <div class="main-inner">
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
 
       <!-- ===================== RESUMEN ===================== -->
       <section class="view active" id="resumen">
@@ -4657,8 +4696,12 @@ function show(view){
   animateSection(sec);
 }
 document.querySelectorAll('.nav-item').forEach(btn=>{
-  btn.addEventListener('click', ()=>show(btn.dataset.view));
+  btn.addEventListener('click', ()=>{ show(btn.dataset.view); closeSidebar(); });
 });
+function openSidebar(){ document.querySelector('.sidebar').classList.add('open'); document.getElementById('sidebar-backdrop').classList.add('show'); }
+function closeSidebar(){ document.querySelector('.sidebar').classList.remove('open'); document.getElementById('sidebar-backdrop').classList.remove('show'); }
+document.getElementById('menu-toggle').addEventListener('click', openSidebar);
+document.getElementById('sidebar-backdrop').addEventListener('click', closeSidebar);
 document.querySelectorAll('#prod-seg .seg-b').forEach(b=>{
   b.addEventListener('click', ()=>{
     document.querySelectorAll('#prod-seg .seg-b').forEach(x=>x.classList.toggle('active', x===b));
