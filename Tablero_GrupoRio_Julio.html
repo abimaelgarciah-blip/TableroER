@@ -251,12 +251,12 @@
   .card .csub{margin:0 0 16px;font-size:12px;color:var(--muted)}
 
   /* ---------- Bar chart ---------- */
-  .bars{display:flex;flex-direction:column;gap:11px}
+  .bars{display:flex;flex-direction:column;gap:14px}
   .bar-row{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:12px}
   .bar-label{font-size:12.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .bar-track{position:relative;background:var(--track);border-radius:6px;height:14px}
+  .bar-track{position:relative;background:var(--track);border-radius:3px;height:4px}
   .bar-target{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px dashed var(--target-line);z-index:3;pointer-events:none}
-  .bar-fill{height:100%;border-radius:6px;width:0;transition:width .8s cubic-bezier(.22,1,.36,1)}
+  .bar-fill{height:100%;border-radius:3px;width:0;transition:width .8s cubic-bezier(.22,1,.36,1)}
   .bar-val{font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right;color:var(--ink);font-weight:600}
   @media(max-width:520px){.bar-row{grid-template-columns:120px 1fr 40px}}
 
@@ -2370,7 +2370,7 @@ function renderRadLine(){
   const series = radPers==='Todos'
     ? RAD_NAMES.map(n=>({name:n, color:RAD_COL[n], vals:radPersSeries[n]}))
     : [{name:radPers, color:RAD_COL[radPers], vals:radPersSeries[radPers]}];
-  multiLineChart(document.getElementById('line-transcriptor'), radMonthLabels, series, '');
+  multiLineChart(document.getElementById('line-transcriptor'), radMonthLabels, series, '', 'D');
   document.getElementById('rad-legend').innerHTML = radPers==='Todos' ? trLegend(series) : '';
   const sum = (radPers==='Todos' ? RAD_NAMES.reduce((a,n)=>a+radPersSeries[n].reduce((x,y)=>x+y,0),0)
                                   : radPersSeries[radPers].reduce((a,b)=>a+b,0));
@@ -3843,7 +3843,7 @@ function renderServicios(){
     series=[{name:srvSel, color:SRV_COL[Math.max(0,orden.indexOf(srvSel))%SRV_COL.length],
              vals:deptEvo.deptos[srvSel][kt].map(v=>v||null)}];
   }
-  multiLineChart(document.getElementById('srv-line'), labels, series, ' estudios');
+  multiLineChart(document.getElementById('srv-line'), labels, series, ' estudios', 'D');
   document.getElementById('srv-legend').innerHTML = series.length>1 ? trLegend(series) : '';
   const tot=series.reduce((a,s)=>a+s.vals.reduce((x,v)=>x+(v||0),0),0);
   document.getElementById('srv-sub').textContent =
@@ -3959,7 +3959,7 @@ function renderChqSerie(){
   const labels = sem?s.semanas:s.meses;
   const series=[{name:'Objetivo 1 · ≤ 4 días', color:'#4e8c70', vals:sem?s.o1s:s.o1m},
                 {name:'Objetivo 2 · ≥ 1 día antes', color:'#3f6fa6', vals:sem?s.o2s:s.o2m}];
-  multiLineChart(document.getElementById('chq-serie'), labels, series, '%');
+  multiLineChart(document.getElementById('chq-serie'), labels, series, '%', 'D');
   document.getElementById('chq-serie-leg').innerHTML=trLegend(series);
   const n=(sem?s.ns:s.nm).reduce((a,b)=>a+b,0);
   document.getElementById('chq-serie-sub').textContent =
@@ -4258,7 +4258,7 @@ function renderTrans(){
   const series = (trSel==='Todos')
     ? trPers.map(p=>({name:p, color:TR_COL[p], vals:trStats[p][key].map(s=>s[1])}))
     : [{name:trSel, color:TR_COL[trSel], vals:trStats[trSel][key].map(s=>s[1])}];
-  multiLineChart(document.getElementById('tr-line'), labels, series, ' min');
+  multiLineChart(document.getElementById('tr-line'), labels, series, ' min', 'D');
   document.getElementById('tr-legend').innerHTML = (trSel==='Todos') ? trLegend(series) : '';
   document.getElementById('tr-sub-a').textContent =
     'Minutos entre inicio y fin · se excluyen duraciones ≤ 0 y mayores a 60 min'+
@@ -4336,7 +4336,7 @@ const TR_DAY_S37 = {"Hugo Tabares": [1.42, 1.33, 1.0, 1.18, 0.78, null], "Laura 
 const TR_DAY_COL = TR_COL;
 function renderTrDay(){
   const series = Object.keys(TR_DAY_S37).map(p=>({name:p, color:TR_DAY_COL[p]||'var(--muted)', vals:TR_DAY_S37[p]}));
-  multiLineChart(document.getElementById('tr-day-line'), TR_DAY_LABELS, series, ' h');
+  multiLineChart(document.getElementById('tr-day-line'), TR_DAY_LABELS, series, ' h', 'D');
   document.getElementById('tr-day-legend').innerHTML = trLegend(series);
   const totals = Object.entries(TR_DAY_S37).map(([p,vals])=>[p, vals.reduce((a,v)=>a+(v||0),0)]);
   const top = totals.slice().sort((a,b)=>b[1]-a[1])[0];
@@ -4685,7 +4685,7 @@ function renderIndicadorTemporal(nombre){
   chip.style.borderColor = showRef ? 'transparent' : '';
   chip.querySelector('.dot').style.background = showRef ? '#fff' : 'var(--muted)';
   const ref2025 = showRef ? T.p.map(m=>IND_2025[m] ?? null) : null;
-  indLineChart(el, data, '#3f6ea5', 98, ref2025);
+  indLineChart(el, data, '#3f6ea5', 98, ref2025, 'D');
   document.getElementById('sub-ind-temp').innerHTML=
     `Cumplimiento real · meta 98% (roja punteada) · tendencia (gris)`+
     (showRef?' · 2025 (referencia)':'')+
