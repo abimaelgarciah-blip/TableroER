@@ -487,15 +487,20 @@
       <div class="mark">Entrega de Resultados</div>
       <div class="sub">Tablero de productividad</div>
     </div>
-    <div class="nav-label">Secciones</div>
     <button class="nav-item active" data-view="resumen">
       <svg class="ico ico-resumen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect class="r1" x="3" y="3" width="7" height="9" rx="1.5"/><rect class="r2" x="14" y="3" width="7" height="5" rx="1.5"/><rect class="r3" x="14" y="12" width="7" height="9" rx="1.5"/><rect class="r4" x="3" y="16" width="7" height="5" rx="1.5"/></svg>
       Resumen
     </button>
+    <div class="nav-label">Indicadores</div>
     <button class="nav-item" data-view="indicador">
       <svg class="ico ico-indicador" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 13a8 8 0 0 1 16 0"/><line class="needle" x1="12" y1="13" x2="16" y2="9"/><circle cx="12" cy="13" r="1.3" fill="currentColor" stroke="none"/></svg>
       Indicador
     </button>
+    <button class="nav-item" data-view="chequeos">
+      <svg class="ico ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a1 1 0 0 1 1-1Z"/><path class="tick" d="M9 13l2 2 4-4"/></svg>
+      Chequeos médicos
+    </button>
+    <div class="nav-label">Análisis</div>
     <button class="nav-item" data-view="interpretacion">
       <svg class="ico ico-lines" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="l1" d="M4 5h16"/><path class="l2" d="M4 10h16"/><path class="l3" d="M4 15h11"/><path class="l4" d="M4 20h7"/></svg>
       Productividad
@@ -504,12 +509,10 @@
       <svg class="ico ico-efect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path class="tick" d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
       Efectividad
     </button>
-    <button class="nav-item" data-view="chequeos">
-      <svg class="ico ico-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1V5a1 1 0 0 1 1-1Z"/><path class="tick" d="M9 13l2 2 4-4"/></svg>
-      Chequeos médicos
-    </button>
-        <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Estudios y Deptos </button>
+        <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Volumen de estudios </button>
+        <button class="nav-item" data-view="promesa"><svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring2" cx="12" cy="12" r="9"/><circle class="ring1" cx="12" cy="12" r="5.5"/><circle class="dot" cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg> Promesa y Cumplimiento </button>
         <button class="nav-item" data-view="vs2025"><svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="6"/><line class="handle" x1="20" y1="20" x2="15.5" y2="15.5"/></svg> 2026 vs 2025 </button>
+    <div class="nav-label">Gestión</div>
     <button class="nav-item" data-view="proyectos">
       <svg class="ico ico-proj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="bulb" d="M8 10a4 4 0 1 1 8 0c0 2-1.2 2.8-1.8 3.6-.4.5-.6.9-.6 1.4h-3.2c0-.5-.2-.9-.6-1.4C9.2 12.8 8 12 8 10Z"/><path d="M9.5 21h5M10.3 18.2h3.4" stroke-linecap="round"/><line class="ray r1" x1="12" y1="1.6" x2="12" y2="3.3"/><line class="ray r2" x1="3.6" y1="10" x2="5.3" y2="10"/><line class="ray r3" x1="18.7" y1="10" x2="20.4" y2="10"/></svg>
       Proyectos
@@ -735,11 +738,10 @@
       <!-- ===================== DEPARTAMENTOS ===================== -->
       <section class="view" id="estudios">
         <div class="page-head">
-          <h1>Estudios y Departamentos</h1>
-          <p>Volumen y cumplimiento por unidad y departamento <span class="badge">Ene–Sep 2026</span> <span class="badge" id="est-badge-wk"></span></p>
+          <h1>Volumen de estudios</h1>
+          <p>Volumen por unidad, departamento y total <span class="badge">Ene–Sep 2026</span></p>
         </div>
 
-        <div class="nav-label" style="margin:30px 0 10px">Volumen de estudios por unidad, departamento y total</div>
         <div class="est-wrap draw-fade">
     <iframe class="est-frame" title="Estudios Grupo Río" srcdoc="&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;es&quot;&gt;
@@ -1399,6 +1401,14 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
 &lt;/html&gt;
 "></iframe>
   </div>
+      </section>
+
+      <!-- ===================== PROMESA Y CUMPLIMIENTO ===================== -->
+      <section class="view" id="promesa">
+        <div class="page-head">
+          <h1>Promesa y Cumplimiento</h1>
+          <p>Evolución del cumplimiento por departamento y promesa de estudios por unidad <span class="badge" id="est-badge-wk"></span></p>
+        </div>
 
         <div class="card">
           <div class="card-head">
@@ -1697,6 +1707,13 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <p>Efectividad vs incidencias internas <span class="badge">Enero – septiembre 2026</span></p>
         </div>
 
+        <div class="seg" id="eff-seg" style="margin-bottom:16px">
+          <button class="seg-b active" data-t="errores">Errores y efectividad</button>
+          <button class="seg-b" data-t="incidencias">Incidencias y asistencia</button>
+          <button class="seg-b" data-t="herramientas">Herramientas</button>
+        </div>
+
+        <div class="eff-tab" data-t="errores">
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
@@ -1723,9 +1740,9 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         </div>
 
         <div class="empty" id="eff-nota"></div>
+        </div>
 
-        <div class="nav-label" style="margin:30px 0 10px">Incidencias por colaborador</div>
-
+        <div class="eff-tab" data-t="incidencias" style="display:none">
         <div class="card" style="margin-bottom:16px">
           <h3>Incidencias por colaborador</h3>
           <p class="csub" id="incc-sub">Registro de incidencias · enero-agosto vs. septiembre 2026</p>
@@ -1740,9 +1757,9 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <div class="eff-detail" id="falt-detail"></div>
           <div class="line-note" style="margin-top:10px" id="falt-nota"></div>
         </div>
+        </div>
 
-        <div class="nav-label" style="margin:30px 0 10px">Asistente Interpretación</div>
-
+        <div class="eff-tab" data-t="herramientas" style="display:none">
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div style="display:flex;align-items:center;gap:12px">
@@ -1754,6 +1771,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             </div>
             <div class="k-value" style="font-size:26px">94.55%</div>
           </div>
+        </div>
         </div>
       </section>
 
@@ -4645,6 +4663,12 @@ document.querySelectorAll('#prod-seg .seg-b').forEach(b=>{
   b.addEventListener('click', ()=>{
     document.querySelectorAll('#prod-seg .seg-b').forEach(x=>x.classList.toggle('active', x===b));
     document.querySelectorAll('.prod-tab').forEach(t=>t.style.display = t.dataset.t===b.dataset.t ? '' : 'none');
+  });
+});
+document.querySelectorAll('#eff-seg .seg-b').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    document.querySelectorAll('#eff-seg .seg-b').forEach(x=>x.classList.toggle('active', x===b));
+    document.querySelectorAll('.eff-tab').forEach(t=>t.style.display = t.dataset.t===b.dataset.t ? '' : 'none');
   });
 });
 
