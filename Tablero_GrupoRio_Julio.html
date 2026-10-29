@@ -516,7 +516,7 @@
     </button>
     <div class="side-foot">
       Fuente: SharePoint · Datos Tablero.<br>
-      Semana en curso: <b>S34</b> (17 – 23 AGO 2026).
+      <span id="side-foot-week">Semana en curso: <b>S34</b> (17 – 23 AGO 2026).</span>
     </div>
   </aside>
 
@@ -645,7 +645,7 @@
       <section class="view" id="indicador">
         <div class="page-head">
           <h1>Indicador</h1>
-          <p>Puntualidad en entrega de resultados <span class="badge">Septiembre 2026 · 7,834 estudios</span></p>
+          <p>Puntualidad en entrega de resultados <span class="badge">Septiembre 2026 · 7,834 estudios</span> <span class="badge" id="ind-badge-wk"></span></p>
         </div>
 
         <div class="nav-label" style="margin:0 0 8px">Unidad</div>
@@ -736,7 +736,7 @@
       <section class="view" id="estudios">
         <div class="page-head">
           <h1>Estudios y Departamentos</h1>
-          <p>Volumen y cumplimiento por unidad y departamento <span class="badge">Ene–Sep 2026</span></p>
+          <p>Volumen y cumplimiento por unidad y departamento <span class="badge">Ene–Sep 2026</span> <span class="badge" id="est-badge-wk"></span></p>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Volumen de estudios por unidad, departamento y total</div>
@@ -4348,7 +4348,32 @@ function initResumen(){
   renderResumen();
 }
 
+const MES_ABR_U=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+function isoWeekRange(year,week){
+  const simple=new Date(Date.UTC(year,0,1+(week-1)*7));
+  const dow=simple.getUTCDay()||7;
+  const monday=new Date(simple); monday.setUTCDate(simple.getUTCDate()-dow+1);
+  const sunday=new Date(monday); sunday.setUTCDate(monday.getUTCDate()+6);
+  return {start:monday,end:sunday};
+}
+function fmtWeekRange(year,week){
+  const {start,end}=isoWeekRange(year,week);
+  const d1=start.getUTCDate(), d2=end.getUTCDate(), m2=MES_ABR_U[end.getUTCMonth()];
+  if(start.getUTCMonth()===end.getUTCMonth()) return `${d1} – ${d2} ${m2} ${year}`;
+  return `${d1} ${MES_ABR_U[start.getUTCMonth()]} – ${d2} ${m2} ${year}`;
+}
+function updateSideFoot(){
+  const weeks=indTemporal.semana.p;
+  const last=weeks[weeks.length-1];
+  const wn=parseInt(last.slice(1),10);
+  document.getElementById('side-foot-week').innerHTML=
+    `Semana en curso: <b>${last}</b> (${fmtWeekRange(2026,wn)}).`;
+  const wkTxt=`Semanal hasta ${last}`;
+  const indChip=document.getElementById('ind-badge-wk'); if(indChip) indChip.textContent=wkTxt;
+  const estChip=document.getElementById('est-badge-wk'); if(estChip) estChip.textContent=wkTxt;
+}
 function renderAll(){
+  updateSideFoot();
   initResumen();
   initRad();
   renderDist();
