@@ -474,6 +474,29 @@
   .sbar-legend .it{display:flex;align-items:center;gap:6px}
   .sbar-legend .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
 
+  /* ---------- Margen antes de la promesa (box + dot-strip) ---------- */
+  .mg-row{display:grid;grid-template-columns:150px 1fr 190px;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border)}
+  .mg-row:last-child{border-bottom:0}
+  .mg-label{font-size:12.5px;color:var(--ink-2)}
+  .mg-label b{color:var(--ink);display:block;font-size:13px}
+  .mg-track{position:relative;height:30px}
+  .mg-band{position:absolute;top:0;bottom:0}
+  .mg-vline{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed}
+  .mg-whisker{position:absolute;top:50%;height:1px;background:var(--ink-2)}
+  .mg-box{position:absolute;top:6px;bottom:6px;border-radius:4px;background:var(--ink-2);opacity:.12;border:1px solid var(--ink-2)}
+  .mg-med{position:absolute;top:3px;bottom:3px;width:3px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+  .mg-p10{position:absolute;top:8px;bottom:8px;width:0;border-left:1.5px dashed var(--ink-2);transform:translateX(-50%)}
+  .mg-dot{position:absolute;width:5px;height:5px;border-radius:50%;opacity:.7;transform:translate(-50%,-50%)}
+  .mg-stat{font-size:11.5px;line-height:1.5;text-align:right;color:var(--muted)}
+  .mg-stat b{color:var(--ink)}
+  .mg-axis{display:grid;grid-template-columns:150px 1fr 190px;gap:10px;margin-top:2px}
+  .mg-ticks{position:relative;height:16px;font-size:10.5px;color:var(--muted)}
+  .mg-tick{position:absolute;transform:translateX(-50%);white-space:nowrap}
+  @media(max-width:600px){
+    .mg-row,.mg-axis{grid-template-columns:92px 1fr}
+    .mg-stat{display:none}
+  }
+
   /* ---------- Detail table ---------- */
   .dtab{width:100%;border-collapse:collapse;font-size:12.5px}
   .dtab th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;
@@ -1472,21 +1495,20 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
         <div class="card" style="margin-bottom:16px">
           <div class="card-head">
             <div>
-              <h3>Promesa de estudios por unidad</h3>
+              <h3>Margen antes de la promesa</h3>
               <p class="csub" id="promu-sub">—</p>
             </div>
             <div class="k-value" id="promu-pct" style="font-size:26px">—</div>
           </div>
           <div class="seg" id="promu-unit-sel" style="flex-wrap:wrap;margin:12px 0 16px"></div>
-          <p class="csub">Antes de interpretación + interpretación + entrega posterior (promedio) vs. moda de horas prometidas, solo estudios dentro de objetivo</p>
+          <p class="csub">Margen = Fecha Promesa [A] − Fecha de firma (Exa), por departamento · caja P25–P75, línea gruesa mediana, marca punteada P10, línea delgada mínimo–máximo</p>
           <div class="sbar-legend">
-            <span class="it"><span class="sw" style="background:#3f6fa6"></span>Antes de interpretación (Alta→Unread)</span>
-            <span class="it"><span class="sw" style="background:#8a6a9c"></span>Interpretación (promedio) · con margen</span>
-            <span class="it"><span class="sw" style="background:#ba544c"></span>Interpretación (promedio) · al límite o rebasa la moda</span>
-            <span class="it"><span class="sw" style="background:#4e8c70"></span>Entrega posterior (promedio, Firma→Recibe)</span>
-            <span class="it">▲ moda de horas prometidas</span>
+            <span class="it"><span class="sw" style="background:var(--ok)"></span>Sin riesgo (más de 30 min antes)</span>
+            <span class="it"><span class="sw" style="background:var(--warn)"></span>Riesgo alto (0–30 min antes)</span>
+            <span class="it"><span class="sw" style="background:var(--bad)"></span>Tarde (después de la promesa)</span>
           </div>
-          <div id="promu-chart" class="bars" style="gap:22px"></div>
+          <div id="promu-chart"></div>
+          <div style="overflow-x:auto;margin-top:12px"><table class="dtab" id="promu-tab"></table></div>
           <div class="line-note" style="margin-top:12px" id="promu-nota"></div>
           <div class="empty" style="margin-top:14px" id="promu-metodo"></div>
         </div>
@@ -2142,51 +2164,27 @@ const incumpl = {"total":1443,"porMes":[["Ene",142],["Feb",391],["Mar",230],["Ab
    mismo método verificado en semanas anteriores. Sin excepciones por AU. */
 const deptEvo = {"semanas": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33", "S34", "S35", "S36", "S37", "S38", "S39", "S40", "S41", "S42", "S43", "S44"], "meses": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct"], "orden": ["Servicio Dental", "Paquetes", "Espirometría", "Medicina Nuclear", "Cardiología", "Ecosonografía", "Bioimpedanciología", "Mamografía", "Salud Visual", "Radiología", "Resonancia Magnética", "Densitometría", "Servicios Especiales", "Chequeos Médicos", "Maquila", "Tomografía Axial Computada", "Eeg Y Mapeo Cerebral", "Electromiografía Y Potenciales Evocados"], "deptos": {"Servicio Dental": {"sem": [null, null, 100.0, 100.0, null, 100.0, null, 100.0, 100.0, null, 100.0, 100.0, null, null, 100.0, null, null, null, null, null, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [0, 0, 1, 1, 0, 1, 0, 2, 1, 0, 2, 2, 0, 0, 2, 0, 0, 0, 0, 0, 1, 1, 7, 23, 18, 24, 9, 17, 5, 12, 7, 19, 19, 18, 16, 10, 19, 22, 24, 21, 26, 25, 26, 28], "mes": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "mesT": [2, 4, 4, 2, 2, 81, 58, 77, 77, 122]}, "Paquetes": {"sem": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 90.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 86.7, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 83.3, 89.5, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [4, 10, 7, 19, 15, 6, 21, 15, 20, 14, 21, 11, 21, 11, 11, 7, 18, 11, 15, 16, 15, 16, 17, 13, 19, 14, 7, 7, 12, 19, 16, 13, 16, 14, 16, 19, 12, 12, 18, 11, 15, 12, 18, 19], "mes": [100.0, 96.8, 100.0, 100.0, 96.8, 100.0, 91.9, 100.0, 100.0, 100.0], "mesT": [55, 62, 74, 51, 62, 70, 63, 63, 64, 68]}, "Espirometría": {"sem": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 88.0, 97.6, 100.0, 100.0, 100.0, 98.1, 98.1, 98.0, 100.0, 98.8, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 95.5, 100.0, 97.8, 100.0, 98.1, 100.0, 97.8, 100.0, 98.2, 100.0, 98.5, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [3, 18, 24, 28, 31, 52, 35, 50, 41, 57, 73, 53, 54, 54, 51, 67, 82, 86, 36, 40, 31, 30, 33, 42, 64, 61, 22, 70, 45, 53, 52, 54, 45, 49, 56, 52, 66, 44, 55, 70, 69, 66, 69, 62], "mes": [100.0, 96.1, 99.3, 99.3, 100.0, 99.5, 99.6, 99.0, 99.6, 100.0], "mesT": [104, 178, 271, 288, 155, 222, 253, 210, 257, 292]}, "Medicina Nuclear": {"sem": [100.0, 100.0, 97.8, 100.0, 100.0, 100.0, 96.4, 100.0, 100.0, 100.0, 100.0, 96.2, 88.9, 97.3, 100.0, 100.0, 100.0, 100.0, 96.8, 100.0, 97.4, 100.0, 100.0, 100.0, 100.0, 98.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 97.4, 100.0, 100.0, 100.0, 100.0, 94.0, 98.1, 100.0, 95.9, 100.0], "semT": [6, 41, 46, 36, 41, 49, 56, 36, 35, 47, 52, 26, 45, 37, 32, 53, 36, 28, 31, 50, 38, 57, 39, 43, 31, 51, 8, 38, 37, 31, 33, 41, 45, 50, 39, 39, 28, 36, 44, 50, 52, 51, 49, 43], "mes": [99.4, 98.9, 96.7, 99.4, 98.9, 99.4, 100.0, 100.0, 98.3, 98.6], "mesT": [170, 176, 184, 171, 177, 172, 150, 186, 176, 214]}, "Cardiología": {"sem": [73.3, 96.3, 100.0, 100.0, 100.0, 100.0, 99.4, 92.3, 92.2, 99.5, 98.3, 96.5, 100.0, 98.1, 100.0, 100.0, 100.0, 99.3, 100.0, 99.4, 100.0, 100.0, 100.0, 96.6, 100.0, 99.5, 98.4, 100.0, 96.6, 99.0, 100.0, 98.5, 96.0, 99.4, 99.4, 100.0, 99.0, 99.2, 100.0, 98.0, 99.5, 99.0, 98.6, 99.0], "semT": [15, 81, 117, 102, 128, 163, 175, 155, 153, 204, 237, 173, 186, 213, 158, 213, 254, 271, 146, 165, 120, 117, 137, 145, 224, 210, 125, 174, 146, 195, 161, 198, 149, 166, 173, 174, 200, 130, 187, 203, 217, 203, 213, 200], "mes": [98.4, 96.1, 98.6, 99.6, 99.8, 99.0, 99.5, 99.4, 99.3, 99.0], "mesT": [443, 646, 929, 936, 592, 841, 767, 713, 809, 901]}, "Ecosonografía": {"sem": [98.3, 98.2, 98.7, 99.0, 98.8, 97.6, 99.7, 94.0, 94.7, 98.1, 99.4, 98.1, 99.0, 99.6, 99.3, 99.7, 99.5, 98.5, 97.8, 97.1, 98.5, 98.1, 98.6, 97.4, 98.6, 97.9, 99.2, 99.4, 97.3, 98.7, 98.0, 97.4, 98.5, 98.2, 99.2, 99.0, 99.1, 99.7, 99.2, 99.5, 98.7, 98.8, 99.0, 98.0], "semT": [59, 285, 317, 314, 326, 290, 308, 335, 244, 362, 354, 315, 388, 241, 281, 319, 424, 403, 358, 307, 325, 320, 295, 384, 353, 335, 128, 319, 256, 371, 299, 380, 338, 342, 353, 294, 319, 321, 360, 398, 390, 344, 403, 409], "mes": [98.7, 96.5, 98.8, 99.3, 97.8, 98.2, 98.9, 98.3, 99.4, 98.7], "mesT": [1300, 1176, 1543, 1476, 1380, 1495, 1369, 1513, 1441, 1746]}, "Bioimpedanciología": {"sem": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 96.9, 93.2, 100.0, 100.0, 97.9, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 93.3, 100.0, 100.0, 100.0, 88.9, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [1, 11, 7, 5, 19, 27, 44, 32, 32, 44, 39, 33, 47, 33, 37, 45, 70, 60, 52, 24, 24, 22, 15, 23, 28, 28, 9, 19, 21, 36, 30, 25, 19, 22, 27, 38, 36, 21, 26, 42, 32, 45, 42, 29], "mes": [100.0, 99.3, 97.7, 100.0, 100.0, 98.1, 100.0, 100.0, 100.0, 100.0], "mesT": [43, 135, 177, 213, 140, 103, 122, 106, 137, 167]}, "Mamografía": {"sem": [100.0, 100.0, 100.0, 100.0, 100.0, 94.1, 97.6, 84.6, 89.7, 95.8, 98.6, 96.7, 98.9, 93.3, null, 100.0, 99.3, 98.2, 93.6, 95.6, 97.3, 94.5, 100.0, 94.0, 97.9, 100.0, 97.4, 97.7, 97.9, 100.0, 98.6, 96.6, 98.9, 99.0, 97.8, 98.8, 100.0, 98.9, 98.9, 99.2, 97.4, 97.1, 99.3, 98.6], "semT": [28, 88, 92, 102, 87, 51, 82, 78, 58, 72, 70, 91, 94, 15, 0, 25, 141, 109, 110, 113, 112, 127, 110, 116, 97, 81, 39, 88, 96, 94, 74, 87, 91, 97, 92, 83, 74, 93, 92, 120, 114, 105, 138, 140], "mes": [100.0, 91.4, 97.4, 99.2, 95.1, 97.7, 98.7, 98.2, 99.0, 98.4], "mesT": [397, 269, 341, 265, 473, 443, 384, 388, 389, 557]}, "Salud Visual": {"sem": [100.0, 100.0, 100.0, 99.4, 98.6, 97.4, 98.9, 98.0, 92.0, 97.5, 97.7, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 99.0, 94.2, 96.7, 96.2, 95.3, 100.0, 99.1, 100.0, 100.0, 95.6, 99.1, 100.0, 98.2, 98.2, 100.0, 100.0, 100.0, 99.1, 100.0, 100.0, 100.0, 100.0, 100.0, 98.0, 100.0], "semT": [52, 164, 202, 173, 146, 114, 95, 102, 75, 81, 88, 84, 105, 75, 101, 120, 123, 74, 113, 96, 103, 92, 78, 107, 78, 106, 22, 121, 91, 112, 118, 111, 111, 112, 120, 88, 106, 71, 97, 90, 79, 42, 49, 63], "mes": [99.6, 96.9, 99.0, 100.0, 97.7, 97.7, 99.0, 99.6, 99.8, 99.6], "mesT": [737, 386, 392, 434, 429, 391, 500, 471, 416, 261]}, "Radiología": {"sem": [100.0, 97.7, 96.3, 97.3, 93.6, 93.6, 95.5, 94.8, 90.8, 92.8, 94.0, 89.2, 93.9, 95.4, 92.2, 98.5, 96.7, 97.1, 97.2, 96.6, 90.8, 93.4, 96.3, 95.0, 98.7, 95.9, 96.8, 89.8, 90.8, 96.9, 91.7, 95.0, 98.6, 93.0, 97.7, 94.5, 98.0, 98.1, 98.0, 98.9, 97.2, 99.3, 98.4, 99.0], "semT": [44, 263, 272, 255, 280, 283, 268, 286, 249, 318, 349, 269, 295, 219, 306, 334, 369, 348, 283, 237, 218, 243, 270, 299, 303, 290, 126, 256, 261, 318, 253, 319, 220, 299, 306, 255, 298, 259, 296, 268, 284, 304, 319, 298], "mes": [96.3, 93.8, 93.0, 95.8, 95.1, 96.5, 93.2, 95.4, 98.2, 98.5], "mesT": [1109, 1089, 1340, 1390, 1060, 1288, 1228, 1242, 1171, 1358]}, "Resonancia Magnética": {"sem": [97.2, 98.7, 95.2, 96.7, 93.8, 96.2, 93.5, 87.9, 83.0, 98.1, 97.7, 97.1, 97.8, 99.4, 96.8, 98.0, 97.5, 95.5, 94.3, 95.4, 97.8, 95.0, 93.9, 93.8, 95.2, 92.3, 100.0, 95.4, 95.8, 95.0, 97.4, 97.6, 96.5, 98.0, 97.9, 96.8, 98.8, 98.8, 97.8, 95.5, 97.0, 97.9, 98.4, 98.3], "semT": [36, 239, 271, 239, 289, 234, 276, 231, 206, 268, 303, 207, 226, 176, 220, 251, 285, 222, 279, 219, 270, 298, 231, 243, 273, 248, 70, 195, 264, 241, 266, 205, 228, 254, 190, 189, 240, 170, 229, 242, 231, 233, 256, 237], "mes": [96.0, 90.5, 97.8, 97.7, 95.3, 94.3, 96.5, 98.0, 98.0, 97.1], "mesT": [1065, 946, 1100, 1028, 1106, 1065, 1062, 952, 934, 1039]}, "Densitometría": {"sem": [100.0, 97.0, 94.3, 97.2, 94.7, 95.3, 94.7, 71.6, 87.7, 93.5, 92.9, 98.9, 89.7, 94.0, 94.7, 98.8, 100.0, 98.3, 88.0, 92.7, 76.8, 95.0, 94.9, 93.6, 88.9, 95.9, 100.0, 94.7, 92.9, 96.1, 97.5, 96.4, 100.0, 97.1, 98.8, 95.9, 93.1, 95.2, 100.0, 98.7, 95.2, 98.7, 96.6, 94.9], "semT": [19, 66, 70, 71, 57, 64, 76, 74, 57, 92, 98, 88, 87, 50, 76, 84, 106, 115, 92, 109, 95, 120, 98, 94, 72, 74, 18, 75, 70, 77, 79, 84, 66, 68, 81, 74, 87, 83, 77, 77, 83, 77, 87, 98], "mes": [96.1, 87.1, 93.6, 98.2, 89.1, 93.8, 95.4, 97.8, 96.3, 96.1], "mesT": [282, 271, 391, 382, 440, 356, 346, 323, 348, 383]}, "Servicios Especiales": {"sem": [100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 98.9, 91.2, 87.3, 98.7, 98.7, 98.7, 96.9, 99.5, 100.0, 100.0, 99.7, 100.0, 99.6, 100.0, 100.0, 100.0, 99.2, 85.4, 89.1, 93.6, 98.6, 98.8, 99.4, 97.3, 97.2, 97.5, 99.5, 99.5, 98.1, 99.1, 97.4, 100.0, 99.5, 99.1, 100.0, 99.3, 99.6, 99.6], "semT": [15, 77, 90, 70, 109, 136, 188, 182, 158, 226, 239, 235, 260, 183, 227, 238, 329, 321, 230, 166, 137, 116, 119, 199, 230, 236, 72, 250, 171, 221, 181, 199, 196, 198, 208, 214, 228, 204, 215, 231, 291, 270, 275, 245], "mes": [100.0, 94.3, 98.3, 99.9, 99.9, 91.7, 98.4, 98.7, 98.7, 99.5], "mesT": [361, 664, 1047, 1138, 722, 856, 959, 867, 946, 1196]}, "Chequeos Médicos": {"sem": [null, null, null, null, null, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, 100.0, null, 100.0, null, null, 100.0, null, null, null, null, null, null, null, null, null, null], "semT": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, null, null, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "mes": [null, null, 100.0, null, null, null, 100.0, 100.0, null, null], "mesT": [0, 0, 1, 0, 0, 0, 2, 2, 0, 0]}, "Maquila": {"sem": [null, null, null, 100.0, null, null, 100.0, null, null, null, null, 100.0, 100.0, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, null, null, null, 100.0, null, null, null, null, null, null, null, null], "semT": [0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], "mes": [100.0, 100.0, 100.0, 100.0, null, null, null, 100.0, null, null], "mesT": [1, 1, 2, 2, 0, 0, 0, 2, 0, 0]}, "Tomografía Axial Computada": {"sem": [94.7, 99.2, 97.3, 97.5, 97.5, 95.1, 97.0, 95.6, 91.5, 98.6, 99.2, 99.2, 96.2, 96.4, 96.9, 96.9, 98.6, 94.7, 95.5, 96.9, 95.6, 96.1, 88.6, 85.6, 91.4, 90.9, 98.3, null, null, 96.7, 94.9, 94.4, 100.0, 96.6, 99.0, 96.8, 96.4, 99.1, 100.0, 100.0, 99.2, 97.7, 93.7, 97.3], "semT": [19, 126, 149, 160, 120, 103, 132, 135, 106, 140, 127, 119, 156, 84, 129, 127, 143, 132, 133, 130, 135, 154, 114, 111, 116, 110, 60, 0, 0, 153, 117, 125, 112, 118, 103, 125, 140, 107, 129, 128, 122, 128, 142, 149], "mes": [97.7, 95.0, 98.3, 96.5, 96.0, 90.2, 94.9, 97.6, 98.6, 96.7], "mesT": [574, 476, 594, 545, 570, 511, 609, 490, 553, 598]}, "Eeg Y Mapeo Cerebral": {"sem": [100.0, 100.0, 100.0, 100.0, 90.0, 100.0, 47.6, 86.7, 23.1, 93.3, 100.0, 100.0, 100.0, 100.0, 95.5, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, null, null, 100.0, 100.0, 100.0, 96.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [2, 23, 24, 20, 30, 17, 21, 15, 13, 15, 23, 13, 27, 23, 22, 21, 23, 20, 15, 22, 20, 29, 19, 16, 17, 16, 17, 0, 0, 33, 22, 18, 25, 29, 24, 21, 19, 18, 19, 13, 25, 25, 23, 11], "mes": [97.0, 65.2, 98.9, 99.0, 100.0, 100.0, 99.0, 99.0, 100.0, 100.0], "mesT": [99, 66, 90, 97, 86, 85, 104, 103, 83, 84]}, "Electromiografía Y Potenciales Evocados": {"sem": [100.0, 92.3, 100.0, 100.0, 91.7, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 83.3, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, null, null, 100.0, 100.0, 100.0, 85.7, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "semT": [1, 13, 10, 11, 12, 9, 4, 10, 5, 12, 11, 8, 7, 6, 5, 9, 8, 4, 9, 12, 9, 13, 12, 10, 11, 6, 3, 0, 0, 13, 7, 7, 7, 9, 5, 9, 3, 6, 11, 9, 11, 10, 6, 3], "mes": [95.7, 100.0, 97.4, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0], "mesT": [47, 28, 39, 31, 43, 42, 45, 29, 33, 34]}}};
 
-/* ===== Promesa de estudios por unidad (septiembre 2026) =====
-   Fuente: reporte general de septiembre 2026, mismas exclusiones que el resto de
-   "Promesa de estudios": Medicina Preventiva, Plaza Universidad y Ciudad Granja;
-   protocolos (iniciales + número en el campo de paciente); citas de Eco con Biopsia
-   (ag_horas>=140h). Por cada unidad x modalidad: n/cumple/pct igual que antes (motor
-   de reglas por departamento, Fecha Promesa [A] vs. su regla); moda/mediana de
-   "A—G horas" (Promesa [A] − Alta [G], lo que se prometió desde que el estudio quedó
-   listo); mediana de "G—C horas" (Transcrito [C] − Alta [G], tiempo real de
-   interpretación, columna precomputada del reporte); margen = mediana promesa − mediana
-   interpretación (cuánto tiempo queda, en mediana, entre que se interpreta y vence la
-   promesa); pctNeg = % de estudios donde la interpretación sola ya rebasó la promesa
-   (horas A—G − horas G—C < 0). */
-const PROMESA_UNIT_DATA = {"López Mateos":[{"dept":"Cardiología","n":207,"cumple":121,"pct":58.5,"moda":4.0,"mediana":17.0,"interp":4.0,"margen":4.0,"pctNeg":0.5},{"dept":"Densitometría","n":180,"cumple":168,"pct":93.3,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":419,"cumple":370,"pct":88.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":1.0},{"dept":"Mamografía","n":134,"cumple":126,"pct":94.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":581,"cumple":484,"pct":83.3,"moda":1.0,"mediana":1.0,"interp":0.0,"margen":1.0,"pctNeg":1.0},{"dept":"Resonancia Magnética","n":532,"cumple":240,"pct":45.1,"moda":4.0,"mediana":17.5,"interp":11.0,"margen":3.0,"pctNeg":2.3},{"dept":"Tomografía Axial Computada","n":396,"cumple":343,"pct":86.6,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":2.0,"pctNeg":1.3}],"Acueducto":[{"dept":"Cardiología","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Densitometría","n":4,"cumple":4,"pct":100.0,"moda":0.0,"mediana":1.5,"interp":1.0,"margen":0.5,"pctNeg":0.0},{"dept":"Ecosonografía","n":141,"cumple":109,"pct":77.3,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.7},{"dept":"Mamografía","n":4,"cumple":4,"pct":100.0,"moda":1.0,"mediana":1.5,"interp":0.0,"margen":1.5,"pctNeg":0.0},{"dept":"Radiología","n":170,"cumple":144,"pct":84.7,"moda":2.0,"mediana":2.0,"interp":0.5,"margen":1.0,"pctNeg":0.6},{"dept":"Resonancia Magnética","n":204,"cumple":58,"pct":28.4,"moda":4.0,"mediana":23.0,"interp":4.0,"margen":4.0,"pctNeg":2.5},{"dept":"Tomografía Axial Computada","n":116,"cumple":94,"pct":81.0,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":2.0,"pctNeg":1.7}],"Clínica de la Mujer":[{"dept":"Densitometría","n":104,"cumple":97,"pct":93.3,"moda":1.0,"mediana":2.0,"interp":0.0,"margen":1.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":264,"cumple":151,"pct":57.2,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.4},{"dept":"Mamografía","n":180,"cumple":97,"pct":53.9,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.6},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Tomografía Axial Computada","n":2,"cumple":2,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":1.0,"margen":1.0,"pctNeg":0.0}],"Chamizal":[{"dept":"Ecosonografía","n":50,"cumple":41,"pct":82.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":185,"cumple":132,"pct":71.4,"moda":4.0,"mediana":4.0,"interp":2.0,"margen":3.0,"pctNeg":0.5}],"Guadalupe":[{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":2.0,"margen":0.0,"pctNeg":0.0},{"dept":"Ecosonografía","n":40,"cumple":34,"pct":85.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Mamografía","n":1,"cumple":1,"pct":100.0,"moda":2.0,"mediana":2.0,"interp":0.0,"margen":2.0,"pctNeg":0.0},{"dept":"Radiología","n":1,"cumple":0,"pct":0.0,"moda":3.0,"mediana":3.0,"interp":2.0,"margen":1.0,"pctNeg":0.0},{"dept":"Resonancia Magnética","n":2,"cumple":1,"pct":50.0,"moda":23.0,"mediana":28.5,"interp":18.0,"margen":10.5,"pctNeg":0.0}],"Las Águilas":[{"dept":"Cardiología","n":2,"cumple":0,"pct":0.0,"moda":25.0,"mediana":25.5,"interp":25.0,"margen":0.5,"pctNeg":0.0},{"dept":"Densitometría","n":1,"cumple":1,"pct":100.0,"moda":3.0,"mediana":3.0,"interp":0.0,"margen":3.0,"pctNeg":0.0},{"dept":"Radiología","n":2,"cumple":1,"pct":50.0,"moda":1.0,"mediana":34.0,"interp":11.0,"margen":23.0,"pctNeg":0.0}]};
+/* ===== Margen antes de la promesa, por unidad (octubre 2026) =====
+   Fuente: Datos Exa (export de Exa, por estudio: Fecha de Recepción de Estudio,
+   Fecha de cambio de estado = firma, Estado) + reporte general de octubre 2026
+   (Fecha Promesa [A], igual que el resto de "Promesa de estudios"). Correlación
+   Exa↔Sio: el IdCita se busca como prefijo del Número de adhesión de Exa (7 a 10
+   dígitos) y se confirma comparando la Descripción de estudio de Exa con el
+   Estudio de Sio, sin acentos ni mayúsculas, con al menos 60% de similitud — 1,918
+   de 1,920 filas de Exa (99.9%) cruzaron correctamente. Mismas exclusiones que el
+   resto de "Promesa de estudios": Medicina Preventiva, Plaza Universidad y Ciudad
+   Granja; protocolos (iniciales + número en el campo de paciente); citas de Eco
+   con Biopsia (ag_horas>=140h); las 7 modalidades de siempre (Cardiología no tiene
+   casi presencia en Exa — solo ecocardiogramas, no electrocardiogramas, así que
+   su muestra es mínima). Margen = Fecha Promesa [A] − Fecha de cambio de estado
+   (firma en Exa), en minutos, solo estudios Aprobados (firmados) con ambas fechas;
+   76 estudios cruzados quedan pendientes de firma y no entran. Sin riesgo = más de
+   30 min antes de la promesa; riesgo alto = de 0 a 30 min; tarde = margen negativo
+   (firmado después de la promesa). "puntos" trae cada margen individual (sin datos
+   de paciente) para el dot-strip de la gráfica; min/p10/p25/med/p75/p90/max son
+   percentiles de esos mismos valores (interpolación lineal). */
+const PROMESA_MARGEN = {"López Mateos": [{"departamento": "Ecosonografía", "medidos": 160, "min": 19.0, "p10": 73.0, "p25": 89.8, "med": 107.0, "p75": 124.2, "p90": 220.7, "max": 5016.0, "sin_riesgo": 157, "riesgo_alto": 3, "tarde": 0, "pct_sin_riesgo": 98.1, "pct_alto": 1.9, "pct_tarde": 0.0, "puntos": [200.0, 92.0, 85.0, 95.0, 92.0, 119.0, 124.0, 98.0, 99.0, 85.0, 108.0, 99.0, 112.0, 108.0, 107.0, 117.0, 107.0, 104.0, 100.0, 220.0, 70.0, 109.0, 80.0, 111.0, 94.0, 59.0, 105.0, 86.0, 133.0, 110.0, 160.0, 98.0, 213.0, 90.0, 79.0, 23.0, 123.0, 93.0, 116.0, 108.0, 157.0, 159.0, 90.0, 260.0, 32.0, 107.0, 116.0, 122.0, 215.0, 114.0, 97.0, 209.0, 88.0, 81.0, 218.0, 85.0, 73.0, 65.0, 179.0, 123.0, 95.0, 105.0, 73.0, 141.0, 140.0, 192.0, 115.0, 106.0, 75.0, 116.0, 128.0, 109.0, 108.0, 103.0, 87.0, 115.0, 102.0, 110.0, 101.0, 67.0, 53.0, 278.0, 147.0, 111.0, 128.0, 108.0, 112.0, 120.0, 121.0, 19.0, 90.0, 60.0, 227.0, 110.0, 117.0, 90.0, 102.0, 73.0, 60.0, 149.0, 206.0, 104.0, 100.0, 145.0, 157.0, 91.0, 105.0, 1248.0, 1254.0, 1241.0, 1207.0, 55.0, 61.0, 1218.0, 1221.0, 1224.0, 110.0, 97.0, 106.0, 73.0, 78.0, 83.0, 110.0, 27.0, 91.0, 270.0, 94.0, 84.0, 69.0, 704.0, 3293.0, 77.0, 116.0, 250.0, 107.0, 91.0, 5016.0, 83.0, 66.0, 110.0, 73.0, 97.0, 93.0, 150.0, 84.0, 126.0, 97.0, 76.0, 113.0, 89.0, 124.0, 125.0, 113.0, 107.0, 290.0, 101.0, 76.0, 105.0, 88.0, 106.0]}, {"departamento": "Mamografía", "medidos": 65, "min": 51.0, "p10": 84.4, "p25": 100.0, "med": 111.0, "p75": 124.0, "p90": 147.4, "max": 5016.0, "sin_riesgo": 65, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [85.0, 92.0, 108.0, 119.0, 124.0, 98.0, 112.0, 117.0, 107.0, 100.0, 109.0, 111.0, 94.0, 59.0, 160.0, 133.0, 90.0, 123.0, 116.0, 157.0, 51.0, 116.0, 122.0, 114.0, 95.0, 105.0, 73.0, 141.0, 125.0, 119.0, 108.0, 100.0, 109.0, 125.0, 111.0, 128.0, 112.0, 121.0, 145.0, 110.0, 102.0, 149.0, 104.0, 132.0, 1254.0, 1207.0, 245.0, 110.0, 97.0, 79.0, 99.0, 77.0, 84.0, 107.0, 5016.0, 115.0, 93.0, 116.0, 58.0, 126.0, 118.0, 125.0, 107.0, 101.0, 116.0]}, {"departamento": "Densitometría", "medidos": 27, "min": 50.0, "p10": 75.6, "p25": 86.0, "med": 103.0, "p75": 120.5, "p90": 139.6, "max": 3365.0, "sin_riesgo": 27, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [112.0, 74.0, 111.0, 136.0, 80.0, 104.0, 101.0, 50.0, 85.0, 145.0, 121.0, 105.0, 78.0, 159.0, 87.0, 91.0, 125.0, 103.0, 105.0, 123.0, 3365.0, 92.0, 90.0, 76.0, 75.0, 120.0, 90.0]}, {"departamento": "Resonancia Magnética", "medidos": 165, "min": -2717.0, "p10": 38.4, "p25": 115.0, "med": 190.0, "p75": 505.0, "p90": 1828.2, "max": 4822.0, "sin_riesgo": 151, "riesgo_alto": 8, "tarde": 6, "pct_sin_riesgo": 91.5, "pct_alto": 4.8, "pct_tarde": 3.6, "puntos": [185.0, 208.0, 685.0, 505.0, 502.0, 1894.0, 505.0, 203.0, 2414.0, 111.0, 1217.0, 196.0, 3170.0, 2830.0, 1412.0, 136.0, -2717.0, 2952.0, 87.0, 118.0, 124.0, 79.0, 2760.0, 2822.0, 4152.0, 107.0, 998.0, 179.0, 191.0, -124.0, 241.0, 2665.0, 219.0, 27.0, 48.0, 296.0, 115.0, 164.0, 124.0, 357.0, 63.0, 140.0, 16.0, 102.0, 1599.0, 2556.0, 110.0, 223.0, 203.0, 175.0, 131.0, 70.0, 115.0, 1742.0, 1681.0, 88.0, 155.0, 83.0, 263.0, 110.0, 105.0, 1477.0, 150.0, 2681.0, 2584.0, 574.0, 199.0, 25.0, 94.0, 1809.0, 1841.0, 32.0, -810.0, 111.0, 430.0, 497.0, 26.0, 198.0, 238.0, 172.0, 176.0, 204.0, 250.0, 189.0, 210.0, 193.0, 194.0, 168.0, 190.0, 192.0, 133.0, 39.0, 404.0, 156.0, 56.0, 123.0, 1188.0, 189.0, 19.0, 22.0, 1394.0, 208.0, 181.0, 150.0, 150.0, 150.0, 68.0, 105.0, 42.0, 51.0, 38.0, 151.0, 151.0, 688.0, 164.0, 10.0, 631.0, 222.0, 597.0, 168.0, 38.0, 92.0, 223.0, 2731.0, 105.0, 226.0, 145.0, 145.0, -14.0, 239.0, 3089.0, 144.0, 263.0, 3149.0, 5.0, 1424.0, -27.0, 1510.0, 222.0, 202.0, 1462.0, 4822.0, 203.0, 1464.0, 394.0, 134.0, 193.0, 188.0, 182.0, 181.0, 192.0, 240.0, 240.0, 990.0, 1258.0, 203.0, 174.0, 1114.0, 1168.0, 185.0, 1399.0, 179.0, 183.0, -38.0, 48.0]}, {"departamento": "Radiología", "medidos": 182, "min": -94.0, "p10": 36.4, "p25": 56.0, "med": 78.0, "p75": 105.8, "p90": 306.5, "max": 4395.0, "sin_riesgo": 166, "riesgo_alto": 14, "tarde": 2, "pct_sin_riesgo": 91.2, "pct_alto": 7.7, "pct_tarde": 1.1, "puntos": [160.0, 146.0, 173.0, 58.0, 100.0, 42.0, 47.0, 45.0, 13.0, 45.0, 40.0, 18.0, 18.0, 49.0, 44.0, 913.0, 913.0, 162.0, 117.0, 58.0, 67.0, 69.0, 47.0, 49.0, 4395.0, 72.0, 66.0, 152.0, 27.0, 85.0, 31.0, 95.0, 106.0, 51.0, 56.0, 56.0, 74.0, 48.0, 69.0, 50.0, 82.0, 83.0, 786.0, 840.0, 69.0, 95.0, 115.0, 82.0, 82.0, 98.0, 73.0, 66.0, 82.0, 86.0, 88.0, 117.0, 82.0, 95.0, 108.0, 69.0, 69.0, 174.0, 151.0, 151.0, 105.0, 65.0, 72.0, -1.0, 90.0, 66.0, 66.0, 88.0, 68.0, 239.0, 91.0, 71.0, 158.0, 97.0, 50.0, 64.0, 40.0, 820.0, 820.0, 808.0, 820.0, 67.0, 40.0, 46.0, 109.0, 6.0, 97.0, -94.0, 160.0, 60.0, 80.0, 66.0, 54.0, 30.0, 11.0, 76.0, 52.0, 53.0, 63.0, 1236.0, 1229.0, 124.0, 119.0, 34.0, 36.0, 13.0, 13.0, 1411.0, 1418.0, 988.0, 988.0, 91.0, 77.0, 61.0, 49.0, 49.0, 145.0, 129.0, 62.0, 46.0, 59.0, 23.0, 23.0, 17.0, 25.0, 3318.0, 3320.0, 192.0, 66.0, 64.0, 65.0, 74.0, 90.0, 67.0, 237.0, 86.0, 79.0, 79.0, 56.0, 81.0, 81.0, 92.0, 72.0, 78.0, 78.0, 106.0, 92.0, 92.0, 92.0, 133.0, 41.0, 25.0, 41.0, 79.0, 97.0, 135.0, 103.0, 41.0, 88.0, 95.0, 87.0, 89.0, 76.0, 70.0, 102.0, 88.0, 147.0, 64.0, 83.0, 62.0, 79.0, 95.0, 49.0, 76.0, 1512.0, 63.0, 77.0, 314.0]}, {"departamento": "Tomografía Axial Computada", "medidos": 119, "min": 1.0, "p10": 38.8, "p25": 75.0, "med": 113.0, "p75": 136.0, "p90": 410.0, "max": 3077.0, "sin_riesgo": 113, "riesgo_alto": 6, "tarde": 0, "pct_sin_riesgo": 95.0, "pct_alto": 5.0, "pct_tarde": 0.0, "puntos": [2418.0, 2444.0, 3077.0, 713.0, 125.0, 133.0, 113.0, 88.0, 126.0, 57.0, 126.0, 141.0, 114.0, 130.0, 116.0, 132.0, 79.0, 892.0, 138.0, 120.0, 91.0, 118.0, 115.0, 113.0, 113.0, 150.0, 105.0, 116.0, 162.0, 89.0, 110.0, 113.0, 87.0, 119.0, 95.0, 52.0, 165.0, 820.0, 97.0, 61.0, 74.0, 120.0, 132.0, 52.0, 104.0, 44.0, 132.0, 98.0, 38.0, 38.0, 38.0, 181.0, 151.0, 103.0, 1.0, 134.0, 873.0, 818.0, 108.0, 92.0, 117.0, 60.0, 79.0, 119.0, 251.0, 22.0, 37.0, 138.0, 126.0, 66.0, 145.0, 53.0, 800.0, 820.0, 830.0, 37.0, 84.0, 49.0, 49.0, 86.0, 125.0, 135.0, 121.0, 110.0, 66.0, 50.0, 127.0, 94.0, 123.0, 104.0, 137.0, 140.0, 205.0, 123.0, 106.0, 119.0, 117.0, 3.0, 152.0, 141.0, 151.0, 414.0, 409.0, 73.0, 77.0, 13.0, 20.0, 25.0, 180.0, 60.0, 47.0, 36.0, 93.0, 76.0, 39.0, 84.0, 54.0, 78.0, 99.0]}], "Acueducto": [{"departamento": "Ecosonografía", "medidos": 59, "min": 18.0, "p10": 54.0, "p25": 77.5, "med": 98.0, "p75": 119.5, "p90": 247.8, "max": 2591.0, "sin_riesgo": 58, "riesgo_alto": 1, "tarde": 0, "pct_sin_riesgo": 98.3, "pct_alto": 1.7, "pct_tarde": 0.0, "puntos": [73.0, 118.0, 92.0, 83.0, 64.0, 78.0, 67.0, 72.0, 83.0, 229.0, 223.0, 79.0, 81.0, 68.0, 104.0, 94.0, 100.0, 105.0, 101.0, 94.0, 90.0, 68.0, 92.0, 109.0, 103.0, 772.0, 105.0, 169.0, 139.0, 121.0, 103.0, 124.0, 85.0, 77.0, 107.0, 112.0, 102.0, 2585.0, 2591.0, 18.0, 43.0, 36.0, 56.0, 126.0, 50.0, 323.0, 803.0, 31.0, 146.0, 105.0, 31.0, 108.0, 98.0, 150.0, 846.0, 55.0, 89.0, 88.0, 97.0]}, {"departamento": "Tomografía Axial Computada", "medidos": 40, "min": 13.0, "p10": 46.5, "p25": 74.0, "med": 138.5, "p75": 277.0, "p90": 1041.5, "max": 2951.0, "sin_riesgo": 38, "riesgo_alto": 2, "tarde": 0, "pct_sin_riesgo": 95.0, "pct_alto": 5.0, "pct_tarde": 0.0, "puntos": [197.0, 400.0, 71.0, 2951.0, 873.0, 131.0, 149.0, 77.0, 118.0, 103.0, 791.0, 85.0, 200.0, 783.0, 772.0, 810.0, 47.0, 75.0, 13.0, 116.0, 29.0, 59.0, 48.0, 189.0, 192.0, 2558.0, 2878.0, 2651.0, 42.0, 236.0, 88.0, 63.0, 49.0, 76.0, 34.0, 146.0, 75.0, 204.0, 151.0, 176.0]}, {"departamento": "Radiología", "medidos": 55, "min": 1.0, "p10": 16.8, "p25": 39.5, "med": 68.0, "p75": 104.5, "p90": 863.6, "max": 2965.0, "sin_riesgo": 46, "riesgo_alto": 9, "tarde": 0, "pct_sin_riesgo": 83.6, "pct_alto": 16.4, "pct_tarde": 0.0, "puntos": [2602.0, 2612.0, 2613.0, 2965.0, 2965.0, 63.0, 45.0, 56.0, 60.0, 860.0, 866.0, 104.0, 115.0, 54.0, 57.0, 39.0, 40.0, 57.0, 38.0, 14.0, 82.0, 74.0, 60.0, 47.0, 36.0, 97.0, 107.0, 782.0, 5.0, 100.0, 68.0, 104.0, 64.0, 64.0, 39.0, 33.0, 21.0, 24.0, 28.0, 1.0, 1.0, 104.0, 151.0, 100.0, 9.0, 9.0, 81.0, 90.0, 67.0, 79.0, 74.0, 105.0, 76.0, 762.0, 765.0]}, {"departamento": "Resonancia Magnética", "medidos": 90, "min": -5.0, "p10": 59.9, "p25": 123.5, "med": 209.0, "p75": 1065.2, "p90": 1661.6, "max": 3564.0, "sin_riesgo": 84, "riesgo_alto": 5, "tarde": 1, "pct_sin_riesgo": 93.3, "pct_alto": 5.6, "pct_tarde": 1.1, "puntos": [264.0, 1641.0, 2696.0, 950.0, 885.0, 782.0, 796.0, 105.0, 177.0, 123.0, 3066.0, 109.0, 108.0, 19.0, 206.0, 221.0, 1091.0, 1379.0, 1423.0, 142.0, 28.0, 1446.0, 125.0, 126.0, 54.0, 113.0, 114.0, 1573.0, 102.0, 177.0, 73.0, 207.0, 1366.0, 203.0, 215.0, 98.0, 680.0, 73.0, 1629.0, 223.0, 129.0, 517.0, 191.0, 1693.0, 147.0, 1819.0, 198.0, 197.0, 1548.0, 361.0, 130.0, 988.0, 987.0, 1634.0, 1616.0, 59.0, 17.0, 211.0, 77.0, 1580.0, 269.0, 567.0, 2753.0, 60.0, 423.0, 198.0, 1537.0, 2987.0, 3054.0, 238.0, 282.0, 12.0, 226.0, 54.0, 128.0, 162.0, 127.0, 3564.0, 133.0, 132.0, 121.0, 213.0, 88.0, 185.0, 132.0, 1659.0, 7.0, 1685.0, 261.0, -5.0]}, {"departamento": "Mamografía", "medidos": 1, "min": 223.0, "p10": 223.0, "p25": 223.0, "med": 223.0, "p75": 223.0, "p90": 223.0, "max": 223.0, "sin_riesgo": 1, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [223.0]}, {"departamento": "Densitometría", "medidos": 1, "min": 129.0, "p10": 129.0, "p25": 129.0, "med": 129.0, "p75": 129.0, "p90": 129.0, "max": 129.0, "sin_riesgo": 1, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [129.0]}], "Clínica de la Mujer": [{"departamento": "Ecosonografía", "medidos": 88, "min": -48.0, "p10": 23.6, "p25": 89.8, "med": 131.5, "p75": 179.8, "p90": 201.8, "max": 2683.0, "sin_riesgo": 78, "riesgo_alto": 7, "tarde": 3, "pct_sin_riesgo": 88.6, "pct_alto": 8.0, "pct_tarde": 3.4, "puntos": [125.0, 18.0, 7.0, 2545.0, 2574.0, 200.0, 92.0, 26.0, 9.0, 154.0, 162.0, 189.0, 172.0, 1220.0, 190.0, 151.0, 100.0, 165.0, 182.0, 191.0, 199.0, 172.0, 164.0, 86.0, 120.0, 99.0, 2.0, 122.0, 112.0, 134.0, 130.0, 107.0, -19.0, 68.0, -9.0, 101.0, -48.0, 172.0, 183.0, 184.0, 127.0, 98.0, 133.0, 41.0, 121.0, 111.0, 89.0, 110.0, 14.0, 75.0, 1279.0, 88.0, 140.0, 158.0, 141.0, 170.0, 153.0, 68.0, 67.0, 2683.0, 185.0, 189.0, 104.0, 157.0, 191.0, 140.0, 218.0, 197.0, 163.0, 104.0, 96.0, 107.0, 1552.0, 80.0, 58.0, 164.0, 159.0, 185.0, 179.0, 159.0, 206.0, 90.0, 73.0, 78.0, 115.0, 1756.0, 13.0, 116.0]}, {"departamento": "Mamografía", "medidos": 66, "min": -13.0, "p10": 42.0, "p25": 93.5, "med": 140.0, "p75": 183.5, "p90": 198.0, "max": 2683.0, "sin_riesgo": 59, "riesgo_alto": 5, "tarde": 2, "pct_sin_riesgo": 89.4, "pct_alto": 7.6, "pct_tarde": 3.0, "puntos": [18.0, 2545.0, 92.0, -4.0, 9.0, 154.0, 162.0, 189.0, 172.0, 1220.0, 190.0, 151.0, 165.0, 182.0, 191.0, 199.0, 172.0, 86.0, 120.0, 84.0, -13.0, 122.0, 112.0, 134.0, 130.0, 107.0, 68.0, 101.0, 172.0, 184.0, 127.0, 98.0, 133.0, 26.0, 121.0, 111.0, 14.0, 75.0, 88.0, 140.0, 141.0, 170.0, 19.0, 2683.0, 185.0, 204.0, 189.0, 104.0, 157.0, 188.0, 191.0, 140.0, 218.0, 211.0, 197.0, 163.0, 80.0, 58.0, 164.0, 185.0, 179.0, 159.0, 73.0, 115.0, 78.0, 116.0]}, {"departamento": "Densitometría", "medidos": 25, "min": -3.0, "p10": 7.8, "p25": 30.0, "med": 39.0, "p75": 77.0, "p90": 125.8, "max": 165.0, "sin_riesgo": 18, "riesgo_alto": 6, "tarde": 1, "pct_sin_riesgo": 72.0, "pct_alto": 24.0, "pct_tarde": 4.0, "puntos": [31.0, 58.0, 77.0, 42.0, 33.0, 15.0, 137.0, -3.0, 17.0, 109.0, 48.0, 88.0, 0.0, 165.0, 57.0, 3.0, 31.0, 35.0, 149.0, 39.0, 17.0, 109.0, 39.0, 30.0, 38.0]}, {"departamento": "Radiología", "medidos": 1, "min": 13.0, "p10": 13.0, "p25": 13.0, "med": 13.0, "p75": 13.0, "p90": 13.0, "max": 13.0, "sin_riesgo": 0, "riesgo_alto": 1, "tarde": 0, "pct_sin_riesgo": 0.0, "pct_alto": 100.0, "pct_tarde": 0.0, "puntos": [13.0]}, {"departamento": "Resonancia Magnética", "medidos": 1, "min": 15.0, "p10": 15.0, "p25": 15.0, "med": 15.0, "p75": 15.0, "p90": 15.0, "max": 15.0, "sin_riesgo": 0, "riesgo_alto": 1, "tarde": 0, "pct_sin_riesgo": 0.0, "pct_alto": 100.0, "pct_tarde": 0.0, "puntos": [15.0]}], "Chamizal": [{"departamento": "Resonancia Magnética", "medidos": 68, "min": -104.0, "p10": 97.0, "p25": 142.2, "med": 194.5, "p75": 268.0, "p90": 1429.7, "max": 2795.0, "sin_riesgo": 65, "riesgo_alto": 1, "tarde": 2, "pct_sin_riesgo": 95.6, "pct_alto": 1.5, "pct_tarde": 2.9, "puntos": [-7.0, 1551.0, 33.0, 2703.0, 2725.0, 220.0, 239.0, 101.0, 178.0, 123.0, 139.0, 1360.0, 167.0, 1327.0, 225.0, 220.0, -104.0, 140.0, 146.0, 146.0, 115.0, 115.0, 1014.0, 1295.0, 81.0, 22.0, 203.0, 224.0, 186.0, 195.0, 138.0, 90.0, 108.0, 222.0, 209.0, 1471.0, 103.0, 587.0, 100.0, 1018.0, 191.0, 184.0, 223.0, 193.0, 213.0, 203.0, 203.0, 175.0, 197.0, 183.0, 1412.0, 210.0, 148.0, 87.0, 2639.0, 1550.0, 180.0, 211.0, 146.0, 2795.0, 182.0, 355.0, 143.0, 631.0, 194.0, 221.0, 194.0, 1358.0]}, {"departamento": "Ecosonografía", "medidos": 14, "min": 50.0, "p10": 75.4, "p25": 94.2, "med": 106.0, "p75": 115.2, "p90": 148.4, "max": 161.0, "sin_riesgo": 14, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [88.0, 113.0, 92.0, 110.0, 116.0, 101.0, 103.0, 50.0, 161.0, 161.0, 119.0, 70.0, 103.0, 109.0]}], "Guadalupe": [{"departamento": "Tomografía Axial Computada", "medidos": 1, "min": 57.0, "p10": 57.0, "p25": 57.0, "med": 57.0, "p75": 57.0, "p90": 57.0, "max": 57.0, "sin_riesgo": 1, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [57.0]}, {"departamento": "Ecosonografía", "medidos": 22, "min": 9.0, "p10": 49.5, "p25": 66.8, "med": 84.5, "p75": 113.8, "p90": 1020.4, "max": 1147.0, "sin_riesgo": 21, "riesgo_alto": 1, "tarde": 0, "pct_sin_riesgo": 95.5, "pct_alto": 4.5, "pct_tarde": 0.0, "puntos": [65.0, 81.0, 72.0, 1119.0, 58.0, 72.0, 81.0, 88.0, 104.0, 1128.0, 1147.0, 9.0, 125.0, 54.0, 80.0, 97.0, 102.0, 49.0, 37.0, 133.0, 117.0, 102.0]}, {"departamento": "Resonancia Magnética", "medidos": 1, "min": 147.0, "p10": 147.0, "p25": 147.0, "med": 147.0, "p75": 147.0, "p90": 147.0, "max": 147.0, "sin_riesgo": 1, "riesgo_alto": 0, "tarde": 0, "pct_sin_riesgo": 100.0, "pct_alto": 0.0, "pct_tarde": 0.0, "puntos": [147.0]}], "Las Águilas": [{"departamento": "Radiología", "medidos": 2, "min": 15.0, "p10": 16.2, "p25": 18.0, "med": 21.0, "p75": 24.0, "p90": 25.8, "max": 27.0, "sin_riesgo": 0, "riesgo_alto": 2, "tarde": 0, "pct_sin_riesgo": 0.0, "pct_alto": 100.0, "pct_tarde": 0.0, "puntos": [15.0, 27.0]}]};
 const PROMU_UNIT_ORDER = ["López Mateos","Acueducto","Clínica de la Mujer","Chamizal","Guadalupe","Las Águilas"];
-/* Moda de horas prometidas vs. promedio de interpretación, SOLO estudios que
-   cumplieron su objetivo de horas prometidas (para no mezclar con casos que
-   rodaron al día siguiente): Cardiología <=7h, Densitometría <=3h,
-   Ecosonografía <=4h (ampliado desde <=2h), Mamografía <=2h, Radiología <=3h,
-   Tomografía <=4h; Resonancia Magnética separada por bloque de estudio
-   (4h/24h/48h), cada uno filtrado a su propio límite. Se omiten las
-   combinaciones unidad x modalidad con 5 estudios o menos (no se considera
-   representativo reportar muestras tan chicas) — 13 combinaciones omitidas,
-   incluyendo las 2 de Las Águilas (esa unidad queda sin modalidades en esta
-   vista). "moda" = valor más frecuente de A—G horas
-   (Promesa [A] − Alta [G]) en ese grupo; "interp" = promedio de G—C horas
-   (Transcrito [C] − Alta [G], tiempo real de interpretación) en ese mismo
-   grupo filtrado, excluyendo 9 filas con G—C horas negativo (Transcrito
-   registrado antes que Alta, error de captura, ej. -140h) de 2,679
-   consideradas. Se usa promedio y no mediana porque la mayoría de los casos
-   caen en 0h y la mediana se queda ahí, ocultando la cola de casos que sí
-   tardan más — el promedio sí la refleja. "entrega" = promedio de horas
-   entre Fecha Firma [D] y Fecha Recibe Entregas [F] (tiempo posterior a la
-   interpretación, sin columna precomputada en el reporte, calculado fila
-   por fila), en ese mismo grupo filtrado; sin filas negativas en este caso.
-   "antes" = media de horas Alta [G] → Study Unread On (espera en PACS antes
-   de que el estudio se pueda interpretar), tomada tal cual de la antigua
-   gráfica "Tiempos del proceso por departamento" (ahora retirada): reporte
-   Turnaround Time (TAT, de los sistemas SIO y Exa) cruzado contra el
-   reporte general de septiembre por Study Accession # vs IdCita — por esa
-   limitación solo cubre citas de un solo estudio (1,777 de 7,834 filas de
-   septiembre), un n distinto al de moda/interp/entrega de este mismo
-   objeto. Cardiología no tiene valor de "antes" (0 electrocardiogramas sin
-   otro estudio de Cardiología acompañante quedaron en ese cruce); Las
-   Águilas y Medicina Preventiva tampoco tenían datos en esa gráfica. */
-const PROMESA_UNIT_MODA = {"López Mateos":[{"label":"Cardiología","n":100,"moda":4.0,"interp":1.6,"entrega":0.0,"antes":null},{"label":"Densitometría","n":163,"moda":3.0,"interp":0.4,"entrega":0.1,"antes":0.39},{"label":"Ecosonografía","n":369,"moda":2.0,"interp":0.1,"entrega":0.3,"antes":0.07},{"label":"Mamografía","n":118,"moda":2.0,"interp":0.0,"entrega":0.3,"antes":-0.02},{"label":"Radiología","n":486,"moda":1.0,"interp":0.4,"entrega":0.2,"antes":0.13},{"label":"Resonancia Magnética (4h)","n":81,"moda":4.0,"interp":0.8,"entrega":0.6,"antes":0.2},{"label":"Resonancia Magnética (24h)","n":158,"moda":24.0,"interp":13.1,"entrega":2.3,"antes":0.2},{"label":"Tomografía Axial Computada","n":323,"moda":2.0,"interp":0.6,"entrega":0.3,"antes":0.33}],"Acueducto":[{"label":"Ecosonografía","n":123,"moda":2.0,"interp":0.5,"entrega":0.2,"antes":0.03},{"label":"Radiología","n":147,"moda":2.0,"interp":0.6,"entrega":0.2,"antes":0.21},{"label":"Resonancia Magnética (4h)","n":35,"moda":4.0,"interp":2.3,"entrega":0.5,"antes":0.28},{"label":"Resonancia Magnética (24h)","n":22,"moda":23.0,"interp":14.0,"entrega":4.2,"antes":0.28},{"label":"Tomografía Axial Computada","n":82,"moda":4.0,"interp":3.5,"entrega":0.5,"antes":0.18}],"Clínica de la Mujer":[{"label":"Densitometría","n":97,"moda":1.0,"interp":0.6,"entrega":0.2,"antes":0.4},{"label":"Ecosonografía","n":226,"moda":2.0,"interp":0.4,"entrega":0.1,"antes":0.19},{"label":"Mamografía","n":97,"moda":2.0,"interp":0.5,"entrega":1.6,"antes":0.06}],"Chamizal":[{"label":"Ecosonografía","n":42,"moda":2.0,"interp":0.3,"entrega":0.2,"antes":-0.02},{"label":"Resonancia Magnética (4h)","n":83,"moda":4.0,"interp":1.3,"entrega":0.2,"antes":0.15},{"label":"Resonancia Magnética (24h)","n":49,"moda":24.0,"interp":4.4,"entrega":0.2,"antes":0.15}],"Guadalupe":[{"label":"Ecosonografía","n":34,"moda":2.0,"interp":0.6,"entrega":0.2,"antes":0.19}],"Las Águilas":[]};
 
 const indTemporal = {"mes": {"p": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct"], "u": {"Medicina Preventiva": [99.9, 97.6, 98.9, 99.9, 99.6, 97.2, 99.4, 99.5, 99.4, 99.7], "Todas": [97.9, 94.0, 97.3, 98.5, 96.7, 96.1, 97.3, 98.1, 98.8, 98.5], "López Mateos": [97.7, 92.9, 97.2, 97.6, 96.2, 96.6, 96.5, 98.4, 98.7, 98.2], "Clínica de la Mujer": [98.9, 91.6, 97.2, 98.3, 96.2, 95.5, 97.5, 97.0, 97.6, 96.0], "Guadalupe": [95.5, 84.4, 97.7, 96.9, 66.7, 80.0, 90.0, 91.1, 95.6, 98.3], "Las Águilas": [87.5, 100.0, 93.8, 100.0, 85.7, 78.6, 100.0, 85.7, 83.3, 100.0], "Acueducto": [96.3, 90.8, 91.8, 95.5, 93.1, 92.7, 94.3, 93.8, 97.2, 97.0], "Ciudad Granja": [100.0, 33.3, 100.0, null, null, null, 100.0, null, null, null], "Chamizal": [97.4, 95.4, 95.3, 98.1, 96.6, 95.2, 98.2, 98.2, 99.2, 97.8], "Plaza Universidad": [null, 100.0, 66.7, null, null, null, 100.0, null, null, null]}}, "semana": {"p": ["S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33", "S34", "S35", "S36", "S37", "S38", "S39", "S40", "S41", "S42", "S43", "S44"], "u": {"Guadalupe": [90.5, 94.7, 100.0, 100.0, 87.5, 100.0, 55.6, 100.0, 100.0, 100.0, 92.9, 100.0, 100.0, 100.0, 100.0, 100.0, null, 80.0, null, null, null, null, 80.0, 75.0, null, null, null, null, 100.0, 80.0, 91.7, 88.9, 100.0, 100.0, 90.0, 92.3, 100.0, 92.3, 100.0, 100.0, 100.0, 100.0, 92.9], "Ciudad Granja": [null, null, 100.0, null, null, 33.3, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "Clínica de la Mujer": [99.2, 100.0, 99.2, 96.3, 95.6, 97.2, 85.1, 89.8, 96.6, 97.9, 97.1, 97.5, 94.6, 97.9, 96.9, 100.0, 97.8, 98.2, 93.4, 95.9, 96.1, 98.7, 93.0, 93.4, 96.2, 98.1, 97.2, 96.8, 98.7, 94.9, 95.7, 99.1, 97.0, 98.0, 96.1, 95.3, 97.0, 98.4, 99.4, 91.2, 95.3, 98.5, 97.6], "Medicina Preventiva": [100.0, 100.0, 100.0, 99.7, 99.4, 99.4, 96.4, 95.2, 99.4, 99.3, 99.1, 98.0, 99.4, 100.0, 100.0, 100.0, 99.4, 99.6, 99.8, 99.7, 100.0, 99.7, 95.3, 96.1, 97.8, 99.7, 99.4, 99.0, 98.9, 98.8, 99.2, 99.8, 99.8, 99.2, 99.7, 98.8, 100.0, 99.9, 99.4, 99.5, 99.8, 99.5, 99.9], "Plaza Universidad": [null, null, null, null, null, 100.0, null, null, 66.7, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null], "Todas": [98.6, 97.9, 98.4, 96.9, 97.0, 96.7, 91.9, 90.0, 97.1, 97.7, 96.8, 97.1, 98.1, 97.4, 99.2, 98.9, 98.2, 97.0, 97.3, 95.7, 96.6, 96.8, 94.2, 96.5, 96.3, 98.2, 96.7, 95.8, 97.7, 97.1, 97.1, 98.3, 97.8, 98.6, 97.8, 98.0, 99.1, 99.1, 98.6, 98.5, 98.9, 98.4, 98.6], "López Mateos": [98.4, 97.6, 98.4, 96.7, 96.3, 95.7, 89.8, 88.3, 97.5, 96.7, 96.1, 97.8, 98.0, 95.9, 98.7, 98.2, 97.4, 95.9, 97.2, 94.7, 96.7, 96.7, 94.4, 98.0, 97.2, 97.3, 96.0, 94.1, 96.7, 97.6, 97.2, 97.6, 98.4, 98.7, 97.7, 98.7, 99.0, 99.4, 97.8, 99.1, 99.0, 98.0, 97.8], "Las Águilas": [66.7, null, null, null, 100.0, null, 100.0, null, null, null, 100.0, 100.0, 75.0, 100.0, null, 100.0, null, 100.0, null, null, null, 100.0, null, 66.7, 33.3, 100.0, null, 100.0, 100.0, 100.0, 75.0, null, 100.0, null, 75.0, 100.0, null, null, 100.0, 100.0, 100.0, null, 100.0], "Chamizal": [100.0, 98.2, 98.2, 93.0, 98.3, 96.6, 97.3, 87.2, 96.6, 96.0, 93.1, 95.1, 97.6, 97.3, 98.5, 99.0, 96.4, 94.5, 96.7, 98.8, 97.0, 96.7, 94.9, 98.6, 90.0, 95.5, 96.3, 100.0, 97.7, 96.6, 96.8, 96.5, 100.0, 98.4, 100.0, 98.2, 100.0, 98.3, 100.0, 95.0, 96.0, 98.8, 100.0], "Acueducto": [98.8, 96.1, 96.5, 94.4, 93.8, 94.2, 92.2, 81.3, 89.2, 96.2, 90.1, 87.9, 93.8, 93.4, 98.8, 95.4, 96.1, 94.7, 93.7, 91.8, 91.8, 89.1, 91.4, 95.6, 92.0, 96.2, 89.2, 94.9, 96.8, 92.8, 91.5, 96.5, 90.1, 97.2, 95.8, 96.7, 96.3, 95.9, 98.0, 97.8, 97.8, 96.1, 97.8]}}};
 /* Indicador General 2025 · referencia mensual, todas las unidades */
@@ -3159,96 +3157,109 @@ let promuUnit = 'López Mateos';
 function initPromuUnitSel(){
   const el = document.getElementById('promu-unit-sel');
   el.innerHTML = PROMU_UNIT_ORDER.map(u=>{
-    const n = (PROMESA_UNIT_DATA[u]||[]).reduce((a,r)=>a+r.n,0);
+    const n = (PROMESA_MARGEN[u]||[]).reduce((a,r)=>a+r.medidos,0);
     return `<button class="seg-b${u===promuUnit?' active':''}" data-u="${u}">${u} <span style="opacity:.6">(${fmt(n)})</span></button>`;
   }).join('');
   el.querySelectorAll('.seg-b').forEach(b=>b.onclick=()=>{
     promuUnit = b.dataset.u;
     el.querySelectorAll('.seg-b').forEach(x=>x.classList.toggle('active', x===b));
-    renderPromesaUnit();
+    renderPromesaMargen();
   });
 }
 
-const PROMU_THRESH_LABEL = {
-  'Cardiología':'≤7h', 'Densitometría':'≤3h', 'Ecosonografía':'≤4h', 'Mamografía':'≤2h',
-  'Radiología':'≤3h', 'Resonancia Magnética (4h)':'≤4h', 'Resonancia Magnética (24h)':'≤24h',
-  'Resonancia Magnética (48h)':'≤48h', 'Tomografía Axial Computada':'≤4h'
-};
+function fmtMin(v){
+  if(v==null) return '—';
+  const a = Math.abs(v);
+  const s = v<0 ? '−' : '';
+  return a<60 ? s+Math.round(a)+' min' : s+(a/60).toFixed(1)+' h';
+}
+function margenScale(lo, hi){
+  const k=10;
+  const sl = v => Math.sign(v)*Math.log1p(Math.abs(v)/k);
+  const a = sl(lo), b = sl(hi);
+  return v => ((sl(v)-a)/(b-a))*100;
+}
+function margenTicks(lo, hi, x){
+  const cand=[-2880,-1440,-480,-240,-60,-30,-15,0,15,30,60,120,180,300,480,960,1440,2880,5760].filter(v=>v>=lo&&v<=hi);
+  const out=[]; let last=-Infinity;
+  for(const v of cand){
+    const p=x(v);
+    if(p-last>=9 || v===0 || v===30){ out.push(v); last=Math.max(last,p); }
+  }
+  return out;
+}
 
-function renderPromesaUnit(){
-  const full = PROMESA_UNIT_DATA[promuUnit] || [];
-  const totalN = full.reduce((a,r)=>a+r.n,0);
-  const totalCumple = full.reduce((a,r)=>a+r.cumple,0);
-  const pct = totalN ? +(100*totalCumple/totalN).toFixed(1) : 0;
+function renderPromesaMargen(){
+  const full = (PROMESA_MARGEN[promuUnit]||[]).slice().sort((a,b)=>(b.pct_tarde+b.pct_alto)-(a.pct_tarde+a.pct_alto)||b.medidos-a.medidos);
+  const totalN = full.reduce((a,r)=>a+r.medidos,0);
+  const sinRiesgo = full.reduce((a,r)=>a+r.sin_riesgo,0);
+  const pct = totalN ? +(100*sinRiesgo/totalN).toFixed(1) : 0;
 
-  document.getElementById('promu-sub').textContent = `${promuUnit} · ${fmt(totalN)} estudios · septiembre 2026`;
+  document.getElementById('promu-sub').textContent = `${promuUnit} · ${fmt(totalN)} estudios firmados con Fecha Promesa · octubre 2026`;
   const pctEl = document.getElementById('promu-pct');
-  pctEl.textContent = pct.toFixed(1)+'%';
-  pctEl.style.color = pct>=95?'#4c8c6f':(pct>=85?'#c2921f':'#ba544c');
+  pctEl.textContent = totalN ? pct.toFixed(1)+'%' : '—';
+  pctEl.style.color = pct>=90?'var(--ok)':(pct>=75?'var(--warn)':'var(--bad)');
 
-  const recs = PROMESA_UNIT_MODA[promuUnit] || [];
-  const maxVal = Math.max(...recs.map(r=>Math.max(r.moda||0, (r.antes||0)+(r.interp||0)+(r.entrega||0))), 0.1);
   const chartEl = document.getElementById('promu-chart');
-
-  if(!recs.length){
-    chartEl.innerHTML = `<div class="empty">Ninguna modalidad de ${promuUnit} tiene más de 5 estudios dentro de objetivo en septiembre 2026 — muestra insuficiente para esta vista.</div>`;
+  if(!full.length){
+    chartEl.innerHTML = `<div class="empty">Sin estudios cruzados con Exa para ${promuUnit} en octubre 2026.</div>`;
+    document.getElementById('promu-tab').innerHTML = '';
   } else {
-  chartEl.innerHTML = recs.map(r=>{
-    const moda = r.moda ?? 0, interp = r.interp ?? 0, entrega = r.entrega ?? 0;
-    const antes = Math.max(0, r.antes ?? 0);
-    const total = antes + interp + entrega;
-    const antesPct = +(antes/maxVal*100).toFixed(1);
-    const interpPct = +(interp/maxVal*100).toFixed(1);
-    const entregaPct = +(entrega/maxVal*100).toFixed(1);
-    const modaPct = +(moda/maxVal*100).toFixed(1);
-    const over = total > moda;
-    const color = over ? '#ba544c' : '#8a6a9c';
-    const antesTxt = r.antes==null ? 'no disponible' : `${r.antes}h`;
-    const tip = `<b>${r.label}</b> · ${fmt(r.n)} estudios con horas prometidas dentro de objetivo (${PROMU_THRESH_LABEL[r.label]||''}) · moda prometida ${moda}h · antes de interpretación (promedio) ${antesTxt} · interpretación (promedio) ${interp}h · entrega posterior (promedio) ${entrega}h`+
-      (over? ' · ⚠ el tiempo total ya iguala o rebasa la moda prometida' : '');
-    return `<div class="bar-row" style="grid-template-columns:170px 1fr 220px" data-tip="${tip}">
-      <div class="bar-label">${r.label}</div>
-      <div class="sbar-wrap">
-        <div class="sbar-track">
-          <div class="sbar-seg" data-w="${antesPct}" style="background:#3f6fa6"></div>
-          <div class="sbar-seg" data-w="${interpPct}" style="background:${color}"></div>
-          <div class="sbar-seg" data-w="${entregaPct}" style="background:#4e8c70"></div>
+    const lo = Math.min(-60, ...full.map(d=>d.min));
+    const hi = Math.max(240, ...full.map(d=>d.max));
+    const x = margenScale(lo, hi);
+    const ticks = margenTicks(lo, hi, x);
+    const bandAmber = `<div class="mg-band" style="left:${x(0)}%;width:${x(30)-x(0)}%;background:var(--warn);opacity:.09"></div>`;
+    const bandRed = `<div class="mg-band" style="left:0;width:${x(0)}%;background:var(--bad);opacity:.07"></div>`;
+    const vlines = [0,30].map(v=>`<div class="mg-vline" style="left:${x(v)}%;border-left-color:${v===0?'var(--bad)':'var(--warn)'}"></div>`).join('');
+
+    chartEl.innerHTML = full.map(d=>{
+      const dots = d.puntos.map((m,i)=>{
+        const c = m<0?'var(--bad)':(m<=30?'var(--warn)':'var(--ok)');
+        const jig = ((i*37)%21)/20*22+4;
+        return `<div class="mg-dot" style="left:${x(m).toFixed(1)}%;top:${jig.toFixed(1)}%;background:${c}" data-tip="${fmtMin(m)} ${m<0?'después':'antes'} de la promesa"></div>`;
+      }).join('');
+      const tip = `<b>${d.departamento}</b> · ${fmt(d.medidos)} estudios firmados · mediana ${fmtMin(d.med)} · sin riesgo ${d.pct_sin_riesgo}% · riesgo alto ${d.pct_alto}% · tarde ${d.pct_tarde}%`;
+      return `<div class="mg-row" data-tip="${tip}">
+        <div class="mg-label"><b>${d.departamento}</b>${fmt(d.medidos)} estudios</div>
+        <div class="mg-track">
+          ${bandAmber}${bandRed}${vlines}
+          <div class="mg-whisker" style="left:${x(d.min)}%;width:${(x(d.max)-x(d.min)).toFixed(1)}%"></div>
+          <div class="mg-box" style="left:${x(d.p25)}%;width:${Math.max(0.6,x(d.p75)-x(d.p25)).toFixed(1)}%"></div>
+          <div class="mg-med" style="left:${x(d.med)}%"></div>
+          <div class="mg-p10" style="left:${x(d.p10)}%"></div>
+          ${dots}
         </div>
-        <div class="sbar-target" data-l="${modaPct}" style="left:0" data-tip="<b>${r.label}</b> · moda prometida: ${moda}h"></div>
-      </div>
-      <div style="font-size:11.5px;line-height:1.4;text-align:right;color:var(--muted)">
-        <div>Moda prometida <b style="color:var(--ink)">${moda}h</b></div>
-        <div>Antes de interpretación <b style="color:var(--ink)">${antesTxt}</b></div>
-        <div>Interpretación (promedio) <b style="color:var(--ink)">${interp}h</b></div>
-        <div>Entrega posterior (promedio) <b style="color:var(--ink)">${entrega}h</b></div>
-      </div>
-    </div>`;
-  }).join('');
+        <div class="mg-stat">
+          <div>Mediana <b>${fmtMin(d.med)}</b></div>
+          <div>P10 <b>${fmtMin(d.p10)}</b></div>
+          <div>Mínimo <b>${fmtMin(d.min)}</b></div>
+        </div>
+      </div>`;
+    }).join('') + `<div class="mg-axis"><div></div><div class="mg-ticks">${
+      ticks.map(v=>`<div class="mg-tick" style="left:${x(v).toFixed(1)}%">${v===0?'0':fmtMin(v)}</div>`).join('')
+    }</div><div></div></div>`;
+
+    document.getElementById('promu-tab').innerHTML =
+      '<thead><tr><th>Departamento</th><th class="n">Medidos</th><th class="n">Mediana</th><th class="n">P10</th><th class="n">Mínimo</th><th class="n">Sin riesgo</th><th class="n">Riesgo alto</th><th class="n">Tarde</th><th>Mezcla</th></tr></thead><tbody>'+
+      full.map(d=>`<tr><td>${d.departamento}</td><td class="n">${fmt(d.medidos)}</td><td class="n">${fmtMin(d.med)}</td><td class="n">${fmtMin(d.p10)}</td><td class="n" style="${d.min<0?'color:var(--bad)':''}">${fmtMin(d.min)}</td>`+
+        `<td class="n">${d.pct_sin_riesgo}%</td><td class="n" style="${d.pct_alto>0?'color:var(--warn)':''}">${d.pct_alto}%</td><td class="n" style="${d.pct_tarde>0?'color:var(--bad)':''}">${d.pct_tarde}%</td>`+
+        `<td><div style="display:flex;height:9px;border-radius:5px;overflow:hidden;min-width:90px">`+
+          `<span style="width:${d.pct_sin_riesgo}%;background:var(--ok)"></span>`+
+          `<span style="width:${d.pct_alto}%;background:var(--warn)"></span>`+
+          `<span style="width:${d.pct_tarde}%;background:var(--bad)"></span>`+
+        `</div></td></tr>`).join('')+
+      '</tbody>';
   }
 
-  const segsEl = chartEl.querySelectorAll('.sbar-seg');
-  const tgtEl = chartEl.querySelectorAll('.sbar-target');
-  if(reduce){
-    segsEl.forEach(s=>s.style.width=s.dataset.w+'%');
-    tgtEl.forEach(t=>t.style.left=t.dataset.l+'%');
-  } else {
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      segsEl.forEach(s=>s.style.width=s.dataset.w+'%');
-      tgtEl.forEach(t=>t.style.left=t.dataset.l+'%');
-    }));
-  }
-
-  const withN = full.filter(r=>r.n>=5);
-  const worst = (withN.length?withN:full).slice().sort((a,b)=>a.pct-b.pct)[0];
-  const over = recs.filter(r=>((r.antes??0)+(r.interp??0)+(r.entrega??0)) > (r.moda??0) && r.n>=5);
-  let nota = `<b>${fmt(totalN)}</b> estudios en ${promuUnit} (septiembre 2026), ${full.length} modalidad${full.length===1?'':'es'}. `;
-  if(worst) nota += `Menor cumplimiento: <b>${worst.dept}</b> (${worst.pct.toFixed(1)}%). `;
-  if(over.length) nota += `El tiempo total (antes + interpretación + entrega posterior) ya iguala o rebasa la moda prometida en: <b>${over.map(r=>r.label).join(', ')}</b>.`;
-  else nota += `En ningún caso (con muestra suficiente) el tiempo total rebasa la moda prometida.`;
+  const worst = full[0];
+  let nota = `<b>${fmt(totalN)}</b> estudios firmados en ${promuUnit} con Fecha Promesa (octubre 2026), ${full.length} departamento${full.length===1?'':'s'}. `;
+  if(worst && (worst.pct_tarde+worst.pct_alto)>0) nota += `Mayor riesgo: <b>${worst.departamento}</b> (${worst.pct_tarde}% tarde, ${worst.pct_alto}% riesgo alto). `;
+  else if(worst) nota += `Todos los departamentos con muestra están sin riesgo. `;
   document.getElementById('promu-nota').innerHTML = nota;
 
   document.getElementById('promu-metodo').innerHTML =
-    `Por modalidad, solo con los estudios cuyas horas prometidas («A—G horas», Promesa [A] − Alta [G]) cumplieron su objetivo — Cardiología ≤7h, Densitometría ≤3h, Ecosonografía ≤4h, Mamografía ≤2h, Radiología ≤3h, Tomografía ≤4h, Resonancia Magnética separada por bloque (4h/24h/48h, cada uno a su propio límite) — para no mezclar con casos que rodaron al día siguiente. Se omiten las combinaciones unidad × modalidad con 5 estudios o menos, por no ser una muestra representativa. <b>Moda prometida</b> (▲, marca negra): valor más frecuente de horas prometidas en ese grupo. <b>Antes de interpretación</b>: media de horas Alta [G] → Study Unread On (espera en PACS antes de poder interpretar), tomada de los reportes TAT (sistemas SIO y Exa) cruzados contra IdCita — esta parte solo cubre citas de un solo estudio, así que su n es distinto al de las otras 3 etapas; no disponible para Cardiología (sin casos suficientes en ese cruce) ni para Las Águilas. <b>Interpretación (promedio)</b>: promedio de horas reales de interpretación (Transcrito [C] − Alta [G]) en ese mismo grupo filtrado — se usa promedio y no mediana porque la mayoría de los casos caen en 0h y la mediana se queda ahí, ocultando la cola de casos que sí tardan más; se excluyen 9 registros con G—C horas negativo (error de captura, Transcrito antes que Alta). <b>Entrega posterior (promedio)</b>: promedio de horas entre Fecha Firma [D] y Fecha Recibe Entregas [F] (lo que transcurre después de interpretado, hasta que se recibe la entrega), en ese mismo grupo filtrado. Barra roja en el segmento de interpretación = el tiempo total (antes + interpretación + entrega posterior) ya iguala o rebasa la moda prometida (poco margen o ya al límite); barra morada = hay margen. El % de cumplimiento (arriba) es el global de la unidad, sin estos filtros. Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia. Datos de septiembre 2026.`;
+    `Margen = Fecha Promesa [A] (reporte general) − Fecha de cambio de estado (firma en Exa), solo estudios Aprobados con ambas fechas, cruzados por IdCita/Número de adhesión entre Exa y Sio. Sin riesgo = firmado con más de 30 min de margen; riesgo alto = de 0 a 30 min; tarde = firmado después de la promesa (margen negativo). Caja = P25 a P75, línea gruesa = mediana, marca punteada = P10, línea delgada = mínimo a máximo; cada punto es un estudio firmado. Escala comprimida (símil logarítmica) para que quepan en una sola vista los casos de minutos y los de varias horas. Se excluyen Medicina Preventiva, Plaza Universidad y Ciudad Granja, protocolos (iniciales + número en el campo de paciente) y citas de Eco con Biopsia — mismas exclusiones que el resto de "Promesa de estudios". Datos de octubre 2026 (Datos Exa y Sio de octubre).`;
 }
 
 /* ===== Estudios · septiembre 2026, mes completo (por departamento) =====
@@ -4492,7 +4503,7 @@ function renderAll(){
   // Departamentos (evolución)
   renderDeptos();
   initPromuUnitSel();
-  renderPromesaUnit();
+  renderPromesaMargen();
   renderEstudiosJulio();
   renderEstudiosYoy();
   renderDraniela();
