@@ -1537,6 +1537,16 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
           <h3 style="margin-top:20px">Tendencia diaria · Llegada a Exa</h3>
           <p class="csub">Mediana de minutos entre Alta ticket [G] y Recepción en Exa, por día · octubre 2026 · todas las unidades</p>
           <div id="mapa-llegada-line"></div>
+
+          <h3 style="margin-top:22px">Llegada a Exa por unidad</h3>
+          <p class="csub">Mediana de minutos, octubre 2026 completo · unidades con muestra chica (&lt;100 estudios en el mes) marcadas en gris</p>
+          <div id="mapa-llegada-bar" class="bars" style="gap:11px"></div>
+
+          <h3 style="margin-top:22px">Tendencia diaria por unidad</h3>
+          <p class="csub" id="mapa-llegada-multi-sub">—</p>
+          <div id="mapa-llegada-legend" style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-size:11.5px;color:var(--ink-2)"></div>
+          <div id="mapa-llegada-multi"></div>
+
           <div class="empty" style="margin-top:14px" id="mapa-metodo"></div>
         </div>
       </section>
@@ -2229,6 +2239,17 @@ const PROMU_UNIT_ORDER = ["López Mateos","Acueducto","Clínica de la Mujer","Ch
    diaria (todas las unidades) de Llegada a Exa, 1–31 de octubre; algunos días
    tienen muestra chica (fin de semana, día 25 con solo 13 estudios). */
 const PROMESA_MAPA = {"mapa": {"Todas": {"realizacion": {"n": 4205, "med": 11.0, "p90": 48.2}, "llegada": {"n": 4167, "med": 6.1, "p90": 23.9}, "interpretacion": {"n": 3902, "med": 50.0, "p90": 861.9}, "alta_firma": {"n": 3909, "med": 54.5, "p90": 863.5}}, "López Mateos": {"realizacion": {"n": 2335, "med": 4.9, "p90": 49.7}, "llegada": {"n": 2309, "med": 5.7, "p90": 22.3}, "interpretacion": {"n": 2079, "med": 44.0, "p90": 918.8}, "alta_firma": {"n": 2082, "med": 48.2, "p90": 934.7}}, "Acueducto": {"realizacion": {"n": 835, "med": 15.9, "p90": 42.3}, "llegada": {"n": 832, "med": 8.4, "p90": 38.3}, "interpretacion": {"n": 827, "med": 78.0, "p90": 1026.2}, "alta_firma": {"n": 828, "med": 85.8, "p90": 1109.0}}, "Clínica de la Mujer": {"realizacion": {"n": 702, "med": 24.0, "p90": 51.1}, "llegada": {"n": 694, "med": 1.9, "p90": 17.6}, "interpretacion": {"n": 667, "med": 35.0, "p90": 114.0}, "alta_firma": {"n": 669, "med": 35.9, "p90": 114.3}}, "Chamizal": {"realizacion": {"n": 276, "med": 13.8, "p90": 37.1}, "llegada": {"n": 275, "med": 7.5, "p90": 20.2}, "interpretacion": {"n": 272, "med": 74.0, "p90": 911.9}, "alta_firma": {"n": 273, "med": 85.2, "p90": 918.3}}, "Guadalupe": {"realizacion": {"n": 55, "med": 34.9, "p90": 94.1}, "llegada": {"n": 55, "med": -1.4, "p90": 3.7}, "interpretacion": {"n": 55, "med": 57.0, "p90": 95.6}, "alta_firma": {"n": 55, "med": 52.1, "p90": 91.3}}, "Las Águilas": {"realizacion": {"n": 2, "med": 58.8, "p90": 59.6}, "llegada": {"n": 2, "med": 13.2, "p90": 13.2}, "interpretacion": {"n": 2, "med": 37.0, "p90": 41.8}, "alta_firma": {"n": 2, "med": 50.2, "p90": 55.0}}}, "tendenciaLlegada": [{"dia": "2026-10-01", "n": 126, "med": 5.9}, {"dia": "2026-10-02", "n": 132, "med": 6.0}, {"dia": "2026-10-03", "n": 152, "med": 4.6}, {"dia": "2026-10-04", "n": 36, "med": 5.4}, {"dia": "2026-10-05", "n": 150, "med": 6.0}, {"dia": "2026-10-06", "n": 148, "med": 6.2}, {"dia": "2026-10-07", "n": 130, "med": 6.4}, {"dia": "2026-10-08", "n": 131, "med": 7.3}, {"dia": "2026-10-09", "n": 143, "med": 6.5}, {"dia": "2026-10-10", "n": 142, "med": 7.6}, {"dia": "2026-10-11", "n": 27, "med": 1.8}, {"dia": "2026-10-12", "n": 88, "med": 10.6}, {"dia": "2026-10-13", "n": 156, "med": 6.8}, {"dia": "2026-10-14", "n": 160, "med": 5.4}, {"dia": "2026-10-15", "n": 154, "med": 4.6}, {"dia": "2026-10-16", "n": 151, "med": 6.6}, {"dia": "2026-10-17", "n": 139, "med": 5.7}, {"dia": "2026-10-18", "n": 22, "med": -2.0}, {"dia": "2026-10-19", "n": 200, "med": 6.1}, {"dia": "2026-10-20", "n": 162, "med": 6.1}, {"dia": "2026-10-21", "n": 172, "med": 6.5}, {"dia": "2026-10-22", "n": 180, "med": 6.0}, {"dia": "2026-10-23", "n": 157, "med": 6.6}, {"dia": "2026-10-24", "n": 163, "med": 6.5}, {"dia": "2026-10-25", "n": 13, "med": 6.8}, {"dia": "2026-10-26", "n": 150, "med": 6.0}, {"dia": "2026-10-27", "n": 161, "med": 5.5}, {"dia": "2026-10-28", "n": 185, "med": 6.8}, {"dia": "2026-10-29", "n": 181, "med": 7.2}, {"dia": "2026-10-30", "n": 183, "med": 5.3}, {"dia": "2026-10-31", "n": 73, "med": 5.3}]};
+/* ===== Llegada a Exa por unidad (octubre 2026) =====
+   Misma fuente/correlación que PROMESA_MAPA. barUnidad: mediana de octubre
+   completo por unidad, ordenado de mayor a menor (incluye Las Águilas con
+   n=2 — se marca en gris por muestra insuficiente, no se omite). Tendencia
+   diaria por unidad (diasRobustos/seriesRobustas) solo para las 4 unidades
+   con volumen diario estable (López Mateos, Acueducto, Clínica de la Mujer,
+   Chamizal); Guadalupe (2.8 estudios/día en promedio) y Las Águilas (2 en
+   todo el mes) se excluyen de esa vista porque una mediana diaria de 1-2
+   puntos no es representativa — su cifra mensual sigue visible en la
+   barra de arriba. */
+const PROMESA_LLEGADA_UNIT = {"barUnidad": [{"unidad": "Las Águilas", "n": 2, "med": 13.2, "p90": 13.2}, {"unidad": "Acueducto", "n": 832, "med": 8.4, "p90": 38.3}, {"unidad": "Chamizal", "n": 275, "med": 7.5, "p90": 20.2}, {"unidad": "López Mateos", "n": 2309, "med": 5.7, "p90": 22.3}, {"unidad": "Clínica de la Mujer", "n": 694, "med": 1.9, "p90": 17.6}, {"unidad": "Guadalupe", "n": 55, "med": -1.4, "p90": 3.7}], "diasRobustos": ["2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"], "seriesRobustas": {"López Mateos": [5.9, 7.7, 5.3, 4.7, 5.8, 6.6, 6.5, 6.5, 6.7, 5.6, 1.8, 8.3, 5.8, 3.5, 4.3, 5.4, 5.1, -2.0, 4.4, 6.0, 6.0, 5.6, 6.6, 5.1, 6.8, 4.3, 5.3, 6.6, 6.8, 5.7, 5.5], "Acueducto": [4.9, 2.2, 4.1, null, 9.8, 8.0, 6.2, 12.2, 7.7, 9.8, null, 12.0, 8.8, 10.3, 10.3, 10.3, 9.1, null, 8.5, 9.2, 8.8, 7.2, 8.5, 8.7, null, 10.9, 8.1, 7.1, 8.9, 3.5, 7.2], "Clínica de la Mujer": [6.7, -5.9, -4.5, null, 1.0, 1.0, 1.5, 4.9, -5.9, 10.1, null, 14.0, 10.7, -0.6, 3.4, 7.3, 4.7, null, 1.9, -0.2, 2.4, 1.1, 2.4, 0.3, null, 7.1, 3.5, 2.4, 5.6, 1.6, 1.3], "Chamizal": [4.7, 1.0, 7.5, null, 6.8, 2.9, 7.8, null, 2.0, 17.7, null, 18.0, 7.8, 6.8, 10.3, 8.2, -0.2, null, 12.9, 4.3, 10.6, 13.0, 6.3, 3.3, null, 8.2, 9.2, 8.0, 4.7, 4.0, 20.0]}};
 
 const indTemporal = {"mes": {"p": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct"], "u": {"Medicina Preventiva": [99.9, 97.6, 98.9, 99.9, 99.6, 97.2, 99.4, 99.5, 99.4, 99.7], "Todas": [97.9, 94.0, 97.3, 98.5, 96.7, 96.1, 97.3, 98.1, 98.8, 98.5], "López Mateos": [97.7, 92.9, 97.2, 97.6, 96.2, 96.6, 96.5, 98.4, 98.7, 98.2], "Clínica de la Mujer": [98.9, 91.6, 97.2, 98.3, 96.2, 95.5, 97.5, 97.0, 97.6, 96.0], "Guadalupe": [95.5, 84.4, 97.7, 96.9, 66.7, 80.0, 90.0, 91.1, 95.6, 98.3], "Las Águilas": [87.5, 100.0, 93.8, 100.0, 85.7, 78.6, 100.0, 85.7, 83.3, 100.0], "Acueducto": [96.3, 90.8, 91.8, 95.5, 93.1, 92.7, 94.3, 93.8, 97.2, 97.0], "Ciudad Granja": [100.0, 33.3, 100.0, null, null, null, 100.0, null, null, null], "Chamizal": [97.4, 95.4, 95.3, 98.1, 96.6, 95.2, 98.2, 98.2, 99.2, 97.8], "Plaza Universidad": [null, 100.0, 66.7, null, null, null, 100.0, null, null, null]}}, "semana": {"p": ["S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33", "S34", "S35", "S36", "S37", "S38", "S39", "S40", "S41", "S42", "S43", "S44"], "u": {"Guadalupe": [90.5, 94.7, 100.0, 100.0, 87.5, 100.0, 55.6, 100.0, 100.0, 100.0, 92.9, 100.0, 100.0, 100.0, 100.0, 100.0, null, 80.0, null, null, null, null, 80.0, 75.0, null, null, null, null, 100.0, 80.0, 91.7, 88.9, 100.0, 100.0, 90.0, 92.3, 100.0, 92.3, 100.0, 100.0, 100.0, 100.0, 92.9], "Ciudad Granja": [null, null, 100.0, null, null, 33.3, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null], "Clínica de la Mujer": [99.2, 100.0, 99.2, 96.3, 95.6, 97.2, 85.1, 89.8, 96.6, 97.9, 97.1, 97.5, 94.6, 97.9, 96.9, 100.0, 97.8, 98.2, 93.4, 95.9, 96.1, 98.7, 93.0, 93.4, 96.2, 98.1, 97.2, 96.8, 98.7, 94.9, 95.7, 99.1, 97.0, 98.0, 96.1, 95.3, 97.0, 98.4, 99.4, 91.2, 95.3, 98.5, 97.6], "Medicina Preventiva": [100.0, 100.0, 100.0, 99.7, 99.4, 99.4, 96.4, 95.2, 99.4, 99.3, 99.1, 98.0, 99.4, 100.0, 100.0, 100.0, 99.4, 99.6, 99.8, 99.7, 100.0, 99.7, 95.3, 96.1, 97.8, 99.7, 99.4, 99.0, 98.9, 98.8, 99.2, 99.8, 99.8, 99.2, 99.7, 98.8, 100.0, 99.9, 99.4, 99.5, 99.8, 99.5, 99.9], "Plaza Universidad": [null, null, null, null, null, 100.0, null, null, 66.7, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 100.0, 100.0, null, null, null, null, null, null, null, null, null, null, null, null, null], "Todas": [98.6, 97.9, 98.4, 96.9, 97.0, 96.7, 91.9, 90.0, 97.1, 97.7, 96.8, 97.1, 98.1, 97.4, 99.2, 98.9, 98.2, 97.0, 97.3, 95.7, 96.6, 96.8, 94.2, 96.5, 96.3, 98.2, 96.7, 95.8, 97.7, 97.1, 97.1, 98.3, 97.8, 98.6, 97.8, 98.0, 99.1, 99.1, 98.6, 98.5, 98.9, 98.4, 98.6], "López Mateos": [98.4, 97.6, 98.4, 96.7, 96.3, 95.7, 89.8, 88.3, 97.5, 96.7, 96.1, 97.8, 98.0, 95.9, 98.7, 98.2, 97.4, 95.9, 97.2, 94.7, 96.7, 96.7, 94.4, 98.0, 97.2, 97.3, 96.0, 94.1, 96.7, 97.6, 97.2, 97.6, 98.4, 98.7, 97.7, 98.7, 99.0, 99.4, 97.8, 99.1, 99.0, 98.0, 97.8], "Las Águilas": [66.7, null, null, null, 100.0, null, 100.0, null, null, null, 100.0, 100.0, 75.0, 100.0, null, 100.0, null, 100.0, null, null, null, 100.0, null, 66.7, 33.3, 100.0, null, 100.0, 100.0, 100.0, 75.0, null, 100.0, null, 75.0, 100.0, null, null, 100.0, 100.0, 100.0, null, 100.0], "Chamizal": [100.0, 98.2, 98.2, 93.0, 98.3, 96.6, 97.3, 87.2, 96.6, 96.0, 93.1, 95.1, 97.6, 97.3, 98.5, 99.0, 96.4, 94.5, 96.7, 98.8, 97.0, 96.7, 94.9, 98.6, 90.0, 95.5, 96.3, 100.0, 97.7, 96.6, 96.8, 96.5, 100.0, 98.4, 100.0, 98.2, 100.0, 98.3, 100.0, 95.0, 96.0, 98.8, 100.0], "Acueducto": [98.8, 96.1, 96.5, 94.4, 93.8, 94.2, 92.2, 81.3, 89.2, 96.2, 90.1, 87.9, 93.8, 93.4, 98.8, 95.4, 96.1, 94.7, 93.7, 91.8, 91.8, 89.1, 91.4, 95.6, 92.0, 96.2, 89.2, 94.9, 96.8, 92.8, 91.5, 96.5, 90.1, 97.2, 95.8, 96.7, 96.3, 95.9, 98.0, 97.8, 97.8, 96.1, 97.8]}}};
 /* Indicador General 2025 · referencia mensual, todas las unidades */
@@ -3362,6 +3383,31 @@ function renderMapaProceso(){
 
   document.getElementById('mapa-metodo').innerHTML =
     `Realización = Fecha de Estudio (Exa) → Alta ticket [G] (reporte general). Llegada a Exa = Alta [G] → Fecha de Recepción de Estudio (Exa). Interpretación = Recepción → Fecha de cambio de estado (firma en Exa), solo estudios Aprobados. Alta → Firma = el total de las dos últimas etapas, también solo Aprobados. Cada tramo del mapa y de las tarjetas se calcula sobre los estudios que tienen ese par de fechas, por lo que el "n" varía entre tramos. La tendencia diaria de Llegada a Exa junta las 6 unidades (no sigue el selector de arriba) para tener muestra suficiente cada día; algunos días (fines de semana, 25 de octubre) tienen muestra chica y su mediana es menos estable. Misma fuente, correlación y exclusiones que "Margen antes de la promesa".`;
+}
+
+function renderLlegadaPorUnidad(){
+  const bar = PROMESA_LLEGADA_UNIT.barUnidad;
+  barChart(document.getElementById('mapa-llegada-bar'), bar.map(d=>({name:d.unidad, v:d.med, n:d.n})), '#4e8c70', {
+    fmt: v=>fmtMin(v),
+    colorFn: (v,d)=> d.n<100 ? '#b8c0ca' : '#4e8c70',
+    tip: d=>{
+      const row = bar.find(x=>x.unidad===d.name);
+      return `<b>${d.name}</b> · mediana ${fmtMin(row.med)} · ${fmt(row.n)} estudios · P90 ${fmtMin(row.p90)}`+(row.n<100?' · muestra chica':'');
+    },
+  });
+
+  const robustLabels = PROMESA_LLEGADA_UNIT.diasRobustos.map(d=>d.slice(8,10)+' '+MES_ABR_U[+d.slice(5,7)-1]);
+  const units = Object.keys(PROMESA_LLEGADA_UNIT.seriesRobustas);
+  const colors = units.map(u=>INC_UNIT_COLORS[u]||'#4c8c6f');
+  document.getElementById('mapa-llegada-legend').innerHTML = units.map((u,i)=>
+    `<span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:${colors[i]};display:inline-block"></span>${u}</span>`
+  ).join('');
+  document.getElementById('mapa-llegada-multi-sub').textContent =
+    'Mediana diaria de minutos (Alta [G] → Recepción en Exa) · octubre 2026 · solo unidades con volumen diario estable (Guadalupe y Las Águilas quedan fuera, muestra muy chica por día)';
+  multiLineChart(document.getElementById('mapa-llegada-multi'),
+    robustLabels,
+    units.map((u,i)=>({name:u, color:colors[i], vals:PROMESA_LLEGADA_UNIT.seriesRobustas[u]})),
+    ' min', 'D');
 }
 
 /* ===== Estudios · septiembre 2026, mes completo (por departamento) =====
@@ -4607,6 +4653,7 @@ function renderAll(){
   initPromuUnitSel();
   renderPromesaMargen();
   renderMapaProceso();
+  renderLlegadaPorUnidad();
   renderEstudiosJulio();
   renderEstudiosYoy();
   renderDraniela();
