@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vista por Tarjetas · Grupo Río</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f4f2; --surface:#fcfcfb; --surface-2:#f0efec; --line:#e2e1dc; --grid:#ecebe7;
+  --ink:#1f1f1e; --ink-2:#52514e; --ink-3:#8a8984;
+  --brand:#1f5fa8;
+  --good:#3f8a68; --warn:#b98612; --bad:#c0463f;
+  --good-bg:#e3f1ea; --warn-bg:#fbf0d4; --bad-bg:#f9e0dd; --bad-bg2:#f2c3bd; --none-bg:#f2f1ee;
+  --u1:#2a78d6; --u2:#eb6834; --u3:#1baf7a; --u4:#eda100; --u5:#e87ba4; --u6:#008300; --u7:#6250d6; --u0:#3a3a38;
+  --sans:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --line:#2f2f2c; --grid:#262624;
+    --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#8d8c85;
+    --brand:#6aa3e8;
+    --good:#5fb48b; --warn:#d9a636; --bad:#e46e66;
+    --good-bg:#1d3a2c; --warn-bg:#3d3216; --bad-bg:#45211e; --bad-bg2:#5e2924; --none-bg:#20201e;
+    --u1:#3987e5; --u2:#d95926; --u3:#199e70; --u4:#c98500; --u5:#d55181; --u6:#2f9a2f; --u7:#9085e9; --u0:#e6e5e0;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121211; --surface:#1a1a19; --surface-2:#232321; --line:#2f2f2c; --grid:#262624;
+  --ink:#f0efec; --ink-2:#c3c2b7; --ink-3:#8d8c85;
+  --brand:#6aa3e8;
+  --good:#5fb48b; --warn:#d9a636; --bad:#e46e66;
+  --good-bg:#1d3a2c; --warn-bg:#3d3216; --bad-bg:#45211e; --bad-bg2:#5e2924; --none-bg:#20201e;
+  --u1:#3987e5; --u2:#d95926; --u3:#199e70; --u4:#c98500; --u5:#d55181; --u6:#2f9a2f; --u7:#9085e9; --u0:#e6e5e0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+.num{font-variant-numeric:tabular-nums}
+
+/* Barra superior común */
+.topbar{display:flex;align-items:center;gap:14px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;margin-right:auto;min-width:0}
+.brand b{font-size:17px;letter-spacing:-.01em;color:var(--brand)}
+.brand span{font-size:13px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{font-size:12px;padding:3px 9px;border:1px solid var(--line);border-radius:999px;color:var(--ink-2);background:var(--surface-2);white-space:nowrap}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:2px}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:7px;font-size:13px;cursor:pointer;color:var(--ink-2)}
+.seg button.on{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:6px 12px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--surface-2)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0;display:flex;flex-direction:column}
+.card h3{margin:0;font-size:14px;font-weight:650;letter-spacing:-.005em}
+.card .sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.card .body{flex:1;min-height:0;position:relative;margin-top:8px}
+
+/* KPI */
+.kpi .lbl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.kpi .val{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-top:4px}
+.kpi .ft{font-size:12px;color:var(--ink-2);margin-top:2px}
+.st-good{color:var(--good)} .st-warn{color:var(--warn)} .st-bad{color:var(--bad)}
+
+/* Heatmap (tabla) */
+.heat{width:100%;border-collapse:separate;border-spacing:2px;font-size:12px;table-layout:fixed}
+.heat th{font-weight:500;color:var(--ink-3);font-size:11px;padding:2px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.heat th.row{text-align:left;color:var(--ink);font-size:12px;font-weight:550}
+.heat td{text-align:center;border-radius:4px;padding:0 2px;font-variant-numeric:tabular-nums;color:var(--ink);cursor:default;white-space:nowrap}
+.heat td.c-good{background:var(--good-bg)}
+.heat td.c-warn{background:var(--warn-bg)}
+.heat td.c-bad{background:var(--bad-bg)}
+.heat td.c-bad2{background:var(--bad-bg2);font-weight:650}
+.heat td.c-few{background:var(--none-bg);color:var(--ink-2)}
+.heat td.c-none{background:var(--none-bg);color:var(--ink-3)}
+.heat tr.tot th,.heat tr.tot td{font-weight:700}
+.heat td:hover{outline:2px solid var(--ink-2);outline-offset:-1px}
+
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--ink-2)}
+.legend .it{display:inline-flex;align-items:center;gap:6px;cursor:default;padding:1px 2px;border-radius:4px}
+.legend .sw{width:12px;height:3px;border-radius:2px;display:inline-block}
+.legend .sq{width:10px;height:10px;border-radius:3px;display:inline-block}
+.legend.dim .it{opacity:.35}.legend.dim .it.hl{opacity:1}
+
+/* Barras horizontales HTML */
+.hb{display:grid;grid-template-columns:minmax(90px,max-content) 1fr auto;gap:5px 10px;align-items:center;font-size:12px}
+.hb .n{color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .tr{height:12px;background:var(--surface-2);border-radius:0 4px 4px 0;position:relative}
+.hb .b{height:100%;border-radius:0 4px 4px 0}
+.hb .v{font-variant-numeric:tabular-nums;color:var(--ink-2);text-align:right;white-space:nowrap}
+.hb .meta{position:absolute;top:-3px;bottom:-3px;width:0;border-left:1.5px dashed var(--ink-2)}
+
+/* SVG charts */
+svg text{font-family:var(--sans)}
+.ax{fill:var(--ink-3);font-size:11px}
+.gl{stroke:var(--grid);stroke-width:1}
+.metaLine{stroke:var(--bad);stroke-width:1.2;stroke-dasharray:4 4;opacity:.8}
+.ser{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;transition:opacity .15s}
+.svgwrap.dim .ser,.svgwrap.dim .dot{opacity:.15}
+.svgwrap.dim .ser.hl,.svgwrap.dim .dot.hl{opacity:1}
+.guide{stroke:var(--ink-3);stroke-width:1}
+
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 6px 20px rgba(0,0,0,.14);border-radius:8px;padding:8px 10px;font-size:12px;line-height:1.5;opacity:0;transition:opacity .08s;max-width:280px}
+#tip.on{opacity:1}
+#tip .r{display:flex;align-items:center;gap:6px;justify-content:space-between}
+#tip .r i{width:8px;height:8px;border-radius:2px;display:inline-block;flex:none}
+#tip .r span{flex:1}
+#tip .r b{font-variant-numeric:tabular-nums}
+
+.topbar{position:sticky;top:0;z-index:10}
+nav.anchors{display:flex;gap:4px}
+nav.anchors a{font-size:13px;color:var(--ink-2);text-decoration:none;padding:6px 10px;border-radius:7px}
+nav.anchors a:hover{background:var(--surface-2);color:var(--ink)}
+main{padding:14px 20px 40px}
+section{margin-bottom:26px;scroll-margin-top:70px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin:4px 2px 10px;flex-wrap:wrap}
+.sec-h h2{margin:0;font-size:19px;letter-spacing:-.01em}
+.sec-h p{margin:0;color:var(--ink-3);font-size:13px}
+.sec-h .legend{margin-left:auto}
+.g-suc{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:10px}
+.g-mod{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:10px}
+.g-vol{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.sc{padding:12px 14px 8px}
+.sc .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.sc .nm{font-size:14px;font-weight:650}
+.sc .meta{font-size:12px;color:var(--ink-3);margin-top:1px}
+.sc .big{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1;text-align:right;font-variant-numeric:tabular-nums}
+.sc .dl{font-size:11.5px;text-align:right;color:var(--ink-2);margin-top:3px;font-variant-numeric:tabular-nums}
+.sc .sp{height:96px;margin-top:6px}
+.g-mod .sc .big{font-size:21px}
+.g-mod .sc .sp{height:74px}
+.sc.alert{box-shadow:inset 3px 0 0 var(--bad)}
+.sc.tot{background:var(--surface-2)}
+.minibars{display:flex;align-items:flex-end;gap:4px;height:70px;margin-top:10px}
+.minibars div{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.minibars i{display:block;width:100%;border-radius:4px 4px 0 0;background:var(--u1)}
+.minibars span{font-size:10px;color:var(--ink-3)}
+.yoy{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--ink-2);margin-top:8px;border-top:1px solid var(--line);padding-top:7px}
+.proc{width:100%;border-collapse:collapse;font-size:13px}
+.proc th,.proc td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+.proc th:first-child,.proc td:first-child{text-align:left}
+.proc thead th{font-size:11px;color:var(--ink-3);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.proc .bar{display:inline-block;height:8px;border-radius:0 3px 3px 0;vertical-align:middle;margin-right:8px}
+.proc tr.tot td{font-weight:700}
+@media (max-width:760px){nav.anchors{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><b>GRUPO RÍO</b><span>Entrega de Resultados · Vista por tarjetas</span></div>
+  <nav class="anchors"><a href="#suc">Sucursales</a><a href="#mod">Modalidades</a><a href="#vol">Volumen</a><a href="#proc">Tiempos</a></nav>
+  <div class="seg" id="segMode"><button data-m="mes" class="on">Mensual 2026</button><button data-m="sem">Últimas 16 semanas</button></div>
+  <button class="btn" id="fsBtn"></button>
+</header>
+<main>
+  <section id="suc">
+    <div class="sec-h"><h2>Indicador por sucursal</h2><p id="sucSub"></p>
+      <div class="legend" id="legSuc"></div></div>
+    <div class="g-suc" id="gSuc"></div>
+  </section>
+  <section id="mod">
+    <div class="sec-h"><h2>Indicador por modalidad</h2><p id="modSub"></p></div>
+    <div class="g-mod" id="gMod"></div>
+  </section>
+  <section id="vol">
+    <div class="sec-h"><h2>Volumen de estudios por sucursal</h2><p>Estudios por mes, enero–junio 2026 (cada tarjeta con su propia escala) · comparativo septiembre 2026 vs 2025</p></div>
+    <div class="g-vol" id="gVol"></div>
+  </section>
+  <section id="proc">
+    <div class="sec-h"><h2>Tiempos del proceso por sucursal</h2><p>Mediana por etapa · octubre 2026 · la barra compara sucursales dentro de cada etapa</p></div>
+    <div class="card"><table class="proc" id="tProc"></table></div>
+  </section>
+</main>
+<script>
+const D={"indTemporal":{"mes":{"p":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"],"u":{"Medicina Preventiva":[99.9,97.6,98.9,99.9,99.6,97.2,99.4,99.5,99.4,99.7],"Todas":[97.9,94,97.3,98.5,96.7,96.1,97.3,98.1,98.8,98.5],"López Mateos":[97.7,92.9,97.2,97.6,96.2,96.6,96.5,98.4,98.7,98.2],"Clínica de la Mujer":[98.9,91.6,97.2,98.3,96.2,95.5,97.5,97,97.6,96],"Guadalupe":[95.5,84.4,97.7,96.9,66.7,80,90,91.1,95.6,98.3],"Las Águilas":[87.5,100,93.8,100,85.7,78.6,100,85.7,83.3,100],"Acueducto":[96.3,90.8,91.8,95.5,93.1,92.7,94.3,93.8,97.2,97],"Ciudad Granja":[100,33.3,100,null,null,null,100,null,null,null],"Chamizal":[97.4,95.4,95.3,98.1,96.6,95.2,98.2,98.2,99.2,97.8],"Plaza Universidad":[null,100,66.7,null,null,null,100,null,null,null]}},"semana":{"p":["S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S18","S19","S20","S21","S22","S23","S24","S25","S26","S27","S28","S29","S30","S31","S32","S33","S34","S35","S36","S37","S38","S39","S40","S41","S42","S43","S44"],"u":{"Guadalupe":[90.5,94.7,100,100,87.5,100,55.6,100,100,100,92.9,100,100,100,100,100,null,80,null,null,null,null,80,75,null,null,null,null,100,80,91.7,88.9,100,100,90,92.3,100,92.3,100,100,100,100,92.9],"Ciudad Granja":[null,null,100,null,null,33.3,null,null,null,null,null,100,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"Clínica de la Mujer":[99.2,100,99.2,96.3,95.6,97.2,85.1,89.8,96.6,97.9,97.1,97.5,94.6,97.9,96.9,100,97.8,98.2,93.4,95.9,96.1,98.7,93,93.4,96.2,98.1,97.2,96.8,98.7,94.9,95.7,99.1,97,98,96.1,95.3,97,98.4,99.4,91.2,95.3,98.5,97.6],"Medicina Preventiva":[100,100,100,99.7,99.4,99.4,96.4,95.2,99.4,99.3,99.1,98,99.4,100,100,100,99.4,99.6,99.8,99.7,100,99.7,95.3,96.1,97.8,99.7,99.4,99,98.9,98.8,99.2,99.8,99.8,99.2,99.7,98.8,100,99.9,99.4,99.5,99.8,99.5,99.9],"Plaza Universidad":[null,null,null,null,null,100,null,null,66.7,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100,100,null,null,null,null,null,null,null,null,null,null,null,null,null],"Todas":[98.6,97.9,98.4,96.9,97,96.7,91.9,90,97.1,97.7,96.8,97.1,98.1,97.4,99.2,98.9,98.2,97,97.3,95.7,96.6,96.8,94.2,96.5,96.3,98.2,96.7,95.8,97.7,97.1,97.1,98.3,97.8,98.6,97.8,98,99.1,99.1,98.6,98.5,98.9,98.4,98.6],"López Mateos":[98.4,97.6,98.4,96.7,96.3,95.7,89.8,88.3,97.5,96.7,96.1,97.8,98,95.9,98.7,98.2,97.4,95.9,97.2,94.7,96.7,96.7,94.4,98,97.2,97.3,96,94.1,96.7,97.6,97.2,97.6,98.4,98.7,97.7,98.7,99,99.4,97.8,99.1,99,98,97.8],"Las Águilas":[66.7,null,null,null,100,null,100,null,null,null,100,100,75,100,null,100,null,100,null,null,null,100,null,66.7,33.3,100,null,100,100,100,75,null,100,null,75,100,null,null,100,100,100,null,100],"Chamizal":[100,98.2,98.2,93,98.3,96.6,97.3,87.2,96.6,96,93.1,95.1,97.6,97.3,98.5,99,96.4,94.5,96.7,98.8,97,96.7,94.9,98.6,90,95.5,96.3,100,97.7,96.6,96.8,96.5,100,98.4,100,98.2,100,98.3,100,95,96,98.8,100],"Acueducto":[98.8,96.1,96.5,94.4,93.8,94.2,92.2,81.3,89.2,96.2,90.1,87.9,93.8,93.4,98.8,95.4,96.1,94.7,93.7,91.8,91.8,89.1,91.4,95.6,92,96.2,89.2,94.9,96.8,92.8,91.5,96.5,90.1,97.2,95.8,96.7,96.3,95.9,98,97.8,97.8,96.1,97.8]}}},"deptEvo":{"semanas":["S1","S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S18","S19","S20","S21","S22","S23","S24","S25","S26","S27","S28","S29","S30","S31","S32","S33","S34","S35","S36","S37","S38","S39","S40","S41","S42","S43","S44"],"meses":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct"],"orden":["Servicio Dental","Paquetes","Espirometría","Medicina Nuclear","Cardiología","Ecosonografía","Bioimpedanciología","Mamografía","Salud Visual","Radiología","Resonancia Magnética","Densitometría","Servicios Especiales","Chequeos Médicos","Maquila","Tomografía Axial Computada","Eeg Y Mapeo Cerebral","Electromiografía Y Potenciales Evocados"],"deptos":{"Servicio Dental":{"sem":[null,null,100,100,null,100,null,100,100,null,100,100,null,null,100,null,null,null,null,null,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"semT":[0,0,1,1,0,1,0,2,1,0,2,2,0,0,2,0,0,0,0,0,1,1,7,23,18,24,9,17,5,12,7,19,19,18,16,10,19,22,24,21,26,25,26,28],"mes":[100,100,100,100,100,100,100,100,100,100],"mesT":[2,4,4,2,2,81,58,77,77,122]},"Paquetes":{"sem":[100,100,100,100,100,100,100,100,90,100,100,100,100,100,100,100,100,100,100,100,86.7,100,100,100,100,100,100,100,83.3,89.5,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"semT":[4,10,7,19,15,6,21,15,20,14,21,11,21,11,11,7,18,11,15,16,15,16,17,13,19,14,7,7,12,19,16,13,16,14,16,19,12,12,18,11,15,12,18,19],"mes":[100,96.8,100,100,96.8,100,91.9,100,100,100],"mesT":[55,62,74,51,62,70,63,63,64,68]},"Espirometría":{"sem":[100,100,100,100,100,100,100,88,97.6,100,100,100,98.1,98.1,98,100,98.8,100,100,100,100,100,100,100,100,100,95.5,100,97.8,100,98.1,100,97.8,100,98.2,100,98.5,100,100,100,100,100,100,100],"semT":[3,18,24,28,31,52,35,50,41,57,73,53,54,54,51,67,82,86,36,40,31,30,33,42,64,61,22,70,45,53,52,54,45,49,56,52,66,44,55,70,69,66,69,62],"mes":[100,96.1,99.3,99.3,100,99.5,99.6,99,99.6,100],"mesT":[104,178,271,288,155,222,253,210,257,292]},"Medicina Nuclear":{"sem":[100,100,97.8,100,100,100,96.4,100,100,100,100,96.2,88.9,97.3,100,100,100,100,96.8,100,97.4,100,100,100,100,98,100,100,100,100,100,100,100,100,97.4,100,100,100,100,94,98.1,100,95.9,100],"semT":[6,41,46,36,41,49,56,36,35,47,52,26,45,37,32,53,36,28,31,50,38,57,39,43,31,51,8,38,37,31,33,41,45,50,39,39,28,36,44,50,52,51,49,43],"mes":[99.4,98.9,96.7,99.4,98.9,99.4,100,100,98.3,98.6],"mesT":[170,176,184,171,177,172,150,186,176,214]},"Cardiología":{"sem":[73.3,96.3,100,100,100,100,99.4,92.3,92.2,99.5,98.3,96.5,100,98.1,100,100,100,99.3,100,99.4,100,100,100,96.6,100,99.5,98.4,100,96.6,99,100,98.5,96,99.4,99.4,100,99,99.2,100,98,99.5,99,98.6,99],"semT":[15,81,117,102,128,163,175,155,153,204,237,173,186,213,158,213,254,271,146,165,120,117,137,145,224,210,125,174,146,195,161,198,149,166,173,174,200,130,187,203,217,203,213,200],"mes":[98.4,96.1,98.6,99.6,99.8,99,99.5,99.4,99.3,99],"mesT":[443,646,929,936,592,841,767,713,809,901]},"Ecosonografía":{"sem":[98.3,98.2,98.7,99,98.8,97.6,99.7,94,94.7,98.1,99.4,98.1,99,99.6,99.3,99.7,99.5,98.5,97.8,97.1,98.5,98.1,98.6,97.4,98.6,97.9,99.2,99.4,97.3,98.7,98,97.4,98.5,98.2,99.2,99,99.1,99.7,99.2,99.5,98.7,98.8,99,98],"semT":[59,285,317,314,326,290,308,335,244,362,354,315,388,241,281,319,424,403,358,307,325,320,295,384,353,335,128,319,256,371,299,380,338,342,353,294,319,321,360,398,390,344,403,409],"mes":[98.7,96.5,98.8,99.3,97.8,98.2,98.9,98.3,99.4,98.7],"mesT":[1300,1176,1543,1476,1380,1495,1369,1513,1441,1746]},"Bioimpedanciología":{"sem":[100,100,100,100,100,100,100,100,96.9,93.2,100,100,97.9,100,100,100,100,100,100,100,100,100,93.3,100,100,100,88.9,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],"semT":[1,11,7,5,19,27,44,32,32,44,39,33,47,33,37,45,70,60,52,24,24,22,15,23,28,28,9,19,21,36,30,25,19,22,27,38,36,21,26,42,32,45,42,29],"mes":[100,99.3,97.7,100,100,98.1,100,100,100,100],"mesT":[43,135,177,213,140,103,122,106,137,167]},"Mamografía":{"sem":[100,100,100,100,100,94.1,97.6,84.6,89.7,95.8,98.6,96.7,98.9,93.3,null,100,99.3,98.2,93.6,95.6,97.3,94.5,100,94,97.9,100,97.4,97.7,97.9,100,98.6,96.6,98.9,99,97.8,98.8,100,98.9,98.9,99.2,97.4,97.1,99.3,98.6],"semT":[28,88,92,102,87,51,82,78,58,72,70,91,94,15,0,25,141,109,110,113,112,127,110,116,97,81,39,88,96,94,74,87,91,97,92,83,74,93,92,120,114,105,138,140],"mes":[100,91.4,97.4,99.2,95.1,97.7,98.7,98.2,99,98.4],"mesT":[397,269,341,265,473,443,384,388,389,557]},"Salud Visual":{"sem":[100,100,100,99.4,98.6,97.4,98.9,98,92,97.5,97.7,100,100,100,100,100,100,100,100,99,94.2,96.7,96.2,95.3,100,99.1,100,100,95.6,99.1,100,98.2,98.2,100,100,100,99.1,100,100,100,100,100,98,100],"semT":[52,164,202,173,146,114,95,102,75,81,88,84,105,75,101,120,123,74,113,96,103,92,78,107,78,106,22,121,91,112,118,111,111,112,120,88,106,71,97,90,79,42,49,63],"mes":[99.6,96.9,99,100,97.7,97.7,99,99.6,99.8,99.6],"mesT":[737,386,392,434,429,391,500,471,416,261]},"Radiología":{"sem":[100,97.7,96.3,97.3,93.6,93.6,95.5,94.8,90.8,92.8,94,89.2,93.9,95.4,92.2,98.5,96.7,97.1,97.2,96.6,90.8,93.4,96.3,95,98.7,95.9,96.8,89.8,90.8,96.9,91.7,95,98.6,93,97.7,94.5,98,98.1,98,98.9,97.2,99.3,98.4,99],"semT":[44,263,272,255,280,283,268,286,249,318,349,269,295,219,306,334,369,348,283,237,218,243,270,299,303,290,126,256,261,318,253,319,220,299,306,255,298,259,296,268,284,304,319,298],"mes":[96.3,93.8,93,95.8,95.1,96.5,93.2,95.4,98.2,98.5],"mesT":[1109,1089,1340,1390,1060,1288,1228,1242,1171,1358]},"Resonancia Magnética":{"sem":[97.2,98.7,95.2,96.7,93.8,96.2,93.5,87.9,83,98.1,97.7,97.1,97.8,99.4,96.8,98,97.5,95.5,94.3,95.4,97.8,95,93.9,93.8,95.2,92.3,100,95.4,95.8,95,97.4,97.6,96.5,98,97.9,96.8,98.8,98.8,97.8,95.5,97,97.9,98.4,98.3],"semT":[36,239,271,239,289,234,276,231,206,268,303,207,226,176,220,251,285,222,279,219,270,298,231,243,273,248,70,195,264,241,266,205,228,254,190,189,240,170,229,242,231,233,256,237],"mes":[96,90.5,97.8,97.7,95.3,94.3,96.5,98,98,97.1],"mesT":[1065,946,1100,1028,1106,1065,1062,952,934,1039]},"Densitometría":{"sem":[100,97,94.3,97.2,94.7,95.3,94.7,71.6,87.7,93.5,92.9,98.9,89.7,94,94.7,98.8,100,98.3,88,92.7,76.8,95,94.9,93.6,88.9,95.9,100,94.7,92.9,96.1,97.5,96.4,100,97.1,98.8,95.9,93.1,95.2,100,98.7,95.2,98.7,96.6,94.9],"semT":[19,66,70,71,57,64,76,74,57,92,98,88,87,50,76,84,106,115,92,109,95,120,98,94,72,74,18,75,70,77,79,84,66,68,81,74,87,83,77,77,83,77,87,98],"mes":[96.1,87.1,93.6,98.2,89.1,93.8,95.4,97.8,96.3,96.1],"mesT":[282,271,391,382,440,356,346,323,348,383]},"Servicios Especiales":{"sem":[100,100,100,100,100,100,98.9,91.2,87.3,98.7,98.7,98.7,96.9,99.5,100,100,99.7,100,99.6,100,100,100,99.2,85.4,89.1,93.6,98.6,98.8,99.4,97.3,97.2,97.5,99.5,99.5,98.1,99.1,97.4,100,99.5,99.1,100,99.3,99.6,99.6],"semT":[15,77,90,70,109,136,188,182,158,226,239,235,260,183,227,238,329,321,230,166,137,116,119,199,230,236,72,250,171,221,181,199,196,198,208,214,228,204,215,231,291,270,275,245],"mes":[100,94.3,98.3,99.9,99.9,91.7,98.4,98.7,98.7,99.5],"mesT":[361,664,1047,1138,722,856,959,867,946,1196]},"Chequeos Médicos":{"sem":[null,null,null,null,null,null,null,null,null,null,100,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100,100,null,100,null,null,100,null,null,null,null,null,null,null,null,null,null],"semT":[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,null,null,1,0,0,0,0,0,0,0,0,0,0],"mes":[null,null,100,null,null,null,100,100,null,null],"mesT":[0,0,1,0,0,0,2,2,0,0]},"Maquila":{"sem":[null,null,null,100,null,null,100,null,null,null,null,100,100,null,null,null,100,null,null,null,null,null,null,null,null,null,null,null,null,null,null,100,null,null,null,100,null,null,null,null,null,null,null,null],"semT":[0,0,0,1,0,0,1,0,0,0,0,1,1,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,null,0,0,1,0,0,0,0,0,0,0,0],"mes":[100,100,100,100,null,null,null,100,null,null],"mesT":[1,1,2,2,0,0,0,2,0,0]},"Tomografía Axial Computada":{"sem":[94.7,99.2,97.3,97.5,97.5,95.1,97,95.6,91.5,98.6,99.2,99.2,96.2,96.4,96.9,96.9,98.6,94.7,95.5,96.9,95.6,96.1,88.6,85.6,91.4,90.9,98.3,null,null,96.7,94.9,94.4,100,96.6,99,96.8,96.4,99.1,100,100,99.2,97.7,93.7,97.3],"semT":[19,126,149,160,120,103,132,135,106,140,127,119,156,84,129,127,143,132,133,130,135,154,114,111,116,110,60,0,0,153,117,125,112,118,103,125,140,107,129,128,122,128,142,149],"mes":[97.7,95,98.3,96.5,96,90.2,94.9,97.6,98.6,96.7],"mesT":[574,476,594,545,570,511,609,490,553,598]},"Eeg Y Mapeo Cerebral":{"sem":[100,100,100,100,90,100,47.6,86.7,23.1,93.3,100,100,100,100,95.5,100,100,100,100,100,100,100,100,100,100,100,100,null,null,100,100,100,96,100,100,100,100,100,100,100,100,100,100,100],"semT":[2,23,24,20,30,17,21,15,13,15,23,13,27,23,22,21,23,20,15,22,20,29,19,16,17,16,17,0,0,33,22,18,25,29,24,21,19,18,19,13,25,25,23,11],"mes":[97,65.2,98.9,99,100,100,99,99,100,100],"mesT":[99,66,90,97,86,85,104,103,83,84]},"Electromiografía Y Potenciales Evocados":{"sem":[100,92.3,100,100,91.7,100,100,100,100,100,100,100,100,83.3,100,100,100,100,100,100,100,100,100,100,100,100,100,null,null,100,100,100,85.7,100,100,100,100,100,100,100,100,100,100,100],"semT":[1,13,10,11,12,9,4,10,5,12,11,8,7,6,5,9,8,4,9,12,9,13,12,10,11,6,3,0,0,13,7,7,7,9,5,9,3,6,11,9,11,10,6,3],"mes":[95.7,100,97.4,100,100,100,100,100,100,100],"mesT":[47,28,39,31,43,42,45,29,33,34]}}},"unidades":{"Todas":{"prometidos":9020,"cumpl":8885,"incumpl":135,"indicador":98.5,"notrec":0,"excl24":0,"neg":135,"deptos":[["Bioimpedanciología",167,100],["EEG y Mapeo Cerebral",84,100],["Electromiografía y P.E.",34,100],["Espirometría",292,100],["Paquetes",68,100],["Servicio Dental",122,100],["Salud Visual",261,99.6],["Servicios Especiales",1196,99.5],["Cardiología",901,99],["Ecosonografía",1746,98.7],["Medicina Nuclear",214,98.6],["Radiología",1358,98.5],["Mamografía",557,98.4],["Resonancia Magnética",1039,97.1],["Tomografía Axial C.",598,96.7],["Densitometría",383,96.1]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"López Mateos":{"prometidos":3371,"cumpl":3311,"incumpl":60,"indicador":98.2,"notrec":0,"excl24":0,"neg":60,"deptos":[["Bioimpedanciología",9,100],["EEG y Mapeo Cerebral",83,100],["Electromiografía y P.E.",34,100],["Espirometría",40,100],["Paquetes",65,100],["Servicios Especiales",49,100],["Salud Visual",248,99.6],["Medicina Nuclear",212,99.1],["Ecosonografía",520,98.7],["Densitometría",194,98.5],["Mamografía",207,98.1],["Radiología",531,98.1],["Resonancia Magnética",506,97.2],["Tomografía Axial C.",464,97.2],["Cardiología",209,97.1]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Medicina Preventiva":{"prometidos":3672,"cumpl":3660,"incumpl":12,"indicador":99.7,"notrec":0,"excl24":0,"neg":12,"deptos":[["Bioimpedanciología",157,100],["Espirometría",247,100],["Mamografía",80,100],["Salud Visual",3,100],["Servicio Dental",122,100],["Tomografía Axial C.",1,100],["Ecosonografía",616,99.8],["Cardiología",680,99.7],["Radiología",553,99.6],["Servicios Especiales",1121,99.6],["Densitometría",79,98.7],["Resonancia Magnética",13,92.3]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Acueducto":{"prometidos":881,"cumpl":855,"incumpl":26,"indicador":97,"notrec":0,"excl24":0,"neg":26,"deptos":[["Bioimpedanciología",1,100],["Cardiología",9,100],["Densitometría",4,100],["Espirometría",5,100],["Paquetes",1,100],["Salud Visual",2,100],["Servicios Especiales",6,100],["Ecosonografía",168,99.4],["Radiología",268,97.4],["Resonancia Magnética",282,96.8],["Tomografía Axial C.",131,94.7],["Mamografía",3,66.7],["Medicina Nuclear",1,0]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Clínica de la Mujer":{"prometidos":752,"cumpl":722,"incumpl":30,"indicador":96,"notrec":0,"excl24":0,"neg":30,"deptos":[["Medicina Nuclear",1,100],["Paquetes",2,100],["Resonancia Magnética",1,100],["Salud Visual",8,100],["Mamografía",266,98.5],["Ecosonografía",344,96.5],["Servicios Especiales",19,94.7],["Densitometría",106,89.6],["Radiología",3,66.7],["Cardiología",2,50]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Chamizal":{"prometidos":278,"cumpl":272,"incumpl":6,"indicador":97.8,"notrec":0,"excl24":0,"neg":6,"deptos":[["Ecosonografía",41,100],["Radiología",1,100],["Resonancia Magnética",236,97.5]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Guadalupe":{"prometidos":58,"cumpl":57,"incumpl":1,"indicador":98.3,"notrec":0,"excl24":0,"neg":1,"deptos":[["Resonancia Magnética",1,100],["Servicios Especiales",1,100],["Tomografía Axial C.",1,100],["Ecosonografía",55,98.2]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Las Águilas":{"prometidos":8,"cumpl":8,"incumpl":0,"indicador":100,"notrec":0,"excl24":0,"neg":0,"deptos":[["Cardiología",1,100],["Ecosonografía",2,100],["EEG y Mapeo Cerebral",1,100],["Mamografía",1,100],["Radiología",2,100],["Tomografía Axial C.",1,100]],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Ciudad Granja":{"prometidos":0,"cumpl":0,"incumpl":0,"indicador":0,"notrec":0,"excl24":0,"neg":0,"deptos":[],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]},"Plaza Universidad":{"prometidos":0,"cumpl":0,"incumpl":0,"indicador":0,"notrec":0,"excl24":0,"neg":0,"deptos":[],"horas":[["−1 h",0],["−2 h",0],["−3 h",0],["−4 h",0],["−5 h",0],["−6 h",0],["−7 h o más",0]]}},"unidadesMV":{"López Mateos":{"Bioimpedanciología":{"mat":{"t":2,"c":2,"pct":100},"vesp":{"t":7,"c":7,"pct":100}},"Cardiología":{"mat":{"t":46,"c":43,"pct":93.5},"vesp":{"t":163,"c":160,"pct":98.2}},"Densitometría":{"mat":{"t":122,"c":121,"pct":99.2},"vesp":{"t":72,"c":70,"pct":97.2}},"Ecosonografía":{"mat":{"t":429,"c":422,"pct":98.4},"vesp":{"t":91,"c":91,"pct":100}},"EEG y Mapeo Cerebral":{"mat":{"t":5,"c":5,"pct":100},"vesp":{"t":78,"c":78,"pct":100}},"Electromiografía y P.E.":{"mat":{"t":20,"c":20,"pct":100},"vesp":{"t":14,"c":14,"pct":100}},"Espirometría":{"mat":{"t":16,"c":16,"pct":100},"vesp":{"t":24,"c":24,"pct":100}},"Mamografía":{"mat":{"t":184,"c":180,"pct":97.8},"vesp":{"t":23,"c":23,"pct":100}},"Medicina Nuclear":{"mat":{"t":210,"c":208,"pct":99},"vesp":{"t":2,"c":2,"pct":100}},"Paquetes":{"mat":{"t":49,"c":49,"pct":100},"vesp":{"t":16,"c":16,"pct":100}},"Radiología":{"mat":{"t":331,"c":325,"pct":98.2},"vesp":{"t":200,"c":196,"pct":98}},"Resonancia Magnética":{"mat":{"t":304,"c":295,"pct":97},"vesp":{"t":202,"c":197,"pct":97.5}},"Salud Visual":{"mat":{"t":136,"c":135,"pct":99.3},"vesp":{"t":112,"c":112,"pct":100}},"Servicios Especiales":{"mat":{"t":25,"c":25,"pct":100},"vesp":{"t":24,"c":24,"pct":100}},"Tomografía Axial C.":{"mat":{"t":301,"c":293,"pct":97.3},"vesp":{"t":163,"c":158,"pct":96.9}}},"Medicina Preventiva":{"Bioimpedanciología":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":157,"c":157,"pct":100}},"Cardiología":{"mat":{"t":26,"c":26,"pct":100},"vesp":{"t":654,"c":652,"pct":99.7}},"Densitometría":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":78,"c":77,"pct":98.7}},"Ecosonografía":{"mat":{"t":4,"c":4,"pct":100},"vesp":{"t":612,"c":611,"pct":99.8}},"Espirometría":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":246,"c":246,"pct":100}},"Mamografía":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":80,"c":80,"pct":100}},"Radiología":{"mat":{"t":12,"c":12,"pct":100},"vesp":{"t":541,"c":539,"pct":99.6}},"Resonancia Magnética":{"mat":{"t":2,"c":1,"pct":50},"vesp":{"t":11,"c":11,"pct":100}},"Salud Visual":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":3,"c":3,"pct":100}},"Servicio Dental":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":122,"c":122,"pct":100}},"Servicios Especiales":{"mat":{"t":276,"c":274,"pct":99.3},"vesp":{"t":845,"c":842,"pct":99.6}},"Tomografía Axial C.":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}}},"Acueducto":{"Bioimpedanciología":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}},"Cardiología":{"mat":{"t":2,"c":2,"pct":100},"vesp":{"t":7,"c":7,"pct":100}},"Densitometría":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":3,"c":3,"pct":100}},"Ecosonografía":{"mat":{"t":106,"c":105,"pct":99.1},"vesp":{"t":62,"c":62,"pct":100}},"Espirometría":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":4,"c":4,"pct":100}},"Mamografía":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":3,"c":2,"pct":66.7}},"Medicina Nuclear":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":0,"pct":0}},"Paquetes":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Radiología":{"mat":{"t":159,"c":155,"pct":97.5},"vesp":{"t":109,"c":106,"pct":97.2}},"Resonancia Magnética":{"mat":{"t":169,"c":165,"pct":97.6},"vesp":{"t":113,"c":108,"pct":95.6}},"Salud Visual":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":2,"c":2,"pct":100}},"Servicios Especiales":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":5,"c":5,"pct":100}},"Tomografía Axial C.":{"mat":{"t":78,"c":76,"pct":97.4},"vesp":{"t":53,"c":48,"pct":90.6}}},"Clínica de la Mujer":{"Cardiología":{"mat":{"t":2,"c":1,"pct":50},"vesp":{"t":0,"c":0,"pct":null}},"Densitometría":{"mat":{"t":69,"c":64,"pct":92.8},"vesp":{"t":37,"c":31,"pct":83.8}},"Ecosonografía":{"mat":{"t":184,"c":175,"pct":95.1},"vesp":{"t":160,"c":157,"pct":98.1}},"Mamografía":{"mat":{"t":133,"c":130,"pct":97.7},"vesp":{"t":133,"c":132,"pct":99.2}},"Medicina Nuclear":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Paquetes":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":2,"c":2,"pct":100}},"Radiología":{"mat":{"t":2,"c":2,"pct":100},"vesp":{"t":1,"c":0,"pct":0}},"Resonancia Magnética":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}},"Salud Visual":{"mat":{"t":2,"c":2,"pct":100},"vesp":{"t":6,"c":6,"pct":100}},"Servicios Especiales":{"mat":{"t":12,"c":11,"pct":91.7},"vesp":{"t":7,"c":7,"pct":100}}},"Chamizal":{"Ecosonografía":{"mat":{"t":36,"c":36,"pct":100},"vesp":{"t":5,"c":5,"pct":100}},"Radiología":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Resonancia Magnética":{"mat":{"t":168,"c":163,"pct":97},"vesp":{"t":68,"c":67,"pct":98.5}}},"Guadalupe":{"Ecosonografía":{"mat":{"t":47,"c":46,"pct":97.9},"vesp":{"t":8,"c":8,"pct":100}},"Resonancia Magnética":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Servicios Especiales":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Tomografía Axial C.":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}}},"Las Águilas":{"Cardiología":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}},"Ecosonografía":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":2,"c":2,"pct":100}},"EEG y Mapeo Cerebral":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}},"Mamografía":{"mat":{"t":0,"c":0,"pct":null},"vesp":{"t":1,"c":1,"pct":100}},"Radiología":{"mat":{"t":2,"c":2,"pct":100},"vesp":{"t":0,"c":0,"pct":null}},"Tomografía Axial C.":{"mat":{"t":1,"c":1,"pct":100},"vesp":{"t":0,"c":0,"pct":null}}}},"uniDep":{"meses":["Ene","Feb","Mar","Abr","May","Jun"],"sedes":["López Mateos","Medicina Preventiva","Acueducto","Clínica de la Mujer","Chamizal","Guadalupe","Las Águilas"],"deptos":["Ecosonografía","Radiología","Resonancia Magnética","Servicios Especiales","Cardiología","Tomografía Axial Computada","Salud Visual","Mamografía","Densitometría","Espirometría","Medicina Nuclear","Bioimpedanciología","Eeg Y Mapeo Cerebral","Paquetes","Electromiografía Y Potenciales Evocados","Servicio Dental","Maquila","Chequeos Médicos"],"general":[6789,6573,8521,8461,7438,8022],"porSede":{"López Mateos":[4167,2816,3394,3402,3613,3474],"Medicina Preventiva":[964,2100,3189,3558,1951,2687],"Acueducto":[811,803,742,665,793,896],"Clínica de la Mujer":[534,569,835,464,740,662],"Chamizal":[235,239,295,324,326,271],"Guadalupe":[67,32,43,32,6,15],"Las Águilas":[8,7,16,13,7,14],"NaN":[0,0,0,0,0,0]},"porDepto":{"Ecosonografía":[1300,1176,1543,1478,1380,1495],"Radiología":[1109,1089,1341,1392,1060,1288],"Resonancia Magnética":[1065,946,1099,1029,1106,1065],"Servicios Especiales":[361,664,1049,1141,722,856],"Cardiología":[443,646,929,938,592,841],"Tomografía Axial Computada":[574,476,594,546,570,511],"Salud Visual":[737,386,392,434,429,391],"Mamografía":[397,269,341,265,473,443],"Densitometría":[282,271,391,382,440,356],"Espirometría":[104,178,271,288,155,222],"Medicina Nuclear":[170,176,184,171,177,172],"Bioimpedanciología":[43,135,177,214,140,103],"Eeg Y Mapeo Cerebral":[99,66,90,97,86,85],"Paquetes":[55,62,74,51,62,70],"Electromiografía Y Potenciales Evocados":[47,28,39,31,44,43],"Servicio Dental":[2,4,4,2,2,81],"Maquila":[1,1,2,2,0,0],"Chequeos Médicos":[0,0,1,0,0,0]},"sedeDepto":{"López Mateos":{"Ecosonografía":[620,391,435,426,509,517],"Radiología":[714,558,621,605,573,536],"Resonancia Magnética":[592,419,647,613,581,539],"Servicios Especiales":[47,21,42,41,20,23],"Cardiología":[233,193,226,197,186,302],"Tomografía Axial Computada":[474,363,440,452,451,402],"Salud Visual":[697,349,369,410,419,379],"Mamografía":[206,24,14,92,202,175],"Densitometría":[184,136,174,168,269,200],"Espirometría":[33,32,39,47,36,36],"Medicina Nuclear":[169,176,182,170,177,170],"Bioimpedanciología":[2,4,11,5,5,4],"Eeg Y Mapeo Cerebral":[99,66,90,97,86,85],"Paquetes":[50,55,65,46,56,64],"Electromiografía Y Potenciales Evocados":[47,28,37,31,43,42],"Servicio Dental":[0,1,0,0,0,0],"Maquila":[0,0,2,2,0,0]},"Medicina Preventiva":{"Ecosonografía":[152,321,497,556,271,447],"Radiología":[147,301,475,540,263,425],"Resonancia Magnética":[16,20,25,11,16,11],"Servicios Especiales":[293,622,967,1081,666,796],"Cardiología":[201,443,685,735,401,532],"Tomografía Axial Computada":[0,1,1,0,0,0],"Salud Visual":[0,20,1,2,0,0],"Mamografía":[22,32,53,45,37,57],"Densitometría":[20,61,83,137,41,55],"Espirometría":[70,146,231,240,119,184],"Bioimpedanciología":[41,130,166,209,135,99],"Servicio Dental":[2,3,4,2,2,81],"Chequeos Médicos":[0,0,1,0,0,0]},"Acueducto":{"Ecosonografía":[161,149,145,190,193,152],"Radiología":[243,220,227,234,217,316],"Resonancia Magnética":[275,301,191,139,255,300],"Servicios Especiales":[1,5,7,1,4,3],"Cardiología":[4,5,9,3,3,2],"Tomografía Axial Computada":[98,112,151,92,117,109],"Salud Visual":[16,5,2,2,0,4],"Mamografía":[4,2,2,1,0,2],"Densitometría":[5,1,2,1,4,3],"Espirometría":[0,0,1,0,0,1],"Medicina Nuclear":[1,0,1,1,0,1],"Paquetes":[2,3,3,1,0,3],"Electromiografía Y Potenciales Evocados":[0,0,1,0,0,0],"Maquila":[1,0,0,0,0,0]},"Clínica de la Mujer":{"Ecosonografía":[254,253,358,224,335,307],"Radiología":[2,6,15,6,6,7],"Resonancia Magnética":[1,1,3,0,1,1],"Servicios Especiales":[19,16,33,18,32,34],"Cardiología":[2,2,5,0,2,4],"Tomografía Axial Computada":[0,0,1,0,0,0],"Salud Visual":[18,6,16,12,6,6],"Mamografía":[164,210,270,126,231,207],"Densitometría":[70,71,129,75,121,94],"Espirometría":[1,0,0,0,0,0],"Medicina Nuclear":[0,0,1,0,0,0],"Bioimpedanciología":[0,1,0,0,0,0],"Paquetes":[3,2,4,3,6,2],"Maquila":[0,1,0,0,0,0]},"Chamizal":{"Ecosonografía":[51,36,63,51,66,57],"Radiología":[0,0,0,4,0,0],"Resonancia Magnética":[180,202,230,265,252,210],"Cardiología":[0,0,0,1,0,0],"Tomografía Axial Computada":[0,0,0,0,1,0],"Salud Visual":[4,0,0,2,4,0],"Mamografía":[0,0,0,0,1,1],"Densitometría":[0,0,0,0,2,2],"Medicina Nuclear":[0,0,0,0,0,1],"Paquetes":[0,1,1,1,0,0],"Electromiografía Y Potenciales Evocados":[0,0,1,0,0,0]},"Guadalupe":{"Ecosonografía":[61,24,40,28,4,13],"Radiología":[2,0,0,0,1,0],"Resonancia Magnética":[1,0,0,0,0,2],"Cardiología":[2,1,0,1,0,0],"Salud Visual":[0,6,2,2,0,0],"Mamografía":[0,0,0,1,1,0],"Densitometría":[1,1,1,0,0,0]},"Las Águilas":{"Ecosonografía":[1,2,3,3,2,2],"Radiología":[1,3,2,3,0,3],"Resonancia Magnética":[0,0,3,1,0,2],"Cardiología":[1,0,2,1,0,0],"Tomografía Axial Computada":[2,0,1,0,1,0],"Salud Visual":[2,0,2,4,0,2],"Mamografía":[0,1,1,0,1,1],"Densitometría":[1,1,1,0,3,2],"Espirometría":[0,0,0,1,0,1],"Paquetes":[0,0,1,0,0,1]},"NaN":{"Ecosonografía":[0,0,2,0,0,0],"Radiología":[0,1,1,0,0,1],"Resonancia Magnética":[0,3,0,0,1,0],"Servicios Especiales":[1,0,0,0,0,0],"Cardiología":[0,2,2,0,0,1],"Tomografía Axial Computada":[0,0,0,2,0,0],"Mamografía":[1,0,1,0,0,0],"Densitometría":[1,0,1,1,0,0],"Paquetes":[0,1,0,0,0,0],"Electromiografía Y Potenciales Evocados":[0,0,0,0,1,1]}}},"chqSerie":{"meses":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep"],"semanas":["S1","S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S18","S19","S20","S21","S22","S23","S24","S25","S26","S27","S28","S29","S30","S31","S32","S33","S34","S35","S36","S37","S38","S39","S40","S41","S42","S43"],"o1m":[95.2,88.1,94.9,100,99.1,96,87.4,95.3,95],"o2m":[92.9,95,97.2,98.5,100,98.7,98.1,98.6,96.8],"nm":[84,160,253,275,113,223,207,212,221],"o1s":[100,100,100,95.7,89.3,100,92.3,63.4,97.3,100,96.7,86.3,93.1,100,100,100,100,100,100,97,100,100,97.6,95.9,96.4,93.8,100,100,55.8,82.1,87.2,100,97.9,90.9,100,67.9,100,91.7,98.2,98.5,98.5,100,100],"o2s":[100,94.4,92.3,95.7,89.3,100,92.3,95.1,91.9,98.4,96.7,92.2,100,100,100,100,97.4,97.1,100,100,100,100,100,100,98.2,96.9,100,100,100,97.4,100,96.2,97.9,100,100,98.1,100,100,100,98.5,98.5,98.4,100],"ns":[2,18,13,23,28,43,39,41,37,62,60,51,58,39,47,69,76,70,32,33,20,24,42,49,55,65,12,43,43,39,39,52,47,44,48,53,55,36,56,65,66,64,59]},"IND_2025":{"Ene":98.05,"Feb":98.05,"Mar":98.01,"Abr":95.29,"May":95.17,"Jun":97.58,"Jul":98.26,"Ago":94.32,"Sep":98.1,"Oct":97.95,"Nov":96.36,"Dic":97.05},"estYoyRows":[["López Mateos",3924,3427],["Medicina Preventiva",2838,2881],["Acueducto",787,654],["Clínica de la Mujer",507,585],["Chamizal",250,236],["Guadalupe",68,45],["Las Águilas",3,6]],"estYoyAll":{"tot25":8380,"tot26":7834},"PROMESA_MAPA":{"mapa":{"Todas":{"realizacion":{"n":4205,"med":11,"p90":48.2},"llegada":{"n":4167,"med":6.1,"p90":23.9},"interpretacion":{"n":3902,"med":50,"p90":861.9},"alta_firma":{"n":3909,"med":54.5,"p90":863.5}},"López Mateos":{"realizacion":{"n":2335,"med":4.9,"p90":49.7},"llegada":{"n":2309,"med":5.7,"p90":22.3},"interpretacion":{"n":2079,"med":44,"p90":918.8},"alta_firma":{"n":2082,"med":48.2,"p90":934.7}},"Acueducto":{"realizacion":{"n":835,"med":15.9,"p90":42.3},"llegada":{"n":832,"med":8.4,"p90":38.3},"interpretacion":{"n":827,"med":78,"p90":1026.2},"alta_firma":{"n":828,"med":85.8,"p90":1109}},"Clínica de la Mujer":{"realizacion":{"n":702,"med":24,"p90":51.1},"llegada":{"n":694,"med":1.9,"p90":17.6},"interpretacion":{"n":667,"med":35,"p90":114},"alta_firma":{"n":669,"med":35.9,"p90":114.3}},"Chamizal":{"realizacion":{"n":276,"med":13.8,"p90":37.1},"llegada":{"n":275,"med":7.5,"p90":20.2},"interpretacion":{"n":272,"med":74,"p90":911.9},"alta_firma":{"n":273,"med":85.2,"p90":918.3}},"Guadalupe":{"realizacion":{"n":55,"med":34.9,"p90":94.1},"llegada":{"n":55,"med":-1.4,"p90":3.7},"interpretacion":{"n":55,"med":57,"p90":95.6},"alta_firma":{"n":55,"med":52.1,"p90":91.3}},"Las Águilas":{"realizacion":{"n":2,"med":58.8,"p90":59.6},"llegada":{"n":2,"med":13.2,"p90":13.2},"interpretacion":{"n":2,"med":37,"p90":41.8},"alta_firma":{"n":2,"med":50.2,"p90":55}}},"tendenciaLlegada":[{"dia":"2026-10-01","n":126,"med":5.9},{"dia":"2026-10-02","n":132,"med":6},{"dia":"2026-10-03","n":152,"med":4.6},{"dia":"2026-10-04","n":36,"med":5.4},{"dia":"2026-10-05","n":150,"med":6},{"dia":"2026-10-06","n":148,"med":6.2},{"dia":"2026-10-07","n":130,"med":6.4},{"dia":"2026-10-08","n":131,"med":7.3},{"dia":"2026-10-09","n":143,"med":6.5},{"dia":"2026-10-10","n":142,"med":7.6},{"dia":"2026-10-11","n":27,"med":1.8},{"dia":"2026-10-12","n":88,"med":10.6},{"dia":"2026-10-13","n":156,"med":6.8},{"dia":"2026-10-14","n":160,"med":5.4},{"dia":"2026-10-15","n":154,"med":4.6},{"dia":"2026-10-16","n":151,"med":6.6},{"dia":"2026-10-17","n":139,"med":5.7},{"dia":"2026-10-18","n":22,"med":-2},{"dia":"2026-10-19","n":200,"med":6.1},{"dia":"2026-10-20","n":162,"med":6.1},{"dia":"2026-10-21","n":172,"med":6.5},{"dia":"2026-10-22","n":180,"med":6},{"dia":"2026-10-23","n":157,"med":6.6},{"dia":"2026-10-24","n":163,"med":6.5},{"dia":"2026-10-25","n":13,"med":6.8},{"dia":"2026-10-26","n":150,"med":6},{"dia":"2026-10-27","n":161,"med":5.5},{"dia":"2026-10-28","n":185,"med":6.8},{"dia":"2026-10-29","n":181,"med":7.2},{"dia":"2026-10-30","n":183,"med":5.3},{"dia":"2026-10-31","n":73,"med":5.3}]},"PROMESA_LLEGADA_UNIT":{"barUnidad":[{"unidad":"Las Águilas","n":2,"med":13.2,"p90":13.2},{"unidad":"Acueducto","n":832,"med":8.4,"p90":38.3},{"unidad":"Chamizal","n":275,"med":7.5,"p90":20.2},{"unidad":"López Mateos","n":2309,"med":5.7,"p90":22.3},{"unidad":"Clínica de la Mujer","n":694,"med":1.9,"p90":17.6},{"unidad":"Guadalupe","n":55,"med":-1.4,"p90":3.7}],"diasRobustos":["2026-10-01","2026-10-02","2026-10-03","2026-10-04","2026-10-05","2026-10-06","2026-10-07","2026-10-08","2026-10-09","2026-10-10","2026-10-11","2026-10-12","2026-10-13","2026-10-14","2026-10-15","2026-10-16","2026-10-17","2026-10-18","2026-10-19","2026-10-20","2026-10-21","2026-10-22","2026-10-23","2026-10-24","2026-10-25","2026-10-26","2026-10-27","2026-10-28","2026-10-29","2026-10-30","2026-10-31"],"seriesRobustas":{"López Mateos":[5.9,7.7,5.3,4.7,5.8,6.6,6.5,6.5,6.7,5.6,1.8,8.3,5.8,3.5,4.3,5.4,5.1,-2,4.4,6,6,5.6,6.6,5.1,6.8,4.3,5.3,6.6,6.8,5.7,5.5],"Acueducto":[4.9,2.2,4.1,null,9.8,8,6.2,12.2,7.7,9.8,null,12,8.8,10.3,10.3,10.3,9.1,null,8.5,9.2,8.8,7.2,8.5,8.7,null,10.9,8.1,7.1,8.9,3.5,7.2],"Clínica de la Mujer":[6.7,-5.9,-4.5,null,1,1,1.5,4.9,-5.9,10.1,null,14,10.7,-0.6,3.4,7.3,4.7,null,1.9,-0.2,2.4,1.1,2.4,0.3,null,7.1,3.5,2.4,5.6,1.6,1.3],"Chamizal":[4.7,1,7.5,null,6.8,2.9,7.8,null,2,17.7,null,18,7.8,6.8,10.3,8.2,-0.2,null,12.9,4.3,10.6,13,6.3,3.3,null,8.2,9.2,8,4.7,4,20]}},"effMes":[{"name":"Ene","v":2},{"name":"Feb","v":0},{"name":"Mar","v":3},{"name":"Abr","v":5},{"name":"May","v":1},{"name":"Jun","v":3},{"name":"Jul","v":4},{"name":"Ago","v":5},{"name":"Sep","v":5}],"trStats":{"Hugo Tabares":{"mes":[[424,4.3,405],[309,4.6,294],[364,4.9,342],[258,4.9,236],[291,4.7,251],[333,5.3,266],[195,5.9,176],[314,5.6,244],[291,4.7,264]],"sem":[[7,5.4,7],[107,3.9,103],[116,4.2,109],[101,4.5,98],[106,4.4,101],[81,4.3,81],[103,4.8,101],[62,4.3,50],[61,5.3,59],[85,5.3,78],[61,4.6,60],[85,4.9,79],[122,4.6,115],[15,4.8,15],[79,4.4,73],[62,4.9,55],[83,4.7,76],[24,7.9,18],[80,4.6,72],[69,5,59],[63,4.7,56],[74,4.7,63],[65,5.2,58],[89,5,71],[97,5.6,74],[55,5.2,39],[33,5.4,30],[38,6.3,35],[106,6.1,96],[45,5.1,39],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[68,5.7,60]]},"Laura García":{"mes":[[250,9.7,246],[167,11.8,163],[267,10.2,263],[272,9,267],[217,8.9,216],[208,10.2,204],[172,9,167],[348,7.8,340],[367,6.9,365]],"sem":[[3,10,3],[78,9.5,78],[66,9.6,65],[54,10.4,52],[49,9.5,48],[42,11.2,40],[57,10.9,57],[33,13.4,32],[35,12.4,34],[73,8.8,73],[63,10.2,61],[59,10.9,57],[52,10.8,52],[50,11.7,50],[52,9.4,51],[56,9.7,54],[84,7.7,83],[51,8.8,50],[54,9.4,53],[56,8.5,56],[47,9.7,47],[59,8.3,59],[39,9.1,38],[38,12.1,38],[52,9.8,51],[53,10.2,52],[60,9,59],[44,8.4,42],[62,9.1,60],[32,10,31],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[89,6.2,89]]},"Iván Enríquez":{"mes":[[180,7.2,174],[152,7.7,150],[211,6,209],[163,6,153],[197,6.6,196],[130,8.3,129],[100,8.2,98],[142,7.2,142],[203,7.1,194]],"sem":[[4,4.8,4],[46,5.8,44],[52,6.5,51],[46,8.2,43],[32,9.1,32],[42,7.3,42],[52,8.1,50],[31,7.5,31],[27,7.6,27],[57,5.6,57],[45,6.6,45],[39,6.2,38],[41,5.9,41],[49,5.8,47],[32,6.7,31],[57,5.5,53],[39,5.6,36],[23,6.9,22],[59,5.9,59],[40,6.5,40],[43,7.2,43],[47,7.3,46],[25,8.3,25],[38,8.7,38],[30,7.7,29],[23,9,23],[35,7.5,35],[20,8.5,20],[30,9,29],[29,7.7,28],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[52,8.2,52]]},"Mónica Anaya":{"mes":[[198,11.7,188],[223,12.7,216],[250,13.1,247],[216,11.6,214],[198,10.2,196],[260,10.8,254],[180,11.4,178],[285,10.2,279],[293,8.8,287]],"sem":[[3,30.5,2],[42,17.2,39],[56,10.3,53],[45,10.3,43],[52,9.3,51],[75,10.4,73],[71,13.4,67],[46,12.6,45],[31,16.5,31],[86,11.8,85],[54,12.9,54],[16,15,15],[68,15.5,68],[51,10,50],[53,12.4,53],[54,12.7,53],[47,10.5,47],[37,12.1,36],[52,13,51],[69,8.8,69],[48,8.8,48],[29,10.6,28],[41,13.1,41],[48,11,46],[68,9.7,65],[77,10.6,76],[60,11.9,59],[38,9.8,38],[52,12.9,52],[56,10.2,55],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[71,11.1,69]]},"Néstor González":{"mes":[[208,9.8,199],[242,9.2,228],[265,9.1,241],[207,8.6,189],[211,8.9,194],[227,8.8,194],[144,9.3,111],[199,8.2,181],[211,7.9,182]],"sem":[[9,11.1,8],[65,10.8,62],[56,9.4,52],[44,8.8,44],[34,9.5,33],[57,8.7,55],[73,10,67],[46,8.8,43],[66,9.3,63],[62,9.3,60],[78,8.6,73],[49,9.3,43],[53,9.9,49],[37,7.7,28],[61,9.2,55],[49,8.4,45],[55,8.9,51],[44,8.1,40],[45,8.5,42],[51,8.4,47],[31,8.4,26],[68,9.6,65],[49,8.5,45],[68,8.3,61],[48,8.8,37],[48,8.7,40],[44,10.1,32],[33,9.7,24],[60,9.2,49],[21,9.7,17],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[52,8.5,45]]},"Todos":{"mes":[[1260,7.9,1212],[1093,8.8,1051],[1357,8.5,1302],[1116,8.1,1059],[1114,7.7,1053],[1158,8.6,1047],[791,8.8,730],[1288,7.9,1186],[1365,7,1292]],"sem":[[26,9.9,24],[338,8.4,326],[346,7.4,330],[290,7.7,280],[273,7.5,265],[297,8.1,291],[356,9,342],[218,9.1,201],[220,9.5,214],[363,8.3,353],[301,8.6,293],[248,8.1,232],[336,8.8,325],[202,8.6,190],[277,8.2,263],[278,8.2,260],[308,7.3,293],[179,9,166],[290,7.9,277],[285,7.5,271],[232,7.6,220],[277,7.8,261],[219,8.6,207],[281,8.5,254],[295,8.2,256],[256,9.1,230],[232,9.2,215],[173,8.5,159],[310,8.8,286],[183,8.5,170],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[null,null,null],[332,7.8,315]]}},"trMeses":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep"],"trSems":["S1","S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12","S13","S14","S15","S16","S17","S18","S19","S20","S21","S22","S23","S24","S25","S26","S27","S28","S29","S30","S31","S32","S33","S34","S35","S36","S37"]};
+/* ===== Utilidades comunes de las propuestas ===== */
+const $=s=>document.querySelector(s);
+const fmt=n=>n==null?'—':Number(n).toLocaleString('es-MX');
+const fp=(v,d=1)=>v==null?'—':v.toFixed(d)+'%';
+const META=98;
+const UNITS=['López Mateos','Medicina Preventiva','Acueducto','Clínica de la Mujer','Chamizal','Guadalupe','Las Águilas'];
+const UCOL={'López Mateos':'var(--u1)','Medicina Preventiva':'var(--u2)','Acueducto':'var(--u3)','Clínica de la Mujer':'var(--u4)','Chamizal':'var(--u5)','Guadalupe':'var(--u6)','Las Águilas':'var(--u7)','Todas':'var(--u0)'};
+const USHORT={'López Mateos':'L. Mateos','Medicina Preventiva':'Med. Prev.','Acueducto':'Acueducto','Clínica de la Mujer':'Cl. Mujer','Chamizal':'Chamizal','Guadalupe':'Guadalupe','Las Águilas':'Águilas','Todas':'Todas'};
+const DNAME=d=>({'Tomografía Axial Computada':'Tomografía','Eeg Y Mapeo Cerebral':'EEG y Mapeo','Electromiografía Y Potenciales Evocados':'Electromiografía','Resonancia Magnética':'Resonancia','Servicios Especiales':'Serv. Especiales','Bioimpedanciología':'Bioimpedancia','Medicina Nuclear':'Med. Nuclear'}[d]||d);
+/* nombres de unidadesMV/unidades -> nombres de deptEvo */
+const DNORM=d=>({'Tomografía Axial C.':'Tomografía Axial Computada','EEG y Mapeo Cerebral':'Eeg Y Mapeo Cerebral','Electromiografía y P.E.':'Electromiografía Y Potenciales Evocados'}[d]||d);
+
+/* Modalidades ordenadas por volumen del año */
+const DEPTS=Object.keys(D.deptEvo.deptos).filter(d=>D.deptEvo.deptos[d].mesT.some(x=>x>0))
+  .map(d=>({d,t:D.deptEvo.deptos[d].mesT.reduce((a,b)=>a+(b||0),0)})).sort((a,b)=>b.t-a.t).map(o=>o.d);
+
+/* Clasificación por estado (meta 98%) — siempre con valor visible, nunca solo color */
+const stCls=v=>v==null?'none':(v>=META?'good':(v>=95?'warn':(v>=90?'bad':'bad2')));
+const stTxt=v=>v==null?'st-none':(v>=META?'st-good':(v>=95?'st-warn':'st-bad'));
+const stIcon=v=>v==null?'':(v>=META?'●':(v>=95?'▲':'▼'));
+
+/* Periodos: mensual / semanal (últimas N semanas) */
+function periodos(mode,nSem=12){
+  const T=D.indTemporal;
+  if(mode==='mes') return {labels:T.mes.p.slice(), idx:T.mes.p.map((_,i)=>i), src:T.mes};
+  const p=T.semana.p, start=Math.max(0,p.length-nSem);
+  return {labels:p.slice(start), idx:p.slice(start).map((_,i)=>start+i), src:T.semana};
+}
+function deptSerie(d,mode,nSem=12){
+  const o=D.deptEvo.deptos[d];
+  if(mode==='mes') return {v:o.mes.slice(), t:o.mesT.slice(), labels:D.deptEvo.meses.slice()};
+  const n=D.deptEvo.semanas.length, s=Math.max(0,n-nSem);
+  return {v:o.sem.slice(s), t:o.semT.slice(s), labels:D.deptEvo.semanas.slice(s)};
+}
+
+/* ===== Tooltip ===== */
+const tipEl=document.createElement('div');tipEl.id='tip';document.body.appendChild(tipEl);
+function showTip(html,x,y){tipEl.innerHTML=html;tipEl.classList.add('on');
+  const w=tipEl.offsetWidth,h=tipEl.offsetHeight;let l=x+14,t=y+14;
+  if(l+w>innerWidth-8)l=x-w-14; if(t+h>innerHeight-8)t=y-h-14; tipEl.style.left=Math.max(4,l)+'px';tipEl.style.top=Math.max(4,t)+'px';}
+function hideTip(){tipEl.classList.remove('on');}
+document.addEventListener('mouseover',e=>{const t=e.target.closest('[data-tip]');if(t){const r=t.getBoundingClientRect();showTip(t.dataset.tip,r.left+r.width/2,r.top+r.height/2);}});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-tip]'))hideTip();});
+const row=(c,n,v)=>`<div class="r"><i style="background:${c}"></i><span>${n}</span><b>${v}</b></div>`;
+
+/* ===== Re-render al cambiar tamaño ===== */
+const RENDERS=[];
+function onRender(fn){RENDERS.push(fn);fn();}
+let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>RENDERS.forEach(f=>f()),120);});
+function rerender(){RENDERS.forEach(f=>f());}
+
+/* ===== Pantalla completa ===== */
+function wireFullscreen(btn){
+  if(!btn)return;
+  const upd=()=>{btn.innerHTML=document.fullscreenElement?'⤡ Salir de pantalla completa':'⤢ Pantalla completa';};
+  btn.addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen().catch(()=>{});});
+  document.addEventListener('fullscreenchange',()=>{upd();setTimeout(rerender,150);});upd();
+}
+
+/* ===== Heatmap como tabla (valor siempre visible) ===== */
+function heatTable(el,{cols,rows,fmtV=v=>v==null?'·':v.toFixed(1),rowH=24,tipFn,headW='120px',clsFn=stCls}){
+  const h=`<table class="heat"><colgroup><col style="width:${headW}">${cols.map(()=>'<col>').join('')}</colgroup>
+  <thead><tr><th></th>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>
+    `<tr class="${r.tot?'tot':''}"><th class="row" title="${r.name}">${r.label||r.name}</th>${r.values.map((v,i)=>
+      `<td class="c-${clsFn(v,r,i)}" style="height:${rowH}px" data-tip="${tipFn?tipFn(r,i,v).replace(/"/g,'&quot;'):''}">${fmtV(v,r,i)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  el.innerHTML=h;
+}
+
+/* ===== Barras horizontales ===== */
+function hbars(el,items,{max,meta,lo=0,fmtV=v=>fmt(v)}={}){
+  const mx=max??Math.max(...items.map(i=>i.v||0),1);
+  const sc=v=>Math.max(0,Math.min(100,((v-lo)/(mx-lo))*100));
+  el.innerHTML=`<div class="hb">${items.map(it=>`<div class="n" title="${it.name}">${it.label||it.name}</div>
+   <div class="tr" data-tip="${(it.tip||`<b>${it.name}</b><br>${fmtV(it.v)}`).replace(/"/g,'&quot;')}"><div class="b" style="width:${it.v==null?0:sc(it.v)}%;background:${it.color||'var(--u1)'}"></div>${meta!=null?`<div class="meta" style="left:${sc(meta)}%"></div>`:''}</div>
+   <div class="v">${it.vtxt??fmtV(it.v)}</div>`).join('')}</div>`;
+}
+
+/* ===== Leyenda con resaltado ===== */
+function legend(el,items,wrap,{square=false}={}){
+  el.innerHTML=items.map(it=>`<span class="it" data-k="${it.name}"><span class="${square?'sq':'sw'}" style="background:${it.color}"></span>${it.label||it.name}</span>`).join('');
+  if(!wrap)return;
+  el.querySelectorAll('.it').forEach(s=>{
+    s.addEventListener('mouseenter',()=>{const k=s.dataset.k;el.classList.add('dim');s.classList.add('hl');wrap.classList.add('dim');wrap.querySelectorAll('[data-k]').forEach(p=>p.classList.toggle('hl',p.dataset.k===k));});
+    s.addEventListener('mouseleave',()=>{el.classList.remove('dim');s.classList.remove('hl');wrap.classList.remove('dim');});
+  });
+}
+
+/* ===== Gráfica de líneas (multi-serie, crosshair + tooltip) ===== */
+const SVGNS='http://www.w3.org/2000/svg';
+const sv=(t,a={})=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+function niceStep(range,n){const r=range/n,p=Math.pow(10,Math.floor(Math.log10(r))),f=r/p;return (f<1.5?1:f<3?2:f<7?5:10)*p;}
+function lineChart(el,{labels,series,meta=null,domain=null,height=null,fmtV=v=>v.toFixed(1)+'%',ticks=6,floorMark=false,pad={t:10,r:12,b:22,l:34},dots=false}){
+  const W=Math.max(200,el.clientWidth||600),H=height||Math.max(120,el.clientHeight||260);
+  el.innerHTML='';el.classList.add('svgwrap');
+  const all=series.flatMap(s=>s.values).filter(v=>v!=null);
+  let lo,hi;
+  if(domain){[lo,hi]=domain;}else{lo=Math.min(...all,meta??Infinity);hi=Math.max(...all,meta??-Infinity);const sp=(hi-lo)||1;lo-=sp*.08;hi+=sp*.08;}
+  const st=niceStep(hi-lo,4);lo=Math.floor(lo/st)*st;hi=Math.ceil(hi/st)*st;
+  if(domain){lo=domain[0];hi=domain[1];}
+  const P=pad,iw=W-P.l-P.r,ih=H-P.t-P.b,n=labels.length;
+  const x=i=>P.l+(n>1?iw*i/(n-1):iw/2),y=v=>P.t+ih*(1-(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo));
+  const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:'img'});
+  for(let g=lo;g<=hi+1e-9;g+=st){svg.appendChild(sv('line',{class:'gl',x1:P.l,x2:W-P.r,y1:y(g),y2:y(g)}));
+    const t=sv('text',{class:'ax',x:P.l-6,y:y(g)+4,'text-anchor':'end'});t.textContent=(+g.toFixed(2));svg.appendChild(t);}
+  if(meta!=null&&meta>=lo&&meta<=hi)svg.appendChild(sv('line',{class:'metaLine',x1:P.l,x2:W-P.r,y1:y(meta),y2:y(meta)}));
+  const every=Math.max(1,Math.ceil(n/Math.max(2,Math.floor(iw/46))));
+  labels.forEach((l,i)=>{const show=i===n-1||(i%every===0&&(n-1-i)>=every*0.6);if(!show)return;
+    const t=sv('text',{class:'ax',x:x(i),y:H-6,'text-anchor':i===0?'start':(i===n-1?'end':'middle')});t.textContent=l;svg.appendChild(t);});
+  series.forEach(s=>{
+    let d='';let pen=false;s.values.forEach((v,i)=>{if(v==null){pen=false;return;}d+=(pen?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1);pen=true;});
+    const p=sv('path',{class:'ser',d,'data-k':s.name});p.style.stroke=s.color;if(s.width)p.style.strokeWidth=s.width;if(s.dash)p.style.strokeDasharray=s.dash;svg.appendChild(p);
+    s.values.forEach((v,i)=>{
+      const lone=v!=null&&(s.values[i-1]==null)&&(s.values[i+1]==null);
+      const last=i===s.values.length-1&&v!=null;
+      if(lone||last||dots){const c=sv('circle',{class:'dot','data-k':s.name,cx:x(i),cy:y(v),r:last?3.5:2.5});c.style.fill=s.color;c.style.stroke='var(--surface)';c.style.strokeWidth=1.5;svg.appendChild(c);}
+      if(floorMark&&v!=null&&v<lo){const t=sv('text',{class:'dot','data-k':s.name,x:x(i),y:y(lo)-4,'text-anchor':'middle','font-size':10});t.style.fill='var(--bad)';t.textContent='▼';svg.appendChild(t);}
+    });
+  });
+  const guide=sv('line',{class:'guide',y1:P.t,y2:H-P.b,x1:-10,x2:-10});guide.style.opacity=0;svg.appendChild(guide);
+  const hit=sv('rect',{x:P.l-6,y:0,width:iw+12,height:H,fill:'transparent'});svg.appendChild(hit);
+  hit.addEventListener('mousemove',e=>{const b=svg.getBoundingClientRect(),mx=(e.clientX-b.left)*(W/b.width);
+    let i=Math.round((mx-P.l)/(n>1?iw/(n-1):1));i=Math.max(0,Math.min(n-1,i));guide.setAttribute('x1',x(i));guide.setAttribute('x2',x(i));guide.style.opacity=.6;
+    const rs=series.map(s=>({s,v:s.values[i]})).filter(o=>o.v!=null).sort((a,b)=>b.v-a.v);
+    showTip(`<b>${labels[i]}</b>`+rs.map(o=>row(o.s.color,o.s.label||o.s.name,fmtV(o.v)+(o.s.n?` <span style="color:var(--ink-3);font-weight:400">· ${fmt(o.s.n[i])}</span>`:''))).join('')+(meta!=null?`<div style="color:var(--ink-3);margin-top:3px">meta ${meta}%</div>`:''),e.clientX,e.clientY);});
+  hit.addEventListener('mouseleave',()=>{guide.style.opacity=0;hideTip();});
+  el.appendChild(svg);
+  return svg;
+}
+
+/* ===== Barras verticales apiladas (volumen) ===== */
+function stackedBars(el,{labels,series,height=null,fmtV=fmt}){
+  const W=Math.max(200,el.clientWidth||600),H=height||Math.max(140,el.clientHeight||260),P={t:10,r:8,b:22,l:44};
+  el.innerHTML='';
+  const tot=labels.map((_,i)=>series.reduce((a,s)=>a+(s.values[i]||0),0));
+  const mx=Math.max(...tot),st=niceStep(mx,4),hi=Math.ceil(mx/st)*st;
+  const iw=W-P.l-P.r,ih=H-P.t-P.b,bw=iw/labels.length,y=v=>P.t+ih*(1-v/hi);
+  const svg=sv('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H});
+  for(let g=0;g<=hi;g+=st){svg.appendChild(sv('line',{class:'gl',x1:P.l,x2:W-P.r,y1:y(g),y2:y(g)}));const t=sv('text',{class:'ax',x:P.l-6,y:y(g)+4,'text-anchor':'end'});t.textContent=fmt(g);svg.appendChild(t);}
+  labels.forEach((l,i)=>{let acc=0;const x0=P.l+bw*i+bw*.18,w=bw*.64;
+    series.forEach(s=>{const v=s.values[i]||0;if(!v)return;const y1=y(acc+v),h=y(acc)-y1;acc+=v;
+      const r=sv('rect',{x:x0,y:y1+1,width:w,height:Math.max(0,h-2),rx:2,'data-k':s.name,class:'dot'});r.style.fill=s.color;
+      r.dataset.tip=`<b>${l} · ${s.name}</b><br>${fmtV(v)} estudios (${(v/tot[i]*100).toFixed(1)}%)`;svg.appendChild(r);});
+    const t=sv('text',{class:'ax',x:x0+w/2,y:H-6,'text-anchor':'middle'});t.textContent=l;svg.appendChild(t);
+    const tt=sv('text',{class:'ax',x:x0+w/2,y:y(tot[i])-4,'text-anchor':'middle'});tt.textContent=fmt(tot[i]);tt.style.fill='var(--ink-2)';svg.appendChild(tt);
+  });
+  el.classList.add('svgwrap');el.appendChild(svg);
+}
+
+/* ===== Mini línea para tarjetas ===== */
+function spark(el,{values,ref=null,domain=[85,100],color='var(--u1)',labels=[],h=56,meta=META}){
+  return lineChart(el,{labels,series:[...(ref?[{name:'Todas',label:'Todas las unidades',values:ref,color:'var(--ink-3)',width:1.2,dash:'3 3'}]:[]),{name:'v',label:el.dataset.name||'Valor',values,color}],
+    meta,domain,height:h,floorMark:true,pad:{t:6,r:6,b:16,l:26}});
+}
+
+/* ===== Datos derivados ===== */
+function matrizSucMod(){
+  /* unidadesMV: unidad -> depto -> {mat,vesp}: devuelve {deptos, filas:[{u, vals:[{t,c,pct,mat,vesp}]}]} */
+  const deps=new Set();UNITS.forEach(u=>Object.keys(D.unidadesMV[u]||{}).forEach(d=>deps.add(DNORM(d))));
+  const order=DEPTS.filter(d=>deps.has(d));
+  const filas=UNITS.map(u=>{const m=D.unidadesMV[u]||{};const byN={};Object.keys(m).forEach(k=>byN[DNORM(k)]=m[k]);
+    return {u,vals:order.map(d=>{const o=byN[d];if(!o)return null;const t=o.mat.t+o.vesp.t,c=o.mat.c+o.vesp.c;return {t,c,pct:t?c/t*100:null,mat:o.mat,vesp:o.vesp};})};});
+  return {deptos:order,filas};
+}
+
+let MODE='mes';const NSEM=16;const DOM=[85,100];
+
+legend($('#legSuc'),[{name:'v',label:'Sucursal',color:'var(--u1)'},{name:'t',label:'Todas las unidades (referencia)',color:'var(--ink-3)'},{name:'m',label:'Meta 98%',color:'var(--bad)'}]);
+
+function card(el,{name,val,delta,deltaLbl,foot,values,ref,labels,color,cls=''}){
+  const c=document.createElement('div');c.className='card sc '+cls;
+  c.innerHTML=`<div class="top"><div><div class="nm">${name}</div><div class="meta">${foot}</div></div>
+   <div><div class="big ${stTxt(val)}">${fp(val)}</div><div class="dl">${delta==null?'':(delta>=0?'▲ +':'▼ ')+delta.toFixed(1)+' pts '+deltaLbl}</div></div></div><div class="sp" data-name="${name}"></div>`;
+  el.appendChild(c);
+  spark(c.querySelector('.sp'),{values,ref,labels,color,domain:DOM,h:c.querySelector('.sp').clientHeight||90});
+}
+const lastNN=a=>{for(let i=a.length-1;i>=0;i--)if(a[i]!=null)return i;return -1;};
+
+function renderSuc(){
+  const P=periodos(MODE,NSEM),g=$('#gSuc');g.innerHTML='';
+  const ref=P.idx.map(i=>P.src.u.Todas[i]);
+  $('#sucSub').textContent=(MODE==='mes'?'enero–octubre 2026':P.labels[0]+'–'+P.labels.at(-1))+' · misma escala 85–100% en todas · ▼ = valor por debajo de 85%';
+  ['Todas',...UNITS].forEach(u=>{
+    const vals=P.idx.map(i=>P.src.u[u][i]);const li=lastNN(vals);const v=vals[li];
+    let pi=li-1;while(pi>=0&&vals[pi]==null)pi--;
+    const n=D.unidades[u]?.prometidos;
+    const under=vals.filter(x=>x!=null&&x<META).length;
+    card(g,{name:u==='Todas'?'Todas las unidades':u,val:v,delta:pi>=0?v-vals[pi]:null,deltaLbl:'',
+      foot:`${P.labels[li]}${MODE==='mes'?' · '+fmt(n)+' estudios':''} · ${under}/${vals.filter(x=>x!=null).length} bajo meta`,
+      values:vals,ref:u==='Todas'?null:ref,labels:P.labels,color:UCOL[u],cls:(u==='Todas'?'tot':'')+(v<95?' alert':'')});
+  });
+}
+function renderMod(){
+  const g=$('#gMod');g.innerHTML='';
+  const ref=MODE==='mes'?D.indTemporal.mes.u.Todas:null;
+  DEPTS.filter(d=>D.deptEvo.deptos[d].mesT.reduce((a,b)=>a+(b||0),0)>=50).forEach(d=>{
+    const s=deptSerie(d,MODE,NSEM);const li=lastNN(s.v);if(li<0)return;const v=s.v[li];
+    let pi=li-1;while(pi>=0&&s.v[pi]==null)pi--;
+    const tot=s.t.reduce((a,b)=>a+(b||0),0);
+    card(g,{name:DNAME(d),val:v,delta:pi>=0?v-s.v[pi]:null,deltaLbl:'',
+      foot:`${s.labels[li]} · ${fmt(s.t[li])} estudios`,values:s.v,ref,labels:s.labels,color:'var(--u1)',cls:v<95?'alert':''});
+  });
+  $('#modSub').textContent=(MODE==='mes'?'enero–octubre 2026':'últimas '+NSEM+' semanas')+' · todas las sucursales juntas · ordenadas por volumen · misma escala 85–100%';
+}
+function renderVol(){
+  const g=$('#gVol');g.innerHTML='';const U=D.uniDep;const yoy=Object.fromEntries(D.estYoyRows.map(r=>[r[0],r]));
+  UNITS.forEach(u=>{
+    const a=U.porSede[u];const mx=Math.max(...a,1);const tot=a.reduce((x,y)=>x+y,0);const y=yoy[u];
+    const ch=y?((y[2]-y[1])/y[1]*100):null;
+    const c=document.createElement('div');c.className='card sc';
+    c.innerHTML=`<div class="top"><div><div class="nm">${u}</div><div class="meta">${fmt(tot)} estudios ene–jun</div></div></div>
+      <div class="minibars">${a.map((v,i)=>`<div data-tip="<b>${u}</b> · ${U.meses[i]} 2026<br>${fmt(v)} estudios"><i style="height:${Math.max(2,v/mx*100)}%;background:${UCOL[u]}"></i><span>${U.meses[i]}</span></div>`).join('')}</div>
+      ${y?`<div class="yoy"><span>Sep 25 → Sep 26</span><b class="num ${ch>=0?'st-good':'st-bad'}">${fmt(y[1])} → ${fmt(y[2])} (${ch>=0?'+':''}${ch.toFixed(1)}%)</b></div>`:''}`;
+    g.appendChild(c);
+  });
+}
+function renderProc(){
+  const M=D.PROMESA_MAPA.mapa;const ST=[['realizacion','Realización'],['llegada','Llegada a Exa'],['interpretacion','Interpretación'],['alta_firma','Alta → firma']];
+  const fm=v=>v==null?'—':(v<60?v.toFixed(0)+' min':(Math.floor(v/60)+' h '+String(Math.round(v%60)).padStart(2,'0')));
+  const us=['Todas',...UNITS.filter(u=>M[u])];
+  const mx=Object.fromEntries(ST.map(([k])=>[k,Math.max(...us.map(u=>M[u][k].med||0))]));
+  $('#tProc').innerHTML=`<thead><tr><th>Sucursal</th>${ST.map(s=>`<th>${s[1]}</th>`).join('')}<th>Estudios</th></tr></thead><tbody>${us.map(u=>`<tr class="${u==='Todas'?'tot':''}"><td>${u==='Todas'?'Todas las unidades':u}</td>${ST.map(([k,l])=>{const s=M[u][k];return `<td data-tip="<b>${u}</b> · ${l}<br>mediana ${fm(s.med)} · P90 ${fm(s.p90)}<br>${fmt(s.n)} estudios"><span class="bar" style="width:${Math.round((s.med||0)/mx[k]*70)}px;background:${UCOL[u]}"></span>${fm(s.med)}</td>`;}).join('')}<td>${fmt(M[u].realizacion.n)}</td></tr>`).join('')}</tbody>`;
+}
+function renderAll(){renderSuc();renderMod();renderVol();renderProc();}
+$('#segMode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;MODE=b.dataset.m;
+  document.querySelectorAll('#segMode button').forEach(x=>x.classList.toggle('on',x===b));renderSuc();renderMod();});
+wireFullscreen($('#fsBtn'));
+onRender(renderAll);
+</script>
+</body>
+</html>

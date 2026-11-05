@@ -7,6 +7,7 @@ Repositorio del tablero semanal de productividad de Grupo Río.
 | Archivo | Descripción |
 |---|---|
 | `Tablero_GrupoRio_Julio.html` | Tablero autocontenido (HTML + CSS + JS en línea, con iframe de Estudios vía `srcdoc`). Última versión de referencia. |
+| `propuestas/` | 3 prototipos de rediseño a pantalla completa (ver `propuestas/README.md`). |
 | `INSTRUCCIONES_Actualizacion_Semanal.md` | Flujo para actualizar el tablero con los archivos de cada semana (Indicador, Interpretación, Transcripción, Efectividad). |
 
 ## Uso
