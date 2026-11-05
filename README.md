@@ -12,8 +12,14 @@ Repositorio del tablero semanal de productividad de Grupo Río.
 
 ## Uso
 
-El tablero es un único archivo `.html` que se abre directamente en el navegador. Contiene 8 vistas:
-Indicador, Interpretación, Transcripción, Efectividad, Estudios (iframe) y comparativas.
+El tablero es un único archivo `.html` que se abre directamente en el navegador. Usa el **diseño B**
+(elegido de `propuestas/`): barra superior con pestañas, ancho completo, botón de pantalla completa,
+y las gráficas ya vienen cargadas con todas las sucursales y modalidades.
+
+Vistas: Resumen (tarjetas por sucursal y por modalidad, volumen, tiempos del proceso, chequeos),
+Indicador (mapas de calor de todas las sucursales y matriz modalidad × sucursal, más el detalle por unidad),
+Chequeos médicos, Productividad, Efectividad, Volumen de estudios (iframe), Promesa y Cumplimiento,
+2026 vs 2025 y Proyectos.
 
 ## Actualización semanal
 

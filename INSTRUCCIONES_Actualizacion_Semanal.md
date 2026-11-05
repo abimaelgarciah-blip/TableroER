@@ -63,11 +63,20 @@ De los 5 CSV de radiólogos: solo algunos traen columnas de error (`INCONSISTENC
 
 El dataset `DATA` del iframe cubre ene–26 jul 2026 por hora/unidad. Solo se actualiza si subo CSV mensuales nuevos que extiendan esa ventana. Una semana suelta del indicador NO va aquí.
 
+## 6b. Diseño B (bloques `layout-b`) — normalmente NO se toca
+
+El diseño (barra superior, tarjetas de Resumen, mapas de calor de Indicador, tabla de tiempos en Promesa) vive en
+`<style id="layout-b">` y `<script id="layout-b-js">` al final del HTML. **Lee las mismas constantes** (`indTemporal`,
+`deptEvo`, `unidades`, `unidadesMV`, `uniDep`, `chqSerie`, `estYoyRows`, `PROMESA_MAPA`…), así que al cargar la
+semana N se actualiza solo. Únicos ajustes manuales posibles:
+- `YOY_LBL` (inicio de `layout-b-js`): cambiar el mes si `estYoyRows` pasa a otro mes (hoy `Sep 25 → Sep 26`).
+- La lista de sucursales `UNITS` si se abre o cierra una sucursal.
+
 ## 7. Validación y entrega (siempre)
 
-1. Validar sintaxis: extraer los 2 `<script>` externos (excluyendo el `srcdoc` del iframe) y `node --check` cada uno.
+1. Validar sintaxis: extraer los 3 `<script>` externos (incluye `layout-b-js`) (excluyendo el `srcdoc` del iframe) y `node --check` cada uno.
 2. Si toqué el iframe: editar `/home/claude/iframe_content.html` desescapado → re-escapar (`&`→`&amp;`, `"`→`&quot;`, `<`→`&lt;`, `>`→`&gt;`, en ese orden) → re-inyectar al `srcdoc` vía regex `(<iframe class="est-frame" title="Estudios Grupo Río" srcdoc=")(.*?)("></iframe>)`.
-3. Prueba headless Puppeteer (chrome en `/home/claude/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome`, args `['--no-sandbox']`, vía `require('/home/claude/.npm-global/lib/node_modules/@mermaid-js/mermaid-cli/node_modules/puppeteer')`): recorrer las 8 vistas, confirmar `ERRORES: NINGUNO` y que `indTemporal.semana.p`, `trSems`, `trendTrans` incluyan SN.
+3. Prueba headless Puppeteer (chrome en `/home/claude/.cache/puppeteer/chrome/linux-131.0.6778.204/chrome-linux64/chrome`, args `['--no-sandbox']`, vía `require('/home/claude/.npm-global/lib/node_modules/@mermaid-js/mermaid-cli/node_modules/puppeteer')`): recorrer las 9 vistas (pestañas `#bx-tabs`), confirmar `ERRORES: NINGUNO` y que `indTemporal.semana.p`, `trSems`, `trendTrans` incluyan SN.
 4. Copiar a `/mnt/user-data/outputs/Tablero_GrupoRio_SemanaN.html` y `present_files`.
 
 ## 8. Estilo de trabajo
