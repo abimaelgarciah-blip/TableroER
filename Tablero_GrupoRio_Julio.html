@@ -867,6 +867,25 @@
   .seg button.on{background:var(--ink);color:#fff}
   .segbtn{border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--muted);font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer}
   .segbtn:hover{background:var(--paper)}
+  #unidad .featured{margin-bottom:18px}
+  #unidad .featured-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+  #unidad .big-val{font-size:27px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:8px}
+  #unidad .big-val .unit-lbl{font-size:13px;color:var(--muted);font-weight:500}
+  #unidad .big-val .back-total{font-family:inherit;font-size:12px;font-weight:600;color:var(--us);cursor:pointer;border:0;background:none;padding:0;text-decoration:underline;text-underline-offset:2px}
+  #unidad .trend-chip{font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  #unidad .trend-chip.up{background:rgba(76,140,111,.13);color:#3a7057}
+  #unidad .trend-chip.down{background:rgba(186,84,76,.13);color:#a5473f}
+  #unidad .trend-chip.flat{background:var(--line2);color:var(--muted)}
+  #unidad .mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+  #unidad .mini{display:block;width:100%;font-family:inherit;background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 13px;cursor:pointer;transition:.12s;text-align:left}
+  #unidad .mini:hover{border-color:var(--us)}
+  #unidad .mini.featured{border-color:var(--us);box-shadow:0 0 0 1px var(--us)}
+  #unidad .mini-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px;gap:6px}
+  #unidad .mini-name{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #unidad .mini-val{font-size:11px;color:var(--muted);white-space:nowrap}
+  #unidad .mini-tot{font-size:10.5px;color:var(--muted);margin-top:4px}
+  @media(max-width:980px){#unidad .mini-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:640px){#unidad .mini-grid{grid-template-columns:repeat(2,1fr)}}
   .brief{background:linear-gradient(180deg,#0f2438,#16324a);color:#eef4f9;border-radius:16px;padding:26px 28px;margin-top:26px}
   .brief-tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8fe3ec;margin:0 0 10px;font-weight:600}
   .brief-h{font-size:clamp(19px,2.6vw,26px);line-height:1.15;margin:0 0 18px;font-weight:750;letter-spacing:-.01em;color:#fff}
@@ -1002,24 +1021,25 @@
   &lt;/div&gt;
   &lt;section id=&quot;unidad&quot;&gt;
     &lt;div class=&quot;sec-head&quot;&gt;&lt;h2&gt;Estudios por unidad, departamento y total&lt;/h2&gt;&lt;/div&gt;
-    &lt;p class=&quot;sec-note&quot;&gt;Panorama de &lt;b&gt;más de 2 años&lt;/b&gt; (jul 2024 – oct 2026). Elige una unidad o &lt;b&gt;General&lt;/b&gt; (suma de las 6 unidades de abajo), alterna &lt;b&gt;mensual&lt;/b&gt; o &lt;b&gt;semanal&lt;/b&gt;, acota la &lt;b&gt;temporalidad&lt;/b&gt; con los botones (todo · 2024 · 2025 · 2026 · últimos 6 meses) y enciende o apaga departamentos para comparar. La &lt;b&gt;tendencia&lt;/b&gt; (línea punteada) se recalcula según el rango elegido. Medicina Preventiva se agregó solo con octubre 2026 (3,672 estudios) — los 27 meses anteriores aparecen en cero porque no hay histórico cargado para esa unidad, no porque no tuviera estudios; se completará si llega su histórico. Plaza Universidad y Ciudad Granja siguen fuera (sin estudios registrados). General sigue siendo la suma de las 6 unidades con histórico completo, sin Medicina Preventiva, para no distorsionar su propia tendencia.&lt;/p&gt;
+    &lt;p class=&quot;sec-note&quot;&gt;Panorama de &lt;b&gt;más de 2 años&lt;/b&gt; (jul 2024 – oct 2026). Elige una unidad o &lt;b&gt;General&lt;/b&gt; (suma de las 6 unidades de abajo), alterna &lt;b&gt;mensual&lt;/b&gt; o &lt;b&gt;semanal&lt;/b&gt; y acota la &lt;b&gt;temporalidad&lt;/b&gt; con los botones (todo · 2024 · 2025 · 2026 · últimos 6 meses). El Total queda arriba en grande; cada departamento tiene su propia mini-gráfica abajo — clic en una para verla en grande en vez del Total. Medicina Preventiva se agregó solo con octubre 2026 (3,672 estudios) — los 27 meses anteriores aparecen en cero porque no hay histórico cargado para esa unidad, no porque no tuviera estudios; se completará si llega su histórico. Plaza Universidad y Ciudad Granja siguen fuera (sin estudios registrados). General sigue siendo la suma de las 6 unidades con histórico completo, sin Medicina Preventiva, para no distorsionar su propia tendencia.&lt;/p&gt;
     &lt;div class=&quot;panel&quot;&gt;
       &lt;div class=&quot;controls&quot;&gt;
-        &lt;div style=&quot;display:flex;align-items:center;gap:9px&quot;&gt;&lt;label style=&quot;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase&quot;&gt;Unidad&lt;/label&gt;
+        &lt;div style=&quot;display:flex;align-items:center;gap:9px&quot;&gt;&lt;label style=&quot;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase&quot;&gt;Unidad&lt;/label&gt;
           &lt;select id=&quot;uniSel&quot;&gt;&lt;/select&gt;&lt;/div&gt;
         &lt;div class=&quot;seg&quot; id=&quot;granSeg&quot;&gt;&lt;button data-g=&quot;m&quot; class=&quot;on&quot;&gt;Mensual&lt;/button&gt;&lt;button data-g=&quot;w&quot;&gt;Semanal&lt;/button&gt;&lt;/div&gt;
         &lt;div class=&quot;seg&quot; id=&quot;rangeSeg&quot; style=&quot;margin-left:8px&quot;&gt;&lt;button data-r=&quot;all&quot; class=&quot;on&quot;&gt;Todo&lt;/button&gt;&lt;button data-r=&quot;2024&quot;&gt;2024&lt;/button&gt;&lt;button data-r=&quot;2025&quot;&gt;2025&lt;/button&gt;&lt;button data-r=&quot;2026&quot;&gt;2026&lt;/button&gt;&lt;button data-r=&quot;6m&quot;&gt;Últimos 6 meses&lt;/button&gt;&lt;/div&gt;
-        &lt;div style=&quot;display:flex;gap:6px;margin-left:auto&quot;&gt;
-          &lt;button class=&quot;segbtn&quot; id=&quot;allDepts&quot;&gt;Todos&lt;/button&gt;
-          &lt;button class=&quot;segbtn&quot; id=&quot;noDepts&quot;&gt;Ninguno&lt;/button&gt;
-        &lt;/div&gt;
       &lt;/div&gt;
-      &lt;div class=&quot;chips&quot; id=&quot;deptChips&quot; style=&quot;margin-bottom:16px&quot;&gt;&lt;/div&gt;
-      &lt;div id=&quot;uniChart&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;lgd&quot; id=&quot;uniLgd&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;featured&quot;&gt;
+        &lt;div class=&quot;featured-head&quot;&gt;
+          &lt;div class=&quot;big-val&quot; id=&quot;uniBigVal&quot;&gt;—&lt;/div&gt;
+          &lt;div class=&quot;trend-chip&quot; id=&quot;uniTrendChip&quot;&gt;—&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id=&quot;uniChart&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;lgd&quot; id=&quot;uniLgd&quot;&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;mini-grid&quot; id=&quot;uniMiniGrid&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class=&quot;cards&quot; id=&quot;uniTrendCards&quot; style=&quot;margin-top:18px&quot;&gt;&lt;/div&gt;
-    &lt;div class=&quot;takeaway&quot; id=&quot;uniTake&quot; style=&quot;border-left-color:var(--us);background:#eef3f8&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;takeaway&quot; id=&quot;uniTake&quot; style=&quot;border-left-color:var(--us);background:#eef3f8;margin-top:18px&quot;&gt;&lt;/div&gt;
   &lt;/section&gt;
   &lt;div id=&quot;estMore2&quot; class=&quot;est-more&quot; style=&quot;display:none&quot;&gt;
     &lt;section id=&quot;top5&quot;&gt;
@@ -1235,45 +1255,17 @@ const UPAL={Ultrasonido:'#3f6fa6',Radiología:'#4e8c70',Resonancia:'#8a6a9c',Tom
   Total:'#1f1f1e'};
 const PALCYC=['#3f6fa6','#4e8c70','#8a6a9c','#ab7a45','#5c7d97','#b5524a','#c2921f','#5f8a8b','#8a8a8a','#6d8a4f','#9c7a52','#7a6a8c'];
 function ucol(d,i){return UPAL[d]|| PALCYC[i%PALCYC.length];}
-let uState={unit:DATA5.units[0], gran:'m', on:{}, range:'all'};
-const MAIN=['Ultrasonido','Radiología','Resonancia','Tomografía','Mamografía'];
+let uState={unit:DATA5.units[0], gran:'m', range:'all', featured:'Total'};
 
 (function(){
   const sel=$(&quot;#uniSel&quot;);
   DATA5.units.forEach(u=&gt;{const o=document.createElement('option');o.value=u;const v=DATA5.deptVol[u];const tot=Object.values(v).reduce((a,b)=&gt;a+b,0);o.textContent=`${u} (${tot.toLocaleString('es-MX')})`;sel.appendChild(o);});
-  sel.onchange=()=&gt;{uState.unit=sel.value;initDepts();drawUni();};
+  sel.onchange=()=&gt;{uState.unit=sel.value;uState.featured='Total';drawUni();};
   $(&quot;#granSeg&quot;).querySelectorAll('button').forEach(b=&gt;b.onclick=()=&gt;{uState.gran=b.dataset.g;$(&quot;#granSeg&quot;).querySelectorAll('button').forEach(x=&gt;x.classList.toggle('on',x===b));drawUni();});
   $(&quot;#rangeSeg&quot;).querySelectorAll('button').forEach(b=&gt;b.onclick=()=&gt;{uState.range=b.dataset.r;$(&quot;#rangeSeg&quot;).querySelectorAll('button').forEach(x=&gt;x.classList.toggle('on',x===b));drawUni();});
-  $(&quot;#allDepts&quot;).onclick=()=&gt;{Object.keys(uState.on).forEach(d=&gt;uState.on[d]=true);syncChips();drawUni();};
-  $(&quot;#noDepts&quot;).onclick=()=&gt;{Object.keys(uState.on).forEach(d=&gt;uState.on[d]=(d==='Total'));syncChips();drawUni();};
-  initDepts();drawUni();
+  drawUni();
 })();
-function unitDepts(){return Object.keys(DATA5.deptVol[uState.unit]);}
-function initDepts(){
-  const depts=unitDepts();uState.on={};
-  depts.forEach(d=&gt;uState.on[d]=MAIN.includes(d));
-  uState.on['Total']=true;
-  // if none of MAIN present, turn on top 3
-  if(!depts.some(d=&gt;MAIN.includes(d))) depts.slice(0,3).forEach(d=&gt;uState.on[d]=true);
-  const chips=$(&quot;#deptChips&quot;);chips.innerHTML='';
-  ['Total',...depts].forEach((d,i)=&gt;{
-    const c=document.createElement('div');c.className='chip';c.dataset.d=d;
-    const col=d==='Total'?UPAL.Total:ucol(d,i-1);
-    c.innerHTML=`&lt;span class=&quot;dot&quot; style=&quot;background:${col}&quot;&gt;&lt;/span&gt;${d}`+(d!=='Total'?` &lt;span style=&quot;opacity:.6&quot;&gt;${DATA5.deptVol[uState.unit][d]}&lt;/span&gt;`:'');
-    c.style.cssText=`--c:${col}`;
-    c.onclick=()=&gt;{uState.on[d]=!uState.on[d];syncChips();drawUni();};
-    chips.appendChild(c);
-  });
-  syncChips();
-}
-function syncChips(){
-  $(&quot;#deptChips&quot;).querySelectorAll('.chip').forEach(c=&gt;{const d=c.dataset.d;const onc=uState.on[d];
-    c.classList.toggle('on',onc);
-    const col=getComputedStyle(c).getPropertyValue('--c');
-    if(onc){c.style.background=col;c.style.color='#fff';c.style.borderColor='transparent';c.style.opacity=1;}
-    else{c.style.background='#fff';c.style.color='var(--muted)';c.style.borderColor='var(--line)';c.style.opacity=.5;}
-  });
-}
+function unitDepts(){return Object.keys(DATA5.deptVol[uState.unit]).sort((a,b)=&gt;DATA5.deptVol[uState.unit][b]-DATA5.deptVol[uState.unit][a]);}
 function rangeWindow(gran){
   // returns [lo,hi] inclusive indices into meses/weeks for uState.range
   const keys = gran==='m'?DATA5.mesesKey:DATA5.weeks;
@@ -1290,6 +1282,14 @@ function rangeWindow(gran){
   }
   return [0,N-1];
 }
+const linfit=(vals)=&gt;{const N=vals.length;if(N&lt;2)return null;let sx=0,sy=0,sxx=0,sxy=0;for(let i=0;i&lt;N;i++){sx+=i;sy+=vals[i];sxx+=i*i;sxy+=i*vals[i];}const den=N*sxx-sx*sx;if(!den)return null;const b=(N*sxy-sx*sy)/den,a=(sy-b*sx)/N;return {y0:a,y1:a+b*(N-1)};};
+function sparkPath(vals,W,H,pad){
+  const n=vals.length;if(n&lt;2) return {d:'',last:null};
+  const lo=Math.min(...vals),hi=Math.max(...vals);const span=(hi-lo)||1;
+  const x=i=&gt;pad+i*((W-2*pad)/(n-1)),y=v=&gt;pad+(1-(v-lo)/span)*(H-2*pad);
+  let d='';for(let i=0;i&lt;n;i++){d+=(i?'L':'M')+x(i).toFixed(1)+' '+y(vals[i]).toFixed(1)+' ';}
+  return {d,last:[x(n-1),y(vals[n-1])]};
+}
 function drawUni(){
   const unit=uState.unit,gran=uState.gran;
   const [lo,hi]=rangeWindow(gran);
@@ -1298,46 +1298,11 @@ function drawUni(){
   const n=xs.length;
   const full=uState.range==='all';
   const depts=unitDepts();
-  const active=['Total',...depts].filter(d=&gt;uState.on[d]);
+  if(!depts.includes(uState.featured) &amp;&amp; uState.featured!=='Total') uState.featured='Total';
+  const featured=uState.featured;
   const getArr=d=&gt; (d==='Total'? DATA5.unitTotals[unit][gran] : DATA5.data[unit][d][gran]).slice(lo,hi+1);
   const getTr=d=&gt; d==='Total'? DATA5.unitTotals[unit][gran==='m'?'tM':'tW'] : DATA5.data[unit][d][gran==='m'?'tM':'tW'];
-  let rawmax=0;active.forEach(d=&gt;getArr(d).forEach(v=&gt;rawmax=Math.max(rawmax,v)));rawmax=rawmax||1;
-  const step=niceStep(rawmax,6);const max=Math.max(step,Math.ceil(rawmax/step)*step);
-  const W=Math.min(1120,$(&quot;#uniChart&quot;).clientWidth||1120),Ht=400,P={t:18,r:18,b:42,l:46};
-  const iw=W-P.l-P.r,ih=Ht-P.t-P.b;
-  const x=i=&gt;P.l+(n&gt;1?iw*i/(n-1):0),y=v=&gt;P.t+ih-ih*v/max;
-  const svg=el('svg',{viewBox:`0 0 ${W} ${Ht}`});
-  for(let g=0;g&lt;=max+0.5;g+=step){const yy=y(g);svg.appendChild(el('line',{class:'grid',x1:P.l,x2:W-P.r,y1:yy,y2:yy}));const t=el('text',{class:'tick',x:P.l-8,y:yy+4,'text-anchor':'end'});t.textContent=g;svg.appendChild(t);}
-  // x labels
-  if(gran==='m'){xs.forEach((m,i)=&gt;{const abs=lo+i;const t=el('text',{class:'tick',x:x(i),y:Ht-P.b+18,'text-anchor':'middle','font-size':(xs.length&gt;14?'9.5':'11')});t.textContent=m+(abs===DATA5.partialIdx&amp;&amp;DATA5.partial?'*':'');svg.appendChild(t);});
-    if(DATA5.partial&amp;&amp;DATA5.partialIdx&gt;=lo&amp;&amp;DATA5.partialIdx&lt;=hi){svg.appendChild(el('rect',{x:x(DATA5.partialIdx-lo)-8,y:P.t,width:16,height:ih,fill:'#000','fill-opacity':.03}));}
-  } else {(function(){const nn=xs.length,maxT=14;const tset=new Set();if(nn&lt;=maxT){for(let k=0;k&lt;nn;k++)tset.add(k);}else{for(let k=0;k&lt;maxT;k++)tset.add(Math.round(k*(nn-1)/(maxT-1)));}xs.forEach((w,i)=&gt;{if(tset.has(i)){const t=el('text',{class:'tick',x:x(i),y:Ht-P.b+18,'text-anchor':'middle','font-size':'9.5'});t.textContent=DATA5.weekStart[w];svg.appendChild(t);}});})();}
-  svg.appendChild(el('line',{class:'axis',x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih}));
-  const linfit=(vals)=&gt;{const N=vals.length;if(N&lt;2)return null;let sx=0,sy=0,sxx=0,sxy=0;for(let i=0;i&lt;N;i++){sx+=i;sy+=vals[i];sxx+=i*i;sxy+=i*vals[i];}const den=N*sxx-sx*sx;if(!den)return null;const b=(N*sxy-sx*sy)/den,a=(sy-b*sx)/N;return {y0:a,y1:a+b*(N-1)};};
-  active.forEach((d,ai)=&gt;{
-    const arr=getArr(d),col=d==='Total'?UPAL.Total:ucol(d,depts.indexOf(d));
-    // trend (dashed)
-    if(full){const tr=getTr(d);const xa=0,xb=(gran==='m'?(DATA5.monthFitEnd!=null?DATA5.monthFitEnd:n-1):(DATA5.weekFitEnd!=null?DATA5.weekFitEnd:n-1));
-      if(tr &amp;&amp; (tr.y0||tr.y1)) svg.appendChild(el('line',{x1:x(xa),y1:y(tr.y0),x2:x(xb),y2:y(tr.y1),stroke:col,'stroke-width':1.4,'stroke-dasharray':'6 4','stroke-opacity':.5}));
-    } else {const fitEnd=(gran==='m'&amp;&amp;DATA5.partial&amp;&amp;hi===DATA5.partialIdx)?n-2:n-1;const lf=linfit(arr.slice(0,fitEnd+1));
-      if(lf) svg.appendChild(el('line',{x1:x(0),y1:y(lf.y0),x2:x(fitEnd),y2:y(lf.y1),stroke:col,'stroke-width':1.4,'stroke-dasharray':'6 4','stroke-opacity':.5}));}
-    const pts=arr.map((v,i)=&gt;[x(i),y(v)]);
-    svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0]+' '+p[1]).join(' '),fill:'none',stroke:col,'stroke-width':d==='Total'?2.8:1.9,'stroke-linejoin':'round','stroke-opacity':d==='Total'?1:.92}));
-    pts.forEach((p,i)=&gt;{const c=el('circle',{cx:p[0],cy:p[1],r:d==='Total'?2.6:2,fill:col,'data-i':i});
-      const lbl=gran==='m'?xs[i]+((lo+i)===DATA5.partialIdx&amp;&amp;DATA5.partial?' (parcial)':''):('Sem '+xs[i].slice(6)+' · '+DATA5.weekStart[xs[i]]);
-      c.addEventListener('mousemove',e=&gt;showTip(`&lt;b&gt;${lbl}&lt;/b&gt;&lt;br&gt;${d}: ${arr[i]} estudios`,e.clientX,e.clientY));c.addEventListener('mouseleave',hideTip);svg.appendChild(c);});
-  });
-  wireHover(svg,P,W,Ht,x,n,i=&gt;{
-    const lbl=gran==='m'?xs[i]+((lo+i)===DATA5.partialIdx&amp;&amp;DATA5.partial?' (parcial)':''):('Sem '+xs[i].slice(6)+' · '+DATA5.weekStart[xs[i]]);
-    let s=`&lt;b&gt;${lbl}&lt;/b&gt;`;
-    active.forEach(d=&gt;{s+=`&lt;br&gt;${d}: ${getArr(d)[i]} estudios`;});
-    return s;
-  });
-  $(&quot;#uniChart&quot;).innerHTML='';$(&quot;#uniChart&quot;).appendChild(svg);
-  $(&quot;#uniLgd&quot;).innerHTML=`&lt;span style=&quot;color:var(--muted)&quot;&gt;Línea sólida = estudios por ${gran==='m'?'mes':'semana'} · punteada = tendencia${gran==='m'&amp;&amp;DATA5.partial?' (incluye julio 2026 completo)':''}.&lt;/span&gt;`;
-  // trend cards — full range usa tM/tW precomputado; sub-rango calcula sobre lo visible
-  const key=gran==='m'?'tM':'tW';
-  const fitEndC=(gran==='m'&amp;&amp;DATA5.partial&amp;&amp;hi===DATA5.partialIdx)?n-2:n-1;
+  const fitEndC=n-1;
   const trendOf=d=&gt;{
     if(full) return getTr(d);
     const vals=getArr(d).slice(0,fitEndC+1);const lf=linfit(vals);
@@ -1346,27 +1311,68 @@ function drawUni(){
     const pct=lf.y0&gt;0?((lf.y1-lf.y0)/lf.y0*100):0;
     return {y0:lf.y0,y1:lf.y1,b,pct};
   };
-  $(&quot;#uniTrendCards&quot;).innerHTML=active.map((d,i)=&gt;{const t=trendOf(d);const up=t.pct&gt;=3,down=t.pct&lt;=-3;const col=d==='Total'?UPAL.Total:ucol(d,depts.indexOf(d));
-    const arrD=getArr(d),nD=arrD.length,curV=arrD[nD-1],prevV=nD&gt;=2?arrD[nD-2]:null;
-    const momPct=(prevV!=null&amp;&amp;prevV&gt;0)?((curV-prevV)/prevV*100):null;
-    const momUp=momPct!=null&amp;&amp;momPct&gt;=3,momDown=momPct!=null&amp;&amp;momPct&lt;=-3;
-    const momPartial=gran==='m'&amp;&amp;DATA5.partial&amp;&amp;(lo+nD-1)===DATA5.partialIdx;
-    const momUnit=gran==='m'?'mes':'semana';
-    const momArrow=momUp?'▲':momDown?'▼':'≈';
-    const momHtml=momPct==null?'':`&lt;p class=&quot;d&quot; style=&quot;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)&quot;&gt;vs ${momUnit} anterior &lt;span style=&quot;color:var(--faint)&quot;&gt;(último dato)&lt;/span&gt;: &lt;b style=&quot;color:${momUp?'var(--ok)':momDown?'var(--danger)':'inherit'}&quot;&gt;${momArrow} ${momPct&gt;=0?'+':''}${momPct.toFixed(0)}%&lt;/b&gt; (${prevV.toFixed(0)}→${curV.toFixed(0)})${momPartial?' &lt;i&gt;parcial&lt;/i&gt;':''}&lt;/p&gt;`;
-    return `&lt;div class=&quot;card&quot;&gt;&lt;span style=&quot;position:absolute;left:0;top:0;bottom:0;width:3px;background:${col}&quot;&gt;&lt;/span&gt;
-      &lt;p class=&quot;k&quot;&gt;${d}&lt;/p&gt;&lt;div class=&quot;v&quot; style=&quot;color:${col}&quot;&gt;${t.pct&gt;=0?'+':''}${t.pct.toFixed(0)}%&lt;/div&gt;
-      &lt;span class=&quot;tag ${up?'up':down?'down':''}&quot;&gt;${up?'▲ crece':down?'▼ baja':'≈ estable'} en el periodo&lt;/span&gt;
-      &lt;p class=&quot;d&quot; style=&quot;margin-top:8px&quot;&gt;${t.b&gt;=0?'+':''}${t.b.toFixed(1)}/${gran==='m'?'mes':'sem'} · ${t.y0.toFixed(0)}→${t.y1.toFixed(0)} · tendencia del rango&lt;/p&gt;
-      ${momHtml}&lt;/div&gt;`;}).join('');
-  // takeaway
+
+  // ---------- featured chart (línea mínima) ----------
+  const arrF=getArr(featured),col=featured==='Total'?UPAL.Total:ucol(featured,depts.indexOf(featured));
+  const W=Math.min(1120,$(&quot;#uniChart&quot;).clientWidth||1120),Ht=240,P={t:14,r:14,b:26,l:14};
+  const iw=W-P.l-P.r,ih=Ht-P.t-P.b;
+  let rawmax=Math.max(...arrF,1),rawmin=Math.min(...arrF,0);
+  const span=(rawmax-rawmin)||1,padV=span*0.12;
+  const yv0=rawmin-padV,yv1=rawmax+padV;
+  const x=i=&gt;P.l+(n&gt;1?iw*i/(n-1):0),y=v=&gt;P.t+(1-(v-yv0)/(yv1-yv0))*ih;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${Ht}`});
+  svg.appendChild(el('line',{class:'axis',x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih}));
+  const maxTicks=gran==='m'?7:6;
+  const tset=new Set();if(n&lt;=maxTicks){for(let k=0;k&lt;n;k++)tset.add(k);}else{for(let k=0;k&lt;maxTicks;k++)tset.add(Math.round(k*(n-1)/(maxTicks-1)));}
+  xs.forEach((lbl,i)=&gt;{if(!tset.has(i))return;const txt=gran==='m'?lbl:DATA5.weekStart[lbl];
+    const anchor=i===0?'start':(i===n-1?'end':'middle');
+    const t=el('text',{class:'tick',x:x(i),y:Ht-8,'text-anchor':anchor});t.textContent=txt;svg.appendChild(t);
+  });
+  const pts=arrF.map((v,i)=&gt;[x(i),y(v)]);
+  svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),fill:'none',stroke:col,'stroke-width':1.6,'stroke-linejoin':'round','stroke-linecap':'round'}));
+  if(pts.length) svg.appendChild(el('circle',{cx:pts[pts.length-1][0],cy:pts[pts.length-1][1],r:2.8,fill:col}));
+  wireHover(svg,P,W,Ht,x,n,i=&gt;{
+    const lbl=gran==='m'?xs[i]:('Sem '+xs[i].slice(6)+' · '+DATA5.weekStart[xs[i]]);
+    return `&lt;b&gt;${lbl}&lt;/b&gt;&lt;br&gt;${featured}: ${arrF[i]} estudios`;
+  });
+  $(&quot;#uniChart&quot;).innerHTML='';$(&quot;#uniChart&quot;).appendChild(svg);
+  $(&quot;#uniLgd&quot;).innerHTML=`&lt;span style=&quot;color:var(--muted)&quot;&gt;Línea sólida = estudios por ${gran==='m'?'mes':'semana'}, ${featured}.&lt;/span&gt;`;
+
+  const curV=arrF[arrF.length-1]||0,prevV=arrF.length&gt;=2?arrF[arrF.length-2]:null;
+  const momPct=(prevV!=null&amp;&amp;prevV&gt;0)?((curV-prevV)/prevV*100):null;
+  const lastLbl=gran==='m'?xs[xs.length-1]:('sem '+xs[xs.length-1].slice(6));
+  $(&quot;#uniBigVal&quot;).innerHTML=`${curV.toLocaleString('es-MX')}&lt;span class=&quot;unit-lbl&quot;&gt;estudios · ${lastLbl}&lt;/span&gt;`+
+    (featured!=='Total'?`&lt;button type=&quot;button&quot; class=&quot;back-total&quot; id=&quot;uniBackTotal&quot;&gt;← Total&lt;/button&gt;`:'');
+  const backBtn=document.getElementById('uniBackTotal');
+  if(backBtn) backBtn.onclick=()=&gt;{uState.featured='Total';drawUni();};
+  const chip=$(&quot;#uniTrendChip&quot;);
+  if(momPct==null){chip.textContent='—';chip.className='trend-chip flat';}
+  else{const up=momPct&gt;=3,down=momPct&lt;=-3;chip.className='trend-chip '+(up?'up':down?'down':'flat');
+    chip.textContent=`${up?'▲':down?'▼':'≈'} ${momPct&gt;=0?'+':''}${momPct.toFixed(0)}% vs ${gran==='m'?'mes':'semana'} anterior`;}
+
+  // ---------- mini-grid ----------
+  const miniW=200,miniH=44,miniPad=4;
+  $(&quot;#uniMiniGrid&quot;).innerHTML=depts.map((d,i)=&gt;{
+    const arr=getArr(d),dcol=ucol(d,i);
+    const {d:path,last}=sparkPath(arr,miniW,miniH,miniPad);
+    const dot=last?`&lt;circle cx=&quot;${last[0].toFixed(1)}&quot; cy=&quot;${last[1].toFixed(1)}&quot; r=&quot;2.2&quot; fill=&quot;${dcol}&quot;/&gt;`:'';
+    const lastV=arr[arr.length-1]||0;
+    return `&lt;button type=&quot;button&quot; class=&quot;mini${d===featured?' featured':''}&quot; data-d=&quot;${d}&quot;&gt;
+      &lt;div class=&quot;mini-head&quot;&gt;&lt;span class=&quot;mini-name&quot; style=&quot;color:${dcol}&quot;&gt;${d}&lt;/span&gt;&lt;span class=&quot;mini-val&quot;&gt;${lastV.toLocaleString('es-MX')}&lt;/span&gt;&lt;/div&gt;
+      &lt;svg viewBox=&quot;0 0 ${miniW} ${miniH}&quot; width=&quot;100%&quot; height=&quot;32&quot;&gt;&lt;path d=&quot;${path}&quot; fill=&quot;none&quot; stroke=&quot;${dcol}&quot; stroke-width=&quot;1.5&quot;/&gt;${dot}&lt;/svg&gt;
+      &lt;div class=&quot;mini-tot&quot;&gt;${DATA5.deptVol[unit][d].toLocaleString('es-MX')} histórico&lt;/div&gt;
+    &lt;/button&gt;`;
+  }).join('');
+  $(&quot;#uniMiniGrid&quot;).querySelectorAll('.mini').forEach(b=&gt;b.onclick=()=&gt;{uState.featured=b.dataset.d;drawUni();});
+
+  // ---------- takeaway ----------
   const RLBL={all:'jul 2024 – oct 2026',2024:'2024 (jul–dic)','2025':'2025','2026':'2026 (ene–oct)','6m':'últimos 6 '+(gran==='m'?'meses':'~6 meses')};
   const tot=trendOf('Total');
-  const dl=depts.map(d=&gt;({d,t:trendOf(d)})).filter(o=&gt;DATA5.deptVol[unit][o.d]&gt;=40);
+  const dl=depts.map(d=&gt;({d,t:trendOf(d)})).filter(o=&gt;DATA5.deptVol[unit][o.d]&gt;=40 &amp;&amp; Math.abs(o.t.pct)&lt;300);
   const grow=dl.slice().sort((a,b)=&gt;b.t.pct-a.t.pct)[0], drop=dl.slice().sort((a,b)=&gt;a.t.pct-b.t.pct)[0];
-  $(&quot;#uniTake&quot;).innerHTML=`En &lt;b&gt;${unit}&lt;/b&gt; · &lt;b&gt;${RLBL[uState.range]||'rango'}&lt;/b&gt;, el total ${tot.pct&gt;=0?'crece':'baja'} &lt;b&gt;${tot.pct&gt;=0?'+':''}${tot.pct.toFixed(0)}%&lt;/b&gt; en la vista ${gran==='m'?'mensual':'semanal'}${full&amp;&amp;gran==='m'?' (jul 2024–sep 2026)':''}.`+
-    (grow&amp;&amp;drop?` La modalidad que más ${grow.t.pct&gt;=0?'sube es &lt;b&gt;'+grow.d+'&lt;/b&gt; ('+(grow.t.pct&gt;=0?'+':'')+grow.t.pct.toFixed(0)+'%)':'destaca'} y la que más baja es &lt;b&gt;${drop.d}&lt;/b&gt; (${drop.t.pct.toFixed(0)}%).`:'')+
-    ` Cambia el rango o enciende departamentos arriba para aislar tendencias.`;
+  $(&quot;#uniTake&quot;).innerHTML=`En &lt;b&gt;${unit}&lt;/b&gt; · &lt;b&gt;${RLBL[uState.range]||'rango'}&lt;/b&gt;, el total ${tot.pct&gt;=0?'crece':'baja'} &lt;b&gt;${tot.pct&gt;=0?'+':''}${tot.pct.toFixed(0)}%&lt;/b&gt; en la vista ${gran==='m'?'mensual':'semanal'}.`+
+    (grow&amp;&amp;drop?` El departamento que más ${grow.t.pct&gt;=0?'sube es &lt;b&gt;'+grow.d+'&lt;/b&gt; ('+(grow.t.pct&gt;=0?'+':'')+grow.t.pct.toFixed(0)+'%)':'destaca'} y el que más baja es &lt;b&gt;${drop.d}&lt;/b&gt; (${drop.t.pct.toFixed(0)}%).`:'')+
+    ` Clic en una mini-gráfica para verla en grande.`;
 }
 
 function drawInc(){
