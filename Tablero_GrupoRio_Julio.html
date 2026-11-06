@@ -720,6 +720,16 @@
           <p>Puntualidad en entrega de resultados <span class="badge" id="ind-badge-mes"></span> <span class="badge" id="ind-badge-wk"></span></p>
         </div>
 
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-head">
+            <div>
+              <h3>Indicador por unidad</h3>
+              <p class="csub" id="ind-unit-sub">Cumplimiento real · meta 98% (línea punteada)</p>
+            </div>
+          </div>
+          <div class="bars wide" id="ind-unit-bars"></div>
+        </div>
+
         <div class="nav-label" style="margin:0 0 8px">Unidad</div>
         <div class="unit-bar" id="unit-bar"></div>
 
@@ -4645,6 +4655,7 @@ function renderAll(){
   // Indicador por unidad (junio) + tendencia temporal
   buildUnitBar();
   renderIndicador('Todas');
+  renderIndicadorPorUnidad();
   document.getElementById('inc-toggle').onclick=()=>setIncDetail(!incDetailOpen);
   document.getElementById('inc-close').onclick=()=>setIncDetail(false);
   document.getElementById('excl-toggle').onclick=()=>setExclDetail(!exclDetailOpen);
@@ -4719,7 +4730,7 @@ function renderIncDrill(){
     const names = INC_UNITS_ORDEN.filter(u=>unidades[u] && unidades[u].prometidos>0);
     const data = names.map(u=>({name:u, v:unidades[u].indicador, n:unidades[u].prometidos, inc:unidades[u].incumpl}));
     barChart(el, data, '#4c8c6f', {
-      max:100, fmt:v=>v.toFixed(1)+'%',
+      max:100, target:98, fmt:v=>v.toFixed(1)+'%',
       colorFn:(v,d)=>INC_UNIT_COLORS[d.name]||'#4c8c6f',
       tip:d=>`<b>${d.name}</b> · ${d.v.toFixed(1)}% cumplimiento · ${fmt(d.n-d.inc)}/${fmt(d.n)} a tiempo`
     });
@@ -4825,6 +4836,16 @@ function setExclDetail(open){
   }
 }
 
+function renderIndicadorPorUnidad(){
+  const names = INC_UNITS_ORDEN.filter(u=>unidades[u] && unidades[u].prometidos>0);
+  const data = names.map(u=>({name:u, v:unidades[u].indicador, n:unidades[u].prometidos, inc:unidades[u].incumpl}));
+  barChart(document.getElementById('ind-unit-bars'), data, '#4c8c6f', {
+    max:100, target:98, fmt:v=>v.toFixed(1)+'%',
+    colorFn:(v,d)=>INC_UNIT_COLORS[d.name]||'#4c8c6f',
+    tip:d=>`<b>${d.name}</b> · ${d.v.toFixed(1)}% cumplimiento · ${fmt(d.n-d.inc)}/${fmt(d.n)} a tiempo`
+  });
+  document.getElementById('ind-unit-sub').textContent = `Cumplimiento real · meta 98% (línea punteada) · ${names.length} unidades`;
+}
 function renderIndicador(nombre){
   const u=unidades[nombre]; if(!u) return;
   const et=(nombre==='Todas')?'todas las unidades':nombre;
