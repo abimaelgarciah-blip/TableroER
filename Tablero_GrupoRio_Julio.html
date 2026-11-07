@@ -910,6 +910,29 @@
   #unidad .mini-tot{font-size:10.5px;color:var(--muted);margin-top:4px}
   @media(max-width:980px){#unidad .mini-grid{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:640px){#unidad .mini-grid{grid-template-columns:repeat(2,1fr)}}
+  #unidad .yoy-wrap{margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+  #unidad .yoy-head h3{margin:0 0 3px;font-size:16px;font-weight:700;color:var(--ink)}
+  #unidad .yoy-sub{margin:0 0 16px;font-size:12.5px;color:var(--muted)}
+  #unidad .yoy-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media(max-width:860px){#unidad .yoy-grid{grid-template-columns:1fr}}
+  #unidad .yoy-panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  #unidad .yoy-panel-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:12px}
+  #unidad .yoy-legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);margin-bottom:10px}
+  #unidad .yoy-legend span{display:inline-flex;align-items:center;gap:5px}
+  #unidad .yoy-legend .sw{width:10px;height:10px;border-radius:3px}
+  #unidad .yoy-row{display:grid;grid-template-columns:84px 1fr 124px;align-items:center;gap:8px;padding:5px 0}
+  #unidad .yoy-row+.yoy-row{border-top:1px solid var(--line2)}
+  #unidad .yoy-label{font-size:11.5px;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #unidad .yoy-bars{display:flex;flex-direction:column;gap:3px}
+  #unidad .yoy-bar-track{position:relative;background:var(--line2);border-radius:3px;height:7px}
+  #unidad .yoy-bar-fill{position:absolute;top:0;left:0;height:100%;border-radius:3px}
+  #unidad .yoy-bar-fill.y25{background:var(--faint)}
+  #unidad .yoy-bar-fill.y26{background:var(--us)}
+  #unidad .yoy-nums{font-size:10.5px;color:var(--muted);text-align:right;white-space:nowrap}
+  #unidad .yoy-delta{font-weight:700}
+  #unidad .yoy-delta.up{color:var(--ok)}
+  #unidad .yoy-delta.down{color:var(--danger)}
+  #unidad .yoy-delta.flat{color:var(--muted)}
   .brief{background:linear-gradient(180deg,#0f2438,#16324a);color:#eef4f9;border-radius:16px;padding:26px 28px;margin-top:26px}
   .brief-tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8fe3ec;margin:0 0 10px;font-weight:600}
   .brief-h{font-size:clamp(19px,2.6vw,26px);line-height:1.15;margin:0 0 18px;font-weight:750;letter-spacing:-.01em;color:#fff}
@@ -1057,7 +1080,10 @@
       &lt;div class=&quot;featured&quot;&gt;
         &lt;div class=&quot;featured-head&quot;&gt;
           &lt;div class=&quot;big-val&quot; id=&quot;uniBigVal&quot;&gt;—&lt;/div&gt;
-          &lt;div class=&quot;trend-chip&quot; id=&quot;uniTrendChip&quot;&gt;—&lt;/div&gt;
+          &lt;div style=&quot;display:flex;flex-direction:column;gap:6px;align-items:flex-end&quot;&gt;
+            &lt;div class=&quot;trend-chip&quot; id=&quot;uniTrendChip&quot;&gt;—&lt;/div&gt;
+            &lt;div class=&quot;trend-chip&quot; id=&quot;uniTrendChipYoy&quot;&gt;—&lt;/div&gt;
+          &lt;/div&gt;
         &lt;/div&gt;
         &lt;div id=&quot;uniChart&quot;&gt;&lt;/div&gt;
         &lt;div class=&quot;lgd&quot; id=&quot;uniLgd&quot;&gt;&lt;/div&gt;
@@ -1065,6 +1091,24 @@
       &lt;div class=&quot;mini-grid&quot; id=&quot;uniMiniGrid&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
     &lt;div class=&quot;takeaway&quot; id=&quot;uniTake&quot; style=&quot;border-left-color:var(--us);background:#eef3f8;margin-top:18px&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;yoy-wrap&quot; id=&quot;uniYoyWrap&quot;&gt;
+      &lt;div class=&quot;yoy-head&quot;&gt;
+        &lt;h3&gt;Comparativo anual por departamento · &lt;span id=&quot;uniYoyUnit&quot;&gt;—&lt;/span&gt;&lt;/h3&gt;
+        &lt;p class=&quot;yoy-sub&quot; id=&quot;uniYoySub&quot;&gt;Octubre 2025 vs. octubre 2026&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;yoy-grid&quot;&gt;
+        &lt;div class=&quot;yoy-panel&quot;&gt;
+          &lt;div class=&quot;yoy-panel-title&quot;&gt;Cantidad de estudios&lt;/div&gt;
+          &lt;div class=&quot;yoy-legend&quot;&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--faint)&quot;&gt;&lt;/span&gt;2025&lt;/span&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--us)&quot;&gt;&lt;/span&gt;2026&lt;/span&gt;&lt;/div&gt;
+          &lt;div id=&quot;uniYoyVol&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;yoy-panel&quot;&gt;
+          &lt;div class=&quot;yoy-panel-title&quot;&gt;Cumplimiento por modalidad&lt;/div&gt;
+          &lt;div class=&quot;yoy-legend&quot;&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--faint)&quot;&gt;&lt;/span&gt;2025&lt;/span&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--us)&quot;&gt;&lt;/span&gt;2026&lt;/span&gt;&lt;/div&gt;
+          &lt;div id=&quot;uniYoyCumpl&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
   &lt;/section&gt;
   &lt;div id=&quot;estMore2&quot; class=&quot;est-more&quot; style=&quot;display:none&quot;&gt;
     &lt;section id=&quot;top5&quot;&gt;
@@ -1280,6 +1324,7 @@ const UPAL={Ultrasonido:'#3f6fa6',Radiología:'#4e8c70',Resonancia:'#8a6a9c',Tom
   Total:'#1f1f1e'};
 const PALCYC=['#3f6fa6','#4e8c70','#8a6a9c','#ab7a45','#5c7d97','#b5524a','#c2921f','#5f8a8b','#8a8a8a','#6d8a4f','#9c7a52','#7a6a8c'];
 function ucol(d,i){return UPAL[d]|| PALCYC[i%PALCYC.length];}
+const YOY_MOD = {&quot;López Mateos&quot;: [{&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 689, &quot;pct25&quot;: 93.8, &quot;n26&quot;: 531, &quot;pct26&quot;: 98.1}, {&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 545, &quot;pct25&quot;: 99.4, &quot;n26&quot;: 520, &quot;pct26&quot;: 98.7}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 587, &quot;pct25&quot;: 97.1, &quot;n26&quot;: 506, &quot;pct26&quot;: 97.2}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 113, &quot;pct25&quot;: 98.2, &quot;n26&quot;: 464, &quot;pct26&quot;: 97.2}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 585, &quot;pct25&quot;: 98.8, &quot;n26&quot;: 248, &quot;pct26&quot;: 99.6}, {&quot;dept&quot;: &quot;Medicina Nuclear&quot;, &quot;n25&quot;: 195, &quot;pct25&quot;: 99.5, &quot;n26&quot;: 212, &quot;pct26&quot;: 99.1}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 279, &quot;pct25&quot;: 99.6, &quot;n26&quot;: 209, &quot;pct26&quot;: 97.1}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 241, &quot;pct25&quot;: 99.6, &quot;n26&quot;: 207, &quot;pct26&quot;: 98.1}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 213, &quot;pct25&quot;: 97.2, &quot;n26&quot;: 194, &quot;pct26&quot;: 98.5}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 99, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 83, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Paquetes&quot;, &quot;n25&quot;: 66, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 65, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 80, &quot;pct25&quot;: 96.2, &quot;n26&quot;: 49, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 33, &quot;pct25&quot;: 93.9, &quot;n26&quot;: 40, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Electromiografía&quot;, &quot;n25&quot;: 49, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 34, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Bioimpedanciología&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 9, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Maquila&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Medicina Preventiva&quot;: [{&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 1107, &quot;pct25&quot;: 99.5, &quot;n26&quot;: 1121, &quot;pct26&quot;: 99.6}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 661, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 680, &quot;pct26&quot;: 99.7}, {&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 541, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 616, &quot;pct26&quot;: 99.8}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 494, &quot;pct25&quot;: 99.4, &quot;n26&quot;: 553, &quot;pct26&quot;: 99.6}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 241, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 247, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Bioimpedanciología&quot;, &quot;n25&quot;: 161, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 157, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicio Dental&quot;, &quot;n25&quot;: 110, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 122, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 74, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 80, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 79, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 79, &quot;pct26&quot;: 98.7}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 34, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 13, &quot;pct26&quot;: 92.3}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 5, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 3, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Chequeos Médicos&quot;, &quot;n25&quot;: 3, &quot;pct25&quot;: 66.7, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Acueducto&quot;: [{&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 352, &quot;pct25&quot;: 92.9, &quot;n26&quot;: 282, &quot;pct26&quot;: 96.8}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 251, &quot;pct25&quot;: 93.6, &quot;n26&quot;: 268, &quot;pct26&quot;: 97.4}, {&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 169, &quot;pct25&quot;: 99.4, &quot;n26&quot;: 168, &quot;pct26&quot;: 99.4}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 395, &quot;pct25&quot;: 90.6, &quot;n26&quot;: 131, &quot;pct26&quot;: 94.7}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 17, &quot;pct25&quot;: 94.1, &quot;n26&quot;: 9, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 7, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 6, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 7, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 5, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 5, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 4, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 4, &quot;pct25&quot;: 75.0, &quot;n26&quot;: 3, &quot;pct26&quot;: 66.7}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 2, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 2, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Medicina Nuclear&quot;, &quot;n25&quot;: 17, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 1, &quot;pct26&quot;: 0.0}, {&quot;dept&quot;: &quot;Paquetes&quot;, &quot;n25&quot;: 10, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Bioimpedanciología&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 2, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Clínica de la Mujer&quot;: [{&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 323, &quot;pct25&quot;: 97.5, &quot;n26&quot;: 344, &quot;pct26&quot;: 96.5}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 279, &quot;pct25&quot;: 97.1, &quot;n26&quot;: 266, &quot;pct26&quot;: 98.5}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 97, &quot;pct25&quot;: 94.8, &quot;n26&quot;: 106, &quot;pct26&quot;: 89.6}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 40, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 19, &quot;pct26&quot;: 94.7}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 18, &quot;pct25&quot;: 88.9, &quot;n26&quot;: 8, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 7, &quot;pct25&quot;: 85.7, &quot;n26&quot;: 3, &quot;pct26&quot;: 66.7}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 2, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 2, &quot;pct26&quot;: 50.0}, {&quot;dept&quot;: &quot;Paquetes&quot;, &quot;n25&quot;: 5, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 2, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Medicina Nuclear&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}], &quot;Chamizal&quot;: [{&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 167, &quot;pct25&quot;: 99.4, &quot;n26&quot;: 236, &quot;pct26&quot;: 97.5}, {&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 68, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 41, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Guadalupe&quot;: [{&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 87, &quot;pct25&quot;: 97.7, &quot;n26&quot;: 55, &quot;pct26&quot;: 98.2}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 3, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 0.0, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 0.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 2, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Las Águilas&quot;: [{&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 2, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 2, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 0, &quot;pct25&quot;: null, &quot;n26&quot;: 1, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 2, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;Total&quot;: [{&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 1734, &quot;pct25&quot;: 99.2, &quot;n26&quot;: 1746, &quot;pct26&quot;: 98.7}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 1444, &quot;pct25&quot;: 95.6, &quot;n26&quot;: 1358, &quot;pct26&quot;: 98.5}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 1235, &quot;pct25&quot;: 99.4, &quot;n26&quot;: 1196, &quot;pct26&quot;: 99.5}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 1144, &quot;pct25&quot;: 96.2, &quot;n26&quot;: 1039, &quot;pct26&quot;: 97.1}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 959, &quot;pct25&quot;: 99.8, &quot;n26&quot;: 901, &quot;pct26&quot;: 99.0}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 509, &quot;pct25&quot;: 92.1, &quot;n26&quot;: 598, &quot;pct26&quot;: 96.7}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 600, &quot;pct25&quot;: 98.3, &quot;n26&quot;: 557, &quot;pct26&quot;: 98.4}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 396, &quot;pct25&quot;: 97.0, &quot;n26&quot;: 383, &quot;pct26&quot;: 96.1}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 282, &quot;pct25&quot;: 99.3, &quot;n26&quot;: 292, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 612, &quot;pct25&quot;: 98.5, &quot;n26&quot;: 261, &quot;pct26&quot;: 99.6}, {&quot;dept&quot;: &quot;Medicina Nuclear&quot;, &quot;n25&quot;: 212, &quot;pct25&quot;: 99.5, &quot;n26&quot;: 214, &quot;pct26&quot;: 98.6}, {&quot;dept&quot;: &quot;Bioimpedanciología&quot;, &quot;n25&quot;: 162, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 167, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicio Dental&quot;, &quot;n25&quot;: 110, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 122, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 102, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 84, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Paquetes&quot;, &quot;n25&quot;: 81, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 68, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Electromiografía&quot;, &quot;n25&quot;: 49, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 34, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Chequeos Médicos&quot;, &quot;n25&quot;: 3, &quot;pct25&quot;: 66.7, &quot;n26&quot;: 0, &quot;pct26&quot;: null}, {&quot;dept&quot;: &quot;Maquila&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}], &quot;General&quot;: [{&quot;dept&quot;: &quot;Ultrasonido&quot;, &quot;n25&quot;: 1193, &quot;pct25&quot;: 98.8, &quot;n26&quot;: 1130, &quot;pct26&quot;: 98.1}, {&quot;dept&quot;: &quot;Resonancia&quot;, &quot;n25&quot;: 1110, &quot;pct25&quot;: 96.1, &quot;n26&quot;: 1026, &quot;pct26&quot;: 97.2}, {&quot;dept&quot;: &quot;Radiología&quot;, &quot;n25&quot;: 950, &quot;pct25&quot;: 93.7, &quot;n26&quot;: 805, &quot;pct26&quot;: 97.8}, {&quot;dept&quot;: &quot;Tomografía&quot;, &quot;n25&quot;: 509, &quot;pct25&quot;: 92.1, &quot;n26&quot;: 597, &quot;pct26&quot;: 96.6}, {&quot;dept&quot;: &quot;Mamografía&quot;, &quot;n25&quot;: 526, &quot;pct25&quot;: 98.1, &quot;n26&quot;: 477, &quot;pct26&quot;: 98.1}, {&quot;dept&quot;: &quot;Densitometría&quot;, &quot;n25&quot;: 317, &quot;pct25&quot;: 96.2, &quot;n26&quot;: 304, &quot;pct26&quot;: 95.4}, {&quot;dept&quot;: &quot;Salud Visual&quot;, &quot;n25&quot;: 607, &quot;pct25&quot;: 98.5, &quot;n26&quot;: 258, &quot;pct26&quot;: 99.6}, {&quot;dept&quot;: &quot;Cardiología&quot;, &quot;n25&quot;: 298, &quot;pct25&quot;: 99.3, &quot;n26&quot;: 221, &quot;pct26&quot;: 96.8}, {&quot;dept&quot;: &quot;Medicina Nuclear&quot;, &quot;n25&quot;: 212, &quot;pct25&quot;: 99.5, &quot;n26&quot;: 214, &quot;pct26&quot;: 98.6}, {&quot;dept&quot;: &quot;EEG&quot;, &quot;n25&quot;: 102, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 84, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Servicios Especiales&quot;, &quot;n25&quot;: 128, &quot;pct25&quot;: 97.7, &quot;n26&quot;: 75, &quot;pct26&quot;: 98.7}, {&quot;dept&quot;: &quot;Paquetes&quot;, &quot;n25&quot;: 81, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 68, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Espirometría&quot;, &quot;n25&quot;: 41, &quot;pct25&quot;: 95.1, &quot;n26&quot;: 45, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Electromiografía&quot;, &quot;n25&quot;: 49, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 34, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Bioimpedanciología&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 10, &quot;pct26&quot;: 100.0}, {&quot;dept&quot;: &quot;Maquila&quot;, &quot;n25&quot;: 1, &quot;pct25&quot;: 100.0, &quot;n26&quot;: 0, &quot;pct26&quot;: null}]};
 let uState={unit:DATA5.units[0], gran:'m', range:'all', featured:'Total'};
 
 (function(){
@@ -1386,6 +1431,20 @@ function drawUni(){
   else{const up=momPct&gt;=3,down=momPct&lt;=-3;chip.className='trend-chip '+(up?'up':down?'down':'flat');
     chip.textContent=`${up?'▲':down?'▼':'≈'} ${momPct&gt;=0?'+':''}${momPct.toFixed(0)}% vs ${gran==='m'?'mes':'semana'} anterior`;}
 
+  const chipYoy=$(&quot;#uniTrendChipYoy&quot;);
+  if(gran!=='m'){ chipYoy.style.display='none'; }
+  else{
+    chipYoy.style.display='';
+    const fullArr = featured==='Total' ? DATA5.unitTotals[unit].m : DATA5.data[unit][featured].m;
+    const yoyIdx = hi-12;
+    const yoyPrev = yoyIdx&gt;=0 ? fullArr[yoyIdx] : null;
+    const yoyCur = fullArr[hi];
+    const yoyPct = (yoyPrev!=null &amp;&amp; yoyPrev&gt;0 &amp;&amp; yoyCur!=null) ? ((yoyCur-yoyPrev)/yoyPrev*100) : null;
+    if(yoyPct==null){ chipYoy.textContent='—'; chipYoy.className='trend-chip flat'; }
+    else{ const up=yoyPct&gt;=3,down=yoyPct&lt;=-3; chipYoy.className='trend-chip '+(up?'up':down?'down':'flat');
+      chipYoy.textContent=`${up?'▲':down?'▼':'≈'} ${yoyPct&gt;=0?'+':''}${yoyPct.toFixed(0)}% vs mismo mes 2025`; }
+  }
+
   // ---------- mini-grid ----------
   const miniW=200,miniH=44,miniPad=4;
   $(&quot;#uniMiniGrid&quot;).innerHTML=depts.map((d,i)=&gt;{
@@ -1409,6 +1468,48 @@ function drawUni(){
   $(&quot;#uniTake&quot;).innerHTML=`En &lt;b&gt;${unit}&lt;/b&gt; · &lt;b&gt;${RLBL[uState.range]||'rango'}&lt;/b&gt;, el total ${tot.pct&gt;=0?'crece':'baja'} &lt;b&gt;${tot.pct&gt;=0?'+':''}${tot.pct.toFixed(0)}%&lt;/b&gt; en la vista ${gran==='m'?'mensual':'semanal'}.`+
     (grow&amp;&amp;drop?` El departamento que más ${grow.t.pct&gt;=0?'sube es &lt;b&gt;'+grow.d+'&lt;/b&gt; ('+(grow.t.pct&gt;=0?'+':'')+grow.t.pct.toFixed(0)+'%)':'destaca'} y el que más baja es &lt;b&gt;${drop.d}&lt;/b&gt; (${drop.t.pct.toFixed(0)}%).`:'')+
     ` Clic en una mini-gráfica para verla en grande.`;
+
+  renderYoyMod();
+}
+
+function renderYoyMod(){
+  const unit=uState.unit;
+  const rows=YOY_MOD[unit]||[];
+  $(&quot;#uniYoyUnit&quot;).textContent=unit;
+  if(!rows.length){
+    $(&quot;#uniYoyVol&quot;).innerHTML='&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos comparables para esta unidad.&lt;/div&gt;';
+    $(&quot;#uniYoyCumpl&quot;).innerHTML='&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos comparables para esta unidad.&lt;/div&gt;';
+    return;
+  }
+  const maxN=Math.max(...rows.map(r=&gt;Math.max(r.n25,r.n26)),1);
+  const volRows=rows.slice().sort((a,b)=&gt;b.n26-a.n26);
+  $(&quot;#uniYoyVol&quot;).innerHTML=volRows.map(r=&gt;{
+    const d=r.n25&gt;0?(r.n26-r.n25)/r.n25*100:null;
+    const cls=d==null?'flat':(d&gt;3?'up':d&lt;-3?'down':'flat');
+    const dTxt=d==null?'—':`${d&gt;=0?'+':''}${d.toFixed(0)}%`;
+    return `&lt;div class=&quot;yoy-row&quot;&gt;
+      &lt;div class=&quot;yoy-label&quot;&gt;${r.dept}&lt;/div&gt;
+      &lt;div class=&quot;yoy-bars&quot;&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y25&quot; style=&quot;width:${(r.n25/maxN*100).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y26&quot; style=&quot;width:${(r.n26/maxN*100).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;yoy-nums&quot;&gt;${r.n25.toLocaleString('es-MX')}→${r.n26.toLocaleString('es-MX')} &lt;span class=&quot;yoy-delta ${cls}&quot;&gt;${dTxt}&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;`;
+  }).join('');
+  const cumplRows=rows.filter(r=&gt;r.pct25!=null||r.pct26!=null).slice().sort((a,b)=&gt;(b.pct26??0)-(a.pct26??0));
+  $(&quot;#uniYoyCumpl&quot;).innerHTML=cumplRows.length?cumplRows.map(r=&gt;{
+    const d=(r.pct25!=null&amp;&amp;r.pct26!=null)?(r.pct26-r.pct25):null;
+    const cls=d==null?'flat':(d&gt;0.5?'up':d&lt;-0.5?'down':'flat');
+    const dTxt=d==null?'—':`${d&gt;=0?'+':''}${d.toFixed(1)}pp`;
+    return `&lt;div class=&quot;yoy-row&quot;&gt;
+      &lt;div class=&quot;yoy-label&quot;&gt;${r.dept}&lt;/div&gt;
+      &lt;div class=&quot;yoy-bars&quot;&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y25&quot; style=&quot;width:${(r.pct25||0).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y26&quot; style=&quot;width:${(r.pct26||0).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;yoy-nums&quot;&gt;${r.pct25==null?'—':r.pct25.toFixed(1)+'%'}→${r.pct26==null?'—':r.pct26.toFixed(1)+'%'} &lt;span class=&quot;yoy-delta ${cls}&quot;&gt;${dTxt}&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;`;
+  }).join(''):'&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos de cumplimiento comparables.&lt;/div&gt;';
 }
 
 function drawInc(){
