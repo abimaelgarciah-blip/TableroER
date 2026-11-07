@@ -922,6 +922,7 @@
   svg{display:block;width:100%;height:auto;overflow:visible}
   .grid{stroke:var(--line2);stroke-width:1} .axis{stroke:var(--line);stroke-width:1}
   .tick{font-family:var(--mono);font-size:11px;fill:var(--faint)}
+  .trend-line{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:4 3;fill:none}
   .axlbl{font-family:var(--mono);font-size:11px;fill:var(--muted);letter-spacing:.04em}
   .band-rect{fill:var(--band);opacity:.7} .band-lbl{font-family:var(--mono);font-size:10.5px;fill:#a9852a;font-weight:700;letter-spacing:.05em}
   .lgd{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-size:13px;color:var(--muted)}
@@ -1306,13 +1307,15 @@ function rangeWindow(gran){
   }
   return [0,N-1];
 }
-const linfit=(vals)=&gt;{const N=vals.length;if(N&lt;2)return null;let sx=0,sy=0,sxx=0,sxy=0;for(let i=0;i&lt;N;i++){sx+=i;sy+=vals[i];sxx+=i*i;sxy+=i*vals[i];}const den=N*sxx-sx*sx;if(!den)return null;const b=(N*sxy-sx*sy)/den,a=(sy-b*sx)/N;return {y0:a,y1:a+b*(N-1)};};
+function linfit(vals){const N=vals.length;if(N&lt;2)return null;let sx=0,sy=0,sxx=0,sxy=0;for(let i=0;i&lt;N;i++){sx+=i;sy+=vals[i];sxx+=i*i;sxy+=i*vals[i];}const den=N*sxx-sx*sx;if(!den)return null;const b=(N*sxy-sx*sy)/den,a=(sy-b*sx)/N;return {y0:a,y1:a+b*(N-1)};}
 function sparkPath(vals,W,H,pad){
-  const n=vals.length;if(n&lt;2) return {d:'',last:null};
+  const n=vals.length;if(n&lt;2) return {d:'',trend:'',last:null};
   const lo=Math.min(...vals),hi=Math.max(...vals);const span=(hi-lo)||1;
   const x=i=&gt;pad+i*((W-2*pad)/(n-1)),y=v=&gt;pad+(1-(v-lo)/span)*(H-2*pad);
   let d='';for(let i=0;i&lt;n;i++){d+=(i?'L':'M')+x(i).toFixed(1)+' '+y(vals[i]).toFixed(1)+' ';}
-  return {d,last:[x(n-1),y(vals[n-1])]};
+  const lf=linfit(vals);
+  const trend=lf?('M'+x(0).toFixed(1)+' '+y(lf.y0).toFixed(1)+' L'+x(n-1).toFixed(1)+' '+y(lf.y1).toFixed(1)):'';
+  return {d,trend,last:[x(n-1),y(vals[n-1])]};
 }
 function drawUni(){
   const unit=uState.unit,gran=uState.gran;
@@ -1336,15 +1339,22 @@ function drawUni(){
     return {y0:lf.y0,y1:lf.y1,b,pct};
   };
 
-  // ---------- featured chart (línea mínima) ----------
+  // ---------- featured chart (línea mínima + cuadrícula + tendencia) ----------
   const arrF=getArr(featured),col=featured==='Total'?UPAL.Total:ucol(featured,depts.indexOf(featured));
-  const W=Math.min(1120,$(&quot;#uniChart&quot;).clientWidth||1120),Ht=240,P={t:14,r:14,b:26,l:14};
+  const W=Math.min(1120,$(&quot;#uniChart&quot;).clientWidth||1120),Ht=240,P={t:14,r:14,b:26,l:46};
   const iw=W-P.l-P.r,ih=Ht-P.t-P.b;
   let rawmax=Math.max(...arrF,1),rawmin=Math.min(...arrF,0);
   const span=(rawmax-rawmin)||1,padV=span*0.12;
   const yv0=rawmin-padV,yv1=rawmax+padV;
   const x=i=&gt;P.l+(n&gt;1?iw*i/(n-1):0),y=v=&gt;P.t+(1-(v-yv0)/(yv1-yv0))*ih;
   const svg=el('svg',{viewBox:`0 0 ${W} ${Ht}`});
+  const gStep=niceStep(rawmax,4);
+  for(let g=0;g&lt;=yv1+1e-9;g+=gStep){
+    if(g&lt;yv0) continue;
+    const yy=y(g);
+    svg.appendChild(el('line',{class:'grid',x1:P.l,x2:W-P.r,y1:yy,y2:yy}));
+    const t=el('text',{class:'tick',x:P.l-8,y:yy+4,'text-anchor':'end'});t.textContent=g.toLocaleString('es-MX');svg.appendChild(t);
+  }
   svg.appendChild(el('line',{class:'axis',x1:P.l,x2:W-P.r,y1:P.t+ih,y2:P.t+ih}));
   const maxTicks=gran==='m'?7:6;
   const tset=new Set();if(n&lt;=maxTicks){for(let k=0;k&lt;n;k++)tset.add(k);}else{for(let k=0;k&lt;maxTicks;k++)tset.add(Math.round(k*(n-1)/(maxTicks-1)));}
@@ -1352,6 +1362,8 @@ function drawUni(){
     const anchor=i===0?'start':(i===n-1?'end':'middle');
     const t=el('text',{class:'tick',x:x(i),y:Ht-8,'text-anchor':anchor});t.textContent=txt;svg.appendChild(t);
   });
+  const trF=trendOf(featured);
+  if(trF) svg.appendChild(el('line',{class:'trend-line',x1:x(0),x2:x(n-1),y1:y(trF.y0),y2:y(trF.y1)}));
   const pts=arrF.map((v,i)=&gt;[x(i),y(v)]);
   svg.appendChild(el('path',{d:pts.map((p,i)=&gt;(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' '),fill:'none',stroke:col,'stroke-width':1.6,'stroke-linejoin':'round','stroke-linecap':'round'}));
   if(pts.length) svg.appendChild(el('circle',{cx:pts[pts.length-1][0],cy:pts[pts.length-1][1],r:2.8,fill:col}));
@@ -1360,7 +1372,7 @@ function drawUni(){
     return `&lt;b&gt;${lbl}&lt;/b&gt;&lt;br&gt;${featured}: ${arrF[i]} estudios`;
   });
   $(&quot;#uniChart&quot;).innerHTML='';$(&quot;#uniChart&quot;).appendChild(svg);
-  $(&quot;#uniLgd&quot;).innerHTML=`&lt;span style=&quot;color:var(--muted)&quot;&gt;Línea sólida = estudios por ${gran==='m'?'mes':'semana'}, ${featured}.&lt;/span&gt;`;
+  $(&quot;#uniLgd&quot;).innerHTML=`&lt;span style=&quot;color:var(--muted)&quot;&gt;Línea sólida = estudios por ${gran==='m'?'mes':'semana'}, ${featured}. Línea punteada = tendencia (regresión lineal)${trF?' '+(trF.pct&gt;=0?'+':'')+trF.pct.toFixed(0)+'%':''}.&lt;/span&gt;`;
 
   const curV=arrF[arrF.length-1]||0,prevV=arrF.length&gt;=2?arrF[arrF.length-2]:null;
   const momPct=(prevV!=null&amp;&amp;prevV&gt;0)?((curV-prevV)/prevV*100):null;
@@ -1378,12 +1390,12 @@ function drawUni(){
   const miniW=200,miniH=44,miniPad=4;
   $(&quot;#uniMiniGrid&quot;).innerHTML=depts.map((d,i)=&gt;{
     const arr=getArr(d),dcol=ucol(d,i);
-    const {d:path,last}=sparkPath(arr,miniW,miniH,miniPad);
+    const {d:path,trend,last}=sparkPath(arr,miniW,miniH,miniPad);
     const dot=last?`&lt;circle cx=&quot;${last[0].toFixed(1)}&quot; cy=&quot;${last[1].toFixed(1)}&quot; r=&quot;2.2&quot; fill=&quot;${dcol}&quot;/&gt;`:'';
     const lastV=arr[arr.length-1]||0;
     return `&lt;button type=&quot;button&quot; class=&quot;mini${d===featured?' featured':''}&quot; data-d=&quot;${d}&quot;&gt;
       &lt;div class=&quot;mini-head&quot;&gt;&lt;span class=&quot;mini-name&quot; style=&quot;color:${dcol}&quot;&gt;${d}&lt;/span&gt;&lt;span class=&quot;mini-val&quot;&gt;${lastV.toLocaleString('es-MX')}&lt;/span&gt;&lt;/div&gt;
-      &lt;svg viewBox=&quot;0 0 ${miniW} ${miniH}&quot; width=&quot;100%&quot; height=&quot;32&quot;&gt;&lt;path d=&quot;${path}&quot; fill=&quot;none&quot; stroke=&quot;${dcol}&quot; stroke-width=&quot;1.5&quot;/&gt;${dot}&lt;/svg&gt;
+      &lt;svg viewBox=&quot;0 0 ${miniW} ${miniH}&quot; width=&quot;100%&quot; height=&quot;32&quot;&gt;${trend?`&lt;path d=&quot;${trend}&quot; class=&quot;trend-line&quot; stroke-width=&quot;1&quot;/&gt;`:''}&lt;path d=&quot;${path}&quot; fill=&quot;none&quot; stroke=&quot;${dcol}&quot; stroke-width=&quot;1.5&quot;/&gt;${dot}&lt;/svg&gt;
       &lt;div class=&quot;mini-tot&quot;&gt;${DATA5.deptVol[unit][d].toLocaleString('es-MX')} histórico&lt;/div&gt;
     &lt;/button&gt;`;
   }).join('');
