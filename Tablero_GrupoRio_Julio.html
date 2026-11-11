@@ -1088,8 +1088,6 @@
         &lt;div class=&quot;lgd&quot; id=&quot;uniLgd&quot;&gt;&lt;/div&gt;
       &lt;/div&gt;
       &lt;div class=&quot;mini-grid&quot; id=&quot;uniMiniGrid&quot;&gt;&lt;/div&gt;
-      &lt;div class=&quot;yoy-head&quot; style=&quot;margin-top:24px&quot;&gt;&lt;h3&gt;Por unidad · 2026&lt;/h3&gt;&lt;p class=&quot;yoy-sub&quot;&gt;Total de estudios por unidad (todo el historial, jul 2024 – oct 2026) · clic para ver esa unidad en grande&lt;/p&gt;&lt;/div&gt;
-      &lt;div class=&quot;mini-grid&quot; id=&quot;uniUnitGrid&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
     &lt;div class=&quot;takeaway&quot; id=&quot;uniTake&quot; style=&quot;border-left-color:var(--us);background:#eef3f8;margin-top:18px&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;yoy-wrap&quot; id=&quot;uniYoyWrap&quot;&gt;
@@ -1104,9 +1102,9 @@
           &lt;div id=&quot;uniYoyVol&quot;&gt;&lt;/div&gt;
         &lt;/div&gt;
         &lt;div class=&quot;yoy-panel&quot;&gt;
-          &lt;div class=&quot;yoy-panel-title&quot;&gt;Cumplimiento por modalidad&lt;/div&gt;
+          &lt;div class=&quot;yoy-panel-title&quot;&gt;Por unidad&lt;/div&gt;
           &lt;div class=&quot;yoy-legend&quot;&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--faint)&quot;&gt;&lt;/span&gt;2025&lt;/span&gt;&lt;span&gt;&lt;span class=&quot;sw&quot; style=&quot;background:var(--us)&quot;&gt;&lt;/span&gt;2026&lt;/span&gt;&lt;/div&gt;
-          &lt;div id=&quot;uniYoyCumpl&quot;&gt;&lt;/div&gt;
+          &lt;div id=&quot;uniYoyUnits&quot;&gt;&lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
     &lt;/div&gt;
@@ -1461,22 +1459,6 @@ function drawUni(){
   }).join('');
   $(&quot;#uniMiniGrid&quot;).querySelectorAll('.mini').forEach(b=&gt;b.onclick=()=&gt;{uState.featured=b.dataset.d;drawUni();});
 
-  // ---------- unit grid (overview, independent of selected unit) ----------
-  const unitList = DATA5.units.filter(u=&gt;u!=='Total'&amp;&amp;u!=='General');
-  $(&quot;#uniUnitGrid&quot;).innerHTML=unitList.map((u,i)=&gt;{
-    const uarr=DATA5.unitTotals[u].m;
-    const ucolor=ucol(u,i);
-    const {d:upath,trend:utrend,last:ulast}=sparkPath(uarr,miniW,miniH,miniPad);
-    const udot=ulast?`&lt;circle cx=&quot;${ulast[0].toFixed(1)}&quot; cy=&quot;${ulast[1].toFixed(1)}&quot; r=&quot;2.2&quot; fill=&quot;${ucolor}&quot;/&gt;`:'';
-    const ulastV=uarr[uarr.length-1]||0;
-    const uhist=uarr.reduce((a,b)=&gt;a+b,0);
-    return `&lt;button type=&quot;button&quot; class=&quot;mini${u===unit?' featured':''}&quot; data-u=&quot;${u}&quot;&gt;
-      &lt;div class=&quot;mini-head&quot;&gt;&lt;span class=&quot;mini-name&quot; style=&quot;color:${ucolor}&quot;&gt;${u}&lt;/span&gt;&lt;span class=&quot;mini-val&quot;&gt;${ulastV.toLocaleString('es-MX')}&lt;/span&gt;&lt;/div&gt;
-      &lt;svg viewBox=&quot;0 0 ${miniW} ${miniH}&quot; width=&quot;100%&quot; height=&quot;32&quot;&gt;${utrend?`&lt;path d=&quot;${utrend}&quot; class=&quot;trend-line&quot; stroke-width=&quot;1&quot;/&gt;`:''}&lt;path d=&quot;${upath}&quot; fill=&quot;none&quot; stroke=&quot;${ucolor}&quot; stroke-width=&quot;1.5&quot;/&gt;${udot}&lt;/svg&gt;
-      &lt;div class=&quot;mini-tot&quot;&gt;${uhist.toLocaleString('es-MX')} histórico&lt;/div&gt;
-    &lt;/button&gt;`;
-  }).join('');
-  $(&quot;#uniUnitGrid&quot;).querySelectorAll('.mini').forEach(b=&gt;b.onclick=()=&gt;{uState.unit=b.dataset.u;uState.featured='Total';drawUni();});
 
   // ---------- takeaway ----------
   const RLBL={all:'jul 2024 – oct 2026',2024:'2024 (jul–dic)','2025':'2025','2026':'2026 (ene–oct)','6m':'últimos 6 '+(gran==='m'?'meses':'~6 meses')};
@@ -1494,9 +1476,27 @@ function renderYoyMod(){
   const unit=uState.unit;
   const rows=YOY_MOD[unit]||[];
   $(&quot;#uniYoyUnit&quot;).textContent=unit;
+  const REAL_UNITS=['López Mateos','Medicina Preventiva','Acueducto','Clínica de la Mujer','Chamizal','Guadalupe','Las Águilas'];
+  const unitRows=REAL_UNITS.map(u=&gt;{
+    const ur=YOY_MOD[u]||[];
+    return {dept:u, n25:ur.reduce((a,x)=&gt;a+x.n25,0), n26:ur.reduce((a,x)=&gt;a+x.n26,0)};
+  }).sort((a,b)=&gt;b.n26-a.n26);
+  const maxUnitN=Math.max(...unitRows.map(r=&gt;Math.max(r.n25,r.n26)),1);
+  $(&quot;#uniYoyUnits&quot;).innerHTML=unitRows.map(r=&gt;{
+    const d=r.n25&gt;0?(r.n26-r.n25)/r.n25*100:null;
+    const cls=d==null?'flat':(d&gt;3?'up':d&lt;-3?'down':'flat');
+    const dTxt=d==null?'—':`${d&gt;=0?'+':''}${d.toFixed(0)}%`;
+    return `&lt;div class=&quot;yoy-row&quot;&gt;
+      &lt;div class=&quot;yoy-label&quot;&gt;${r.dept}&lt;/div&gt;
+      &lt;div class=&quot;yoy-bars&quot;&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y25&quot; style=&quot;width:${(r.n25/maxUnitN*100).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y26&quot; style=&quot;width:${(r.n26/maxUnitN*100).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;yoy-nums&quot;&gt;${r.n25.toLocaleString('es-MX')}→${r.n26.toLocaleString('es-MX')} &lt;span class=&quot;yoy-delta ${cls}&quot;&gt;${dTxt}&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;`;
+  }).join('');
   if(!rows.length){
     $(&quot;#uniYoyVol&quot;).innerHTML='&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos comparables para esta unidad.&lt;/div&gt;';
-    $(&quot;#uniYoyCumpl&quot;).innerHTML='&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos comparables para esta unidad.&lt;/div&gt;';
     return;
   }
   const maxN=Math.max(...rows.map(r=&gt;Math.max(r.n25,r.n26)),1);
@@ -1514,20 +1514,6 @@ function renderYoyMod(){
       &lt;div class=&quot;yoy-nums&quot;&gt;${r.n25.toLocaleString('es-MX')}→${r.n26.toLocaleString('es-MX')} &lt;span class=&quot;yoy-delta ${cls}&quot;&gt;${dTxt}&lt;/span&gt;&lt;/div&gt;
     &lt;/div&gt;`;
   }).join('');
-  const cumplRows=rows.filter(r=&gt;r.pct25!=null||r.pct26!=null).slice().sort((a,b)=&gt;(b.pct26??0)-(a.pct26??0));
-  $(&quot;#uniYoyCumpl&quot;).innerHTML=cumplRows.length?cumplRows.map(r=&gt;{
-    const d=(r.pct25!=null&amp;&amp;r.pct26!=null)?(r.pct26-r.pct25):null;
-    const cls=d==null?'flat':(d&gt;0.5?'up':d&lt;-0.5?'down':'flat');
-    const dTxt=d==null?'—':`${d&gt;=0?'+':''}${d.toFixed(1)}pp`;
-    return `&lt;div class=&quot;yoy-row&quot;&gt;
-      &lt;div class=&quot;yoy-label&quot;&gt;${r.dept}&lt;/div&gt;
-      &lt;div class=&quot;yoy-bars&quot;&gt;
-        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y25&quot; style=&quot;width:${(r.pct25||0).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-        &lt;div class=&quot;yoy-bar-track&quot;&gt;&lt;div class=&quot;yoy-bar-fill y26&quot; style=&quot;width:${(r.pct26||0).toFixed(1)}%&quot;&gt;&lt;/div&gt;&lt;/div&gt;
-      &lt;/div&gt;
-      &lt;div class=&quot;yoy-nums&quot;&gt;${r.pct25==null?'—':r.pct25.toFixed(1)+'%'}→${r.pct26==null?'—':r.pct26.toFixed(1)+'%'} &lt;span class=&quot;yoy-delta ${cls}&quot;&gt;${dTxt}&lt;/span&gt;&lt;/div&gt;
-    &lt;/div&gt;`;
-  }).join(''):'&lt;div style=&quot;font-size:12px;color:var(--muted)&quot;&gt;Sin datos de cumplimiento comparables.&lt;/div&gt;';
 }
 
 function drawInc(){
