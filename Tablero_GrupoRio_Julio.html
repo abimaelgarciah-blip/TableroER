@@ -2433,9 +2433,9 @@ const radData = {
     {k:'Sep26', lab:'Septiembre 2026 · RM+Densi+MN+TAC', tot:482,
       rad:[{name:'Hugo Tabares',v:91},{name:'Estefanía Martínez',v:89},{name:'Néstor González',v:75},{name:'Laura García',v:74},{name:'Mónica Anaya',v:74},{name:'Graciela Cortés',v:21},{name:'Iván Enríquez',v:20},{name:'Abimael García',v:16},{name:'Samanta Mora',v:13},{name:'Humberto González',v:6},{name:'Oswaldo Ríos',v:3}],
       mod:[{name:'Medicina Nuclear',v:155},{name:'Densitometría',v:138},{name:'Tomografía',v:135},{name:'Resonancia',v:54}], sede:[]},
-    {k:'Oct26', lab:'Octubre 2026 · RM+Densi+MN+TAC', tot:507,
-      rad:[{name:'Estefanía Martínez',v:133},{name:'Néstor González',v:88},{name:'Mónica Anaya',v:79},{name:'Laura García',v:76},{name:'Hugo Tabares',v:54},{name:'Iván Enríquez',v:35},{name:'Abimael García',v:19},{name:'Samanta Mora',v:15},{name:'Graciela Cortés',v:4},{name:'Oswaldo Ríos',v:4}],
-      mod:[{name:'Medicina Nuclear',v:208},{name:'Densitometría',v:133},{name:'Tomografía',v:119},{name:'Resonancia',v:47}], sede:[]}
+    {k:'Oct26', lab:'Octubre 2026 · RM+Densi+MN+TAC', tot:1326,
+      rad:[{name:'Estefanía Martínez',v:259},{name:'Laura García',v:232},{name:'Néstor González',v:207},{name:'Iván Enríquez',v:207},{name:'Mónica Anaya',v:205},{name:'Hugo Tabares',v:165},{name:'Graciela Cortés',v:17},{name:'Abimael García',v:15},{name:'Samanta Mora',v:15},{name:'Oswaldo Ríos',v:4}],
+      mod:[{name:'Resonancia',v:841},{name:'Medicina Nuclear',v:208},{name:'Tomografía',v:144},{name:'Densitometría',v:133}], sede:[]}
   ],
     weeks: [
     {k:'S27', lab:'Semana 27 · 29 jun – 5 jul', tot:188,
@@ -2486,21 +2486,21 @@ const radData = {
 };
 const radMonthLabels = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26','Jul 26','Ago 26','Sep 26','Oct 26'];
 const radPersSeries = {
-  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,183,91,54],
-  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,171,74,79],
-  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,104,75,88],
-  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,0,89,133],
-  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,125,20,35],
-  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,159,74,76],
+  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,183,91,165],
+  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,171,74,205],
+  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,104,75,207],
+  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,0,89,259],
+  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,125,20,207],
+  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,159,74,232],
   'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4,5,6,0],
-  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,2,21,4],
+  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,2,21,17],
   'Alberto Valdez': [15,1,2,1,2,36,26,7,2,0,0,3,0,1,0,0,0,0,0,0,0,0],
   'Casandra Ceballos': [419,409,451,629,235,59,54,20,7,3,1,0,0,0,0,0,3,0,0,0,0,0],
   'Mayra Gallegos': [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
   'Ana Lidia Ochoa': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0],
   'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,0,13,15],
   'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,0,3,4],
-  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,16,19],
+  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,16,15],
   'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108,4,0]
 };
 const RAD_NAMES = Object.keys(radPersSeries);
@@ -2560,7 +2560,7 @@ function renderRadLine(){
   const sum = (radPers==='Todos' ? RAD_NAMES.reduce((a,n)=>a+radPersSeries[n].reduce((x,y)=>x+y,0),0)
                                   : radPersSeries[radPers].reduce((a,b)=>a+b,0));
   document.getElementById('rad-sub').textContent =
-    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO) · ene 2025 – oct 2026 · '+
+    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO; octubre 2026: Resonancia y Tomografía de Exa, Densitometría y Medicina Nuclear de SIO) · ene 2025 – oct 2026 · '+
     (radPers==='Todos' ? 'los 16 transcriptores' : radPers)+' · '+fmt(sum)+' estudios';
   document.getElementById('note-rad-alt').innerHTML = radAltNoteHTML();
 }
