@@ -1758,7 +1758,7 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
             <div class="legend" id="dist-legend"></div>
           </div>
           <div id="dist-chart"></div>
-          <p class="line-note" style="margin-top:10px"><b>Transcripciones</b> = Medicina Nuclear + Densitometría de las cuentas de transcripción. <b>Intervención</b> = el resto de departamentos (incluye Resonancia y Tomografía) de esas mismas cuentas. <b>Radiólogos</b> = todo lo que interpretan directo las cuentas que no son de transcripción. 2025 de referencia; 2026 del SIO (Productividad de Transcripción), salvo <b>junio y julio</b>, donde Transcripciones usa el <b>total de Exa</b> (lo efectivamente leído: 793 y 973), la fuente más fidedigna para la lectura de imagen. <b>Agosto</b> y <b>septiembre</b> ya usan la regla ajustada (Resonancia y Tomografía pasan a Intervención, antes contaban como Transcripciones), así que no son directamente comparables con los meses anteriores en el desglose Transcripciones/Intervención — el total combinado sí es consistente. Septiembre toma los mismos totales por departamento que la tarjeta "Interpretación y transcripción" de Productividad (pivote SIO, 7,800 estudios: 293 Transcripciones, 2,653 Intervención, 4,854 Radiólogos); octubre toma Transcripciones y Radiólogos del pivote SIO (341 y 5,962), pero Intervención suma Resonancia y Tomografía ya corregidas con Exa en vez del pivote SIO (3,581 en lugar de 2,762 — mismo ajuste de +819 que en "Estudios por Transcriptor"), dando 9,884 estudios en total.</p>
+          <p class="line-note" style="margin-top:10px"><b>Transcripciones</b> = Medicina Nuclear + Densitometría de las cuentas de transcripción. <b>Intervención</b> = el resto de departamentos (incluye Resonancia y Tomografía) de esas mismas cuentas. <b>Radiólogos</b> = todo lo que interpretan directo las cuentas que no son de transcripción. 2025 de referencia; 2026 del SIO (Productividad de Transcripción), salvo <b>junio y julio</b>, donde Transcripciones usa el <b>total de Exa</b> (lo efectivamente leído: 793 y 973), la fuente más fidedigna para la lectura de imagen. <b>Agosto</b> y <b>septiembre</b> ya usan la regla ajustada (Resonancia y Tomografía pasan a Intervención, antes contaban como Transcripciones), así que no son directamente comparables con los meses anteriores en el desglose Transcripciones/Intervención — el total combinado sí es consistente. Agosto, septiembre y octubre toman Transcripciones y Radiólogos del pivote SIO de cada mes (agosto 310 y 4,876; septiembre 293 y 4,854; octubre 341 y 5,962), pero Intervención suma Resonancia y Tomografía ya corregidas con Exa en vez del pivote SIO (agosto 3,381 en lugar de 2,688; septiembre 3,353 en lugar de 2,653; octubre 3,581 en lugar de 2,762 — mismo ajuste por mes que en "Estudios por Transcriptor"), dando 8,567 / 8,500 / 9,884 estudios en total respectivamente. Agosto no tenía antes un desglose propio por persona en "Estudios por Transcriptor" (faltaba el mes en el selector); con el pivote SIO de agosto ahora completo, se agrega esa vista también.</p>
         </div>
 
         <div class="nav-label" style="margin:30px 0 10px">Productividad de transcriptores</div>
@@ -2430,9 +2430,12 @@ const radData = {
     {k:'Jul26', lab:'Julio 2026 · RM+Densi+MN+TAC', tot:430,
       rad:[{name:'Estefanía Martínez',v:128},{name:'Hugo Tabares',v:72},{name:'Laura García',v:70},{name:'Mónica Anaya',v:52},{name:'Graciela Cortés',v:41},{name:'Néstor González',v:30},{name:'Iván Enríquez',v:18},{name:'Samanta Mora',v:9},{name:'Oswaldo Ríos',v:6},{name:'Humberto González',v:4}],
       mod:[{name:'Densitometría',v:147},{name:'Medicina Nuclear',v:131},{name:'Tomografía',v:106},{name:'Resonancia',v:46}], sede:[]},
-    {k:'Sep26', lab:'Septiembre 2026 · RM+Densi+MN+TAC', tot:482,
-      rad:[{name:'Hugo Tabares',v:91},{name:'Estefanía Martínez',v:89},{name:'Néstor González',v:75},{name:'Laura García',v:74},{name:'Mónica Anaya',v:74},{name:'Graciela Cortés',v:21},{name:'Iván Enríquez',v:20},{name:'Abimael García',v:16},{name:'Samanta Mora',v:13},{name:'Humberto González',v:6},{name:'Oswaldo Ríos',v:3}],
-      mod:[{name:'Medicina Nuclear',v:155},{name:'Densitometría',v:138},{name:'Tomografía',v:135},{name:'Resonancia',v:54}], sede:[]},
+    {k:'Ago26', lab:'Agosto 2026 · RM+Densi+MN+TAC', tot:1177,
+      rad:[{name:'Hugo Tabares',v:236},{name:'Estefanía Martínez',v:217},{name:'Laura García',v:199},{name:'Mónica Anaya',v:192},{name:'Néstor González',v:151},{name:'Iván Enríquez',v:132},{name:'Abimael García',v:18},{name:'Samanta Mora',v:15},{name:'Graciela Cortés',v:7},{name:'Humberto González',v:5},{name:'Oswaldo Ríos',v:5}],
+      mod:[{name:'Resonancia',v:717},{name:'Medicina Nuclear',v:186},{name:'Tomografía',v:150},{name:'Densitometría',v:124}], sede:[]},
+    {k:'Sep26', lab:'Septiembre 2026 · RM+Densi+MN+TAC', tot:1182,
+      rad:[{name:'Hugo Tabares',v:209},{name:'Mónica Anaya',v:193},{name:'Laura García',v:192},{name:'Iván Enríquez',v:185},{name:'Estefanía Martínez',v:178},{name:'Néstor González',v:175},{name:'Abimael García',v:17},{name:'Graciela Cortés',v:16},{name:'Samanta Mora',v:13},{name:'Oswaldo Ríos',v:3},{name:'Humberto González',v:1}],
+      mod:[{name:'Resonancia',v:721},{name:'Tomografía',v:168},{name:'Medicina Nuclear',v:155},{name:'Densitometría',v:138}], sede:[]},
     {k:'Oct26', lab:'Octubre 2026 · RM+Densi+MN+TAC', tot:1326,
       rad:[{name:'Estefanía Martínez',v:259},{name:'Laura García',v:232},{name:'Néstor González',v:207},{name:'Iván Enríquez',v:207},{name:'Mónica Anaya',v:205},{name:'Hugo Tabares',v:165},{name:'Graciela Cortés',v:17},{name:'Abimael García',v:15},{name:'Samanta Mora',v:15},{name:'Oswaldo Ríos',v:4}],
       mod:[{name:'Resonancia',v:841},{name:'Medicina Nuclear',v:208},{name:'Tomografía',v:144},{name:'Densitometría',v:133}], sede:[]}
@@ -2486,21 +2489,21 @@ const radData = {
 };
 const radMonthLabels = ['Ene 25','Feb 25','Mar 25','Abr 25','May 25','Jun 25','Jul 25','Ago 25','Sep 25','Oct 25','Nov 25','Dic 25','Ene 26','Feb 26','Mar 26','Abr 26','May 26','Jun 26','Jul 26','Ago 26','Sep 26','Oct 26'];
 const radPersSeries = {
-  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,183,91,165],
-  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,171,74,205],
-  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,104,75,207],
-  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,0,89,259],
-  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,125,20,207],
-  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,159,74,232],
-  'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4,5,6,0],
-  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,2,21,17],
+  'Hugo Tabares': [143,93,127,173,303,401,652,538,359,403,474,362,454,317,370,256,316,160,72,236,209,165],
+  'Mónica Anaya': [313,213,339,361,455,384,368,291,303,329,225,179,273,265,307,272,232,110,52,192,193,205],
+  'Néstor González': [0,0,0,0,0,0,0,11,2,12,56,51,42,39,61,48,53,41,30,151,175,207],
+  'Estefanía Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,70,160,166,128,217,178,259],
+  'Iván Enríquez': [3,11,8,44,34,38,11,18,13,24,53,20,29,52,20,8,44,10,18,132,185,207],
+  'Laura García': [0,1,3,1,149,148,297,237,304,301,249,263,282,207,290,276,248,131,70,199,192,232],
+  'Humberto González': [11,15,35,24,21,12,32,34,33,40,48,19,7,27,17,23,16,21,4,5,1,0],
+  'Graciela Cortés': [20,119,140,97,74,88,69,62,30,42,55,27,46,49,79,129,73,44,41,7,16,17],
   'Alberto Valdez': [15,1,2,1,2,36,26,7,2,0,0,3,0,1,0,0,0,0,0,0,0,0],
   'Casandra Ceballos': [419,409,451,629,235,59,54,20,7,3,1,0,0,0,0,0,3,0,0,0,0,0],
   'Mayra Gallegos': [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
   'Ana Lidia Ochoa': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0],
-  'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,0,13,15],
-  'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,0,3,4],
-  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,16,15],
+  'Samanta Mora': [1,0,1,5,3,3,7,6,18,15,13,17,4,4,8,11,26,16,9,15,13,15],
+  'Oswaldo Ríos': [0,0,0,0,0,0,1,4,0,1,0,4,2,1,1,3,4,5,6,5,3,4],
+  'Abimael García': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,17,15],
   'Sandra Martínez': [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,108,4,0]
 };
 const RAD_NAMES = Object.keys(radPersSeries);
@@ -2560,7 +2563,7 @@ function renderRadLine(){
   const sum = (radPers==='Todos' ? RAD_NAMES.reduce((a,n)=>a+radPersSeries[n].reduce((x,y)=>x+y,0),0)
                                   : radPersSeries[radPers].reduce((a,b)=>a+b,0));
   document.getElementById('rad-sub').textContent =
-    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO; octubre 2026: Resonancia y Tomografía de Exa, Densitometría y Medicina Nuclear de SIO) · ene 2025 – oct 2026 · '+
+    'Resonancia + Densitometría + Medicina Nuclear + Tomografía (SIO; agosto–octubre 2026: Resonancia y Tomografía de Exa, Densitometría y Medicina Nuclear de SIO) · ene 2025 – oct 2026 · '+
     (radPers==='Todos' ? 'los 16 transcriptores' : radPers)+' · '+fmt(sum)+' estudios';
   document.getElementById('note-rad-alt').innerHTML = radAltNoteHTML();
 }
@@ -2605,7 +2608,7 @@ function initRad(){
 /* Interpretación y transcripción · % del total · 2025 (referencia) + 2026 (SIO) */
 const distData = {
   '2025':[{m:'Ene',t:20,i:28,d:52},{m:'Feb',t:25,i:27,d:48},{m:'Mar',t:22,i:30,d:48},{m:'Abr',t:14,i:40,d:46},{m:'May',t:19,i:30,d:51},{m:'Jun',t:21,i:30,d:49},{m:'Jul',t:26,i:28,d:46},{m:'Ago',t:21,i:30,d:49},{m:'Sep',t:18,i:36,d:46},{m:'Oct',t:19,i:33,d:48},{m:'Nov',t:18.5,i:36.5,d:45},{m:'Dic',t:22,i:30,d:48}],
-  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56},{m:'Ago',t:3.9,i:34.2,d:61.8},{m:'Sep',t:3.8,i:34.0,d:62.2},{m:'Oct',t:3.5,i:36.2,d:60.3}]
+  '2026':[{m:'Ene',t:18,i:30,d:52},{m:'Feb',t:15,i:33,d:52},{m:'Mar',t:15,i:31,d:54},{m:'Abr',t:13,i:32,d:55},{m:'May',t:17,i:31,d:52},{m:'Jun',t:10,i:33,d:57},{m:'Jul',t:12,i:32,d:56},{m:'Ago',t:3.6,i:39.5,d:56.9},{m:'Sep',t:3.4,i:39.4,d:57.1},{m:'Oct',t:3.5,i:36.2,d:60.3}]
 };
 const DIST_SRC=[['t','Transcripciones','var(--c-trans)'],['i','Intervención','var(--c-serv)'],['d','Radiólogos','var(--c-interp)']];
 const DIST_COL=Object.fromEntries(DIST_SRC.map(s=>[s[0],s[2]]));
