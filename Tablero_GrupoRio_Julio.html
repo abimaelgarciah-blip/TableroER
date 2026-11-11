@@ -589,7 +589,6 @@
     </button>
         <button class="nav-item" data-view="estudios"><svg class="ico ico-estudios" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line class="eb1" x1="6" y1="20" x2="6" y2="13"/><line class="eb2" x1="12" y1="20" x2="12" y2="8"/><line class="eb3" x1="18" y1="20" x2="18" y2="11"/><path d="M3 20h18"/></svg> Volumen de estudios </button>
         <button class="nav-item" data-view="promesa"><svg class="ico ico-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="ring2" cx="12" cy="12" r="9"/><circle class="ring1" cx="12" cy="12" r="5.5"/><circle class="dot" cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg> Promesa y Cumplimiento </button>
-        <button class="nav-item" data-view="vs2025"><svg class="ico ico-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle class="lens" cx="11" cy="11" r="6"/><line class="handle" x1="20" y1="20" x2="15.5" y2="15.5"/></svg> 2026 vs 2025 </button>
     <div class="nav-label">Gestión</div>
     <button class="nav-item" data-view="proyectos">
       <svg class="ico ico-proj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path class="bulb" d="M8 10a4 4 0 1 1 8 0c0 2-1.2 2.8-1.8 3.6-.4.5-.6.9-.6 1.4h-3.2c0-.5-.2-.9-.6-1.4C9.2 12.8 8 12 8 10Z"/><path d="M9.5 21h5M10.3 18.2h3.4" stroke-linecap="round"/><line class="ray r1" x1="12" y1="1.6" x2="12" y2="3.3"/><line class="ray r2" x1="3.6" y1="10" x2="5.3" y2="10"/><line class="ray r3" x1="18.7" y1="10" x2="20.4" y2="10"/></svg>
@@ -1089,6 +1088,8 @@
         &lt;div class=&quot;lgd&quot; id=&quot;uniLgd&quot;&gt;&lt;/div&gt;
       &lt;/div&gt;
       &lt;div class=&quot;mini-grid&quot; id=&quot;uniMiniGrid&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;yoy-head&quot; style=&quot;margin-top:24px&quot;&gt;&lt;h3&gt;Por unidad · 2026&lt;/h3&gt;&lt;p class=&quot;yoy-sub&quot;&gt;Total de estudios por unidad (todo el historial, jul 2024 – oct 2026) · clic para ver esa unidad en grande&lt;/p&gt;&lt;/div&gt;
+      &lt;div class=&quot;mini-grid&quot; id=&quot;uniUnitGrid&quot;&gt;&lt;/div&gt;
     &lt;/div&gt;
     &lt;div class=&quot;takeaway&quot; id=&quot;uniTake&quot; style=&quot;border-left-color:var(--us);background:#eef3f8;margin-top:18px&quot;&gt;&lt;/div&gt;
     &lt;div class=&quot;yoy-wrap&quot; id=&quot;uniYoyWrap&quot;&gt;
@@ -1460,6 +1461,23 @@ function drawUni(){
   }).join('');
   $(&quot;#uniMiniGrid&quot;).querySelectorAll('.mini').forEach(b=&gt;b.onclick=()=&gt;{uState.featured=b.dataset.d;drawUni();});
 
+  // ---------- unit grid (overview, independent of selected unit) ----------
+  const unitList = DATA5.units.filter(u=&gt;u!=='Total'&amp;&amp;u!=='General');
+  $(&quot;#uniUnitGrid&quot;).innerHTML=unitList.map((u,i)=&gt;{
+    const uarr=DATA5.unitTotals[u].m;
+    const ucolor=ucol(u,i);
+    const {d:upath,trend:utrend,last:ulast}=sparkPath(uarr,miniW,miniH,miniPad);
+    const udot=ulast?`&lt;circle cx=&quot;${ulast[0].toFixed(1)}&quot; cy=&quot;${ulast[1].toFixed(1)}&quot; r=&quot;2.2&quot; fill=&quot;${ucolor}&quot;/&gt;`:'';
+    const ulastV=uarr[uarr.length-1]||0;
+    const uhist=uarr.reduce((a,b)=&gt;a+b,0);
+    return `&lt;button type=&quot;button&quot; class=&quot;mini${u===unit?' featured':''}&quot; data-u=&quot;${u}&quot;&gt;
+      &lt;div class=&quot;mini-head&quot;&gt;&lt;span class=&quot;mini-name&quot; style=&quot;color:${ucolor}&quot;&gt;${u}&lt;/span&gt;&lt;span class=&quot;mini-val&quot;&gt;${ulastV.toLocaleString('es-MX')}&lt;/span&gt;&lt;/div&gt;
+      &lt;svg viewBox=&quot;0 0 ${miniW} ${miniH}&quot; width=&quot;100%&quot; height=&quot;32&quot;&gt;${utrend?`&lt;path d=&quot;${utrend}&quot; class=&quot;trend-line&quot; stroke-width=&quot;1&quot;/&gt;`:''}&lt;path d=&quot;${upath}&quot; fill=&quot;none&quot; stroke=&quot;${ucolor}&quot; stroke-width=&quot;1.5&quot;/&gt;${udot}&lt;/svg&gt;
+      &lt;div class=&quot;mini-tot&quot;&gt;${uhist.toLocaleString('es-MX')} histórico&lt;/div&gt;
+    &lt;/button&gt;`;
+  }).join('');
+  $(&quot;#uniUnitGrid&quot;).querySelectorAll('.mini').forEach(b=&gt;b.onclick=()=&gt;{uState.unit=b.dataset.u;uState.featured='Total';drawUni();});
+
   // ---------- takeaway ----------
   const RLBL={all:'jul 2024 – oct 2026',2024:'2024 (jul–dic)','2025':'2025','2026':'2026 (ene–oct)','6m':'últimos 6 '+(gran==='m'?'meses':'~6 meses')};
   const tot=trendOf('Total');
@@ -1695,42 +1713,6 @@ $(&quot;#foot&quot;).innerHTML=`&lt;p&gt;Grupo Río · Reportes &quot;Tiempo pro
       </section>
 
       <!-- ================== 2026 VS 2025 ================== -->
-      <section class="view" id="vs2025">
-        <div class="page-head">
-          <h1>2026 vs 2025</h1>
-          <p>Volumen de estudios, octubre 2026 contra octubre 2025 <span class="badge">Octubre</span></p>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <div class="card-head">
-            <div>
-              <h3>Comparación vs 2025</h3>
-              <p class="csub" id="est-yoy-all-sub">Todas las unidades</p>
-            </div>
-            <div class="k-value" id="est-yoy-all-total" style="font-size:26px">—</div>
-          </div>
-          <div class="empty" id="est-yoy-all-nota" style="margin-top:12px"></div>
-
-          <p class="csub" style="margin-top:18px" id="est-yoy-sub">Detalle por unidad · octubre 2025 vs. octubre 2026</p>
-          <div id="est-yoy-chart"></div>
-          <div class="legend" id="est-yoy-legend"></div>
-          <div class="empty" id="est-yoy-nota" style="margin-top:12px"></div>
-
-          <p class="csub" style="margin-top:18px">Unidades sin volumen relevante en 2026</p>
-          <div class="bars" id="est-yoy-nodata"></div>
-          <div class="empty" id="est-yoy-nodata-nota" style="margin-top:12px"></div>
-        </div>
-
-        <div class="card" style="margin-bottom:16px">
-          <h3>Estudios por departamento · octubre 2026</h3>
-          <p class="csub">Suma de las 9 unidades · mes completo · variación vs. octubre 2025, todas las unidades</p>
-          <div style="overflow-x:auto">
-            <table class="dtab" id="est-jul-dept-tab"></table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================== INTERPRETACIÓN ================== -->
       <section class="view" id="interpretacion">
         <div class="page-head">
           <h1>Productividad</h1>
@@ -3574,70 +3556,6 @@ function renderLlegadaPorUnidad(){
    Fuente: reporte general de octubre 2026 (9,020 filas, 1–31 oct, las 9 unidades;
    mismos conteos que unidades.Todas.deptos). Nombres de departamento normalizados
    al formato abreviado del resto del tablero (p. ej. "Tomografía Axial C."). */
-const estJulDeptRows = [["Ecosonografía", 1746], ["Radiología", 1358], ["Servicios Especiales", 1196], ["Resonancia Magnética", 1039], ["Cardiología", 901], ["Tomografía Axial C.", 598], ["Mamografía", 557], ["Densitometría", 383], ["Espirometría", 292], ["Salud Visual", 261], ["Medicina Nuclear", 214], ["Bioimpedanciología", 167], ["Servicio Dental", 122], ["EEG y Mapeo Cerebral", 84], ["Paquetes", 68], ["Electromiografía y P.E.", 34]];
-// % variación vs octubre 2025, con las 9 unidades en ambos años (reporte general
-// de octubre 2025, 9,654 estudios prometidos, mismo origen de reporte
-// que el de octubre 2026, 9,020 estudios). Ya no hace falta excluir unidades: cubre todo el volumen.
-const estDeptYoyPct = {"Ecosonografía": 0.6, "Radiología": -6.0, "Servicios Especiales": -3.2, "Resonancia Magnética": -9.3, "Cardiología": -6.0, "Tomografía Axial C.": 17.5, "Mamografía": -7.3, "Densitometría": -3.3, "Espirometría": 3.5, "Salud Visual": -58.3, "Medicina Nuclear": 0.9, "Bioimpedanciología": 3.1, "Servicio Dental": 10.9, "EEG y Mapeo Cerebral": -17.6, "Paquetes": -16.0, "Electromiografía y P.E.": -30.6};
-function renderEstudiosJulio(){
-  const totDept = estJulDeptRows.reduce((a,r)=>a+r[1],0);
-  const tbody = estJulDeptRows.map(([d,v])=>{
-    const pct = estDeptYoyPct[d];
-    const pctCell = pct==null ? `<span class="pill">sin dato 2025</span>`
-      : pct>0 ? `<span class="pill" style="background:rgba(76,140,111,.13);color:#3a7057">▲ +${pct.toFixed(1)}%</span>`
-      : pct<0 ? `<span class="pill red">▼ ${pct.toFixed(1)}%</span>`
-                : `<span class="pill">≈ sin cambio</span>`;
-    return `<tr><td>${d}</td><td class="d">${fmt(v)}</td><td class="d">${(v/totDept*100).toFixed(1)}%</td><td>${pctCell}</td></tr>`;
-  }).join('');
-  document.getElementById('est-jul-dept-tab').innerHTML =
-    `<thead><tr><th>Departamento</th><th>Estudios</th><th>% del total</th><th>Var. vs oct 2025</th></tr></thead><tbody>${tbody}</tbody>`;
-}
-
-/* ===== Estudios · comparativa octubre 2025 vs octubre 2026 =====
-   Total todas-las-unidades: reporte general completo de octubre 2025 (9,654
-   estudios prometidos, calculado de los CSV "Tiempo promesa de entrega vs
-   recibido en entregas" de Jaspersoft, ene–dic 2025) — ya incluye Medicina Preventiva.
-   Detalle por unidad: 7 unidades con dato en ambos años. Ciudad Granja (4 estudios
-   en oct 2025) y Plaza Universidad (3) siguen sin dato comparable en 2026 — no se
-   registró ningún estudio con esas Sucursales este mes. */
-const estYoyAll = {tot25: 9654, tot26: 9020};
-const estYoyRows = [["López Mateos", 3788, 3371], ["Medicina Preventiva", 3510, 3672], ["Acueducto", 1238, 881], ["Clínica de la Mujer", 771, 752], ["Chamizal", 237, 278], ["Guadalupe", 95, 58], ["Las Águilas", 8, 8]];
-const estYoyNoData = [["Ciudad Granja", 4], ["Plaza Universidad", 3]];
-function renderEstudiosYoy(){
-  const dAllPct = (estYoyAll.tot26-estYoyAll.tot25)/estYoyAll.tot25*100;
-  document.getElementById('est-yoy-all-total').textContent = (dAllPct>=0?'+':'')+dAllPct.toFixed(1)+'%';
-  document.getElementById('est-yoy-all-sub').textContent =
-    `Todas las unidades · ${fmt(estYoyAll.tot25)} → ${fmt(estYoyAll.tot26)} estudios`;
-  document.getElementById('est-yoy-all-nota').innerHTML =
-    `Octubre 2026 quedó <b>${dAllPct.toFixed(1)}%</b> por debajo de octubre 2025 en el total de la compañía (${fmt(estYoyAll.tot25)} → ${fmt(estYoyAll.tot26)} estudios), `+
-    `usando el reporte general completo de octubre 2025 — este total ya incluye a Medicina Preventiva.`;
-
-  const tot25 = estYoyRows.reduce((a,r)=>a+r[1],0);
-  const tot26 = estYoyRows.reduce((a,r)=>a+r[2],0);
-  const dPct = (tot26-tot25)/tot25*100;
-
-  const series = [
-    {name:'Octubre 2025', color:'var(--track)', vals: estYoyRows.map(r=>r[1])},
-    {name:'Octubre 2026', color:'var(--c-sede)', vals: estYoyRows.map(r=>r[2])}
-  ];
-  groupBarChart(document.getElementById('est-yoy-chart'), estYoyRows.map(r=>r[0]), series, ' est.');
-  document.getElementById('est-yoy-legend').innerHTML = trLegend(series);
-
-  const growers = estYoyRows.map(([u,a,b])=>[u,a,b,(b-a)/a*100]).filter(r=>r[1]>=50 && r[3]>0)
-    .sort((a,b)=>b[3]-a[3]);
-  const growTxt = growers.map(([u,,,p])=>`<b>${u}</b> (+${p.toFixed(1)}%)`).join(' y ');
-  const movers = estYoyRows.map(([u,a,b])=>[u,a,b,(b-a)/a*100]).filter(r=>r[1]>=50 && r[3]<0)
-    .sort((a,b)=>a[3]-b[3]);
-  const [mu,,,mmp] = movers[0];
-  document.getElementById('est-yoy-nota').innerHTML =
-    `En estas 7 unidades (${fmt(tot25)} → ${fmt(tot26)} estudios, ${dPct.toFixed(1)}%), ${growTxt} son las únicas que crecen con volumen relevante. `+
-    `La caída más fuerte es <b>${mu}</b> (${mmp.toFixed(1)}%); Las Águilas se mantiene sin cambio (8→8).`;
-
-  barChart(document.getElementById('est-yoy-nodata'),
-    estYoyNoData.map(([name,v])=>({name,v})), 'var(--muted)', {fmt:v=>fmt(v)+' est. (oct 2025)'});
-  document.getElementById('est-yoy-nodata-nota').innerHTML =
-    `Ciudad Granja y Plaza Universidad sí tienen dato de octubre 2025 (${fmt(estYoyNoData.reduce((a,r)=>a+r[1],0))} estudios entre las dos) pero no aparecen en el reporte de octubre 2026 — no se registró ningún estudio con esas Sucursales este mes, así que quedan fuera de la comparación de la gráfica principal.`;
-}
 
 /* ===== Tiempo de interpretación (Dra. Daniela Ramírez, Alta [G] -> Firma [D]) =====
    Fuente: log PACS de la Dra. Daniela Ramírez (124 renglones, Mamografía/Ecosonografía,
@@ -4866,8 +4784,6 @@ function renderAll(){
   renderPromesaMargen();
   renderMapaProceso();
   renderLlegadaPorUnidad();
-  renderEstudiosJulio();
-  renderEstudiosYoy();
   renderDraniela();
   renderAnalisis();
 }
